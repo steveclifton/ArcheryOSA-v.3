@@ -6,7 +6,7 @@ Our goal is to create a platform that can be used by anyone to enable efficient 
 
 ### Server requirements
 
-* PHP >= 7.0.0
+* PHP >= 7.2
 * OpenSSL PHP Extension
 * PDO PHP Extension
 * Mbstring PHP Extension
