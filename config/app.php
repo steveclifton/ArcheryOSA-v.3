@@ -1,7 +1,7 @@
 <?php
 
 return [
-
+    Rap2hpoutre\LaravelLogViewer\LaravelLogViewerServiceProvider::class,
     /*
     |--------------------------------------------------------------------------
     | Application Name
@@ -13,7 +13,7 @@ return [
     |
     */
 
-    'name' => env('APP_NAME', 'Laravel'),
+    'name' => env('APP_NAME', 'ArcheryOSA'),
 
     /*
     |--------------------------------------------------------------------------
