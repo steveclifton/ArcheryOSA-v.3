@@ -13,21 +13,17 @@
 
 //admin routes
 
-
-Route::get('/', function () {
-    return view('welcome');
-});
-Route::get('/home', 'HomeController@index')->name('home');
-
 Auth::routes();
+
+Route::get('/', 'HomeController@index');
+
+
 
 
 
 
 Route::middleware(['web'])->group(function() {
 
-//    Route::middleware(['guest'])->group(function () {
-//    });
 
     Route::middleware(['auth'])->group(function () {
 
