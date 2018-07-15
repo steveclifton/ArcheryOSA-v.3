@@ -1,0 +1,16 @@
+.loginLogo{
+	max-width: 40%;
+	height: auto;
+	display: block;
+	margin: auto;
+}
+
+.loginPerson{
+	font-size: 5em;
+	display: block;
+	text-align: center;
+}
+
+.formInput{
+	padding: 0 20px 0 20px;
+}
