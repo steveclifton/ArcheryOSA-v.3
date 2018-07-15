@@ -12,12 +12,36 @@
 */
 
 //admin routes
-Route::get('logs', '\Rap2hpoutre\LaravelLogViewer\LogViewerController@index');
+
 
 Route::get('/', function () {
     return view('welcome');
 });
+Route::get('/home', 'HomeController@index')->name('home');
 
 Auth::routes();
 
-Route::get('/home', 'HomeController@index')->name('home');
+
+
+
+Route::middleware(['web'])->group(function() {
+
+//    Route::middleware(['guest'])->group(function () {
+//    });
+
+    Route::middleware(['auth'])->group(function () {
+
+    });
+
+    Route::middleware(['admin'])->group(function () {
+        Route::get('logs', '\Rap2hpoutre\LaravelLogViewer\LogViewerController@index');
+
+        //Route::get('/admin/test/createsiteroles', 'Admin\TestController@createsiteroles');
+
+
+    });
+
+
+
+
+});
