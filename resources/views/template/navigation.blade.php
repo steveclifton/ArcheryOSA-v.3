@@ -91,9 +91,6 @@
                                     <i class="md md-settings-power"></i> <span>Logout</span>
                                 </a>
                             @endif
-                                <a href="/contact" class="dropdown-item notify-item">
-                                    <i class="md md-email"></i> <span>Contact AOSA</span>
-                                </a>
                         </div>
                     </li>
 
