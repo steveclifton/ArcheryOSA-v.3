@@ -84,14 +84,16 @@
                                     <i class="md md-account-circle"></i> <span>Login</span>
                                 </a>
                                 <a href="/register" class="dropdown-item notify-item">
-                                    <i class="md md-account-circle"></i> <span>Register</span>
+                                    <i class="md  md-face-unlock"></i> <span>Register</span>
                                 </a>
                             @else
                                 <a href="/logout" class="dropdown-item notify-item">
                                     <i class="md md-settings-power"></i> <span>Logout</span>
                                 </a>
                             @endif
-
+                                <a href="/contact" class="dropdown-item notify-item">
+                                    <i class="md md-email"></i> <span>Contact AOSA</span>
+                                </a>
                         </div>
                     </li>
 
