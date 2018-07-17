@@ -2,13 +2,14 @@
 
 namespace App\Http\Controllers\Auth;
 
+use App\Jobs\SendWelcome;
 use App\Rules\ValidRecaptcha;
 use App\User;
 use App\Http\Controllers\Controller;
-use Request;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Foundation\Auth\RegistersUsers;
+use Illuminate\Http\Request;
 
 class RegisterController extends Controller
 {
@@ -72,9 +73,24 @@ class RegisterController extends Controller
             'lastname' => $data['lastname'],
             'email' => $data['email'],
             'password' => Hash::make($data['password']),
-            'lastipaddress' => Request::ip(),
+            'lastipaddress' => \Request::ip(),
             'roleid' => 4,
             'username' => strtolower(preg_replace("/[^a-zA-Z0-9]/", "", $data['firstname'].$data['lastname'])) . rand(1,1440)
         ]);
     }
+
+
+    /**
+     * The user has been registered.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @param  mixed  $user
+     * @return mixed
+     */
+    protected function registered(Request $request, $user)
+    {
+        SendWelcome::dispatch($user->email, $user->firstname);
+    }
+
+
 }
