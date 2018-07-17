@@ -27,17 +27,22 @@ Route::middleware(['web'])->group(function() {
         Route::post('register', 'Auth\RegisterController@register');
         Route::get('login', 'Auth\LoginController@showLoginForm')->name('login');
         Route::post('login', 'Auth\LoginController@login');
-        Route::get('/resetpassword', 'Auth\ForgotPasswordController@showLinkRequestForm')->name('password.request');
+        Route::get('resetpassword', 'Auth\ForgotPasswordController@showLinkRequestForm')->name('password.request');
         Route::post('password/email', 'Auth\ForgotPasswordController@sendResetLinkEmail')->name('password.email');
         Route::get('password/reset/{token}', 'Auth\ResetPasswordController@showResetForm')->name('password.reset');
         Route::post('password/reset', 'Auth\ResetPasswordController@reset');
 
-
     });
 
     Route::middleware(['auth'])->group(function () {
+        // Logout
         Route::post('logout', 'Auth\LoginController@logout')->name('logout');
         Route::get('logout', 'Auth\LoginController@logout')->name('logout');
+
+        // Profile
+        Route::get('profile', 'Auth\ProfileController@get');
+        Route::get('profile/mydetails', 'Auth\ProfileController@getMyDetails');
+
     });
 
     Route::middleware(['admin'])->group(function () {
