@@ -40,8 +40,9 @@ Route::middleware(['web'])->group(function() {
         Route::get('logout', 'Auth\LoginController@logout')->name('logout');
 
         // Profile
-        Route::get('profile', 'Auth\ProfileController@get');
+        Route::get('profile', 'Auth\ProfileController@getDashboard');
         Route::get('profile/mydetails', 'Auth\ProfileController@getMyDetails');
+        Route::post('profile/mydetails', 'Auth\ProfileController@updateProfile')->name('updateprofile');
 
     });
 
