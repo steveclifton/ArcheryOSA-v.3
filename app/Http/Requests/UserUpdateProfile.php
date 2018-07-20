@@ -27,7 +27,7 @@ class UserUpdateProfile extends FormRequest
         return [
             'firstname'  => 'required|max:55',
             'lastname'   => 'required|max:55',
-            'dateofbirth'=> 'nullable|date|max:15',
+            'dateofbirth'=> 'nullable',
             'phone'      => 'nullable|numeric',
             'address'    => 'nullable|string|max:155',
             'city'       => 'nullable|string|max:55',
