@@ -49,7 +49,25 @@ Route::middleware(['web'])->group(function() {
     Route::middleware(['admin'])->group(function () {
         Route::get('logs', '\Rap2hpoutre\LaravelLogViewer\LogViewerController@index');
 
-        //Route::get('/admin/test/createsiteroles', 'Admin\TestController@createsiteroles');
+        // Clubs
+        Route::get('admin/clubs', 'Admin\ClubController@get');
+        Route::get('admin/clubs/create', 'Admin\ClubController@getCreateView');
+
+        // Divisions
+        Route::get('admin/divisions', 'Admin\DivisionController@get');
+        Route::get('admin/divisions/create', 'Admin\DivisionController@getCreateView');
+
+        // Organisations
+        Route::get('admin/organisations', 'Admin\OrganisationController@get');
+        Route::get('admin/organisations/create', 'Admin\OrganisationController@getCreateView');
+
+        // Rounds
+        Route::get('admin/rounds', 'Admin\RoundController@get');
+        Route::get('admin/rounds/create', 'Admin\RoundController@getCreateView');
+
+        // Tournaments
+        Route::get('admin/tournaments', 'Admin\TournamentController@get');
+        Route::get('admin/tournaments/create', 'Admin\TournamentController@getCreateView');
 
 
     });
