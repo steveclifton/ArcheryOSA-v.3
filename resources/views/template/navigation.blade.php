@@ -34,43 +34,43 @@
                         </a>
                         <!-- End mobile menu toggle-->
                     </li>
-                    <li class="list-inline-item dropdown notification-list">
-                        <a class="nav-link dropdown-toggle arrow-none waves-light waves-effect" data-toggle="dropdown" href="#" role="button"
-                           aria-haspopup="false" aria-expanded="false">
-                            <i class="dripicons-bell noti-icon"></i>
-                            <span class="badge badge-pink noti-icon-badge">4</span>
-                        </a>
-                        <div class="dropdown-menu dropdown-menu-right dropdown-arrow dropdown-lg" aria-labelledby="Preview">
-                            <!-- item-->
-                            <div class="dropdown-item noti-title">
-                                <h5><span class="badge badge-danger float-right">5</span>Notification</h5>
-                            </div>
+                    {{--<li class="list-inline-item dropdown notification-list">--}}
+                        {{--<a class="nav-link dropdown-toggle arrow-none waves-light waves-effect" data-toggle="dropdown" href="#" role="button"--}}
+                           {{--aria-haspopup="false" aria-expanded="false">--}}
+                            {{--<i class="dripicons-bell noti-icon"></i>--}}
+                            {{--<span class="badge badge-pink noti-icon-badge">4</span>--}}
+                        {{--</a>--}}
+                        {{--<div class="dropdown-menu dropdown-menu-right dropdown-arrow dropdown-lg" aria-labelledby="Preview">--}}
+                            {{--<!-- item-->--}}
+                            {{--<div class="dropdown-item noti-title">--}}
+                                {{--<h5><span class="badge badge-danger float-right">5</span>Notification</h5>--}}
+                            {{--</div>--}}
 
-                            <!-- item-->
-                            <a href="javascript:void(0);" class="dropdown-item notify-item">
-                                <div class="notify-icon bg-success"><i class="icon-bubble"></i></div>
-                                <p class="notify-details">Robert S. Taylor commented on Admin<small class="text-muted">1 min ago</small></p>
-                            </a>
+                            {{--<!-- item-->--}}
+                            {{--<a href="javascript:void(0);" class="dropdown-item notify-item">--}}
+                                {{--<div class="notify-icon bg-success"><i class="icon-bubble"></i></div>--}}
+                                {{--<p class="notify-details">Robert S. Taylor commented on Admin<small class="text-muted">1 min ago</small></p>--}}
+                            {{--</a>--}}
 
-                            <!-- item-->
-                            <a href="javascript:void(0);" class="dropdown-item notify-item">
-                                <div class="notify-icon bg-info"><i class="icon-user"></i></div>
-                                <p class="notify-details">New user registered.<small class="text-muted">1 min ago</small></p>
-                            </a>
+                            {{--<!-- item-->--}}
+                            {{--<a href="javascript:void(0);" class="dropdown-item notify-item">--}}
+                                {{--<div class="notify-icon bg-info"><i class="icon-user"></i></div>--}}
+                                {{--<p class="notify-details">New user registered.<small class="text-muted">1 min ago</small></p>--}}
+                            {{--</a>--}}
 
-                            <!-- item-->
-                            <a href="javascript:void(0);" class="dropdown-item notify-item">
-                                <div class="notify-icon bg-danger"><i class="icon-like"></i></div>
-                                <p class="notify-details">Carlos Crouch liked <b>Admin</b><small class="text-muted">1 min ago</small></p>
-                            </a>
+                            {{--<!-- item-->--}}
+                            {{--<a href="javascript:void(0);" class="dropdown-item notify-item">--}}
+                                {{--<div class="notify-icon bg-danger"><i class="icon-like"></i></div>--}}
+                                {{--<p class="notify-details">Carlos Crouch liked <b>Admin</b><small class="text-muted">1 min ago</small></p>--}}
+                            {{--</a>--}}
 
-                            <!-- All-->
-                            <a href="javascript:void(0);" class="dropdown-item notify-item notify-all">
-                                View All
-                            </a>
+                            {{--<!-- All-->--}}
+                            {{--<a href="javascript:void(0);" class="dropdown-item notify-item notify-all">--}}
+                                {{--View All--}}
+                            {{--</a>--}}
 
-                        </div>
-                    </li>
+                        {{--</div>--}}
+                    {{--</li>--}}
 
                     <li class="list-inline-item dropdown notification-list">
                         <a class="nav-link dropdown-toggle waves-effect waves-light nav-user" data-toggle="dropdown" href="#" role="button"
@@ -149,39 +149,49 @@
                         </ul>
                     </li>
 
-                    @if(Auth::check() && Auth::user()->role <= 3)
-                    <li class="has-submenu">
-                        <a href="#"><i class="md md-layers"></i>Admin</a>
-                        <ul class="submenu megamenu">
+                    @if(Auth::check() && Auth::user()->roleid <= 3)
+                        <li class="has-submenu">
+                            <a href="jacascript:;"><i class="md md-layers"></i>Admin</a>
+                            <ul class="submenu megamenu">
 
-                            @if(Auth::user()->role <=2)
-                            <li>
-                                <ul>
+                                @if(Auth::user()->roleid == 1)
                                     <li>
-                                        <span>Setup</span>
+                                        <ul>
+                                            <li>
+                                                <span>Admin</span>
+                                            </li>
+                                            <li><a href="/admin/users">User Management</a></li>
+                                        </ul>
                                     </li>
-                                    <li><a href="/admin/clubs">Clubs</a></li>
-                                    <li><a href="/admin/divisions">Divisions</a></li>
-                                    <li><a href="/admin/organisations">Organisations</a></li>
-                                    <li><a href="/admin/rounds">Rounds</a></li>
-                                    <li><a href="/admin/tournaments">Tournaments</a></li>
-                                </ul>
-                            </li>
-                            @endif
+                                @endif
 
-                            <li>
-                                <ul>
+                                @if(Auth::user()->roleid <=2)
                                     <li>
-                                        <span>Events</span>
-                                    </li>
-                                    <li><a href="form-elements.html">Manage Events</a></li>
-                                </ul>
-                            </li>
+                                    <ul>
+                                        <li>
+                                            <span>Setup</span>
+                                        </li>
+                                        <li><a href="/admin/clubs">Clubs</a></li>
+                                        <li><a href="/admin/divisions">Divisions</a></li>
+                                        <li><a href="/admin/organisations">Organisations</a></li>
+                                        <li><a href="/admin/rounds">Rounds</a></li>
+                                        <li><a href="/admin/tournaments">Tournaments</a></li>
+                                    </ul>
+                                </li>
+                                @endif
 
-                        </ul>
-                    </li>
+                                <li>
+                                    <ul>
+                                        <li>
+                                            <span>Events</span>
+                                        </li>
+                                        <li><a href="form-elements.html">Manage Events</a></li>
+                                    </ul>
+                                </li>
+
+                            </ul>
+                        </li>
                     @endif
-
 
                 </ul>
                 <!-- End navigation menu -->
