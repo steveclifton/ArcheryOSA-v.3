@@ -1,6 +1,4 @@
 <!-- App css -->
-
-
 <link href="{{URL::asset('/css/archeryosa.css')}}" rel="stylesheet" type="text/css" />
 
 {{--<link href="{{URL::asset('/plugins/timepicker/bootstrap-timepicker.min.css')}}" rel="stylesheet">--}}
