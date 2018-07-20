@@ -72,7 +72,11 @@ Route::middleware(['web'])->group(function() {
 
     });
 
+    Route::middleware(['admin'])->group(function () {
 
+        // Users
+        Route::get('admin/users', 'Admin\UsersController@get');
+    });
 
 
 });
