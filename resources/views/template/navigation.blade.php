@@ -111,7 +111,7 @@
                 <ul class="navigation-menu">
                     @if (Auth::check())
                         <li class="has-submenu">
-                            <a href="javascript:;"><i class="md md-dashboard"></i>Dashboard</a>
+                            <a href="javascript:;"><i class="md md-account-box"></i>My Account</a>
                             <ul class="submenu">
                                 <li>
                                     <a href="/profile">Profile</a>
@@ -125,11 +125,27 @@
                             </ul>
                         </li>
                     @endif
+
+                    {{--<li class="has-submenu">--}}
+                        {{--<a href="javascript:;"><i class="md md-dashboard"></i>Results</a>--}}
+                        {{--<ul class="submenu">--}}
+                            {{--<li>--}}
+                                {{--<a href="/profile">Profile</a>--}}
+                            {{--</li>--}}
+                            {{--<li>--}}
+                                {{--<a href="/myevents">My Events</a>--}}
+                            {{--</li>--}}
+                            {{--<li>--}}
+                                {{--<a href="javascript:;">My Results</a>--}}
+                            {{--</li>--}}
+                        {{--</ul>--}}
+                    {{--</li>--}}
+
                     <li class="has-submenu">
-                        <a href="javascript:;"><i class="md md-color-lens"></i>Competitions</a>
+                        <a href="javascript:;"><i class="md md-color-lens"></i>Tournaments</a>
                         <ul class="submenu">
-                            <li><a href="/upcomingevents">Upcoming Events</a></li>
-                            <li><a href="/previousevents">Previous Events</a></li>
+                            <li><a href="/upcomingevents">Upcoming Tournaments</a></li>
+                            <li><a href="/previousevents">Tournament Results</a></li>
                         </ul>
                     </li>
 
@@ -148,6 +164,7 @@
                                     <li><a href="/admin/divisions">Divisions</a></li>
                                     <li><a href="/admin/organisations">Organisations</a></li>
                                     <li><a href="/admin/rounds">Rounds</a></li>
+                                    <li><a href="/admin/tournaments">Tournaments</a></li>
                                 </ul>
                             </li>
                             @endif
