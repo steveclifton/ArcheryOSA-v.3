@@ -12,4 +12,5 @@ let mix = require('laravel-mix');
  */
 
 mix.sass('resources/assets/sass/scssdark/style.scss', 'public/css/scssdark')
-    .sass('resources/assets/sass/scsslight/style.scss', 'public/css/scsslight');
+    .sass('resources/assets/sass/scsslight/style.scss', 'public/css/scsslight')
+    .sass('resources/assets/sass/archeryosa.scss', 'public/css');
