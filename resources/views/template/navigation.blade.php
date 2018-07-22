@@ -111,7 +111,7 @@
                 <ul class="navigation-menu">
                     @if (Auth::check())
                         <li class="has-submenu">
-                            <a href="javascript:;"><i class="md md-account-box"></i>My Account</a>
+                            <a href="#"><i class="md md-account-box"></i>My Account</a>
                             <ul class="submenu">
                                 <li>
                                     <a href="/profile">Profile</a>
@@ -142,7 +142,7 @@
                     {{--</li>--}}
 
                     <li class="has-submenu">
-                        <a href="javascript:;"><i class="md md-color-lens"></i>Events</a>
+                        <a href="#"><i class="md md-color-lens"></i>Events</a>
                         <ul class="submenu">
                             <li><a href="/upcomingevents">Upcoming Events</a></li>
                             <li><a href="/previousevents">Event Results</a></li>
@@ -151,7 +151,7 @@
 
                     @if(Auth::check() && Auth::user()->roleid <= 3)
                         <li class="has-submenu">
-                            <a href="jacascript:;"><i class="md md-layers"></i>Admin</a>
+                            <a href="#"><i class="md md-layers"></i>Admin</a>
                             <ul class="submenu megamenu">
 
                                 @if(Auth::user()->roleid == 1)
