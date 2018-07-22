@@ -15,11 +15,8 @@
         <div class="col-md-12">
             <div class="card-box">
 
-                @if(session('success'))
-                    <div class="alert alert-success">
-                        {{ session('success') }}
-                    </div>
-                @endif
+                @include('template.alerts')
+
 
                 <form method="POST" action="{{ route('updateprofile') }}">
                     @csrf
