@@ -37,7 +37,7 @@
         <div class="col-lg-12">
             <div class="card-box">
 
-                <div class="table-responsive">
+                <div class="myTable table-responsive">
                     <table class="table table-hover">
                         <thead class="thead-light">
                         <tr>

@@ -36,7 +36,7 @@
         <div class="col-lg-12">
             <div class="card-box">
                 <p>Rounds are the individual distance shoots created which can be added to tournaments</p>
-                <div class="table-responsive">
+                <div class="myTable table-responsive">
                     <table class="table table-hover">
                         <thead class="thead-light">
                         <tr>
