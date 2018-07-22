@@ -29,6 +29,7 @@ class DivisionController extends Controller
      */
     public function getCreateView()
     {
-        dd('here');
+        return view('admin.divisions.create');
+
     }
 }

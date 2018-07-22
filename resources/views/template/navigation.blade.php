@@ -142,10 +142,10 @@
                     {{--</li>--}}
 
                     <li class="has-submenu">
-                        <a href="javascript:;"><i class="md md-color-lens"></i>Tournaments</a>
+                        <a href="javascript:;"><i class="md md-color-lens"></i>Events</a>
                         <ul class="submenu">
-                            <li><a href="/upcomingevents">Upcoming Tournaments</a></li>
-                            <li><a href="/previousevents">Tournament Results</a></li>
+                            <li><a href="/upcomingevents">Upcoming Events</a></li>
+                            <li><a href="/previousevents">Event Results</a></li>
                         </ul>
                     </li>
 
@@ -175,7 +175,7 @@
                                         <li><a href="/admin/divisions">Divisions</a></li>
                                         <li><a href="/admin/organisations">Organisations</a></li>
                                         <li><a href="/admin/rounds">Rounds</a></li>
-                                        <li><a href="/admin/tournaments">Tournaments</a></li>
+                                        <li><a href="/admin/competitions">Competitions</a></li>
                                     </ul>
                                 </li>
                                 @endif

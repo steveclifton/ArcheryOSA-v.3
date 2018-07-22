@@ -30,6 +30,7 @@ class ClubController extends Controller
      */
     public function getCreateView()
     {
-        dd('here');
+        return view('admin.clubs.create');
+
     }
 }

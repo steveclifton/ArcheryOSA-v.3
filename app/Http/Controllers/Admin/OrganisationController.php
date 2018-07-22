@@ -29,7 +29,8 @@ class OrganisationController extends Controller
      */
     public function getCreateView()
     {
-        dd('here');
+        return view('admin.organisations.create');
+
     }
 
 }

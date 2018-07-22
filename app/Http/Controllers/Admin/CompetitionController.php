@@ -5,7 +5,7 @@ namespace App\Http\Controllers\Admin;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 
-class TournamentController extends Controller
+class CompetitionController extends Controller
 {
 
 
@@ -19,7 +19,7 @@ class TournamentController extends Controller
      */
     public function get()
     {
-        return view('admin.tournaments.tournaments');
+        return view('admin.competitions.competitions');
     }
 
 
@@ -28,7 +28,8 @@ class TournamentController extends Controller
      */
     public function getCreateView()
     {
-        dd('here');
+        return view('admin.competitions.create');
+
     }
 
 }

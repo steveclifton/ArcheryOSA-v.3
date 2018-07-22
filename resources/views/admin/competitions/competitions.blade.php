@@ -1,12 +1,12 @@
 @extends('template.default')
 
-@section ('title')Tournaments @endsection
+@section ('title')Competitions @endsection
 
 @section('content')
     <div class="row">
         <div class="col-sm-12">
             <div class="page-title-box">
-                <h4 class="page-title">Tournaments</h4>
+                <h4 class="page-title">Competitions</h4>
             </div>
             <!--  <div class="page-title-box"> -->
             <div class="container" style="margin-left: 0; padding-left: 0;">
@@ -19,7 +19,7 @@
                         </div>
                     </div>
                     <div class="col-xs-6">
-                        <a role="button" href="/admin/tournaments/create" class="btn btn-inverse waves-effect waves-light">
+                        <a role="button" href="/admin/competitions/create" class="btn btn-inverse waves-effect waves-light">
                             <span class="btn-label">
                                 <i class="fa fa-plus"></i>
                             </span>Add
@@ -35,7 +35,9 @@
     <div class="row">
         <div class="col-lg-12">
             <div class="card-box">
-                <p>Tournaments can be created and saved for easy event creation</p>
+                <p>Competitions are designed and contain rounds. <br>
+                - Events then contain one or more competitions
+                </p>
                 <div class="table-responsive">
                     <table class="table table-hover">
                         <thead class="thead-light">

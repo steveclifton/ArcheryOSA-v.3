@@ -29,7 +29,8 @@ class RoundController extends Controller
      */
     public function getCreateView()
     {
-        dd('here');
+        return view('admin.rounds.create');
+
     }
 
 
