@@ -38,7 +38,7 @@
                 <p>Competitions are designed and contain rounds. <br>
                 - Events then contain one or more competitions
                 </p>
-                <div class="table-responsive">
+                <div class=" myTable table-responsive">
                     <table class="table table-hover">
                         <thead class="thead-light">
                         <tr>

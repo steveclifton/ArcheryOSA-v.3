@@ -39,7 +39,7 @@
   -moz-transition: all 1s ease-in-out;
   -o-transition: all 1s ease-in-out;
   transition: all 1s ease-in-out;
-
+  color: #364049;
   border:1px solid #364049; /*CUSTOMIZE THIS COLOR IF YOU WANT */
 }
 .db-social-box:hover {
@@ -57,3 +57,46 @@
   font-size: 50px;
   padding-bottom: 10px;
 }
+
+// add forms
+
+.card-box {
+
+  .addFormHeader {
+  font-size: 1.5em;
+  }
+
+}
+
+//crumbs color
+
+.page-title{
+  a{
+    color: #797979;
+  }
+
+  :hover{
+    color:#5fbeaa;
+  }
+}
+
+//tables//
+.myTable {
+
+  a{
+    color: #343a40;
+  }
+
+}
+
+.myTable a:hover{
+  color:#5fbeaa;
+}
+
+.myTableTop{
+  padding-left: 15px;
+}
+
+
+
+

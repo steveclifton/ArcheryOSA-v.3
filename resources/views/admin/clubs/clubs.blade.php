@@ -4,6 +4,7 @@
 
 @section('content')
 
+
 <div class="row">
     <div class="col-sm-12">
         <div class="page-title-box">
@@ -35,7 +36,7 @@
         <div class="col-lg-12">
             <div class="card-box">
 
-                <div class="table-responsive">
+                <div class=" myTable table-responsive">
                     <table class="table table-hover">
                         <thead class="thead-light">
                         <tr>
