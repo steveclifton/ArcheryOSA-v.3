@@ -18,29 +18,36 @@
     <div class="row">
         <div class="col-12">
             <div class="card-columns">
-                <div class="card m-b-20">
-                    <img class="card-img-top img-fluid" src="{{URL::asset('/images/archery.jpg')}}" alt="Card image cap">
-                    <div class="card-body">
-                        <h4 class="card-title font-18 mt-0">2018 Indoor League Series</h4>
-                        <p class="card-text">Date : {!! date('d F Y') !!}</p>
+                <a href="/event/details/indoor-league-series">
+                    <div class="card m-b-20">
+                        <img class="card-img-top img-fluid" src="{{URL::asset('/images/archery.jpg')}}" alt="Card image cap">
+                        <div class="card-body">
+                            <h4 class="card-title font-18 mt-0">2018 Indoor League Series</h4>
+                            <p class="card-text">Date : {!! date('d F Y') !!}</p>
+                        </div>
                     </div>
-                </div>
+                </a>
 
-                <div class="card m-b-20">
-                    <img class="card-img-top img-fluid" src="{{URL::asset('/images/archery.jpg')}}" alt="Card image cap">
-                    <div class="card-body">
-                        <h4 class="card-title font-18 mt-0">2018 Indoor League Series</h4>
-                        <p class="card-text">Date : {!! date('d F Y') !!}</p>
+                <a href="/event/details/indoor-league-series">
+                    <div class="card m-b-20">
+                        <img class="card-img-top img-fluid" src="{{URL::asset('/images/archery.jpg')}}" alt="Card image cap">
+                        <div class="card-body">
+                            <h4 class="card-title font-18 mt-0">2018 Indoor League Series</h4>
+                            <p class="card-text">Date : {!! date('d F Y') !!}</p>
+                        </div>
                     </div>
-                </div>
+                </a>
 
-                <div class="card m-b-20">
-                    <img class="card-img-top img-fluid" src="{{URL::asset('/images/archery.jpg')}}" alt="Card image cap">
-                    <div class="card-body">
-                        <h4 class="card-title font-18 mt-0">2018 Indoor League Series</h4>
-                        <p class="card-text">Date : {!! date('d F Y') !!}</p>
+                <a href="/event/details/indoor-league-series">
+                    <div class="card m-b-20">
+                        <img class="card-img-top img-fluid" src="{{URL::asset('/images/archery.jpg')}}" alt="Card image cap">
+                        <div class="card-body">
+                            <h4 class="card-title font-18 mt-0">2018 Indoor League Series</h4>
+                            <p class="card-text">Date : {!! date('d F Y') !!}</p>
+                        </div>
                     </div>
-                </div>
+                </a>
+
             </div>
         </div>
     </div>
