@@ -44,7 +44,7 @@
             </div>
 
             <div class="col-lg-4 col-md-4 col-sm-4">
-                <a href="#">
+                <a href="/profile/myevents">
                     <div class="db-social-box">
                         <span class="fa fa-calendar"></span>
                         <h5>My Events</h5>

@@ -27,8 +27,10 @@ class ProfileController extends Controller
      */
     public function getDashboard()
     {
-        return view('profile.profile');
+        return view('profile.auth.profile');
     }
+
+
 
     /**
      * Gets the users details form
@@ -36,7 +38,17 @@ class ProfileController extends Controller
      */
     public function getMyDetails()
     {
-        return view('profile.mydetails');
+        return view('profile.auth.mydetails');
+    }
+
+    public function getMyEvents()
+    {
+        return view('profile.auth.events.myevents');
+    }
+
+    public function getMyResults()
+    {
+        return view('profile.auth.results.all');
     }
 
 
