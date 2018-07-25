@@ -117,10 +117,10 @@
                                     <a href="/profile">Profile</a>
                                 </li>
                                 <li>
-                                    <a href="/myevents">My Events</a>
+                                    <a href="/profile/myevents">My Events</a>
                                 </li>
                                 <li>
-                                    <a href="javascript:;">My Results</a>
+                                    <a href="/profile/myresults">My Results</a>
                                 </li>
                             </ul>
                         </li>
@@ -142,10 +142,19 @@
                     {{--</li>--}}
 
                     <li class="has-submenu">
+                        <a href="#"><i class="md md-color-lens"></i>Results</a>
+                        <ul class="submenu">
+                            <li><a href="/events/previous">Event Results</a></li>
+                            <li><a href="/records/nz">NZ Records</a></li>
+                            <li><a href="/rankings/nz">NZ Rankings</a></li>
+                        </ul>
+                    </li>
+
+                    <li class="has-submenu">
                         <a href="#"><i class="md md-color-lens"></i>Events</a>
                         <ul class="submenu">
-                            <li><a href="/upcomingevents">Upcoming Events</a></li>
-                            <li><a href="/previousevents">Event Results</a></li>
+                            <li><a href="/events/create">Create an Event</a></li>
+                            <li><a href="/events">Event Registration</a></li>
                         </ul>
                     </li>
 
@@ -185,7 +194,7 @@
                                         <li>
                                             <span>Events</span>
                                         </li>
-                                        <li><a href="form-elements.html">Manage Events</a></li>
+                                        <li><a href="/events/manage">Manage Events</a></li>
                                     </ul>
                                 </li>
 
