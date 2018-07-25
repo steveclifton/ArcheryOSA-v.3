@@ -62,7 +62,7 @@
 
                         <div class="form-group m-t-30 m-b-0">
                             <div class="col-12">
-                                <a href="/resetpassword" class="text-dark"><i class="fa fa-lock m-r-5"></i> Forgot
+                                <a href="/passwordreset" class="text-dark"><i class="fa fa-lock m-r-5"></i> Forgot
                                     your password?</a>
                             </div>
                         </div>
