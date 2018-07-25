@@ -18,6 +18,19 @@ Auth::routes();
 Route::get('/', 'HomeController@index');
 
 
+Route::get('/events', 'Events\PublicEvents\EventController@getAllEvents');
+Route::get('/events/previous', 'Events\PublicEvents\EventController@getPreviousEvents');
+
+// Define create in public route to show users they can apply to create events
+Route::get('/events/create', 'Events\PublicEvents\EventController@createEvent');
+
+// Get specific event details
+Route::get('/event/details/{eventurl}', 'Events\PublicEvents\EventController@getEventDetails');
+
+// Results and Ranking
+Route::get('/rankings/nz', 'Ranking\RankingController@getCountryRankings');
+Route::get('/records/nz', 'Record\RecordController@getCountryRecords');
+
 
 
 Route::middleware(['web'])->group(function() {
@@ -25,24 +38,54 @@ Route::middleware(['web'])->group(function() {
     Route::middleware(['guest'])->group(function () {
         Route::get('register', 'Auth\RegisterController@showRegistrationForm')->name('register');
         Route::post('register', 'Auth\RegisterController@register');
+
         Route::get('login', 'Auth\LoginController@showLoginForm')->name('login');
         Route::post('login', 'Auth\LoginController@login');
-        Route::get('resetpassword', 'Auth\ForgotPasswordController@showLinkRequestForm')->name('password.request');
+
+        Route::get('passwordreset', 'Auth\ForgotPasswordController@showLinkRequestForm')->name('password.request');
         Route::post('password/email', 'Auth\ForgotPasswordController@sendResetLinkEmail')->name('password.email');
+
         Route::get('password/reset/{token}', 'Auth\ResetPasswordController@showResetForm')->name('password.reset');
         Route::post('password/reset', 'Auth\ResetPasswordController@reset');
 
     });
 
     Route::middleware(['auth'])->group(function () {
+
+
+        /*****************
+         *  Event management
+         *   - defined in this route as not all users will have admin access
+         ****************/
+        Route::get('/events/manage', 'Events\Auth\EventController@getAllEvents');
+
+
+
+
+        // Register for an event
+        Route::get('/event/register/{eventurl}', 'Events\PublicEvents\EventController@getEventRegistration');
+
         // Logout
         Route::post('logout', 'Auth\LoginController@logout')->name('logout');
         Route::get('logout', 'Auth\LoginController@logout')->name('logout');
+
+
+        /*****************
+         *  User profile
+         ****************/
 
         // Profile
         Route::get('profile', 'Auth\ProfileController@getDashboard');
         Route::get('profile/mydetails', 'Auth\ProfileController@getMyDetails');
         Route::post('profile/mydetails', 'Auth\ProfileController@updateProfile')->name('updateprofile');
+
+        // Show my events
+        Route::get('/profile/myevents', 'Auth\ProfileController@getMyEvents');
+
+        // Show my results
+        Route::get('/profile/myresults', 'Auth\ProfileController@getMyResults');
+
+
 
     });
 
