@@ -104,6 +104,7 @@ Route::middleware(['web'])->group(function() {
         // Organisations
         Route::get('admin/organisations', 'Admin\OrganisationController@get');
         Route::get('admin/organisations/create', 'Admin\OrganisationController@getCreateView');
+        Route::post('admin/organisation/create', 'Admin\OrganisationController@createOrganisation');
 
         // Rounds
         Route::get('admin/rounds', 'Admin\RoundController@get');
