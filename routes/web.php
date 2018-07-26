@@ -95,6 +95,7 @@ Route::middleware(['web'])->group(function() {
         // Clubs
         Route::get('admin/clubs', 'Admin\ClubController@get');
         Route::get('admin/clubs/create', 'Admin\ClubController@getCreateView');
+        Route::post('admin/clubs/create', 'Admin\ClubController@createClub');
 
         // Divisions
         Route::get('admin/divisions', 'Admin\DivisionController@get');
