@@ -39,35 +39,26 @@
                 <div class=" myTable table-responsive">
                     <table class="table table-hover">
                         <thead class="thead-light">
-                        <tr>
-                            <th>ID</th>
-                            <th>Name</th>
-                            <th>Description</th>
-                            <th>Visible</th>
-                        </tr>
+                            <tr>
+                                <th>Name</th>
+                                <th>Email</th>
+                                <th>Visible</th>
+                            </tr>
                         </thead>
                         <tbody>
-                        <tr>
-                            <td>42</td>
-                            <th scope="row"><a href="">Dunedin Archery Club</a></th>
-                            <td></td>
-                            <td><i class="fa fa-check"></i></td>
-
-                        </tr>
-                        <tr>
-                            <td>41</td>
-                            <th scope="row"><a href="">Rosebank Archery Club</a></th>
-                            <td></td>
-                            <td><i class="fa fa-check"></i></td>
-
-                        </tr>
-                        <tr>
-                            <td>40</td>
-                            <th scope="row"><a href="">Grey Goose Wing Archery Society</a></th>
-                            <td></td>
-                            <td><i class="fa fa-check"></i></td>
-                        </tr>
-
+                            @foreach($clubs as $club)
+                                <tr>
+                                    <th scope="row">
+                                        <a href="javascript:;">{{ucwords($club->label)}}</a>
+                                    </th>
+                                    <th>{{$club->email}}</th>
+                                    <td>
+                                        @if($club->visible)
+                                            <i class="fa fa-check"></i>
+                                        @endif
+                                    </td>
+                                </tr>
+                            @endforeach
                         </tbody>
                     </table>
                 </div>
