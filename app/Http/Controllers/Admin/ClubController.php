@@ -66,6 +66,7 @@ class ClubController extends Controller
         $club->url            = !empty($validated['url']) ? $validated['url'] : null;
         $club->email          = !empty($validated['email']) ? $validated['email'] : null;
         $club->visible        = !empty($validated['visible']) ? 1 : 0;
+        $club->createdby      = Auth::id();
         $club->save();
 
         return redirect('/admin/clubs');
