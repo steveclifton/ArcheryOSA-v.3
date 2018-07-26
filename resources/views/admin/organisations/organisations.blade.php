@@ -42,33 +42,22 @@
                         <thead class="thead-light">
                         <tr>
                             <th>Name</th>
-                            <th>Description</th>
-                            <th>Parent Organisation</th>
+                            <th>Email</th>
                             <th>Visible</th>
                         </tr>
                         </thead>
                         <tbody>
-                        <tr>
-                            <th scope="row">Archery NZ</th>
-                            <td>Archery New Zealand</td>
-                            <td>World Archery</td>
-                            <td><i class="fa fa-check"></i></td>
-
-                        </tr>
-                        <tr>
-                            <th scope="row">Auckland District Archery Association</th>
-                            <td>ADAA</td>
-                            <td>Archery NZ</td>
-                            <td><i class="fa fa-check"></i></td>
-
-                        </tr>
-                        <tr>
-                            <th scope="row">ECBOPAA</th>
-                            <td>East Coast Bay of Plenty Archery Association</td>
-                            <td>Archery NZ</td>
-                            <td><i class="fa fa-check"></i></td>
-                        </tr>
-
+                            @foreach($organisations as $organisation)
+                                <tr>
+                                    <th scope="row"><a href="javascript:;">{{$organisation->label}}</a></th>
+                                    <td>{{$organisation->email}}</td>
+                                    <td>
+                                        @if($organisation->visible)
+                                            <i class="fa fa-check"></i>
+                                        @endif
+                                    </td>
+                                </tr>
+                            @endforeach
                         </tbody>
                     </table>
                 </div>
