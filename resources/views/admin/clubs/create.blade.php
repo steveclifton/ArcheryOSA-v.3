@@ -4,7 +4,7 @@
 
 @section('content')
 
-  <div class="row">
+    <div class="row">
         <div class="col-sm-12">
             <div class="page-title-box">
                 <h4 class="page-title"><a href="/admin/clubs;">Clubs</a> > <a href="javascript:;">Create</a></h4>
@@ -50,7 +50,7 @@
 	            <div class="form-group row">
                     <label class="col-sm-12 col-md-3 col-form-label">URL</label>
                     <div class="col-md-9">
-                        <input name="url" class="form-control{{ $errors->has('firstname') ? ' is-invalid' : '' }}" type="url" value="{{old('url')}}">
+                        <input name="url" class="form-control{{ $errors->has('url') ? ' is-invalid' : '' }}" type="url" value="{{old('url')}}">
                         @if ($errors->has('url'))
                             <span class="invalid-feedback" role="alert">
                                 <strong>{{ $errors->first('url') }}</strong>
@@ -69,7 +69,13 @@
                  <div class="form-group row">
                     <label for="inputEmail3" class="col-sm-12 col-md-3 col-form-label">Email</label>
                     <div class="col-md-9">
-                        <input name="email" type="email" class="form-control" id="inputEmail3" value="{{old('email')}}">
+                        <input name="email" type="email" class="form-control {{ $errors->has('email') ? ' is-invalid' : '' }}"
+                               id="inputEmail3" value="{{old('email')}}">
+                        @if ($errors->has('email'))
+                            <span class="invalid-feedback" role="alert">
+                                <strong>{{ $errors->first('email') }}</strong>
+                            </span>
+                        @endif
                     </div>
                 </div>
 
