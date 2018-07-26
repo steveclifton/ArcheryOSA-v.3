@@ -2,9 +2,7 @@
 
 namespace App\Http\Controllers\Auth;
 
-use App\Http\Requests\UserUpdateProfile;
-use Faker\Provider\DateTime;
-use Illuminate\Http\Request;
+use App\Http\Requests\User\UserUpdateProfile;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
 
