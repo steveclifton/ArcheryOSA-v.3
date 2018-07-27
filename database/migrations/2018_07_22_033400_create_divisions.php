@@ -16,9 +16,11 @@ class CreateDivisions extends Migration
         Schema::create('divisions', function (Blueprint $table) {
             $table->increments('divisionid');
             $table->string('label');
+            $table->integer('organisationid');
             $table->string('code')->nullable();
             $table->string('description')->nullable();
             $table->integer('visible')->default(1);
+            $table->integer('createdby');
             $table->timestamps();
 
         });
