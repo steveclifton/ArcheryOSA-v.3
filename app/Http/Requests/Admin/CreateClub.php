@@ -28,7 +28,7 @@ class CreateClub extends FormRequest
     public function rules()
     {
         return [
-            'label' => 'required|max:155',
+            'label' => 'required|max:155|unique:clubs,label',
             'organisationid' => 'nullable|integer',
             'description' => 'nullable',
             'phone' => 'nullable',
