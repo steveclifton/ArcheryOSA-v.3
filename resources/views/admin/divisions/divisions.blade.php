@@ -43,32 +43,17 @@
                         <tr>
                             <th>Name</th>
                             <th>Code</th>
-                            <th>Parent Organisation</th>
                             <th>Visible</th>
                         </tr>
                         </thead>
                         <tbody>
-                        <tr>
-                            <th scope="row">Masters 65+ Recurve</th>
-                            <td>MR65+</td>
-                            <td></td>
-                            <td><i class="fa fa-check"></i></td>
-
-                        </tr>
-                        <tr>
-                            <th scope="row">Youth Barebow</th>
-                            <td>YB</td>
-                            <td></td>
-                            <td><i class="fa fa-check"></i></td>
-
-                        </tr>
-                        <tr>
-                            <th scope="row">Youth Long Bow</th>
-                            <td>YB</td>
-                            <td></td>
-                            <td><i class="fa fa-check"></i></td>
-                        </tr>
-
+                            @foreach($divisions as $division)
+                                <tr>
+                                    <th scope="row">{{$division->label}}</th>
+                                    <td>{{$division->code}}</td>
+                                    <td>@if($division->visible)<i class="fa fa-check"></i>@endif</td>
+                                </tr>
+                            @endforeach
                         </tbody>
                     </table>
                 </div>
