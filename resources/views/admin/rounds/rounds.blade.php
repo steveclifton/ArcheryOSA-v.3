@@ -35,39 +35,26 @@
     <div class="row">
         <div class="col-lg-12">
             <div class="card-box">
-                <p>Rounds are the individual distance shoots created which can be added to tournaments</p>
+                <p>Rounds are the individual distance shoots created which can be added to competitions</p>
                 <div class="myTable table-responsive">
                     <table class="table table-hover">
                         <thead class="thead-light">
-                        <tr>
-                            <th>Name</th>
-                            <th>Code</th>
-                            <th>Description</th>
-                            <th>Visible</th>
-                        </tr>
+                            <tr>
+                                <th>Name</th>
+                                <th>Code</th>
+                                <th>Distances</th>
+                                <th>Visible</th>
+                            </tr>
                         </thead>
                         <tbody>
-                        <tr>
-                            <th scope="row"><a href="">WA Kiwi</a></th>
-                            <td>WA25</td>
-                            <td>World Archery 1440 25meters</td>
-                            <td><i class="fa fa-check"></i></td>
-
-                        </tr>
-                        <tr>
-                            <th scope="row"><a href="">WA 1440 Horsham</a></th>
-                            <td>WA40</td>
-                            <td>World Archery 1440 40meters</td>
-                            <td><i class="fa fa-check"></i></td>
-
-                        </tr>
-                        <tr>
-                            <th scope="row"><a href="">WA1440 Intermediate</a></th>
-                            <td>WA55</td>
-                            <td>World Archery 1440 55meters</td>
-                            <td><i class="fa fa-check"></i></td>
-                        </tr>
-
+                            @foreach($rounds as $round)
+                                <tr>
+                                    <th scope="row"><a href="javascript:;">{{$round->label}}</a></th>
+                                    <td>{{$round->code}}</td>
+                                    <td>{!! implode($round->unit . ', ' , $round->getDistances()) . $round->unit!!}</td>
+                                    <td>@if($round->visible)<i class="fa fa-check"></i>@endif</td>
+                                </tr>
+                            @endforeach
                         </tbody>
                     </table>
                 </div>
