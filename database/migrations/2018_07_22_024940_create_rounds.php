@@ -26,7 +26,7 @@ class CreateRounds extends Migration
             $table->string('dist3')->nullable();
             $table->string('dist3max')->nullable();
             $table->string('dist4')->nullable();
-            $table->string('dist5max')->nullable();
+            $table->string('dist4max')->nullable();
             $table->integer('visible')->default(1);
 
             $table->string('totalmax');
