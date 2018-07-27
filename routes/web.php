@@ -109,6 +109,7 @@ Route::middleware(['web'])->group(function() {
         // Rounds
         Route::get('admin/rounds', 'Admin\RoundController@get');
         Route::get('admin/rounds/create', 'Admin\RoundController@getCreateView');
+        Route::post('admin/rounds/create', 'Admin\RoundController@createRound');
 
         // Competitions
         Route::get('admin/competitions', 'Admin\CompetitionController@get');
