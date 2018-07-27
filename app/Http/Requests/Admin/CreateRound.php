@@ -41,7 +41,6 @@ class CreateRound extends FormRequest
             'dist4max'       => 'nullable|numeric',
             'totalmax'       => 'required|numeric',
             'visible'        => 'nullable',
-
         ];
     }
 
