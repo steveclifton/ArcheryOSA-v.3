@@ -28,14 +28,14 @@ class CreateOrganisation extends FormRequest
     public function rules()
     {
         return [
-            'label' => 'required|max:155',
-            'parentid' => 'nullable|integer',
+            'label'       => 'required|max:155|unique:organisations,label',
+            'parentid'    => 'nullable|integer',
             'description' => 'nullable',
-            'phone' => 'nullable',
+            'phone'       => 'nullable',
             'contactname' => 'nullable',
-            'visible' => 'nullable',
-            'url'   => 'nullable|url',
-            'email' => 'nullable|email'
+            'visible'     => 'nullable',
+            'url'         => 'nullable|url',
+            'email'       => 'nullable|email'
         ];
     }
 
