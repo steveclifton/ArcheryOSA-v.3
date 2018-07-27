@@ -89,7 +89,14 @@ Route::middleware(['web'])->group(function() {
 
     });
 
+
     Route::middleware(['admin'])->group(function () {
+
+
+    });
+
+
+    Route::middleware(['superadmin'])->group(function () {
         Route::get('logs', '\Rap2hpoutre\LaravelLogViewer\LogViewerController@index');
 
         // Clubs
@@ -116,14 +123,11 @@ Route::middleware(['web'])->group(function() {
         Route::get('admin/competitions', 'Admin\CompetitionController@get');
         Route::get('admin/competitions/create', 'Admin\CompetitionController@getCreateView');
 
-
-    });
-
-    Route::middleware(['admin'])->group(function () {
-
         // Users
         Route::get('admin/users', 'Admin\UsersController@get');
     });
+
+
 
 
 });
