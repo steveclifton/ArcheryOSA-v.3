@@ -49,7 +49,7 @@
                             @foreach($clubs as $club)
                                 <tr>
                                     <th scope="row">
-                                        <a href="javascript:;">{{ucwords($club->label)}}</a>
+                                        <a href="/admin/clubs/update/{{$club->clubid}}">{{ucwords($club->label)}}</a>
                                     </th>
                                     <th>{{$club->email}}</th>
                                     <td>
