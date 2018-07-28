@@ -7,6 +7,9 @@
 {{--<link href="{{URL::asset('/plugins/clockpicker/css/bootstrap-clockpicker.min.css')}}" rel="stylesheet">--}}
 {{--<link href="{{URL::asset('/plugins/bootstrap-daterangepicker/daterangepicker.css')}}" rel="stylesheet">--}}
 
+<link href="{{URL::asset('plugins/jstree/style.css')}}" rel="stylesheet" type="text/css" />
+
+
 <link href="{{url('css/bootstrap.min.css')}}" rel="stylesheet" type="text/css" />
 <link href="{{url('/css/icons.css')}}" rel="stylesheet" type="text/css" />
 
