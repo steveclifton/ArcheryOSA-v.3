@@ -35,6 +35,7 @@
     <div class="row">
         <div class="col-lg-12">
             <div class="card-box">
+                @include('template.alerts')
                 <p>Rounds are the individual distance shoots created which can be added to competitions</p>
                 <div class="myTable table-responsive">
                     <table class="table table-hover">
