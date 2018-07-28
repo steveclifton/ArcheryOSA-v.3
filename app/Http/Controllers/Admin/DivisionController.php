@@ -5,7 +5,6 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Requests\Admin\CreateDivision;
 use App\Models\Division;
 use App\Models\Organisation;
-use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
 
@@ -48,16 +47,16 @@ class DivisionController extends Controller
         $validated = $request->validated();
 
 
-        $club = new Division();
-        $club->label          = ucwords($validated['label']);
-        $club->organisationid = intval($validated['organisationid']);
-        $club->code           = !empty($validated['code'])            ? strtolower($validated['code']) : null;
-        $club->description    = !empty($validated['description'])     ? strtolower($validated['description']) : null;
-        $club->visible        = !empty($validated['visible'])         ? 1 : 0;
-        $club->createdby      = Auth::id();
-        $club->save();
+        $division = new Division();
+        $division->label          = ucwords($validated['label']);
+        $division->organisationid = intval($validated['organisationid']);
+        $division->code           = !empty($validated['code'])            ? strtolower($validated['code']) : null;
+        $division->description    = !empty($validated['description'])     ? strtolower($validated['description']) : null;
+        $division->visible        = !empty($validated['visible'])         ? 1 : 0;
+        $division->createdby      = Auth::id();
+        $division->save();
 
-        return redirect('/admin/divisions');
+        return redirect('/admin/divisions')->with('success', 'Division Created!');
 
 
     }
