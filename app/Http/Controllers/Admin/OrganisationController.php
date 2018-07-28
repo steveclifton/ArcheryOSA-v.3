@@ -4,7 +4,6 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Requests\Admin\CreateOrganisation;
 use App\Models\Organisation;
-use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
 
@@ -63,7 +62,7 @@ class OrganisationController extends Controller
         $organisation->createdby      = Auth::id();
         $organisation->save();
 
-        return redirect('/admin/organisations');
+        return redirect('/admin/organisations')->with('success', 'Organisation Created!');
 
 
     }
