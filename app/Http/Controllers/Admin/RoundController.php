@@ -51,25 +51,27 @@ class RoundController extends Controller
     {
         $validated = $request->validated();
 
-        $club = new Round();
-        $club->label          = ucwords($validated['label']);
-        $club->organisationid = intval($validated['organisationid']);
-        $club->code           = !empty($validated['code'])       ? strtolower($validated['code']) : null;
-        $club->dist1          = !empty($validated['dist1'])      ? intval($validated['dist1'])    : null;
-        $club->dist1max       = !empty($validated['dist1max'])   ? intval($validated['dist1max']) : null;
-        $club->dist2          = !empty($validated['dist2'])      ? intval($validated['dist2'])    : null;
-        $club->dist2max       = !empty($validated['dist2max'])   ? intval($validated['dist2max']) : null;
-        $club->dist3          = !empty($validated['dist3'])      ? intval($validated['dist3'])    : null;
-        $club->dist3max       = !empty($validated['dist3max'])   ? intval($validated['dist3max']) : null;
-        $club->dist4          = !empty($validated['dist4'])      ? intval($validated['dist4'])    : null;
-        $club->dist4max       = !empty($validated['dist4max'])   ? intval($validated['dist4max']) : null;
-        $club->totalmax       = !empty($validated['totalmax'])   ? intval($validated['totalmax']) : null;
-        $club->visible        = !empty($validated['visible'])    ? 1 : 0;
-        $club->createdby      = Auth::id();
-        $club->save();
+        $round = new Round();
+        $round->label          = ucwords($validated['label']);
+        $round->organisationid = intval($validated['organisationid']);
+        $round->code           = !empty($validated['code'])       ? strtolower($validated['code']) : null;
+        $round->dist1          = !empty($validated['dist1'])      ? intval($validated['dist1'])    : null;
+        $round->dist1max       = !empty($validated['dist1max'])   ? intval($validated['dist1max']) : null;
+        $round->dist2          = !empty($validated['dist2'])      ? intval($validated['dist2'])    : null;
+        $round->dist2max       = !empty($validated['dist2max'])   ? intval($validated['dist2max']) : null;
+        $round->dist3          = !empty($validated['dist3'])      ? intval($validated['dist3'])    : null;
+        $round->dist3max       = !empty($validated['dist3max'])   ? intval($validated['dist3max']) : null;
+        $round->dist4          = !empty($validated['dist4'])      ? intval($validated['dist4'])    : null;
+        $round->dist4max       = !empty($validated['dist4max'])   ? intval($validated['dist4max']) : null;
+        $round->totalmax       = !empty($validated['totalmax'])   ? intval($validated['totalmax']) : null;
+        $round->visible        = !empty($validated['visible'])    ? 1 : 0;
+        $round->type           = !empty($validated['type'])       ? strtolower($validated['type'])  : 'o';
+
+        $round->createdby      = Auth::id();
+        $round->save();
 
 
-        return redirect('/admin/rounds');
+        return redirect('/admin/rounds')->with('success', 'Round Created!');
 
 
     }
