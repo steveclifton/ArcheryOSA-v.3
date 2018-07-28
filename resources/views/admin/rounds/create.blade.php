@@ -25,7 +25,9 @@
                 <div class="form-group row">
                     <label for="inputOrgName3" class="col-sm-12 col-md-3 col-form-label">Name*</label>
                     <div class="col-md-9">
-                        <input name="label" type="text" class="form-control {{ $errors->has('label') ? ' is-invalid' : '' }}" id="inputOrgName3" value="{{old('label')}}">
+                        <input name="label" type="text"
+                               class="form-control {{ $errors->has('label') ? ' is-invalid' : '' }}" id="inputOrgName3"
+                               value="{{old('label')}}">
                         @if ($errors->has('label'))
                             <span class="invalid-feedback" role="alert">
                                 <strong>{{ $errors->first('label') }}</strong>
@@ -47,6 +49,18 @@
 	                    </select>
 	                </div>
 	            </div>
+
+                <div class="form-group row">
+                    <label class="col-sm-12 col-md-3 col-form-label">Round Type</label>
+                    <div class="col-md-9">
+                        <select name="type" class="form-control">
+                            <option value="o" selected>Outdoor</option>
+                            <option value="i">Indoor</option>
+                            <option value="f">Field</option>
+                            <option value="c">Clout</option>
+                        </select>
+                    </div>
+                </div>
 
 	            <div class="form-group row">
                     <label class="col-sm-12 col-md-3 col-form-label">Round Code*</label>
