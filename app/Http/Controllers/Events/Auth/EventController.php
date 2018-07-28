@@ -12,4 +12,9 @@ class EventController extends Controller
         // get all the events the user can manage
         return view('events.auth.events');
     }
+
+    public function getEventView()
+    {
+        return view('events.auth.manage');
+    }
 }
