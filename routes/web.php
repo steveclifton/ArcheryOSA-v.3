@@ -122,6 +122,7 @@ Route::middleware(['web'])->group(function() {
         // Competitions
         Route::get('admin/competitions', 'Admin\CompetitionController@get');
         Route::get('admin/competitions/create', 'Admin\CompetitionController@getCreateView');
+        Route::post('admin/competitions/create', 'Admin\CompetitionController@createCompetition');
 
         // Users
         Route::get('admin/users', 'Admin\UsersController@get');
