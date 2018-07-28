@@ -58,6 +58,7 @@ Route::middleware(['web'])->group(function() {
          *   - defined in this route as not all users will have admin access
          ****************/
         Route::get('/events/manage', 'Events\Auth\EventController@getAllEvents');
+        Route::get('/events/manage/eventname', 'Events\Auth\EventController@getEventView');
 
 
 
@@ -103,6 +104,8 @@ Route::middleware(['web'])->group(function() {
         Route::get('admin/clubs', 'Admin\ClubController@get');
         Route::get('admin/clubs/create', 'Admin\ClubController@getCreateView');
         Route::post('admin/clubs/create', 'Admin\ClubController@createClub');
+        Route::get('admin/clubs/update/{clubid}', 'Admin\ClubController@getUpdateView');
+        Route::post('admin/clubs/update/{clubid}', 'Admin\ClubController@updateClub');
 
         // Divisions
         Route::get('admin/divisions', 'Admin\DivisionController@get');
