@@ -35,41 +35,27 @@
     <div class="row">
         <div class="col-lg-12">
             <div class="card-box">
-                <p>Competitions are designed and contain rounds. <br>
-                - Events then contain one or more competitions
+                @include('template.alerts')
+                <p>A competition is a collection of rounds. <br>
+                    This allows event organisers to 
                 </p>
                 <div class=" myTable table-responsive">
                     <table class="table table-hover">
                         <thead class="thead-light">
                         <tr>
                             <th>Name</th>
-                            <th>Code</th>
                             <th>Description</th>
                             <th>Visible</th>
                         </tr>
                         </thead>
                         <tbody>
-                        <tr>
-                            <th scope="row"><a href="">WA Kiwi</a></th>
-                            <td>WA25</td>
-                            <td>World Archery 1440 25meters</td>
-                            <td><i class="fa fa-check"></i></td>
-
-                        </tr>
-                        <tr>
-                            <th scope="row"><a href="">WA 1440 Horsham</a></th>
-                            <td>WA40</td>
-                            <td>World Archery 1440 40meters</td>
-                            <td><i class="fa fa-check"></i></td>
-
-                        </tr>
-                        <tr>
-                            <th scope="row"><a href="">WA1440 Intermediate</a></th>
-                            <td>WA55</td>
-                            <td>World Archery 1440 55meters</td>
-                            <td><i class="fa fa-check"></i></td>
-                        </tr>
-
+                            @foreach($competitions as $competition)
+                                <tr>
+                                    <th scope="row"><a href="javascript:;">{{$competition->label}}</a></th>
+                                    <td>{{!empty($competition->description) ? substr($competition->description, 0, 40) . '...' : ''}}</td>
+                                    <td>@if($competition->visible)<i class="fa fa-check"></i>@endif</td>
+                                </tr>
+                            @endforeach
                         </tbody>
                     </table>
                 </div>
