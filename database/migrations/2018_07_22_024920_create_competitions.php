@@ -16,8 +16,7 @@ class CreateCompetitions extends Migration
         Schema::create('competitions', function (Blueprint $table) {
             $table->increments('competitionid');
             $table->string('label');
-            $table->text('description');
-
+            $table->text('description')->nullable();
             $table->integer('organisationid');
             $table->integer('visible')->default(1);
 
