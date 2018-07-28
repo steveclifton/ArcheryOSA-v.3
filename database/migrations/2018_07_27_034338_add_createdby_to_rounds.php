@@ -15,8 +15,6 @@ class AddCreatedbyToRounds extends Migration
     {
         Schema::table('rounds', function($table) {
             $table->integer('createdby')->default(0);
-
-
         });
     }
 
