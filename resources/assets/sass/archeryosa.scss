@@ -41,7 +41,11 @@
   transition: all 1s ease-in-out;
   color: #364049;
   border:1px solid #364049; /*CUSTOMIZE THIS COLOR IF YOU WANT */
+
+
 }
+
+
 .db-social-box:hover {
 
   background-color:#C3C6C9;  /*CUSTOMIZE THIS COLOR IF YOU WANT */
@@ -98,5 +102,15 @@
 }
 
 
+@media (min-width: 768px) { 
 
+.db-social-box.topLine{
+    margin-top:0px;
+  }
+
+.db-social-box.bottomLine{
+    margin-bottom:40px;
+  }
+
+ }
 

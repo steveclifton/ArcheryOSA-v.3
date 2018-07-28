@@ -75,3 +75,13 @@
   padding-left: 15px;
 }
 
+@media (min-width: 768px) {
+  .db-social-box.topLine {
+    margin-top: 0px;
+  }
+
+  .db-social-box.bottomLine {
+    margin-bottom: 40px;
+  }
+}
+
