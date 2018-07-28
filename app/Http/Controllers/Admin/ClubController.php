@@ -7,6 +7,7 @@ use App\Models\Club;
 use App\Models\Organisation;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Auth;
 
 class ClubController extends Controller
 {
@@ -69,7 +70,7 @@ class ClubController extends Controller
         $club->createdby      = Auth::id();
         $club->save();
 
-        return redirect('/admin/clubs');
+        return redirect('/admin/clubs')->with('success', 'Club Created!');
 
 
     }
