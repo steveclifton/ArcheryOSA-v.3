@@ -37,7 +37,7 @@
             <div class="card-box">
                 @include('template.alerts')
                 <p>A competition is a collection of rounds. <br>
-                    This allows event organisers to 
+                    This allows event organisers to quickly add pre-defined competitions to their event
                 </p>
                 <div class=" myTable table-responsive">
                     <table class="table table-hover">
