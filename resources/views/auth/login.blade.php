@@ -6,7 +6,7 @@
     <!-- login form start -->
         {{--<div class="account-pages"></div>--}}
         <div class="clearfix"></div>
-        <div class="wrapper-page">
+        <div class="wrapper-page container-fluid">
             <div class="card-box">
                 <div class="panel-heading">
                     <h4 class="text-center"> Sign In </h4>
