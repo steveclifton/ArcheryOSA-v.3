@@ -15,7 +15,7 @@ class CreateCompetitionRounds extends Migration
     {
         Schema::create('competitionrounds', function (Blueprint $table) {
             $table->increments('competitionroundid');
-            $table->integer('eventcompetitionid');
+            $table->integer('competitionid');
             $table->integer('roundid');
 
             $table->timestamps();
