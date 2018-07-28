@@ -30,6 +30,7 @@ class CreateRound extends FormRequest
         return [
             'label'          => 'required|max:155|unique:rounds,label',
             'organisationid' => 'nullable|integer',
+            'type'           => 'required',
             'code'           => 'required|unique:rounds,code',
             'dist1'          => 'required|numeric',
             'dist1max'       => 'required|numeric',
