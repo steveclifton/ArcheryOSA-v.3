@@ -22,7 +22,7 @@
                 <div class="form-group row">
                     <label for="label" class="col-sm-12 col-md-3 col-form-label">Club Name*</label>
                     <div class="col-md-9">
-                        <input name="label" type="text" class="form-control{{ $errors->has('firstname') ? ' is-invalid' : '' }}"
+                        <input name="label" type="text" class="form-control{{ $errors->has('label') ? ' is-invalid' : '' }}"
                                id="inputOrgName3" value="{{old('label')}}" required >
                         @if ($errors->has('label'))
                             <span class="invalid-feedback" role="alert">
