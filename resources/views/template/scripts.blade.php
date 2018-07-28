@@ -15,7 +15,8 @@
 {{--<script src="{{URL::asset('/plugins/bootstrap-daterangepicker/daterangepicker.js')}}"></script>--}}
 <script src="{{URL::asset('/pages/jquery.form-pickers.init.js')}}"></script>
 
-
+<script src="{{URL::asset('plugins/jstree/jstree.min.js')}}"></script>
+<script src="{{URL::asset('pages/jquery.tree.js')}}"></script>
 
 <!-- BEGIN PAGE SCRIPTS -->
 
@@ -25,5 +26,7 @@
 <!-- App js -->
 <script src="{{URL::asset('/js/jquery.core.js')}}"></script>
 <script src="{{URL::asset('/js/jquery.app.js')}}"></script>
+
+<script src="{{URL::asset('/js/archeryosa.js')}}"></script>
 
 {{--<script src="{{URL::asset('/plugins/jquery-ui/jquery-ui.min.js')}}"></script>--}}
