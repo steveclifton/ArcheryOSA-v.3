@@ -36,7 +36,7 @@
     <div class="row">
         <div class="col-lg-12">
             <div class="card-box">
-
+                @include('template.alerts')
                 <div class="myTable table-responsive">
                     <table class="table table-hover">
                         <thead class="thead-light">
