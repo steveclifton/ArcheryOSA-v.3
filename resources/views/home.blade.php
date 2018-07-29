@@ -4,68 +4,68 @@
 
 
 @section('content')
-
-    <!-- Page-Title -->
     <div class="row">
         <div class="col-sm-12">
             <div class="page-title-box">
-                <h4 class="page-title"><a href="/upcomingevents">Upcoming Events</a></h4>
+                {{-- <h4 class="page-title">Upcoming Events</h4> --}}
             </div>
         </div>
-    </div>
-    <!-- end page title  -->
+    </div> 
 
-    <div class="row">
-        <div class="col-12">
-            <div class="card-columns">
-                <a href="/event/details/indoor-league-series">
-                    <div class="card m-b-20">
-                        <img class="card-img-top img-fluid" src="{{URL::asset('/images/archery.jpg')}}" alt="Card image cap">
-                        <div class="card-body">
-                            <h4 class="card-title font-18 mt-0">2018 Indoor League Series</h4>
-                            <p class="card-text">Date : {!! date('d F Y') !!}</p>
-                        </div>
-                    </div>
-                </a>
+    {{-- <div class="wrapper">
+        {{-- <div class="container-fluid"> --}}
 
-                <a href="/event/details/indoor-league-series">
-                    <div class="card m-b-20">
-                        <img class="card-img-top img-fluid" src="{{URL::asset('/images/archery.jpg')}}" alt="Card image cap">
-                        <div class="card-body">
-                            <h4 class="card-title font-18 mt-0">2018 Indoor League Series</h4>
-                            <p class="card-text">Date : {!! date('d F Y') !!}</p>
-                        </div>
-                    </div>
-                </a>
+                                <div class="col-md-12" style="padding:0;">
 
-                <a href="/event/details/indoor-league-series">
-                    <div class="card m-b-20">
-                        <img class="card-img-top img-fluid" src="{{URL::asset('/images/archery.jpg')}}" alt="Card image cap">
-                        <div class="card-body">
-                            <h4 class="card-title font-18 mt-0">2018 Indoor League Series</h4>
-                            <p class="card-text">Date : {!! date('d F Y') !!}</p>
-                        </div>
-                    </div>
-                </a>
+                                    {{-- <p class="text-muted m-b-30 font-13">A slideshow component for cycling through elements, like a carousel.</p> --}}
 
-            </div>
-        </div>
-    </div>
+                                    <div class="panel panel-default text-center text-white slider-bg m-b-0" style="background: url(https://www.streamsongresort.com/wp-content/uploads/2016/01/archery-hero-1800.jpg);">
+                                        <div class="slider-overlay br-radius"></div>
+                                        <div class="panel-body p-0">
+                                            <div class="">
+                                                <div id="owl-slider-2" class="owl-carousel">
+                                                    <div class="item">
+                                                        <h3><a href="#" class="text-white font-600">Welcome to Archery OSA!</a></h3>
+                                                        {{-- <p class="small">02 April, 2015</p> --}}
+                                                        <p class="m-t-30"><em>Our Most recent event was bla bla bla</em></p>
+                                                        <button class="btn btn-inverse btn-sm m-t-40">See Scores</button>
+                                                    </div><!-- /.item -->
 
-    <!-- Section-Title -->
-    <div class="row">
+
+                                                </div><!-- /#tiles-slide-2 -->
+                                            </div>
+                                        </div> <!-- panel-body -->
+                                    </div><!-- Panel -->
+                                </div> <!-- col-->
+
+  <div class="row">
         <div class="col-sm-12">
             <div class="page-title-box">
-                <h4 class="page-title">Upcoming Events</h4>
+                {{-- <h4 class="page-title">Upcoming Events</h4> --}}
             </div>
         </div>
     </div>
 
-    <div class="row">
-        <div class="col-lg-12">
-            <div class="card-box">
 
-                <div class="table-responsive">
+                               <div class="row">
+                    <div class="col-lg-12">
+                        <ul class="nav nav-tabs tabs">
+                            <li class="nav-item tab">
+                                <a href="#upcoming" data-toggle="tab" aria-expanded="false" class="nav-link active show">
+                                    Upcoming Events
+                                </a>
+                            </li>
+                            <li class="nav-item tab">
+                                <a href="#previous" data-toggle="tab" aria-expanded="true" class="nav-link">
+                                    Previous Events
+                                </a>
+                            </li>
+                        </ul>
+                        
+                        <div class="tab-content">
+                            <div class="tab-pane active" id="upcoming">
+
+                                                <div class="table-responsive">
                     <table class="table table-hover">
                         <thead class="thead-light">
                         <tr>
@@ -106,23 +106,9 @@
                         </tbody>
                     </table>
                 </div>
-            </div>
-        </div>
-    </div>
-
-    <div class="row">
-        <div class="col-sm-12">
-            <div class="page-title-box">
-                <h4 class="page-title">Previous Events</h4>
-            </div>
-        </div>
-    </div>
-
-    <div class="row">
-        <div class="col-lg-12">
-            <div class="card-box">
-
-                <div class="table-responsive">
+                            </div>
+                            <div class="tab-pane" id="previous">
+                                <div class="table-responsive">
                     <table class="table table-hover">
                         <thead class="thead-light">
                         <tr>
@@ -151,10 +137,12 @@
                         </tbody>
                     </table>
                 </div>
+                            </div>
 
-            </div>
-        </div>
-    </div>
+                        </div>
+                    </div>
+{{--  </div>
+</div> --}}
 
 
 @endsection
