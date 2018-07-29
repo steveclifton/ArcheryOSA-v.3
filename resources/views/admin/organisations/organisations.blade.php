@@ -37,7 +37,8 @@
         <div class="col-lg-12">
             <div class="card-box">
                 @include('template.alerts')
-                <div class="table-responsive">
+                <p>Organisations are governing bodies for which clubs and competitions can belong to</p>
+                <div class="myTable table-responsive">
                     <table class="table table-hover">
                         <thead class="thead-light">
                         <tr>
@@ -49,7 +50,7 @@
                         <tbody>
                             @foreach($organisations as $organisation)
                                 <tr>
-                                    <th scope="row"><a href="javascript:;">{{$organisation->label}}</a></th>
+                                    <th scope="row"><a href="/admin/organisations/update/{{$organisation->organisationid}}">{{$organisation->label}}</a></th>
                                     <td>{{$organisation->email}}</td>
                                     <td>
                                         @if($organisation->visible)
