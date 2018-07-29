@@ -113,7 +113,7 @@ class ClubController extends Controller
         $club->url            = !empty($validated['url']) ? $validated['url'] : null;
         $club->email          = !empty($validated['email']) ? $validated['email'] : null;
         $club->visible        = !empty($validated['visible']) ? 1 : 0;
-        
+
         $club->save();
 
         return redirect('/admin/clubs')->with('success', 'Club Update!');
