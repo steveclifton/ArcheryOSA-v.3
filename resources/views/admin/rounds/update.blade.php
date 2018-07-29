@@ -1,6 +1,6 @@
 @extends('template.default')
 
-@section ('title')Update Round @endsection
+@section ('title'){{$round->label}} @endsection
 
 @section('content')
 

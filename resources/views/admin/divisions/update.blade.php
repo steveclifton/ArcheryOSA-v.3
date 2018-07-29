@@ -1,6 +1,6 @@
 @extends('template.default')
 
-@section ('title')Update Division @endsection
+@section ('title'){{$division->label}} @endsection
 
 @section('content')
 

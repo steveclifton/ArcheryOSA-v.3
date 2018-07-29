@@ -1,6 +1,6 @@
 @extends('template.default')
 
-@section ('title')Update Organisation @endsection
+@section ('title'){{$organisation->label}} @endsection
 
 @section('content')
 

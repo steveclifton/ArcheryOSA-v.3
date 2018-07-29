@@ -1,6 +1,6 @@
 @extends('template.default')
 
-@section ('title')Update Club @endsection
+@section ('title'){{$club->label}} @endsection
 
 @section('content')
 

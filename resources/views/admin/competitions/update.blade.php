@@ -1,6 +1,6 @@
 @extends('template.default')
 
-@section ('title')Update Competition @endsection
+@section ('title'){{ucwords($competition->label)}} @endsection
 
 @section('content')
 
