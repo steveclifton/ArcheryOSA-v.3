@@ -50,7 +50,7 @@
                         <tbody>
                             @foreach($rounds as $round)
                                 <tr>
-                                    <th scope="row"><a href="javascript:;">{{$round->label}}</a></th>
+                                    <th scope="row"><a href="/admin/rounds/update/{{$round->roundid}}">{{$round->label}}</a></th>
                                     <td>{{$round->code}}</td>
                                     <td>{!! implode($round->unit . ', ' , $round->getDistances()) . $round->unit!!}</td>
                                     <td>@if($round->visible)<i class="fa fa-check"></i>@endif</td>
