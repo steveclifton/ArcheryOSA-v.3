@@ -55,7 +55,8 @@
                 <div class="form-group row">
                     <label for="inputEmail3" class="col-sm-12 col-md-3 col-form-label">Email</label>
                     <div class="col-md-9">
-                        <input name="email" type="email" class="form-control{{ $errors->has('email') ? ' is-invalid' : '' }}" id="inputEmail3">
+                        <input name="email" type="email"
+                               class="form-control{{ $errors->has('email') ? ' is-invalid' : '' }}" id="inputEmail3" value="{{old('email')}}">
                         @if ($errors->has('email'))
                             <span class="invalid-feedback" role="alert">
                                 <strong>{{ $errors->first('email') }}</strong>
