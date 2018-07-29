@@ -116,7 +116,7 @@ class ClubController extends Controller
 
         $club->save();
 
-        return redirect('/admin/clubs')->with('success', 'Club Update!');
+        return redirect('/admin/clubs')->with('success', 'Club Updated!');
 
 
     }
