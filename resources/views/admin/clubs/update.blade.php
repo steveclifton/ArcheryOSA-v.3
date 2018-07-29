@@ -136,7 +136,7 @@
                 <div class="form-group row justify-content-end">
                     <div class=" col-md-9">
                         <div class="checkbox checkbox-primary">
-                            <input name="visible" id="checkbox2" type="checkbox" {{!! empty($club->visible) ? 'checked' : '' !!}}>
+                            <input name="visible" id="checkbox2" type="checkbox" {!! !empty($club->visible) ? 'checked' : '' !!}>
                             <label for="checkbox2">
                                 Visible
                             </label>
