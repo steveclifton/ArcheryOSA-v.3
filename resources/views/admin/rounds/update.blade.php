@@ -43,7 +43,7 @@
 	                        <option value="0">None</option>
                             @foreach($organisations as $organisation)
                                 <option value="{{$organisation->organisationid}}"
-                                        {{$round->organisationid ?? old('organisationid') == $organisation->organisationid ? 'selected' : ''}}>
+                                        {{$round->organisationid == $organisation->organisationid ? 'selected' : ''}}>
                                         {{$organisation->label}}</option>
 	                        @endforeach
 	                    </select>
