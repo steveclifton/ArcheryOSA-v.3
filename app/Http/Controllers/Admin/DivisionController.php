@@ -3,10 +3,12 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Requests\Admin\CreateDivision;
+use App\Http\Requests\Admin\UpdateDivision;
 use App\Models\Division;
 use App\Models\Organisation;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Http\Request;
 
 class DivisionController extends Controller
 {
@@ -38,6 +40,22 @@ class DivisionController extends Controller
     }
 
 
+    public function getUpdateView(Request $request)
+    {
+        $divisionid = $request->divisionid ?? null;
+
+        if (empty($divisionid)) {
+            return redirect('/admin/divisions');
+        }
+
+        $division = Division::where('divisionid', $divisionid)->get()->first();
+        $organisations = Organisation::get();
+
+        return view('admin.divisions.update', compact('division', 'organisations'));
+
+    }
+
+
 
     /******************************************************************************
      * POST Requests
@@ -54,6 +72,28 @@ class DivisionController extends Controller
         $division->description    = !empty($validated['description'])     ? strtolower($validated['description']) : null;
         $division->visible        = !empty($validated['visible'])         ? 1 : 0;
         $division->createdby      = Auth::id();
+        $division->save();
+
+        return redirect('/admin/divisions')->with('success', 'Division Created!');
+    }
+
+
+    public function updateDivision(UpdateDivision $request)
+    {
+        $validated = $request->validated();
+
+
+        $division = Division::where('divisionid', $request->divisionid ?? null)->get()->first();
+
+        if (empty($division)) {
+            return redirect('/admin/divisions')->with('failure', 'Unable to update');
+        }
+
+        $division->label          = ucwords($validated['label']);
+        $division->organisationid = intval($validated['organisationid']);
+        $division->code           = !empty($validated['code'])            ? strtolower($validated['code']) : null;
+        $division->description    = !empty($validated['description'])     ? strtolower($validated['description']) : null;
+        $division->visible        = !empty($validated['visible'])         ? 1 : 0;
         $division->save();
 
         return redirect('/admin/divisions')->with('success', 'Division Updated!');
