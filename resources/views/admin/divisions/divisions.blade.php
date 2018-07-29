@@ -49,7 +49,7 @@
                         <tbody>
                             @foreach($divisions as $division)
                                 <tr>
-                                    <th scope="row">{{$division->label}}</th>
+                                    <th scope="row"><a href="/admin/divisions/update/{{$division->divisionid}}">{{$division->label}}</a></th>
                                     <td>{{$division->code}}</td>
                                     <td>@if($division->visible)<i class="fa fa-check"></i>@endif</td>
                                 </tr>
