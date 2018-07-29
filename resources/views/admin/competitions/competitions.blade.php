@@ -51,7 +51,7 @@
                         <tbody>
                             @foreach($competitions as $competition)
                                 <tr>
-                                    <th scope="row"><a href="javascript:;">{{$competition->label}}</a></th>
+                                    <th scope="row"><a href="/admin/competitions/update/{{$competition->competitionid}}">{{$competition->label}}</a></th>
                                     <td>{{!empty($competition->description) ? substr($competition->description, 0, 40) . '...' : ''}}</td>
                                     <td>@if($competition->visible)<i class="fa fa-check"></i>@endif</td>
                                 </tr>
