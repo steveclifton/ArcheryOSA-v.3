@@ -13,8 +13,6 @@ use Illuminate\Http\Request;
 class DivisionController extends Controller
 {
 
-
-
     /**
      * GET Methods
      */
