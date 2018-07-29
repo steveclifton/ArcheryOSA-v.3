@@ -81,11 +81,11 @@
                                 <div id="checkTree">
                                     @foreach($mappedrounds as $orgname => $roundtype)
                                         <ul>
-                                            <li data-jstree='{"opened":false, "icon": "ti-angle-right"}'>{{$orgname}}
+                                            <li data-jstree='{"opened":true, "icon": "ti-angle-right"}'>{{$orgname}}
                                                 <ul>
                                                     @foreach($roundtype as $roundtype => $type)
 
-                                                        <li data-jstree='{"opened":false, "icon": "ti-angle-right"}'>{{$roundtype}}
+                                                        <li data-jstree='{"opened":true, "icon": "ti-angle-right"}'>{{$roundtype}}
                                                         <ul>
                                                             @foreach($type as $t)
                                                                 <li data-roundid="{{$t->roundid}}" data-jstree='{"icon": "ti-angle-right"}' class="round">{{$t->label}}</li>
