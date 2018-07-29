@@ -121,6 +121,8 @@ Route::middleware(['web'])->group(function() {
         Route::get('admin/rounds', 'Admin\RoundController@get');
         Route::get('admin/rounds/create', 'Admin\RoundController@getCreateView');
         Route::post('admin/rounds/create', 'Admin\RoundController@createRound');
+        Route::get('admin/rounds/update/{roundid}', 'Admin\RoundController@getUpdateView');
+        Route::post('admin/rounds/update/{roundid}', 'Admin\RoundController@updateRound');
 
         // Competitions
         Route::get('admin/competitions', 'Admin\CompetitionController@get');
