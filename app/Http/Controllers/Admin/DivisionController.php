@@ -56,7 +56,7 @@ class DivisionController extends Controller
         $division->createdby      = Auth::id();
         $division->save();
 
-        return redirect('/admin/divisions')->with('success', 'Division Created!');
+        return redirect('/admin/divisions')->with('success', 'Division Updated!');
 
 
     }
