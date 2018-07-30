@@ -7,7 +7,7 @@
     <div class="row">
         <div class="col-sm-12">
             <div class="page-title-box">
-                <h4 class="page-title"><a href="/admin/clubs;">Clubs</a> > <a href="javascript:;">Update</a></h4>
+                <h4 class="page-title"><a href="/admin/clubs">Clubs</a> > <a href="javascript:;">Update</a></h4>
             </div>
         </div>
     </div>
@@ -156,5 +156,5 @@
         </div>
     </div>
 
-</div>
+
 @endsection
