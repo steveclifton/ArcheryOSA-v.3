@@ -22,7 +22,7 @@ Route::get('/events', 'Events\PublicEvents\EventController@getAllEvents');
 Route::get('/events/previous', 'Events\PublicEvents\EventController@getPreviousEvents');
 
 // Define create in public route to show users they can apply to create events
-Route::get('/events/create', 'Events\PublicEvents\EventController@createEvent');
+Route::get('/events/create', 'Events\Auth\EventController@getCreateEventView');
 
 // Get specific event details
 Route::get('/event/details/{eventurl}', 'Events\PublicEvents\EventController@getEventDetails');
@@ -60,6 +60,8 @@ Route::middleware(['web'])->group(function() {
         Route::get('/events/manage', 'Events\Auth\EventController@getAllEvents');
         Route::get('/events/manage/eventname', 'Events\Auth\EventController@getEventView');
 
+        // create an event
+        Route::post('/events/manage/create', 'Events\Auth\EventController@createEvent');
 
 
 
