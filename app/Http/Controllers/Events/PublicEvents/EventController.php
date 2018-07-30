@@ -18,12 +18,6 @@ class EventController extends Controller
         return view('events.public.open');
     }
 
-    public function createEvent()
-    {
-        // Do some auth checking here. Can the user create an event?
-        return view('events.auth.management.create');
-    }
-
     public function getEventDetails(Request $request)
     {
         return view('events.public.details');
