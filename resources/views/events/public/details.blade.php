@@ -59,14 +59,25 @@
                     <span class="sr-only">Next</span>
                 </a>
             </div>
-            <div class="widget-bg-color-icon card-box" id="myUserWidget">
-            <div class="widget-inline-box text-center">
-                <h3><i class="text-inverse md md-account-child"></i> <b data-plugin="counterup">39</b></h3>
-                <h4 class="text-muted font-17">Total Entries</h4>
-                <p class="text-muted font-14">34 Enteries Left</p>
-                 <button type="button" class="btn btn-inverse waves-effect waves-light">Enter Now!</button>
-
+			<div class="d-flex justify-content-around row" id="myWidgetRow">
+            <div class="widget-bg-color-icon card-box col-lg-5 " id="myUserWidget">
+            	<div class="widget-inline-box text-center">
+	                <h3><i class="text-inverse md md-account-child"></i> <b data-plugin="counterup">39</b></h3>
+	                <h4 class="text-muted font-17">Total Entries</h4>
+	                <p class="text-muted font-14">34 Enteries Left</p>
+	                 <button type="button" class="btn btn-inverse waves-effect waves-light">Enter Now</button>  
+	            </div>    
+	           
             </div>
+			<div class="widget-bg-color-icon card-box col-lg-5 " id="myUserWidget">
+            <div class="widget-inline-box text-center">
+                <h3><i class="text-inverse md icon-trophy"></i></h3>
+                <h4 class="text-muted font-17">Results</h4>
+                <p class="text-muted font-14">Results are in</p>
+                 <button type="button" class="btn btn-inverse waves-effect waves-light">I want to see</button>
+            </div>
+	        
+		</div>
         </div>
     </div>
 
