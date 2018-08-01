@@ -8,6 +8,7 @@ use App\Models\Club;
 use App\Models\Event;
 use App\Models\EventAdmin;
 use App\Models\Organisation;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 
@@ -27,10 +28,26 @@ class EventController extends Controller
         return view('events.auth.events', compact('events'));
     }
 
-    public function getEventView()
+    public function getEventView(Request $request)
     {
 
-        return view('events.auth.manage');
+        $event = DB::select("
+            SELECT e.*, es.label as status
+            FROM `events` e
+            JOIN `eventadmins` ea USING (`eventid`)
+            JOIN `eventstatus` es USING (`eventstatusid`)
+            WHERE `ea`.`userid` = :userid
+            AND `e`.`eventurl` = :eventurl
+            LIMIT 1
+        ", ['userid' => Auth::id(), 'eventurl' => $request->eventurl]);
+
+        $event = !empty($event) ? reset($event) : null;
+
+        if (empty($event)) {
+            return redirect()->back()->with('failure', 'Event not found');
+        }
+
+        return view('events.auth.manage', compact('event'));
     }
 
     public function getCreateEventView()
