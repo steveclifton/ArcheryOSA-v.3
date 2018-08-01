@@ -5,8 +5,10 @@ namespace App\Http\Controllers\Events\Auth;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Auth\Events\CreateEvent;
 use App\Models\Club;
+use App\Models\Competition;
 use App\Models\Event;
 use App\Models\EventAdmin;
+use App\Models\EventCompetition;
 use App\Models\Organisation;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -64,7 +66,29 @@ class EventController extends Controller
         return view('events.auth.management.create', compact('organisations', 'clubs'));
     }
 
+    public function getEventCompetitionsView(Request $request)
+    {
 
+        $event = DB::select("
+            SELECT e.*, es.label as status
+            FROM `events` e
+            JOIN `eventadmins` ea USING (`eventid`)
+            JOIN `eventstatus` es USING (`eventstatusid`)
+            WHERE `ea`.`userid` = :userid
+            AND `e`.`eventurl` = :eventurl
+            LIMIT 1
+        ", ['userid' => Auth::id(), 'eventurl' => $request->eventurl]);
+
+        $event = !empty($event) ? reset($event) : null;
+
+        if (empty($event)) {
+            return redirect()->back()->with('failure', 'Event not found');
+        }
+        $event->competitions = EventCompetition::where('eventid', $event->eventid)->get();
+
+
+        return view('events.auth.management.competitions', compact('event'));
+    }
 
 
 
