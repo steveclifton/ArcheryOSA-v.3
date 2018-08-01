@@ -19,7 +19,7 @@
         </div>
 
         <div class="col-lg-4 col-md-4 col-sm-4">
-            <a href="#">
+            <a href="/events/manage/competitions/{{$event->eventurl}}">
                 <div class="db-social-box topLine">
                     <span class="fa fa-bullseye"></span>
                     <h5>Edit Competitions</h5>
