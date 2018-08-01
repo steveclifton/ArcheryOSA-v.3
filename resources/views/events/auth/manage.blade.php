@@ -3,9 +3,9 @@
 @section ('title')Manage Event @endsection
 
 @section('content')
-<div class="page-title-box">
-            <h4 class="page-title" ">Name of Event</h4>
-        </div>
+    <div class="page-title-box">
+        <h4 class="page-title" ">{{ucwords($event->label)}}</h4>
+    </div>
 
     <div class="row">
 
