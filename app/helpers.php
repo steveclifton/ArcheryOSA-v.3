@@ -11,3 +11,10 @@ function makeurl($eventname, $eventid)
 {
     return prepurl($eventname) . '-' . $eventid;
 }
+
+function debug($data)
+{
+    echo '<pre>';
+        print_r($data);
+    echo '</pre>';
+}
