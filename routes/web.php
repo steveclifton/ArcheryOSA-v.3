@@ -27,6 +27,8 @@ Route::get('/events/create', 'Events\Auth\EventController@getCreateEventView');
 // Get specific event details
 Route::get('/event/details/{eventurl}', 'Events\PublicEvents\EventController@getEventDetails');
 
+Route::get('/event/results/{eventurl}', 'Events\PublicEvents\EventController@getEventResults');
+
 // Results and Ranking
 Route::get('/rankings/nz', 'Ranking\RankingController@getCountryRankings');
 Route::get('/records/nz', 'Record\RecordController@getCountryRecords');
@@ -58,7 +60,7 @@ Route::middleware(['web'])->group(function() {
          *   - defined in this route as not all users will have admin access
          ****************/
         Route::get('/events/manage', 'Events\Auth\EventController@getAllEvents');
-        Route::get('/events/manage/eventname', 'Events\Auth\EventController@getEventView');
+        Route::get('/events/manage/{eventname}', 'Events\Auth\EventController@getEventView');
 
         // create an event
         Route::post('/events/manage/create', 'Events\Auth\EventController@createEvent');
