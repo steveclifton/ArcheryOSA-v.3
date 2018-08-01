@@ -37,36 +37,21 @@
                     <div class=" myTable table-responsive">
                         <table class="table table-hover">
                             <thead class="thead-light">
-                                    <tr>
-                                        <th>ID</th>
-                                        <th>Name</th>
-                                        <th>Description</th>
-                                        <th>Visible</th>
-                                    </tr>
-                                    </thead>
-                                    <tbody>
-                                    <tr>
-                                        <td>42</td>
-                                        <th scope="row"><a href="">Dunedin Archery Club</a></th>
-                                        <td></td>
-                                        <td><i class="fa fa-check"></i></td>
-
-                                    </tr>
-                                    <tr>
-                                        <td>41</td>
-                                        <th scope="row"><a href="">Rosebank Archery Club</a></th>
-                                        <td></td>
-                                        <td><i class="fa fa-check"></i></td>
-
-                                    </tr>
-                                   <tr>
-                                        <td>40</td>
-                                        <th scope="row"><a href="">Grey Goose Wing Archery Society</a></th>
-                                        <td></td>
-                                        <td><i class="fa fa-check"></i></td>
-                                    </tr>
-
-                                    </tbody>
+                                <tr>
+                                    <th>Name</th>
+                                    <th>Description</th>
+                                    <th>Visible</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach($events as $event)
+                                        <tr>
+                                            <th scope="row"><a href="/events/manage/{{$event->eventurl}}">Dunedin Archery Club</a></th>
+                                            <td></td>
+                                            <td><i class="fa fa-check"></i></td>
+                                        </tr>
+                                    @endforeach
+                                </tbody>
                         </table>
                     </div>
                 </div>
