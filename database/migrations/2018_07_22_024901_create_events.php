@@ -18,7 +18,7 @@ class CreateEvents extends Migration
             $table->string('label');
             $table->string('hash');
 
-            $table->date('entryclose');
+            $table->date('entryclose')->nullable();
             $table->date('start');
             $table->date('end');
             $table->integer('daycount')->default(1);
