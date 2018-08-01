@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class HomeController extends Controller
 {
@@ -23,6 +23,13 @@ class HomeController extends Controller
      */
     public function index()
     {
-        return view('home');
+        $upcomingevents = DB::select("
+            SELECT e.*, es.label as status
+            FROM `events` e
+            JOIN `eventstatus` es USING (`eventstatusid`)
+            WHERE `e`.`end` > now()
+        ");
+
+        return view('home', compact('upcomingevents'));
     }
 }
