@@ -109,12 +109,10 @@ class EventController extends Controller
         $difference = $startdate->diff($enddate)->days;
 
 
-
-
         $event = new Event();
         $event->label       = ucwords($validated['label']);
         $event->hash        = $this->createHash();
-        $event->entryclose  = $entryclose->format('Y-m-d H:i:s');
+        $event->entryclose  = !empty($entryclose) ? $entryclose->format('Y-m-d H:i:s') : null;
         $event->start       = $startdate->format('Y-m-d H:i:s');
         $event->end         = $enddate->format('Y-m-d H:i:s');
         $event->daycount    = $difference;
