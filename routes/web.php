@@ -61,6 +61,7 @@ Route::middleware(['web'])->group(function() {
          ****************/
         Route::get('/events/manage', 'Events\Auth\EventController@getAllEvents');
         Route::get('/events/manage/{eventurl}', 'Events\Auth\EventController@getEventView');
+        Route::get('/events/manage/competitions/{eventurl}', 'Events\Auth\EventController@getEventCompetitionsView');
 
         // create an event
         Route::post('/events/manage/create', 'Events\Auth\EventController@createEvent');
