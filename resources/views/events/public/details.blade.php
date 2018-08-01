@@ -74,7 +74,7 @@
                 <h3><i class="text-inverse md icon-trophy"></i></h3>
                 <h4 class="text-muted font-17">Results</h4>
                 <p class="text-muted font-14">Results are in</p>
-	                <a href="http://google.com" class="btn btn-inverse waves-effect waves-light">See Results</a>
+                <a href="/event/results/{{$event->eventurl}}" class="btn btn-inverse waves-effect waves-light">See Results</a>
             </div>
 	        
 		</div>
