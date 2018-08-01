@@ -41,7 +41,7 @@ class EventController extends Controller
 
     public function getPreviousEvents()
     {
-        return view('events.completed.completed');
+        return view('events.completed.events');
     }
 
 
