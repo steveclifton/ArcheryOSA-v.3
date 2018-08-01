@@ -2,8 +2,11 @@
 
 namespace App\Http\Controllers\Events\PublicEvents;
 
+
+use App\Models\Event;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+
 
 class EventController extends Controller
 {
@@ -20,7 +23,13 @@ class EventController extends Controller
 
     public function getEventDetails(Request $request)
     {
-        return view('events.public.details');
+
+        $event = Event::where('eventurl', $request->eventurl)->get()->first();
+
+        if (empty($event)) {
+            return redirect('/');
+        }
+        return view('events.public.details', compact('event'));
     }
 
     public function getEventRegistration(Request $request)
@@ -31,7 +40,12 @@ class EventController extends Controller
 
     public function getEventResults(Request $request)
     {
-        return view('events.public.results');
+        $event = Event::where('eventurl', $request->eventurl)->get()->first();
+
+        if (empty($event)) {
+            return redirect('/');
+        }
+        return view('events.public.results', compact('event'));
     }
 
     public function getEventScoring(Request $request)
