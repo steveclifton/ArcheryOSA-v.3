@@ -65,7 +65,7 @@
 	                <h3><i class="text-inverse md md-account-child"></i> <b data-plugin="counterup">39</b></h3>
 	                <h4 class="text-muted font-17">Total Entries</h4>
 	                <p class="text-muted font-14">34 Enteries Left</p>
-	                 <button type="button" class="btn btn-inverse waves-effect waves-light">Enter Now</button>  
+	                <a href="http://google.com" class="btn btn-inverse waves-effect waves-light">Enter Now</a>
 	            </div>    
 	           
             </div>
@@ -74,7 +74,7 @@
                 <h3><i class="text-inverse md icon-trophy"></i></h3>
                 <h4 class="text-muted font-17">Results</h4>
                 <p class="text-muted font-14">Results are in</p>
-                 <button type="button" class="btn btn-inverse waves-effect waves-light">I want to see</button>
+	                <a href="http://google.com" class="btn btn-inverse waves-effect waves-light">See Results</a>
             </div>
 	        
 		</div>
