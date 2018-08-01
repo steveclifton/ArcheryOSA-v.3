@@ -1,7 +1,7 @@
 @extends('template.default')
 
-@section ('title') @endsection
+@section ('title')Competitions @endsection
 
 @section('content')
-    manage the competitions
+    @php debug($event) @endphp
 @endsection
