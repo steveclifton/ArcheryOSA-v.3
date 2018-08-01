@@ -49,6 +49,11 @@
         <div class="col-lg-12">
             <ul class="nav nav-tabs tabs">
                 <li class="nav-item tab">
+                    <a href="#myevents" data-toggle="tab" aria-expanded="true" class="nav-link">
+                        My Events
+                    </a>
+                </li>
+                <li class="nav-item tab">
                     <a href="#upcoming" data-toggle="tab" aria-expanded="false" class="nav-link active show">
                         Upcoming Events
                     </a>
@@ -58,9 +63,41 @@
                         Previous Events
                     </a>
                 </li>
+
             </ul>
 
             <div class="tab-content">
+                <div class="tab-pane" id="myevents">
+                    <div class="table-responsive">
+                        <table class="table table-hover">
+                            <thead class="thead-light">
+                            <tr>
+                                <th>Name</th>
+                                <th>Location</th>
+                                <th>Dates</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <tr>
+                                <th scope="row">2018 Indoor League Series</th>
+                                <td>Nationwide</td>
+                                <td></td>
+                            </tr>
+                            <tr>
+                                <th scope="row">2018 ADAA Indoor Championships</th>
+                                <td>MGAC Indoor Range, 149 Royal Road, Massey, Auckland</td>
+                                <td>13-07-2018</td>
+                            </tr>
+                            <tr>
+                                <th scope="row">3</th>
+                                <td>Larry</td>
+                                <td>21-07-2018</td>
+                            </tr>
+
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
                 <div class="tab-pane active" id="upcoming">
 
                     <div class="table-responsive">
@@ -68,8 +105,6 @@
                             <thead class="thead-light">
                                 <tr>
                                     <th>Name</th>
-                                    <th>Location</th>
-                                    <th>Enteries Close</th>
                                     <th>Start</th>
                                     <th>Status</th>
                                 </tr>
@@ -78,8 +113,6 @@
                                 @foreach($upcomingevents as $event)
                                     <tr>
                                         <th scope="row"><a href="/event/details/{{$event->eventurl}}">{{$event->label}}</a></th>
-                                        <td>{{$event->location}}</td>
-                                        <td>{{date('d F Y', strtotime($event->entryclose))}}</td>
                                         <td>{{date('d F Y', strtotime($event->start))}}</td>
                                         <td class="text-success">{{$event->status}}</td>
                                     </tr>
@@ -119,6 +152,7 @@
                         </table>
                     </div>
                 </div>
+
 
             </div>
         </div>
