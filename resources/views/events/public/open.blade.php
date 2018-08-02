@@ -1,106 +1,77 @@
 @extends('template.default')
 
-@section ('title') @endsection
+@section ('title')Upcoming Events @endsection
 
 @section('content')
-<div class="row">
+    <div class="row">
         <div class="col-sm-12">
             <div class="page-title-box">
                 <h4 class="page-title "><a href="/upcomingevents">Upcoming Events</a></h4>
             </div>
         </div>
     </div>
-        <div class="row">
+    <div class="row">
         <div class="col-12">
+
             <div class="card-columns">
-                <a href="/event/details/indoor-league-series">
-                    <div class="card m-b-20">
-                        <img class="card-img-top img-fluid" src="{{URL::asset('/images/archery.jpg')}}" alt="Card image cap">
-                        <div class="card-body">
-                            <h4 class="card-title font-18 mt-0">2018 Indoor League Series</h4>
-                            <p class="card-text">Date : {!! date('d F Y') !!}</p>
+                @foreach(array_slice($events, 0, 3) as $event)
+                    <a href="/event/details/{{$event->eventurl}}">
+                        <div class="card m-b-20">
+                            <img class="card-img-top img-fluid" src="{{URL::asset('/images/archery.jpg')}}"
+                                 alt="Card image cap">
+                            <div class="card-body">
+                                <h4 class="card-title font-18 mt-0">{{$event->label}}</h4>
+                                @if(!empty($event->entryclose))
+                                    <p class="card-text">Entries Close : {!! date('d F Y', strtotime($event->entryclose)) !!}</p>
+                                @endif
+                                <p class="card-text">Start : {!! date('d F Y', strtotime($event->start)) !!}</p>
+                                <p class="card-text">Status : {{$event->eventstatus}}</p>
+                            </div>
                         </div>
-                    </div>
-                </a>
-
-                <a href="/event/details/indoor-league-series">
-                    <div class="card m-b-20">
-                        <img class="card-img-top img-fluid" src="{{URL::asset('/images/archery.jpg')}}" alt="Card image cap">
-                        <div class="card-body">
-                            <h4 class="card-title font-18 mt-0">2018 Indoor League Series</h4>
-                            <p class="card-text">Date : {!! date('d F Y') !!}</p>
-                        </div>
-                    </div>
-                </a>
-
-                <a href="/event/details/indoor-league-series">
-                    <div class="card m-b-20">
-                        <img class="card-img-top img-fluid" src="{{URL::asset('/images/archery.jpg')}}" alt="Card image cap">
-                        <div class="card-body">
-                            <h4 class="card-title font-18 mt-0">2018 Indoor League Series</h4>
-                            <p class="card-text">Date : {!! date('d F Y') !!}</p>
-                        </div>
-                    </div>
-                </a>
-
+                    </a>
+                @endforeach
             </div>
         </div>
     </div>
 
-    <!-- Section-Title -->
-    <div class="row">
-        <div class="col-sm-12">
-            <div class="page-title-box">
-                <h4 class="page-title">More Events</h4>
-            </div>
-        </div>
-    </div>
-    <div class="row">
-        <div class="col-lg-12">
-            <div class="card-box">
-
-                <div class="table-responsive">
-                    <table class="table table-hover">
-                        <thead class="thead-light">
-                        <tr>
-                            <th>Name</th>
-                            <th>Location</th>
-                            <th>Enteries Close</th>
-                            <th>Start</th>
-                            <th>Status</th>
-
-                        </tr>
-                        </thead>
-                        <tbody>
-                        <tr>
-                            <th scope="row">2018 Indoor League Series</th>
-                            <td>Nationwide</td>
-                            <td></td>
-                            <td>07-05-2018</td>
-                            <td class="text-success">Open</td>
-
-                        </tr>
-                        <tr>
-                            <th scope="row">2018 ADAA Indoor Championships</th>
-                            <td>MGAC Indoor Range, 149 Royal Road, Massey, Auckland</td>
-                            <td>13-07-2018</td>
-                            <td>21-07-2018</td>
-                            <td class="text-danger">Enteries Closed</td>
-
-                        </tr>
-                        <tr>
-                            <th scope="row">3</th>
-                            <td>Larry</td>
-                            <td>21-07-2018</td>
-                            <td>@twitter</td>
-                            <td>@twitter</td>
-
-                        </tr>
-
-                        </tbody>
-                    </table>
+    @if(!empty(array_slice($events, 3)))
+        <!-- Section-Title -->
+        <div class="row">
+            <div class="col-sm-12">
+                <div class="page-title-box">
+                    <h4 class="page-title">Events</h4>
                 </div>
             </div>
         </div>
-    </div>
+        <div class="row">
+            <div class="col-lg-12">
+                <div class="card-box">
+
+                    @if (!empty(array_slice($events, 1)))
+                        <div class="table-responsive">
+                            <table class="table table-hover">
+                                <thead class="thead-light">
+                                <tr>
+                                    <th>Name</th>
+                                    <th>Start</th>
+                                    <th>Status</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                @foreach(array_slice($events, 3) as $event)
+                                    <tr>
+                                        <th scope="row"><a href="/event/details/{{$event->eventurl}}">{{$event->label}}</a></th>
+                                        <td>{{date('d F Y', strtotime($event->start))}}</td>
+                                        <td class="text-success">{{$event->eventstatus}}</td>
+                                    </tr>
+                                @endforeach
+                                </tbody>
+                            </table>
+                        </div>
+                    @endif
+
+                </div>
+            </div>
+        </div>
+    @endif
 @endsection
