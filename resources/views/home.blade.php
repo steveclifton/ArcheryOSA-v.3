@@ -48,58 +48,23 @@
     <div class="row">
         <div class="col-lg-12">
             <ul class="nav nav-tabs tabs">
-                <li class="nav-item tab">
-                    <a href="#myevents" data-toggle="tab" aria-expanded="true" class="nav-link">
-                        My Events
-                    </a>
-                </li>
+                @if(Auth::check())
+                    <li class="nav-item tab">
+                        <a href="#myevents" data-toggle="tab" aria-expanded="true" class="nav-link">
+                            My Events
+                        </a>
+                    </li>
+                @endif
                 <li class="nav-item tab">
                     <a href="#upcoming" data-toggle="tab" aria-expanded="false" class="nav-link active show">
                         Upcoming Events
                     </a>
                 </li>
-                <li class="nav-item tab">
-                    <a href="#previous" data-toggle="tab" aria-expanded="true" class="nav-link">
-                        Previous Events
-                    </a>
-                </li>
-
             </ul>
 
             <div class="tab-content">
-                <div class="tab-pane" id="myevents">
-                    <div class="table-responsive">
-                        <table class="table table-hover">
-                            <thead class="thead-light">
-                            <tr>
-                                <th>Name</th>
-                                <th>Location</th>
-                                <th>Dates</th>
-                            </tr>
-                            </thead>
-                            <tbody>
-                            <tr>
-                                <th scope="row">2018 Indoor League Series</th>
-                                <td>Nationwide</td>
-                                <td></td>
-                            </tr>
-                            <tr>
-                                <th scope="row">2018 ADAA Indoor Championships</th>
-                                <td>MGAC Indoor Range, 149 Royal Road, Massey, Auckland</td>
-                                <td>13-07-2018</td>
-                            </tr>
-                            <tr>
-                                <th scope="row">3</th>
-                                <td>Larry</td>
-                                <td>21-07-2018</td>
-                            </tr>
-
-                            </tbody>
-                        </table>
-                    </div>
-                </div>
-                <div class="tab-pane active" id="upcoming">
-
+                @if(Auth::check())
+                    <div class="tab-pane" id="myevents">
                     <div class="table-responsive">
                         <table class="table table-hover">
                             <thead class="thead-light">
@@ -110,50 +75,66 @@
                                 </tr>
                             </thead>
                             <tbody>
-                                @foreach($upcomingevents as $event)
-                                    <tr>
-                                        <th scope="row"><a href="/event/details/{{$event->eventurl}}">{{$event->label}}</a></th>
-                                        <td>{{date('d F Y', strtotime($event->start))}}</td>
-                                        <td class="text-success">{{$event->status}}</td>
-                                    </tr>
-                                @endforeach
-                            </tbody>
-                        </table>
-                    </div>
-                </div>
-                <div class="tab-pane" id="previous">
-                    <div class="table-responsive">
-                        <table class="table table-hover">
-                            <thead class="thead-light">
-                            <tr>
-                                <th>Name</th>
-                                <th>Location</th>
-                                <th>Dates</th>
-                            </tr>
-                            </thead>
-                            <tbody>
                             <tr>
                                 <th scope="row">2018 Indoor League Series</th>
-                                <td>Nationwide</td>
-                                <td></td>
+                                <td>13-07-2018</td>
+                                <td>Open</td>
                             </tr>
                             <tr>
                                 <th scope="row">2018 ADAA Indoor Championships</th>
-                                <td>MGAC Indoor Range, 149 Royal Road, Massey, Auckland</td>
                                 <td>13-07-2018</td>
+                                <td>Open</td>
                             </tr>
                             <tr>
-                                <th scope="row">3</th>
-                                <td>Larry</td>
+                                <th scope="row">2018 Something Event</th>
                                 <td>21-07-2018</td>
+                                <td>Open</td>
                             </tr>
 
                             </tbody>
                         </table>
                     </div>
                 </div>
-
-
+                @endif
+                <div class="tab-pane active" id="upcoming">
+                    <div class="card-columns">
+                        @foreach(array_slice($upcomingevents, 0, 3) as $event)
+                            <a href="/event/details/{{$event->eventurl}}">
+                                <div class="card m-b-20">
+                                    <img class="card-img-top img-fluid" src="{{URL::asset('/images/archery.jpg')}}"
+                                         alt="Card image cap">
+                                    <div class="card-body">
+                                        <h4 class="card-title font-18 mt-0">{{$event->label}}</h4>
+                                        <p class="card-text">Start : {!! date('d F Y', strtotime($event->start)) !!}</p>
+                                    </div>
+                                </div>
+                            </a>
+                        @endforeach
+                    </div>
+                    @if (!empty(array_slice($upcomingevents, 3)))
+                        <div class="table-responsive">
+                            <table class="table table-hover">
+                                <thead class="thead-light">
+                                    <tr>
+                                        <th>Name</th>
+                                        <th>Start</th>
+                                        <th>Status</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach(array_slice($upcomingevents, 3) as $event)
+                                        <tr>
+                                            <th scope="row"><a href="/event/details/{{$event->eventurl}}">{{$event->label}}</a></th>
+                                            <td>{{date('d F Y', strtotime($event->start))}}</td>
+                                            <td class="text-success">{{$event->eventstatus}}</td>
+                                        </tr>
+                                    @endforeach
+                                </tbody>
+                            </table>
+                        </div>
+                        <h4 class="page-title"><a href="/events">See all events</a></h4>
+                    @endif
+                </div>
             </div>
         </div>
     {{--  </div>
