@@ -22,7 +22,7 @@
             <a href="/events/manage/competitions/{{$event->eventurl}}">
                 <div class="db-social-box topLine">
                     <span class="fa fa-bullseye"></span>
-                    <h5>Edit Competitions</h5>
+                    <h5>{!! $eventcompetitions->isEmpty() ? 'Add' : 'Edit' !!} Competitions</h5>
                 </div>
             </a>
         </div>
