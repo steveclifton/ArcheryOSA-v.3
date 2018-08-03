@@ -96,3 +96,26 @@
   font-size: 1.5em;
 }
 
+.sponsorImgContainer {
+  position: relative;
+}
+
+.textSponsorImg {
+  position: absolute;
+  top: 30%;
+  left: 50%;
+  color: white;
+  -webkit-transform: translateX(-50%);
+          transform: translateX(-50%);
+  font-size: 2em;
+}
+
+.sponsorImg {
+  padding-left: 15px;
+}
+
+.weekSelector {
+  margin-bottom: 30px;
+  margin-top: 30px;
+}
+
