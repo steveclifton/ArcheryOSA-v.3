@@ -30,7 +30,7 @@ class EventController extends Controller
         return view('events.auth.events', compact('events'));
     }
 
-    public function getEventView(Request $request)
+    public function getEventManageView(Request $request)
     {
 
         $event = DB::select("
@@ -49,7 +49,9 @@ class EventController extends Controller
             return redirect()->back()->with('failure', 'Event not found');
         }
 
-        return view('events.auth.manage', compact('event'));
+        $eventcompetitions = EventCompetition::where('eventid', $event->eventid)->get();
+
+        return view('events.auth.manage', compact('event', 'eventcompetitions'));
     }
 
     public function getCreateEventView()
@@ -87,10 +89,52 @@ class EventController extends Controller
         $event->competitions = EventCompetition::where('eventid', $event->eventid)->get();
 
 
-        return view('events.auth.management.competitions', compact('event'));
+        $competitions = DB::select("
+            SELECT c.*, o.label as orgname
+            FROM `competitions` c
+            JOIN `organisations` o USING (`organisationid`)
+            WHERE c.visible = 1
+        ");
+
+
+
+        $mappedcompetitions = [];
+        foreach ($competitions as $competition) {
+            $orgname = !empty($competition->orgname) ? $competition->orgname : 'Other';
+
+            $roundtype = 'Outdoor';
+            if ($competition->type == 'i') {
+                $roundtype = 'Indoor';
+            }
+            else if ($competition->type == 'f') {
+                $roundtype = 'Field';
+            }
+            else if ($competition->type == 'c') {
+                $roundtype = 'Clout';
+            }
+            $mappedcompetitions[$orgname][$roundtype][] = $competition;
+        }
+
+        return view('events.auth.management.competitions', compact('event', 'mappedcompetitions'));
     }
 
 
+
+    // Scoring
+    public function getUserEventScoring()
+    {
+        // get all the events the user can manage
+        $events = DB::select("
+            SELECT e.*, es.label as status
+            FROM `events` e
+            JOIN `eventadmins` ea USING (`eventid`)
+            JOIN `eventcompetitions` ec USING (`eventid`)
+            JOIN `eventstatus` es USING (`eventstatusid`)
+            WHERE `ea`.`userid` = :userid
+            AND `ec`.`scoringlevel` = 0
+        ", ['userid' => Auth::id()]);
+        return view('events.auth.scoringlist', compact('events'));
+    }
 
     /***************************************************************************
      *   POST Requests
@@ -129,6 +173,7 @@ class EventController extends Controller
         $event->createdby   = Auth::id();
         $event->clubid      = !empty($validated['clubid']) ? $validated['clubid'] : null;
         $event->organisationid = !empty($validated['organisationid']) ? $validated['organisationid'] : null;
+        $event->visible     = !empty($validated['visible']) ? 1 : 0;
         $event->save();
 
         $event->eventurl    = makeurl($validated['label'], $event->eventid);
@@ -141,7 +186,7 @@ class EventController extends Controller
         $eventadmin->canedit  = 1;
         $eventadmin->save();
 
-        return redirect('/');
+        return redirect('/events/manage/' . $event->eventurl);
 
     }
 }
