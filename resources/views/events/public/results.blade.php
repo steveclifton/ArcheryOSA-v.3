@@ -3,29 +3,158 @@
 @section ('title')Event Results @endsection
 
 @section('content')
-        <div class="row">
-        <div class="col-sm-12">
-            <div class="page-title-box">
-                <h4 class="page-title">Events</h4>
-            </div>
-            <div class="container" style="margin-left: 0; padding-left: 0;">
-                <div class="row">
-                    <div class="col-xs-6">
-                        <div class="form-group row" style="display:block; margin-left: 0; margin-right: 1em; text-align: left;">
-                            <div class="col-md-12">
-                                <input class="form-control" placeholder="Search" type="search" name="search">
-                            </div>
-                        </div>
+	<div class="row">
+		<div class="col-sm-12">
+	    	<div class="page-title-box">
+	        	<h4 class="page-title">Events</h4>
+	    	</div>
+		</div>
+		<div class="row col-sm-12 sponsorImgContainer">
+			<img class="sponsorImg img-fluid" src="https://weather-tekwindows.com/wp-content/uploads/narrow-header-placeholder.jpg" alt="">
+			<div class="textSponsorImg">The Event Was Sponsored by Miley Popo and friends!</div>
+		</div>
+        <div class="col-sm-3 weekSelector">
+            <select class="form-control">
+                <option>Week 12</option>
+                <option>Week 13</option>
+                <option>Week 14</option>
+                <option>Week 15</option>
+                <option>Week 16</option>
+            </select>
+        </div>        
+	</div>
+	<div class="row">
+        <div class="col-lg-12">
+            <ul class="nav nav-tabs tabs">
+                <li class="nav-item tab">
+                    <a href="#compound" data-toggle="tab" aria-expanded="false" class="nav-link active show">
+                        Compound
+                    </a>
+                </li>
+                <li class="nav-item tab">
+                    <a href="#recurve" data-toggle="tab" aria-expanded="true" class="nav-link">
+                        Recurve
+                    </a>
+                </li>
+                <li class="nav-item tab">
+                    <a href="#barebow" data-toggle="tab" aria-expanded="true" class="nav-link">
+                        Barebow
+                    </a>
+                </li>
+            </ul>
+            <ul class="nav nav-tabs tabs">
+                <li class="nav-item tab">
+                    <a href="#compound" data-toggle="tab" aria-expanded="false" class="nav-link active show">
+                        Female
+                    </a>
+                </li>
+                <li class="nav-item tab">
+                    <a href="#recurve" data-toggle="tab" aria-expanded="true" class="nav-link">
+                        Male
+                    </a>
+                </li>
+            </ul>
+
+            <div class="tab-content">
+                <div class="tab-pane active" id="compound">
+                    <div class="table-responsive">
+                        <table class="table table-bordered table-hover">
+                            <thead class="thead-light">
+                                <tr>
+                                    <th>Archer</th>
+                                    <th>18m</th>
+                                    <th>Total</th>
+                                    <th>10+X</th>
+                                    <th>X</th>
+                                    <th>Average</th>
+                                    <th>Handicap</th>
+                                    <th>Points</th>
+                                    <th>Total Points</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <th scope="row">Adam Niziol</th>
+                                    <td>299</td>
+                                    <td>299</td>
+                                    <td>29</td>
+                                    <td>18</td>
+                                    <td>297.36</td>
+                                    <td>301.64</td>
+                                    <td>0</td>
+                                    <td>39</td>
+                                </tr>
+                            </tbody>
+                        </table>
                     </div>
-                    <div class="col-xs-6">
-                        <a role="button" href="/events/create" class="btn btn-inverse waves-effect waves-light ">
-                            <span class="btn-label">
-                                <i class="fa fa-plus"></i>
-                            </span>Add
-                        </a>
+                </div>
+                <div class="tab-pane" id="recurve">
+                    <div class="table-responsive">
+                        <table class="table table-bordered table-hover">
+                            <thead class="thead-light">
+                                <tr>
+                                    <th>Archer</th>
+                                    <th>18m</th>
+                                    <th>Total</th>
+                                    <th>10+X</th>
+                                    <th>X</th>
+                                    <th>Average</th>
+                                    <th>Handicap</th>
+                                    <th>Points</th>
+                                    <th>Total Points</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <th scope="row">Adam Niziol</th>
+                                    <td>299</td>
+                                    <td>299</td>
+                                    <td>29</td>
+                                    <td>18</td>
+                                    <td>297.36</td>
+                                    <td>301.64</td>
+                                    <td>0</td>
+                                    <td>39</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+                <div class="tab-pane" id="barebow">
+                    <div class="table-responsive">
+                        <table class="table table-bordered table-hover">
+                            <thead class="thead-light">
+                                <tr>
+                                    <th>Archer</th>
+                                    <th>18m</th>
+                                    <th>Total</th>
+                                    <th>10+X</th>
+                                    <th>X</th>
+                                    <th>Average</th>
+                                    <th>Handicap</th>
+                                    <th>Points</th>
+                                    <th>Total Points</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <th scope="row">Adam Niziol</th>
+                                    <td>299</td>
+                                    <td>299</td>
+                                    <td>29</td>
+                                    <td>18</td>
+                                    <td>297.36</td>
+                                    <td>301.64</td>
+                                    <td>0</td>
+                                    <td>39</td>
+                                </tr>
+                            </tbody>
+                        </table>
                     </div>
                 </div>
             </div>
         </div>
-    </div>
+
+         
+    
 @endsection
