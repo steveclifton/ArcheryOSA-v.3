@@ -24,11 +24,15 @@ class HomeController extends Controller
     public function index()
     {
         $upcomingevents = DB::select("
-            SELECT e.*, es.label as status
+            SELECT e.*, es.label as eventstatus
             FROM `events` e
             JOIN `eventstatus` es USING (`eventstatusid`)
             WHERE `e`.`end` > now()
+            AND `e`.`visible` = 1
+            ORDER BY `e`.`promoted` DESC, IFNULL(e.entryclose, e.start) 
         ");
+
+        // Add users events
 
         return view('home', compact('upcomingevents'));
     }
