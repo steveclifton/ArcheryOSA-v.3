@@ -34,43 +34,6 @@
                         </a>
                         <!-- End mobile menu toggle-->
                     </li>
-                    {{--<li class="list-inline-item dropdown notification-list">--}}
-                        {{--<a class="nav-link dropdown-toggle arrow-none waves-light waves-effect" data-toggle="dropdown" href="#" role="button"--}}
-                           {{--aria-haspopup="false" aria-expanded="false">--}}
-                            {{--<i class="dripicons-bell noti-icon"></i>--}}
-                            {{--<span class="badge badge-pink noti-icon-badge">4</span>--}}
-                        {{--</a>--}}
-                        {{--<div class="dropdown-menu dropdown-menu-right dropdown-arrow dropdown-lg" aria-labelledby="Preview">--}}
-                            {{--<!-- item-->--}}
-                            {{--<div class="dropdown-item noti-title">--}}
-                                {{--<h5><span class="badge badge-danger float-right">5</span>Notification</h5>--}}
-                            {{--</div>--}}
-
-                            {{--<!-- item-->--}}
-                            {{--<a href="javascript:void(0);" class="dropdown-item notify-item">--}}
-                                {{--<div class="notify-icon bg-success"><i class="icon-bubble"></i></div>--}}
-                                {{--<p class="notify-details">Robert S. Taylor commented on Admin<small class="text-muted">1 min ago</small></p>--}}
-                            {{--</a>--}}
-
-                            {{--<!-- item-->--}}
-                            {{--<a href="javascript:void(0);" class="dropdown-item notify-item">--}}
-                                {{--<div class="notify-icon bg-info"><i class="icon-user"></i></div>--}}
-                                {{--<p class="notify-details">New user registered.<small class="text-muted">1 min ago</small></p>--}}
-                            {{--</a>--}}
-
-                            {{--<!-- item-->--}}
-                            {{--<a href="javascript:void(0);" class="dropdown-item notify-item">--}}
-                                {{--<div class="notify-icon bg-danger"><i class="icon-like"></i></div>--}}
-                                {{--<p class="notify-details">Carlos Crouch liked <b>Admin</b><small class="text-muted">1 min ago</small></p>--}}
-                            {{--</a>--}}
-
-                            {{--<!-- All-->--}}
-                            {{--<a href="javascript:void(0);" class="dropdown-item notify-item notify-all">--}}
-                                {{--View All--}}
-                            {{--</a>--}}
-
-                        {{--</div>--}}
-                    {{--</li>--}}
 
                     <li class="list-inline-item dropdown notification-list">
                         <a class="nav-link dropdown-toggle waves-effect waves-light nav-user" data-toggle="dropdown" href="#" role="button"
@@ -109,6 +72,13 @@
             <div id="navigation">
                 <!-- Navigation Menu-->
                 <ul class="navigation-menu">
+
+                    @if (Auth::check() && Auth::user()->scoringEnabled())
+                        <li >
+                            <a href="/scoring"><i class=" md-star"></i>Submit Scores!</a>
+                        </li>
+                    @endif
+
                     @if (Auth::check())
                         <li class="has-submenu">
                             <a href="#"><i class="md md-account-box"></i>My Account</a>
@@ -126,23 +96,9 @@
                         </li>
                     @endif
 
-                    {{--<li class="has-submenu">--}}
-                        {{--<a href="javascript:;"><i class="md md-dashboard"></i>Results</a>--}}
-                        {{--<ul class="submenu">--}}
-                            {{--<li>--}}
-                                {{--<a href="/profile">Profile</a>--}}
-                            {{--</li>--}}
-                            {{--<li>--}}
-                                {{--<a href="/myevents">My Events</a>--}}
-                            {{--</li>--}}
-                            {{--<li>--}}
-                                {{--<a href="javascript:;">My Results</a>--}}
-                            {{--</li>--}}
-                        {{--</ul>--}}
-                    {{--</li>--}}
 
                     <li class="has-submenu">
-                        <a href="#"><i class="md md-color-lens"></i>Results</a>
+                        <a href="#"><i class="md-content-copy"></i>Results</a>
                         <ul class="submenu">
                             <li><a href="/events/previous">Event Results</a></li>
                             <li><a href="/records/nz">NZ Records</a></li>
@@ -151,7 +107,7 @@
                     </li>
 
                     <li class="has-submenu">
-                        <a href="#"><i class="md md-color-lens"></i>Events</a>
+                        <a href="#"><i class="md-account-child"></i>Events</a>
                         <ul class="submenu">
                             <li><a href="/events/create">Create an Event</a></li>
                             <li><a href="/events">Event Registration</a></li>
@@ -160,7 +116,7 @@
 
                     @if(Auth::check() && Auth::user()->roleid <= 3)
                         <li class="has-submenu">
-                            <a href="#"><i class="md md-layers"></i>Admin</a>
+                            <a href="#"><i class="md md-settings"></i>Admin</a>
                             <ul class="submenu megamenu">
 
                                 @if(Auth::user()->roleid == 1)
