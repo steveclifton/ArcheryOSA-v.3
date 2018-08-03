@@ -42,7 +42,8 @@ class CreateEvent extends FormRequest
             'schedule' => 'nullable',
             'info' => 'nullable',
             'organisationid' => 'nullable|integer',
-            'clubid' => 'nullable|integer'
+            'clubid' => 'nullable|integer',
+            'visible' => 'nullable'
         ];
     }
 
