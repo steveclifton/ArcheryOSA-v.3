@@ -6,6 +6,7 @@ namespace App\Http\Controllers\Events\PublicEvents;
 use App\Models\Event;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\DB;
 
 
 class EventController extends Controller
@@ -18,8 +19,19 @@ class EventController extends Controller
      */
     public function getAllEvents()
     {
-        return view('events.public.open');
+        $events = DB::select("
+            SELECT e.*, es.label as eventstatus
+            FROM `events` e 
+            JOIN `eventstatus` es USING (`eventstatusid`)
+            WHERE `e`.`end` > NOW()
+            AND `e`.`visible` = 1
+            ORDER BY `e`.`promoted` DESC, IFNULL(e.entryclose, e.start) 
+        ");
+
+
+        return view('events.public.open', compact('events'));
     }
+
 
     public function getEventDetails(Request $request)
     {
@@ -32,11 +44,13 @@ class EventController extends Controller
         return view('events.public.details', compact('event'));
     }
 
+
     public function getEventRegistration(Request $request)
     {
         // Can they register for an event
         return view('events.public.registration');
     }
+
 
     public function getEventResults(Request $request)
     {
@@ -48,10 +62,12 @@ class EventController extends Controller
         return view('events.public.results', compact('event'));
     }
 
+
     public function getEventScoring(Request $request)
     {
         return view('events.public.scoring');
     }
+
 
     public function getPreviousEvents()
     {
