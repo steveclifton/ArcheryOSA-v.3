@@ -28,4 +28,13 @@ class User extends Authenticatable
     protected $hidden = [
         'password', 'remember_token',
     ];
+
+    /**
+     * Need to update this once events are setup, but allows user to see events where they can score
+     * @return bool
+     */
+    public function scoringEnabled()
+    {
+        return true;
+    }
 }
