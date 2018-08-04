@@ -3,6 +3,7 @@
 @section ('title')Create Event @endsection
 
 @section('content')
+
     <div class="row">
         <div class="col-sm-12">
             <div class="page-title-box">
@@ -32,6 +33,19 @@
                     </div>
                 </div>
 
+                <div class="form-group row">
+                    <label class="col-sm-12 col-md-3 col-form-label">Event Type</label>
+                    <div class="col-md-9">
+                        <select name="eventtypeid" class="form-control">
+                            @foreach($eventtypes as $eventtype)
+                                <option value="{{$eventtype->eventtypeid}}"
+                                        {{ old('eventtypeid') == $eventtype->eventtypeid ? 'selected' : ''}}>
+                                    {{ $eventtype->label }}
+                                </option>
+                            @endforeach
+                        </select>
+                    </div>
+                </div>
 
 
                 <div class="form-group row">
@@ -210,4 +224,5 @@
             </form>
         </div>
     </div>
+
 @endsection
