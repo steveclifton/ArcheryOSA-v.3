@@ -57,6 +57,7 @@
 
             <div class="tab-content">
                 <div class="tab-pane active" id="compound">
+                	<h5 class="tableTitle">Events</h5>
                     <div class="table-responsive">
                         <table class="table table-bordered table-hover">
                             <thead class="thead-light">
@@ -89,6 +90,7 @@
                     </div>
                 </div>
                 <div class="tab-pane" id="recurve">
+                	<h5 class="tableTitle">Events</h5>
                     <div class="table-responsive">
                         <table class="table table-bordered table-hover">
                             <thead class="thead-light">
@@ -121,6 +123,7 @@
                     </div>
                 </div>
                 <div class="tab-pane" id="barebow">
+                	<h5 class="tableTitle">Events</h5>
                     <div class="table-responsive">
                         <table class="table table-bordered table-hover">
                             <thead class="thead-light">
