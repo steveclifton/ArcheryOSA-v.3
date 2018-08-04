@@ -28,22 +28,24 @@ class CreateEvent extends FormRequest
     public function rules()
     {
         return [
-            'label' => 'required|max:155|unique:events,label',
-            'entryclose' => 'nullable|date',
-            'start' => 'required|date',
-            'end' => 'required|date|after_or_equal:start',
-            'contactname' => 'nullable',
-            'phone' => 'nullable',
-            'email' => 'required|email',
-            'location' => 'nullable',
-            'cost' => 'nullable',
-            'bankaccount' => 'nullable',
-            'bankreference' => 'nullable',
-            'schedule' => 'nullable',
-            'info' => 'nullable',
+            'label'          => 'required|max:155|unique:events,label',
+            'entryclose'     => 'nullable|date',
+            'start'          => 'required|date',
+            'end'            => 'required|date|after_or_equal:start',
+            'contactname'    => 'nullable',
+            'phone'          => 'nullable',
+            'email'          => 'required|email',
+            'location'       => 'nullable',
+            'cost'           => 'nullable',
+            'bankaccount'    => 'nullable',
+            'bankreference'  => 'nullable',
+            'schedule'       => 'nullable',
+            'info'           => 'nullable',
             'organisationid' => 'nullable|integer',
-            'clubid' => 'nullable|integer',
-            'visible' => 'nullable'
+            'clubid'         => 'nullable|integer',
+            'visible'        => 'nullable',
+            'eventtype'      => 'required',
+
         ];
     }
 
