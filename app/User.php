@@ -2,8 +2,11 @@
 
 namespace App;
 
+use App\Models\Event;
+use App\Models\EventAdmin;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Foundation\Auth\User as Authenticatable;
+use Illuminate\Support\Facades\Auth;
 
 class User extends Authenticatable
 {
@@ -36,5 +39,14 @@ class User extends Authenticatable
     public function scoringEnabled()
     {
         return true;
+    }
+
+    public function canEditEvent($eventid)
+    {
+        return EventAdmin::where('userid', Auth::id())
+                    ->where('eventid', $eventid)
+                    ->where('canedit', 1)
+                    ->get()
+                    ->first();
     }
 }
