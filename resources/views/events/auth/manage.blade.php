@@ -10,7 +10,7 @@
     <div class="row">
 
         <div class="col-lg-4 col-md-4 col-sm-4">
-            <a href="#">
+            <a href="/events/manage/update/{{$event->eventurl}}">
                 <div class="db-social-box topLine">
                     <span class="fa fa-edit"></span>
                     <h5>Edit Event Details</h5>
