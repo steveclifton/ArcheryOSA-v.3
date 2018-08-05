@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateEventTypes extends Migration
+class AddStuffToEventCompetition extends Migration
 {
     /**
      * Run the migrations.
@@ -13,10 +13,10 @@ class CreateEventTypes extends Migration
      */
     public function up()
     {
-        Schema::create('eventtype', function (Blueprint $table) {
-            $table->increments('eventtypeid');
-            $table->string('label');
-            $table->timestamps();
+        Schema::table('eventcompetitions', function($table) {
+            $table->string('competitionids')->default(0);
+            $table->string('divisionids')->default(0);
+            $table->integer('ignoregenders')->default(0);
         });
     }
 
