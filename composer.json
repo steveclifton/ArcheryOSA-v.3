@@ -22,7 +22,8 @@
     },
     "autoload": {
         "files": [
-            "app/helpers.php"
+            "app/helpers.php",
+            "app/Http/Classes/EventsHelper.php"
         ],
         "classmap": [
             "database/seeds",
