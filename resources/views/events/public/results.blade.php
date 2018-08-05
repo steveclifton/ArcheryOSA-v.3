@@ -11,7 +11,7 @@
 		</div>
 		<div class="row col-sm-12 sponsorImgContainer">
 			<img class="sponsorImg img-fluid" src="https://weather-tekwindows.com/wp-content/uploads/narrow-header-placeholder.jpg" alt="">
-			<div class="textSponsorImg">The Event Was Sponsored by Miley Popo and friends!</div>
+			<div class="textSponsorImg d-none d-md-block">The Event Was Sponsored by Miley Popo and friends!</div>
 		</div>
         <div class="col-sm-3 weekSelector">
             <select class="form-control">
