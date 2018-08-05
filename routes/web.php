@@ -61,7 +61,7 @@ Route::middleware(['web'])->group(function() {
          ****************/
         Route::get('/events/manage', 'Events\Auth\EventController@getAllEvents');
         Route::get('/events/manage/{eventurl}', 'Events\Auth\EventController@getEventManageView');
-        Route::get('/events/manage/competitions/{eventurl}', 'Events\Auth\EventController@getEventCompetitionsView');
+
         Route::get('/events/manage/update/{eventurl}', 'Events\Auth\EventController@getUpdateEventView');
 
 
@@ -72,6 +72,11 @@ Route::middleware(['web'])->group(function() {
         // create an event
         Route::post('/events/manage/create', 'Events\Auth\EventController@createEvent');
         Route::post('/events/manage/update/{eventurl}', 'Events\Auth\EventController@updateEvent');
+
+        // event competitions
+        Route::get('events/manage/competitions/{eventurl}', 'Events\Auth\EventCompetitionController@getEventCompetitionsView');
+        Route::post('events/manage/competitions/create/{eventurl}', 'Events\Auth\EventCompetitionController@createEventCompetition');
+        Route::post('events/manage/competitions/update/{eventurl}', 'Events\Auth\EventCompetitionController@updateEventCompetition');
 
 
 
@@ -93,12 +98,17 @@ Route::middleware(['web'])->group(function() {
         Route::post('profile/mydetails', 'Auth\ProfileController@updateProfile')->name('updateprofile');
 
         // Show my events
-        Route::get('/profile/myevents', 'Auth\ProfileController@getMyEvents');
+        Route::get('profile/myevents', 'Auth\ProfileController@getMyEvents');
 
         // Show my results
-        Route::get('/profile/myresults', 'Auth\ProfileController@getMyResults');
+        Route::get('profile/myresults', 'Auth\ProfileController@getMyResults');
 
 
+
+        /**
+         * AJAX
+         */
+        Route::post('ajax/events/manage/competition', 'Events\Auth\Ajax@getMarkup');
 
     });
 
@@ -144,6 +154,7 @@ Route::middleware(['web'])->group(function() {
         Route::get('admin/competitions', 'Admin\CompetitionController@get');
         Route::get('admin/competitions/create', 'Admin\CompetitionController@getCreateView');
         Route::post('admin/competitions/create', 'Admin\CompetitionController@createCompetition');
+
         Route::get('admin/competitions/update/{competitionid}', 'Admin\CompetitionController@getUpdateView');
         Route::post('admin/competitions/update/{competitionid}', 'Admin\CompetitionController@updateCompetition');
 
