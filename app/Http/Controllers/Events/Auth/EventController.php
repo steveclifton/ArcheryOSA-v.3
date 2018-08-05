@@ -2,11 +2,12 @@
 
 namespace App\Http\Controllers\Events\Auth;
 
+use App\Http\Classes\EventsHelper;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Auth\Events\CreateEvent;
 use App\Http\Requests\Auth\Events\UpdateEvent;
 use App\Models\Club;
-use App\Models\Competition;
+
 use App\Models\Event;
 use App\Models\EventAdmin;
 use App\Models\EventCompetition;
@@ -19,6 +20,10 @@ use Illuminate\Support\Facades\DB;
 class EventController extends Controller
 {
 
+    public function __construct()
+    {
+        $this->helper = new EventsHelper();
+    }
 
     /*****************************************
      * Primary Create and Update views
@@ -47,7 +52,6 @@ class EventController extends Controller
         if (empty($event) || empty(Auth::user()->canEditEvent($event->eventid))) {
             return redirect()->back()->with('failure', 'Invalid request');
         }
-
 
         $organisations = Organisation::where('visible', 1)->get();
         $clubs         = Club::where('visible', 1)->get();
@@ -101,64 +105,6 @@ class EventController extends Controller
     }
 
 
-
-    public function getEventCompetitionsView(Request $request)
-    {
-
-        $event = DB::select("
-            SELECT e.*, es.label as status
-            FROM `events` e
-            JOIN `eventadmins` ea USING (`eventid`)
-            JOIN `eventstatus` es USING (`eventstatusid`)
-            WHERE `ea`.`userid` = :userid
-            AND `e`.`eventurl` = :eventurl
-            LIMIT 1
-        ", ['userid' => Auth::id(), 'eventurl' => $request->eventurl]);
-
-        $event = !empty($event) ? reset($event) : null;
-
-        if (empty($event)) {
-            return redirect()->back()->with('failure', 'Event not found');
-        }
-        $event->competitions = EventCompetition::where('eventid', $event->eventid)->get();
-
-
-        $competitions = DB::select("
-            SELECT c.*, o.label as orgname
-            FROM `competitions` c
-            JOIN `organisations` o USING (`organisationid`)
-            WHERE c.visible = 1
-        ");
-
-
-
-        $mappedcompetitions = [];
-        foreach ($competitions as $competition) {
-            $orgname = !empty($competition->orgname) ? $competition->orgname : 'Other';
-
-            $roundtype = 'Outdoor';
-            if ($competition->type == 'i') {
-                $roundtype = 'Indoor';
-            }
-            else if ($competition->type == 'f') {
-                $roundtype = 'Field';
-            }
-            else if ($competition->type == 'c') {
-                $roundtype = 'Clout';
-            }
-            $mappedcompetitions[$orgname][$roundtype][] = $competition;
-        }
-
-        return view('events.auth.management.competitions', compact('event', 'mappedcompetitions'));
-    }
-
-
-
-
-
-
-
-
     // Scoring
     public function getUserEventScoring()
     {
@@ -189,30 +135,30 @@ class EventController extends Controller
         $startdate  = new \DateTime($validated['start']);
         $enddate    = new \DateTime($validated['end']);
 
-        $difference = $startdate->diff($enddate)->days;
+        $difference = $startdate->diff($enddate)->days + 1;
 
 
         $event = new Event();
-        $event->label       = ucwords($validated['label']);
-        $event->hash        = $this->createHash();
-        $event->entryclose  = !empty($entryclose) ? $entryclose->format('Y-m-d H:i:s') : null;
-        $event->start       = $startdate->format('Y-m-d H:i:s');
-        $event->end         = $enddate->format('Y-m-d H:i:s');
-        $event->daycount    = $difference;
-        $event->contactname = !empty($validated['contactname'])     ? $validated['contactname']   : null;
-        $event->phone       = !empty($validated['phone'])           ? $validated['phone']         : null;
-        $event->email       = !empty($validated['email'])           ? $validated['email']         : null;
-        $event->location    = !empty($validated['location'])        ? $validated['location']      : null;
-        $event->cost        = !empty($validated['cost'])            ? $validated['cost']          : null;
-        $event->bankaccount = !empty($validated['bankaccount'])     ? $validated['bankaccount']   : null;
-        $event->bankreference = !empty($validated['bankreference']) ? $validated['bankreference'] : null;
-        $event->schedule    = !empty($validated['schedule'])        ? $validated['schedule']      : null;
-        $event->info        = !empty($validated['info'])            ? $validated['info']          : null;
-        $event->eventstatusid = 6;
-        $event->createdby   = Auth::id();
-        $event->clubid      = !empty($validated['clubid']) ? $validated['clubid'] : null;
-        $event->organisationid = !empty($validated['organisationid']) ? $validated['organisationid'] : null;
-        $event->visible     = !empty($validated['visible']) ? 1 : 0;
+        $event->label           = ucwords($validated['label']);
+        $event->hash            = $this->createHash();
+        $event->entryclose      = !empty($entryclose) ? $entryclose->format('Y-m-d H:i:s') : null;
+        $event->start           = $startdate->format('Y-m-d H:i:s');
+        $event->end             = $enddate->format('Y-m-d H:i:s');
+        $event->daycount        = $difference;
+        $event->contactname     = !empty($validated['contactname'])     ? $validated['contactname']   : null;
+        $event->phone           = !empty($validated['phone'])           ? $validated['phone']         : null;
+        $event->email           = !empty($validated['email'])           ? $validated['email']         : null;
+        $event->location        = !empty($validated['location'])        ? $validated['location']      : null;
+        $event->cost            = !empty($validated['cost'])            ? $validated['cost']          : null;
+        $event->bankaccount     = !empty($validated['bankaccount'])     ? $validated['bankaccount']   : null;
+        $event->bankreference   = !empty($validated['bankreference']) ? $validated['bankreference'] : null;
+        $event->schedule        = !empty($validated['schedule'])        ? $validated['schedule']      : null;
+        $event->info            = !empty($validated['info'])            ? $validated['info']          : null;
+        $event->eventstatusid   = 6;
+        $event->createdby       = Auth::id();
+        $event->clubid          = !empty($validated['clubid']) ? $validated['clubid'] : null;
+        $event->organisationid  = !empty($validated['organisationid']) ? $validated['organisationid'] : null;
+        $event->visible         = !empty($validated['visible']) ? 1 : 0;
         $event->save();
 
         $event->eventurl    = makeurl($validated['label'], $event->eventid);
@@ -246,7 +192,7 @@ class EventController extends Controller
         $startdate  = new \DateTime($validated['start']);
         $enddate    = new \DateTime($validated['end']);
 
-        $difference = $startdate->diff($enddate)->days;
+        $difference = $startdate->diff($enddate)->days + 1;
 
 
         $event->label          = ucwords($validated['label']);
