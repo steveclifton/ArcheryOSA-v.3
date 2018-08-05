@@ -2,8 +2,8 @@
     <div class="alert alert-success">
         {{ session('success') }}
     </div>
-@elseif($errors->any())
+@elseif($errors->any() || session('failure'))
     <div class="alert alert-danger">
-        Please check the details and try again
+        {{session('failure') ?? 'Please check the details and try again'}}
     </div>
 @endif
