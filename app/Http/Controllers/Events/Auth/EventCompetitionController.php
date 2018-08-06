@@ -134,7 +134,7 @@ class EventCompetitionController extends EventController
         $eventcompetition->scoringlevel     = !empty($validated['scoringlevel']) ? intval($validated['scoringlevel']) : 0;
         $eventcompetition->ignoregenders    = empty($validated['ignoregenders']) ? 0 : 1;
         $eventcompetition->scoringenabled   = empty($validated['scoringenabled']) ? 0 : 1;
-        $eventcompetition->visible          = empty($validated['visible']) ? 0 : 1;
+
         $eventcompetition->save();
 
         return redirect()->back()->with('success', 'Competition created!');
@@ -193,7 +193,7 @@ class EventCompetitionController extends EventController
         $eventcompetition->scoringlevel     = !empty($validated['scoringlevel']) ? intval($validated['scoringlevel']) : 0;
         $eventcompetition->ignoregenders    = empty($validated['ignoregenders']) ? 0 : 1;
         $eventcompetition->scoringenabled   = empty($validated['scoringenabled']) ? 0 : 1;
-        $eventcompetition->visible          = empty($validated['visible']) ? 0 : 1;
+
         $eventcompetition->save();
 
         return redirect()->back()->with('success', 'Competition updated!');
