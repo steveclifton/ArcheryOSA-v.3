@@ -121,6 +121,12 @@ class EventController extends Controller
         return view('events.auth.scoringlist', compact('events'));
     }
 
+
+
+
+
+
+
     /***************************************************************************
      *   POST Requests
      ***************************************************************************/
@@ -158,7 +164,7 @@ class EventController extends Controller
         $event->createdby       = Auth::id();
         $event->clubid          = !empty($validated['clubid']) ? $validated['clubid'] : null;
         $event->organisationid  = !empty($validated['organisationid']) ? $validated['organisationid'] : null;
-        $event->visible         = !empty($validated['visible']) ? 1 : 0;
+        $event->visible         = 0;
         $event->save();
 
         $event->eventurl    = makeurl($validated['label'], $event->eventid);
@@ -186,6 +192,16 @@ class EventController extends Controller
 
         if (empty($event)) {
             return redirect('/');
+        }
+
+        if (!empty($validated['visible'])) {
+            $eventcompetitions = EventCompetition::where('eventid', $event->eventid)->get()->first();
+
+            if (empty($eventcompetitions)) {
+                return back()
+                    ->with('failure', 'Event must have competitions before it can be active')
+                    ->with('visible', true);
+            }
         }
 
         $entryclose = !empty($validated['entryclose']) ? new \DateTime($validated['entryclose']) : null;
