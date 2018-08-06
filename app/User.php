@@ -2,8 +2,10 @@
 
 namespace App;
 
+use App\Models\EntryStatus;
 use App\Models\Event;
 use App\Models\EventAdmin;
+use App\Models\EventEntry;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Support\Facades\Auth;
@@ -49,4 +51,46 @@ class User extends Authenticatable
                     ->get()
                     ->first();
     }
+
+    public function getFullname()
+    {
+        return ucwords($this->firstname ?? '') . " " . ucwords($this->lastname ?? '');
+    }
+
+
+
+    public function getEventEntry($eventid)
+    {
+        return EventEntry::where('userid', $this->userid)
+                        ->where('eventid', $eventid)
+                        ->get()
+                        ->first();
+
+
+    }
+
+
+
+    public function getEventEntryStatus($eventid)
+    {
+        $evententry = $this->getEventEntry($eventid);
+
+        if (empty($evententry)) {
+            return false;
+        }
+
+        return EntryStatus::where('entrystatusid', $evententry->entrystatusid)->pluck('label')->first();
+    }
+
+    public function getEventEntryPaid($eventid)
+    {
+        $evententry = $this->getEventEntry($eventid);
+
+        if (empty($evententry)) {
+            return false;
+        }
+
+        return EntryStatus::where('entrystatusid', $evententry->entrystatusid)->pluck('label')->first();
+    }
+
 }
