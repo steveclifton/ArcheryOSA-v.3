@@ -17,7 +17,7 @@ class CreateEventEntrys extends Migration
             $table->increments('entryid');
             $table->integer('userid');
             $table->integer('eventid');
-            $table->integer('entrystatusid');
+            $table->integer('entrystatusid')->default(1);
             $table->integer('paid')->default(0);
             $table->string('firstname')->nullable();
             $table->string('lastname')->nullable();

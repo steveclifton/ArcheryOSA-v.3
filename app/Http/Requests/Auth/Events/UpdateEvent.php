@@ -5,7 +5,7 @@ namespace App\Http\Requests\Auth\Events;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Support\Facades\Auth;
 
-class CreateEvent extends FormRequest
+class UpdateEvent extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -14,7 +14,7 @@ class CreateEvent extends FormRequest
      */
     public function authorize()
     {
-        if (Auth::check() && Auth::user()->roleid <= 3) {
+        if (Auth::check() && Auth::user()->roleid <= 2) {
             return true;
         }
         return false;
@@ -28,7 +28,7 @@ class CreateEvent extends FormRequest
     public function rules()
     {
         return [
-            'label'          => 'required|max:155|unique:events,label',
+            'label'          => 'required|max:155|unique:events,label,' . $this->eventid . ',eventid',
             'entryclose'     => 'nullable|date',
             'start'          => 'required|date',
             'end'            => 'required|date|after_or_equal:start',
@@ -45,7 +45,6 @@ class CreateEvent extends FormRequest
             'clubid'         => 'nullable|integer',
             'visible'        => 'nullable',
             'eventtypeid'    => 'required',
-
         ];
     }
 
@@ -55,11 +54,10 @@ class CreateEvent extends FormRequest
     public function messages()
     {
         return [
-            'label.required' => 'Event name is required',
-            'label.unique' => 'Event name must be unique',
+            'label.required'     => 'Event name is required',
+            'label.unique'       => 'Event name must be unique',
             'end.after_or_equal' => 'Event finish date must be after the start date',
-            'email.required' => 'Email address is required',
+            'email.required'     => 'Email address is required',
         ];
     }
-
 }

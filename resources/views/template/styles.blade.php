@@ -20,3 +20,4 @@
 @endif
 
 <script src="{{URL::asset('/js/modernizr.min.js')}}"></script>
+<script src="{{URL::asset('/js/jquery.min.js')}}"></script>

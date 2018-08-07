@@ -4,16 +4,29 @@
 
 @section('content')
     <div class="page-title-box">
-        <h4 class="page-title" ">{{ucwords($event->label)}}</h4>
+        <h4 class="page-title" ">
+            <a href="/events">Events</a>
+                <i class="ion-arrow-right-c"></i>
+            <a href="javascript:;">{{ucwords($event->label)}}</a>
+        </h4>
     </div>
 
     <div class="row">
 
         <div class="col-lg-4 col-md-4 col-sm-4">
-            <a href="#">
+            <a href="/events/manage/update/{{$event->eventurl}}">
                 <div class="db-social-box topLine">
                     <span class="fa fa-edit"></span>
                     <h5>Edit Event Details</h5>
+                </div>
+            </a>
+        </div>
+
+        <div class="col-lg-4 col-md-4 col-sm-4">
+            <a href="/events/manage/settings/{{$event->eventurl}}">
+                <div class="db-social-box topLine">
+                    <span class="fa fa-cogs"></span>
+                    <h5>Event Settings</h5>
                 </div>
             </a>
         </div>
@@ -27,9 +40,11 @@
             </a>
         </div>
 
+
+
         <div class="col-lg-4 col-md-4 col-sm-4">
             <a href="#">
-                <div class="db-social-box topLine">
+                <div class="db-social-box bottomline">
                     <span class="fa fa-users"></span>
                     <h5>Event Entries</h5>
                 </div>
@@ -62,6 +77,8 @@
                 </div>
             </a>
         </div>
+
+
 
     </div>
 @endsection

@@ -4,7 +4,7 @@
  * Tree view
  */
 
-$( document ).ready(function() {
+//$( document ).ready(function() {
     // // Basic
     // $('#basicTree').jstree({
 		// 'core' : {
@@ -24,22 +24,7 @@ $( document ).ready(function() {
     // });
     
     // Checkbox
-    $('#checkTree').jstree({
-		'core' : {
-			'themes' : {
-				'responsive': false
-			}
-		},
-        'types' : {
-            'default' : {
-                'icon' : 'fa fa-folder'
-            },
-            'file' : {
-                'icon' : 'fa fa-file'
-            }
-        },
-        'plugins' : ['types', 'checkbox']
-    });
+
 
 
 
@@ -91,4 +76,4 @@ $( document ).ready(function() {
     //     },
     //     "plugins" : [ "contextmenu", "dnd", "search", "state", "types", "wholerow" ]
     // });
-});
+// });

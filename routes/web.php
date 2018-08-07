@@ -61,21 +61,38 @@ Route::middleware(['web'])->group(function() {
          ****************/
         Route::get('/events/manage', 'Events\Auth\EventController@getAllEvents');
         Route::get('/events/manage/{eventurl}', 'Events\Auth\EventController@getEventManageView');
-        Route::get('/events/manage/competitions/{eventurl}', 'Events\Auth\EventController@getEventCompetitionsView');
-
-        Route::get('/scoring', 'Events\Auth\EventController@getUserEventScoring');
-
-        // create an event
+        Route::get('/events/manage/update/{eventurl}', 'Events\Auth\EventController@getUpdateEventView');
         Route::post('/events/manage/create', 'Events\Auth\EventController@createEvent');
+        Route::post('/events/manage/update/{eventurl}', 'Events\Auth\EventController@updateEvent');
+
+        // event competitions
+        Route::get('events/manage/competitions/{eventurl}', 'Events\Auth\EventCompetitionController@getEventCompetitionsView');
+        Route::post('events/manage/competitions/create/{eventurl}', 'Events\Auth\EventCompetitionController@createEventCompetition');
+        Route::post('events/manage/competitions/update/{eventurl}', 'Events\Auth\EventCompetitionController@updateEventCompetition');
 
 
+        // event settings
+        Route::get('events/manage/settings/{eventurl}', 'Events\Auth\EventSettingsController@getEventSettingsView');
+        Route::post('events/manage/settings/{eventurl}', 'Events\Auth\EventSettingsController@updateEventSettings');
+
+
+
+
+        // USERS STUFF
 
         // Register for an event
-        Route::get('/event/register/{eventurl}', 'Events\PublicEvents\EventController@getEventRegistration');
+        Route::get('/event/register/{eventurl}', 'Events\Auth\EventRegistrationController@getRegistrationList');
+        Route::get('/event/registration/{eventurl}/{username}', 'Events\Auth\EventRegistrationController@getRegistration');
+        Route::post('/event/registration/create/{eventurl}', 'Events\Auth\EventRegistrationController@createRegistration');
+        Route::post('/event/registration/update/{eventurl}', 'Events\Auth\EventRegistrationController@updateRegistration');
 
         // Logout
         Route::post('logout', 'Auth\LoginController@logout')->name('logout');
         Route::get('logout', 'Auth\LoginController@logout')->name('logout');
+
+
+        // User scoring
+        Route::get('/scoring', 'Events\Auth\EventController@getUserEventScoring');
 
 
         /*****************
@@ -88,12 +105,17 @@ Route::middleware(['web'])->group(function() {
         Route::post('profile/mydetails', 'Auth\ProfileController@updateProfile')->name('updateprofile');
 
         // Show my events
-        Route::get('/profile/myevents', 'Auth\ProfileController@getMyEvents');
+        Route::get('profile/myevents', 'Auth\ProfileController@getMyEvents');
 
         // Show my results
-        Route::get('/profile/myresults', 'Auth\ProfileController@getMyResults');
+        Route::get('profile/myresults', 'Auth\ProfileController@getMyResults');
 
 
+
+        /**
+         * AJAX
+         */
+        Route::post('ajax/events/manage/competition', 'Events\Auth\Ajax@getMarkup');
 
     });
 
@@ -139,6 +161,7 @@ Route::middleware(['web'])->group(function() {
         Route::get('admin/competitions', 'Admin\CompetitionController@get');
         Route::get('admin/competitions/create', 'Admin\CompetitionController@getCreateView');
         Route::post('admin/competitions/create', 'Admin\CompetitionController@createCompetition');
+
         Route::get('admin/competitions/update/{competitionid}', 'Admin\CompetitionController@getUpdateView');
         Route::post('admin/competitions/update/{competitionid}', 'Admin\CompetitionController@updateCompetition');
 

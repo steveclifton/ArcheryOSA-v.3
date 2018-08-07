@@ -3,14 +3,27 @@
 namespace App\Http\Controllers\Events\PublicEvents;
 
 
+use App\Http\Classes\EventsHelper;
 use App\Models\Event;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\DB;
 
-
+/**
+ * Event Controller for PUBLIC REQUESTS
+ *
+ * Class EventController
+ * @package App\Http\Controllers\Events\PublicEvents
+ */
 class EventController extends Controller
 {
+
+
+    public function __construct()
+    {
+        $this->helper = new EventsHelper();
+    }
+
 
     /**
      * GET
@@ -45,11 +58,8 @@ class EventController extends Controller
     }
 
 
-    public function getEventRegistration(Request $request)
-    {
-        // Can they register for an event
-        return view('events.public.registration');
-    }
+
+
 
 
     public function getEventResults(Request $request)

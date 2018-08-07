@@ -3,10 +3,17 @@
 @section ('title')Create Event @endsection
 
 @section('content')
+
     <div class="row">
         <div class="col-sm-12">
             <div class="page-title-box">
-                <h4 class="page-title"><a href="/events/">Events</a> > <a href="javascript:;">Create</a></h4>
+                <h4 class="page-title">
+                    <a href="/events">Events</a>
+                        <i class="ion-arrow-right-c"></i>
+                    <a href="/events/">Events</a>
+                        <i class="ion-arrow-right-c"></i>
+                    <a href="javascript:;">Create</a>
+                </h4>
             </div>
         </div>
     </div>
@@ -32,6 +39,19 @@
                     </div>
                 </div>
 
+                <div class="form-group row">
+                    <label class="col-sm-12 col-md-3 col-form-label">Event Type</label>
+                    <div class="col-md-9">
+                        <select name="eventtypeid" class="form-control">
+                            @foreach($eventtypes as $eventtype)
+                                <option value="{{$eventtype->eventtypeid}}"
+                                        {{ old('eventtypeid') == $eventtype->eventtypeid ? 'selected' : ''}}>
+                                    {{ $eventtype->label }}
+                                </option>
+                            @endforeach
+                        </select>
+                    </div>
+                </div>
 
 
                 <div class="form-group row">
@@ -190,16 +210,6 @@
                     </div>
                 </div>
 
-                <div class="form-group row justify-content-end">
-                    <div class=" col-md-9">
-                        <div class="checkbox checkbox-primary">
-                            <input name="visible" id="checkbox2" type="checkbox">
-                            <label for="checkbox2">
-                                Active
-                            </label>
-                        </div>
-                    </div>
-                </div>
 
                 <div class="form-group mb-0 justify-content-start row">
                     <div class="col-sm-12 col-md-3 col-form-label"></div>
@@ -210,4 +220,5 @@
             </form>
         </div>
     </div>
+
 @endsection

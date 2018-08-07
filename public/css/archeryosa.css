@@ -1,3 +1,7 @@
+.hidden {
+  display: none;
+}
+
 .loginLogo {
   max-width: 40%;
   height: auto;

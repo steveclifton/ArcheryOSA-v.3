@@ -98,7 +98,7 @@
 
 
                     <li class="has-submenu">
-                        <a href="#"><i class="md-content-copy"></i>Results</a>
+                        <a href="#"><i class="ion-trophy"></i>Results</a>
                         <ul class="submenu">
                             <li><a href="/events/previous">Event Results</a></li>
                             <li><a href="/records/nz">NZ Records</a></li>

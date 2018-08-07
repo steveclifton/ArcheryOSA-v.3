@@ -135,7 +135,7 @@
 
 </div>
 
-
+<script src="{{URL::asset('/js/admin/competitions.js')}}"></script>
 
 
 @endsection

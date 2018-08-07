@@ -4,7 +4,7 @@
 
 @section('content')
 
-<div class="row">
+    <div class="row">
         <div class="col-sm-12">
             <div class="page-title-box">
                 <h4 class="page-title"><a href="/admin/clubs">Competitions</a> > <a href="javascript:;">Create</a></h4>
@@ -133,6 +133,7 @@
 </div>
 
 
+    <script src="{{URL::asset('/js/admin/competitions.js')}}"></script>
 
 
 @endsection

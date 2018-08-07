@@ -18,3 +18,15 @@ function debug($data)
         print_r($data);
     echo '</pre>';
 }
+
+function getEntryStatusText($entrystatusid)
+{
+    switch ($entrystatusid) {
+        case 1:
+            return 'warning';
+        case 2:
+            return 'succes';
+        default:
+            return 'danger';
+    }
+}
