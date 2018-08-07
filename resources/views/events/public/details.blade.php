@@ -7,7 +7,11 @@
 <div class="row">
     <div class="col-sm-12">
         <div class="page-title-box">
-            <h4 class="page-title">North Island Youth Championships 2018</h4>
+			<h4 class="page-title" ">
+				<a href="/events">Events</a>
+					<i class="ion-arrow-right-c"></i>
+				<a href="javascript:;">{{ucwords($event->label)}}</a>
+			</h4>
         </div>
     </div>
  </div>
@@ -65,7 +69,7 @@
 	                <h3><i class="text-inverse md md-account-child"></i> <b data-plugin="counterup">39</b></h3>
 	                <h4 class="text-muted font-17">Total Entries</h4>
 	                <p class="text-muted font-14">34 Enteries Left</p>
-	                <a href="http://google.com" class="btn btn-inverse waves-effect waves-light">Enter Now</a>
+	                <a href="/event/register/{{$event->eventurl}}" class="btn btn-inverse waves-effect waves-light">Enter Now</a>
 	            </div>    
 	           
             </div>
