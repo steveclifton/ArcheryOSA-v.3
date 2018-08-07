@@ -42,7 +42,7 @@
                     <label for="label" class="col-sm-12 col-md-3 col-form-label">Firstname*</label>
                     <div class="col-md-9">
                         <input name="firstname" type="text" class="form-control{{ $errors->has('firstname') ? ' is-invalid' : '' }}"
-                               value="{{ $evententry->firstname ?? old('firstname')}}" required >
+                               value="{{ old('firstname') ?? $evententry->firstname}}" required >
                         @if ($errors->has('firstname'))
                             <span class="invalid-feedback" role="alert">
                                 <strong>{{ $errors->first('firstname') }}</strong>
@@ -55,7 +55,7 @@
                     <label for="label" class="col-sm-12 col-md-3 col-form-label">Lastname*</label>
                     <div class="col-md-9">
                         <input name="lastname" type="text" class="form-control{{ $errors->has('lastname') ? ' is-invalid' : '' }}"
-                               value="{{$evententry->lastname ?? old('lastname') ?? ucwords($user->lastname)}}" required >
+                               value="{{old('lastname') ?? $evententry->lastname ?? ucwords($user->lastname)}}" required >
                         @if ($errors->has('lastname'))
                             <span class="invalid-feedback" role="alert">
                                 <strong>{{ $errors->first('lastname') }}</strong>
@@ -69,7 +69,7 @@
                     <label for="label" class="col-sm-12 col-md-3 col-form-label">Email*</label>
                     <div class="col-md-9">
                         <input name="email" type="text" class="form-control{{ $errors->has('email') ? ' is-invalid' : '' }}"
-                               value="{{ $evententry->email ?? old('email') ?? ucwords($user->email)}}" required >
+                               value="{{ old('email') ?? $evententry->email ?? ucwords($user->email)}}" required >
                         @if ($errors->has('email'))
                             <span class="invalid-feedback" role="alert">
                                 <strong>{{ $errors->first('email') }}</strong>
@@ -84,7 +84,7 @@
 
                         <input type="text" name="dateofbirth" class="form-control {{ $errors->has('dateofbirth') ? 'is-invalid' : '' }}"
                                placeholder="dd-mm-yyyy"
-                               value="{{ $evententry->dateofbirth ?? old('dateofbirth') ?? $user->dateofbirth ?? ''}}"
+                               value="{{ old('dateofbirth') ?? $evententry->dateofbirth ?? $user->dateofbirth ?? ''}}"
                                id="datepicker-autoclose">
 
                         @if ($errors->has('dateofbirth'))
@@ -102,7 +102,7 @@
                     <label for="label" class="col-sm-12 col-md-3 col-form-label">Membership</label>
                     <div class="col-md-9">
                         <input name="membership" type="text" class="form-control"
-                               value="{{ $evententry->membership ?? old('membership')}}"  >
+                               value="{{ old('membership') ?? $evententry->membership }}"  >
                     </div>
                 </div>
 
@@ -110,7 +110,7 @@
                     <label for="label" class="col-sm-12 col-md-3 col-form-label">Phone</label>
                     <div class="col-md-9">
                         <input name="phone" type="text" class="form-control"
-                               value="{{ $evententry->phone ?? old('phone') ?? $user->phone ?? ''}}"  >
+                               value="{{ old('phone') ?? $evententry->phone ?? $user->phone ?? ''}}"  >
                     </div>
                 </div>
 
@@ -118,14 +118,14 @@
                 <div class="form-group row">
                     <label class="col-sm-12 col-md-3 col-form-label">Address</label>
                     <div class="col-md-9">
-                        <textarea name="address" class="form-control" rows="2">{{ $evententry->address ?? old('address')}}</textarea>
+                        <textarea name="address" class="form-control" rows="2">{{ old('address') ?? $evententry->address }}</textarea>
                     </div>
                 </div>
 
                 <div class="form-group row">
                     <label class="col-sm-12 col-md-3 col-form-label">Notes</label>
                     <div class="col-md-9">
-                        <textarea name="notes" class="form-control" rows="2">{{ $evententry->notes ?? old('notes')}}</textarea>
+                        <textarea name="notes" class="form-control" rows="2">{{ old('notes') ?? $evententry->notes}}</textarea>
                     </div>
                 </div>
 
@@ -136,7 +136,7 @@
                             <option value="0">None</option>
                             @foreach($clubs as $club)
                                 <option value="{{$club->clubid}}"
-                                        {!!  ($evententry->clubid ?? old('clubid')) == $club->clubid ? 'selected' : '' !!}>
+                                        {!!  (old('clubid') ?? $evententry->clubid) == $club->clubid ? 'selected' : '' !!}>
                                     {{$club->label}}
                                 </option>
                             @endforeach
@@ -152,7 +152,7 @@
                             <option disabled selected >Pick one</option>
                             @foreach($divisionsfinal as $division)
                                 <option value="{{$division->divisionid}}"
-                                        {!! ($evententry->divisionid ?? old('divisionid')) == $division->divisionid ? 'selected' : '' !!}>
+                                        {!! (old('divisionid') ?? $evententry->divisionid) == $division->divisionid ? 'selected' : '' !!}>
                                     {{$division->label}}
                                 </option>
                             @endforeach
