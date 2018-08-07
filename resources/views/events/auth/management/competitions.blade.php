@@ -8,7 +8,11 @@
         <div class="col-sm-12">
             <div class="page-title-box">
                 <h4 class="page-title">
-                    <a href="/events/manage/{{$event->eventurl}}">{{ucwords($event->label)}}</a> > <a href="javascript:;">Competitions</a>
+                    <a href="/events">Events</a>
+                        <i class="ion-arrow-right-c"></i>
+                    <a href="/events/manage/{{$event->eventurl}}">{{ucwords($event->label)}}</a>
+                        <i class="ion-arrow-right-c"></i>
+                    <a href="javascript:;">Competitions</a>
                 </h4>
             </div>
         </div>
@@ -69,5 +73,5 @@
         </div>
     </div>
 
-    <script src="{{URL::asset('/js/divisions.js')}}"></script>
+    <script src="{{URL::asset('/js/admin/divisions.js')}}"></script>
 @endsection
