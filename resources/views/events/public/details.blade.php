@@ -33,21 +33,21 @@
                     </ol>
                 	<div class="carousel-inner" role="listbox">
                         <div class="carousel-item active">
-                            <img class="d-block img-fluid" src="{{URL::asset('/images/archery.jpg')}}" alt="First slide" />
+                            <img class="d-block img-fluid" src="{{URL::asset('/images/' . $event->imagedt)}}" alt="First slide" />
                             <div class="carousel-caption d-none d-md-block">
                                 {{-- <h3 class="text-white">First slide label</h3> --}}
                                 {{-- <p>Nulla vitae elit libero, a pharetra augue mollis interdum.</p> --}}
                             </div>
                         </div>
                     <div class="carousel-item">
-                        <img class="d-block img-fluid" src="{{URL::asset('/images/archery.jpg')}}" alt="Second slide" />
+                        <img class="d-block img-fluid" src="{{URL::asset('/images/' . $event->imagedt)}}" alt="Second slide" />
                         <div class="carousel-caption d-none d-md-block">
                             {{-- <h3 class="text-white">Second slide label</h3> --}}
                             {{-- <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p> --}}
                         </div>
                     </div>
                     <div class="carousel-item">
-                        <img class="d-block img-fluid" src="{{URL::asset('/images/archery.jpg')}}" alt="Third slide" />
+                        <img class="d-block img-fluid" src="{{URL::asset('/images/' . $event->imagedt)}}" alt="Third slide" />
                         <div class="carousel-caption d-none d-md-block">
                             {{-- <h3 class="text-white">Third slide label</h3> --}}
                             {{-- <p>Praesent commodo cursus magna, vel scelerisque nisl consectetur.</p> --}}
