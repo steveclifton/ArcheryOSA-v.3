@@ -7,13 +7,20 @@
     <div class="row">
         <div class="col-sm-12">
             <div class="page-title-box">
-                <h4 class="page-title"><a href="/events/manage/{{$event->eventurl}}">{{ ucwords($event->label) }}</a> > <a href="javascript:;">Update</a></h4>
+                <h4 class="page-title">
+                    <a href="/events">Events</a>
+                        <i class="ion-arrow-right-c"></i>
+                    <a href="/events/manage/{{$event->eventurl}}">{{ ucwords($event->label) }}</a>
+                        <i class="ion-arrow-right-c"></i>
+                    <a href="javascript:;">Update</a>
+                </h4>
             </div>
         </div>
     </div>
 
     <div class="col-md-8 offset-md-2">
         <div class="card-box">
+            @include('template.alerts')
             <h4 class="m-t-0 m-b-30 text-center addFormHeader header-title">Update Event</h4>
 
             <form class="form-horizontal myForms" action="/events/manage/update/{{$event->eventurl}}" method="POST" role="form">
@@ -214,6 +221,11 @@
                             <label for="checkbox2">
                                 Active
                             </label>
+                            @if (session('visible'))
+                                <div class="alert alert-danger">
+                                    Cannot be active at this stage
+                                </div>
+                            @endif
                         </div>
                     </div>
                 </div>
