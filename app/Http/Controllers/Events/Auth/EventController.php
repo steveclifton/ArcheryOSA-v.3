@@ -165,6 +165,7 @@ class EventController extends Controller
         $event->clubid          = !empty($validated['clubid']) ? $validated['clubid'] : null;
         $event->organisationid  = !empty($validated['organisationid']) ? $validated['organisationid'] : null;
         $event->visible         = 0;
+        $event->imagedt         = 'event' . rand(1,2) . '.jpg';
         $event->save();
 
         $event->eventurl    = makeurl($validated['label'], $event->eventid);
