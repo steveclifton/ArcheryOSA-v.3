@@ -61,15 +61,7 @@ Route::middleware(['web'])->group(function() {
          ****************/
         Route::get('/events/manage', 'Events\Auth\EventController@getAllEvents');
         Route::get('/events/manage/{eventurl}', 'Events\Auth\EventController@getEventManageView');
-
         Route::get('/events/manage/update/{eventurl}', 'Events\Auth\EventController@getUpdateEventView');
-
-
-
-
-        Route::get('/scoring', 'Events\Auth\EventController@getUserEventScoring');
-
-        // create an event
         Route::post('/events/manage/create', 'Events\Auth\EventController@createEvent');
         Route::post('/events/manage/update/{eventurl}', 'Events\Auth\EventController@updateEvent');
 
@@ -79,13 +71,28 @@ Route::middleware(['web'])->group(function() {
         Route::post('events/manage/competitions/update/{eventurl}', 'Events\Auth\EventCompetitionController@updateEventCompetition');
 
 
+        // event settings
+        Route::get('events/manage/settings/{eventurl}', 'Events\Auth\EventSettingsController@getEventSettingsView');
+        Route::post('events/manage/settings/{eventurl}', 'Events\Auth\EventSettingsController@updateEventSettings');
+
+
+
+
+        // USERS STUFF
 
         // Register for an event
-        Route::get('/event/register/{eventurl}', 'Events\PublicEvents\EventController@getEventRegistration');
+        Route::get('/event/register/{eventurl}', 'Events\Auth\EventRegistrationController@getRegistrationList');
+        Route::get('/event/registration/{eventurl}/{username}', 'Events\Auth\EventRegistrationController@getRegistration');
+        Route::post('/event/registration/create/{eventurl}', 'Events\Auth\EventRegistrationController@createRegistration');
+        Route::post('/event/registration/update/{eventurl}', 'Events\Auth\EventRegistrationController@updateRegistration');
 
         // Logout
         Route::post('logout', 'Auth\LoginController@logout')->name('logout');
         Route::get('logout', 'Auth\LoginController@logout')->name('logout');
+
+
+        // User scoring
+        Route::get('/scoring', 'Events\Auth\EventController@getUserEventScoring');
 
 
         /*****************
