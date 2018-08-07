@@ -36,16 +36,16 @@
     </div>
 </div>
 
-<div class="form-group row justify-content-end">
-    <div class=" col-md-9">
-        <div class="checkbox checkbox-primary">
-            <input name="ignoregenders" id="checkbox2" type="checkbox" {{ (old('ignoregenders') ?? $competition['ignoregenders']) ? 'checked' : ''}}>
-            <label for="checkbox2">
-                Ignore Genders
-            </label>
-        </div>
-    </div>
-</div>
+{{--<div class="form-group row justify-content-end">--}}
+    {{--<div class=" col-md-9">--}}
+        {{--<div class="checkbox checkbox-primary">--}}
+            {{--<input name="ignoregenders" id="checkbox2" type="checkbox" {{ (old('ignoregenders') ?? $competition['ignoregenders']) ? 'checked' : ''}}>--}}
+            {{--<label for="checkbox2">--}}
+                {{--Ignore Genders--}}
+            {{--</label>--}}
+        {{--</div>--}}
+    {{--</div>--}}
+{{--</div>--}}
 
 <div class="form-group row justify-content-end">
     <div class=" col-md-9">
