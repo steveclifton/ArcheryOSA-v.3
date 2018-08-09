@@ -2,7 +2,9 @@
 
 namespace App\Http\Classes;
 
+use App\Models\Competition;
 use App\Models\Division;
+use App\Models\EventCompetition;
 use Illuminate\Support\Facades\DB;
 
 class EventsHelper
@@ -92,5 +94,28 @@ class EventsHelper
         return $mappeddivisions;
     }
 
+    public function getEventCompetitionLabels()
+    {
 
+    }
+
+    public function getCompetitionLabels($eventid)
+    {
+        $eventcompetitions = EventCompetition::where('eventid', $eventid ?? NULL)->get();
+
+        if (empty($eventcompetitions)) {
+            return '';
+        }
+
+        $complabels = [];
+        foreach ($eventcompetitions as $eventcompetition) {
+            $competitions = Competition::wherein('competitionid', json_decode($eventcompetition->competitionids))->get();
+            foreach ($competitions as $comp) {
+                $complabels[$comp->competitionid] = $comp->label;
+            }
+        }
+
+        return $complabels;
+
+    }
 }
