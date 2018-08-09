@@ -2,6 +2,7 @@
 
 namespace App\Http\Requests\Auth\Competitions;
 
+use App\Models\EventAdmin;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Support\Facades\Auth;
 
@@ -10,10 +11,17 @@ class UpdateEventCompetition extends FormRequest
 
     public function authorize()
     {
-        if (Auth::check() && Auth::user()->roleid <= 3) {
-            return true;
+        if (Auth::check()) {
+            $eventadmin = EventAdmin::where('userid', Auth::id())
+                ->where('eventid', $this->eventid)
+                ->where('canedit', 1)
+                ->get()->first();
+
+            if (!empty($eventadmin)) {
+                return true;
+            }
+
         }
-        return false;
     }
     /**
      * Determine if the user is authorized to make this request.
