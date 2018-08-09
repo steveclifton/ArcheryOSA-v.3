@@ -4,7 +4,11 @@ namespace App\Http\Controllers\Events\PublicEvents;
 
 
 use App\Http\Classes\EventsHelper;
+use App\Models\Club;
+use App\Models\Competition;
 use App\Models\Event;
+use App\Models\EventCompetition;
+use App\Models\EventType;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\DB;
@@ -54,7 +58,25 @@ class EventController extends Controller
         if (empty($event)) {
             return redirect('/');
         }
-        return view('events.public.details', compact('event'));
+
+        $entrycount = DB::table('evententrys')
+                        ->where('eventid', $event->eventid)
+                        ->count();
+
+        $scorecount = DB::table('scores')
+                        ->where('eventid', $event->eventid)
+                        ->count();
+
+        $evententryopen = $event->eventstatusid == 1 ? true : false;
+
+        $competitionlabels = $this->helper->getCompetitionLabels($event->eventid);
+
+        $competitiontype = EventType::where('eventtypeid', $event->eventtypeid)->pluck('label')->first();
+
+        $clublabel = Club::where('clubid', $event->clubid)->pluck('label')->first();
+
+        return view('events.public.details',
+            compact('event', 'entrycount', 'scorecount', 'evententryopen', 'competitionlabels', 'competitiontype', 'clublabel'));
     }
 
 
