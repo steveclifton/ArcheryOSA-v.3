@@ -33,6 +33,7 @@ Route::get('/event/results/{eventurl}', 'Events\PublicEvents\EventController@get
 Route::get('/rankings/nz', 'Ranking\RankingController@getCountryRankings');
 Route::get('/records/nz', 'Record\RecordController@getCountryRecords');
 
+Route::get('/users/{username}', 'Auth\PublicProfile\UserController@getPublicProfile');
 
 
 Route::middleware(['web'])->group(function() {
