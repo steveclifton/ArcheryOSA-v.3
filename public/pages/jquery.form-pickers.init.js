@@ -32,7 +32,7 @@ jQuery(document).ready(function() {
 
                 // Date Picker
                 // jQuery('#datepicker').datepicker().formatDate('dd,mm,yyyy', new Date());
-                jQuery('#datepicker-autoclose').datepicker({
+                jQuery('.datepicker-autoclose').datepicker({
                 	autoclose: true,
                     format: 'dd-mm-yyyy'
                 });
