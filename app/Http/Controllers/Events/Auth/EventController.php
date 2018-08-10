@@ -238,7 +238,7 @@ class EventController extends Controller
         $event->save();
 
 
-        return back()->with('success', 'Event updated!');
+        return redirect('events/manage/update/' . $event->eventurl)->with('success', 'Event updated!');
 
     }
 
