@@ -88,7 +88,8 @@
                             <label>Date of Birth</label>
                             <div>
                                 <div class="input-group">
-                                    <input type="text" name="dateofbirth" class="form-control {{ $errors->has('dateofbirth') ? 'is-invalid' : '' }}" placeholder="dd/mm/yyyy" value="{{old('dateofbirth') ?? Auth::user()->dateofbirth ?? ''}}" id="datepicker-autoclose">
+                                    <input type="text" name="dateofbirth" class="form-control datepicker-autoclose {{ $errors->has('dateofbirth') ? 'is-invalid' : '' }}"
+                                           placeholder="dd/mm/yyyy" value="{{old('dateofbirth') ?? Auth::user()->dateofbirth ?? ''}}" id="">
                                     @if ($errors->has('dateofbirth'))
                                         <span class="invalid-feedback" role="alert">
                                             <strong>{{ $errors->first('dateofbirth') }}</strong>
