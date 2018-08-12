@@ -16,7 +16,7 @@
 
         {{-- <p class="text-muted m-b-30 font-13">A slideshow component for cycling through elements, like a carousel.</p> --}}
 
-        <div class="panel panel-default text-center d-md-none text-white slider-bg m-b-0"
+        <div class="panel panel-default text-center d-lg-none text-white slider-bg m-b-0"
              style="background: url({{asset('/images/archerybanner.jpg')}});">
             <div class="slider-overlay br-radius"></div>
             <div class="panel-body p-0">
@@ -33,7 +33,7 @@
             </div> <!-- panel-body -->
         </div><!-- Panel -->
 
-        <div class="panel panel-default text-center desktopOnlyImg d-none d-md-block text-white slider-bg m-b-0"
+        <div class="panel panel-default text-center desktopOnlyImg d-none d-lg-block text-white slider-bg m-b-0"
              style="background: url({{asset('/images/archerybannerdt1.jpg')}});">
             <div class="slider-overlay br-radius"></div>
             <div class="panel-body p-0">
@@ -48,7 +48,7 @@
                     </div><!-- /#tiles-slide-2 -->
                 </div>
             </div> <!-- panel-body -->
-        </div><!-
+        </div>
     </div> <!-- col-->
 
     <div class="row">
