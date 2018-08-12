@@ -12,12 +12,27 @@ function makeurl($eventname, $eventid)
     return prepurl($eventname) . '-' . $eventid;
 }
 
-function debug($data)
+function debug(...$data)
 {
+    if (Auth::id() != 1) {
+        return;
+    }
     echo '<pre>';
         print_r($data);
     echo '</pre>';
 }
+
+function debugx(...$data)
+{
+    if (Auth::id() != 1) {
+        return;
+    }
+    echo '<pre>';
+    print_r($data);
+    echo '</pre>';
+    die();
+}
+
 
 function getEntryStatusText($entrystatusid)
 {
@@ -29,4 +44,10 @@ function getEntryStatusText($entrystatusid)
         default:
             return 'danger';
     }
+}
+
+
+function makeEventDetailsUrl($eventurl)
+{
+    return env('APP_URL') . '/event/details/' . $eventurl;
 }

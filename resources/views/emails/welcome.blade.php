@@ -345,7 +345,7 @@
                                     <![endif]-->
                                     <div style="font-family:'Lato', Tahoma, Verdana, Segoe, sans-serif;line-height:180%;color:#555555; padding-right: 25px; padding-left: 25px; padding-top: 5px; padding-bottom: 20px;">
                                         <div style="font-size:12px;line-height:22px;color:#555555;font-family:'Lato', Tahoma, Verdana, Segoe, sans-serif;text-align:left;">
-                                            <p style="margin: 0;font-size: 14px;line-height: 25px;text-align: center"><span style="font-size: 16px; line-height: 28px;"><span style="line-height: 28px; font-size: 16px;">ArcheryOSA is a free, open source online scoring service for archers, clubs and organisations developed by seasoned archers, for archers.</span></span></p>
+                                            <p style="margin: 0;font-size: 14px;line-height: 25px;text-align: center"><span style="font-size: 16px; line-height: 28px;"><span style="line-height: 28px; font-size: 16px;">ArcheryOSA is an online scoring service for archers, clubs and organisations developed by seasoned archers, for archers.</span></span></p>
                                         </div>
                                     </div>
                                     <!--[if mso]>

@@ -5,7 +5,7 @@
 @section('content')
     <div class="page-title-box">
         <h4 class="page-title" ">
-            <a href="/events">Events</a>
+            <a href="/events/manage">Events</a>
                 <i class="ion-arrow-right-c"></i>
             <a href="javascript:;">{{ucwords($event->label)}}</a>
         </h4>
@@ -43,7 +43,7 @@
 
 
         <div class="col-lg-4 col-md-4 col-sm-4">
-            <a href="#">
+            <a href="/events/manage/evententries/{{$event->eventurl}}">
                 <div class="db-social-box bottomline">
                     <span class="fa fa-users"></span>
                     <h5>Event Entries</h5>

@@ -11,6 +11,11 @@ class EntryConfirmation extends Mailable
 {
     use Queueable, SerializesModels;
 
+    public $eventname;
+    public $firstname;
+    public $eventurl;
+
+
     /**
      * Create a new message instance.
      *
@@ -20,7 +25,7 @@ class EntryConfirmation extends Mailable
     {
         $this->eventname = $eventname;
         $this->firstname = $firstname;
-        $this->eventurl = $eventurl;
+        $this->eventurl  = $eventurl;
     }
 
     /**
@@ -35,7 +40,7 @@ class EntryConfirmation extends Mailable
             ->with([
                 'eventname' => $this->eventname,
                 'firstname' => $this->firstname,
-                'eventurl' => $this->eventurl,
+                'eventurl' => $this->eventurl
             ]);
     }
 }

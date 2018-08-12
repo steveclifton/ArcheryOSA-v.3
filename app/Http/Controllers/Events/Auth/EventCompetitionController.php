@@ -6,6 +6,7 @@ namespace App\Http\Controllers\Events\Auth;
 use App\Http\Requests\Auth\Competitions\CreateEventCompetition;
 use App\Http\Requests\Auth\Competitions\UpdateEventCompetition;
 use App\Models\Event;
+use App\Models\EventAdmin;
 use App\Models\EventCompetition;
 use App\Models\ScoringLevel;
 use Illuminate\Http\Request;
@@ -14,6 +15,24 @@ use Illuminate\Support\Facades\DB;
 
 class EventCompetitionController extends EventController
 {
+
+    public function __construct(Request $request)
+    {
+        parent::__construct();
+        $this->event = Event::where('eventurl', $request->eventurl)->get()->first();
+
+        if (empty($this->event)) {
+            return back()->with('failure', 'Invalid');
+        }
+
+        $eventadmin = EventAdmin::where('eventid', $this->event->eventid)->get()->first();
+
+        if (empty($eventadmin)) {
+            return back()->with('failure', 'Invalid');
+        }
+    }
+
+
     /**
      * Gets the event competition view
      *

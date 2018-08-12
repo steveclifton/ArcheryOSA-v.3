@@ -76,8 +76,8 @@ Route::middleware(['web'])->group(function() {
         Route::get('events/manage/settings/{eventurl}', 'Events\Auth\EventSettingsController@getEventSettingsView');
         Route::post('events/manage/settings/{eventurl}', 'Events\Auth\EventSettingsController@updateEventSettings');
 
-
-
+        // event entries
+        Route::get('events/manage/evententries/{eventurl}', 'Events\Auth\EventEntryController@getEventEntriesView');
 
         // USERS STUFF
 
@@ -117,6 +117,9 @@ Route::middleware(['web'])->group(function() {
          * AJAX
          */
         Route::post('ajax/events/manage/competition', 'Events\Auth\Ajax@getMarkup');
+        Route::post('ajax/events/manage/{eventurl}/approveentry', 'Events\Auth\EventEntryController@approveEntry');
+        Route::post('ajax/events/manage/{eventurl}/approvepaid', 'Events\Auth\EventEntryController@approvePaid');
+        Route::post('ajax/events/manage/{eventurl}/sendconfirmation', 'Events\Auth\EventEntryController@sendApprove');
 
     });
 
