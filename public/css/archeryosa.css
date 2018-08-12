@@ -1,5 +1,14 @@
-.hidden {
-  display: none;
+.homePageBanner {
+  padding: 0;
+}
+
+.desktopOnlyImg {
+  height: 380px;
+}
+
+.desktopOnlyImg .panel-body .archeryHeadText {
+  color: white;
+  font-size: 2em;
 }
 
 .loginLogo {
