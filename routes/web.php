@@ -25,7 +25,7 @@ Route::get('/events/previous', 'Events\PublicEvents\EventController@getPreviousE
 Route::get('/events/create', 'Events\Auth\EventController@getCreateEventView');
 
 // Get specific event details
-Route::get('/event/details/{eventurl}', 'Events\PublicEvents\EventController@getEventDetails');
+Route::get('/event/details/{eventurl}', 'Events\PublicEvents\EventController@getEventDetails')->name('event');
 
 Route::get('/event/results/{eventurl}', 'Events\PublicEvents\EventController@getEventResults');
 
