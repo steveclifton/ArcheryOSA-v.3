@@ -2,12 +2,13 @@
 
 namespace App\Jobs;
 
-use App\Mail\EntryConfirmation;
+use App\Mail\EntryReceived;
 use Illuminate\Bus\Queueable;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
+use Illuminate\Support\Facades\Mail;
 
 class SendEntryReceived extends ArcheryOSASender implements ShouldQueue
 {
@@ -36,7 +37,7 @@ class SendEntryReceived extends ArcheryOSASender implements ShouldQueue
     {
         if ($this->checkEmailAddress($this->email)) {
             Mail::to($this->email)
-                ->send(new EntryConfirmation(ucwords($this->eventname)));
+                ->send(new EntryReceived(ucwords($this->eventname)));
         }
     }
 }
