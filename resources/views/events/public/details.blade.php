@@ -102,7 +102,7 @@
                             <tbody>
                                 <tr>
                                     <th class="w-25">Entries Close</th>
-                                    <td>{!! date('d F Y', strtotime($event->entryclose)) !!}</td>
+                                    <td>{!! !empty($event->entryclose) ? date('d F Y', strtotime($event->entryclose)) : 'Not Specified'!!}</td>
                                 </tr>
                                 <tr>
                                     <th class="w-25">Start Date</th>
