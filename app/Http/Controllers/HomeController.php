@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 
 class HomeController extends Controller
@@ -32,8 +33,18 @@ class HomeController extends Controller
             ORDER BY `e`.`promoted` DESC, IFNULL(e.entryclose, e.start) 
         ");
 
-        // Add users events
+        $myevents = [];
+        if (Auth::check()) {
+            $myevents = DB::select("
+                SELECT e.label, e.start, e.eventurl, es.label as status
+                FROM `events` e
+                JOIN `evententrys` ee USING (`eventid`)
+                JOIN `entrystatus` es ON (ee.entrystatusid = es.entrystatusid)
+                WHERE `ee`.`userid` = '".Auth::id()."'
+            ");
 
-        return view('home', compact('upcomingevents'));
+        }
+
+        return view('home', compact('upcomingevents', 'myevents'));
     }
 }
