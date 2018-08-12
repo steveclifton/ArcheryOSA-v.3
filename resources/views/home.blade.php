@@ -28,8 +28,6 @@
                             <p class="m-t-30"><em></em></p>
                             <button class="btn btn-inverse btn-sm m-t-40">Latest Results</button>
                         </div><!-- /.item -->
-
-
                     </div><!-- /#tiles-slide-2 -->
                 </div>
             </div> <!-- panel-body -->
@@ -71,26 +69,17 @@
                                 <tr>
                                     <th>Name</th>
                                     <th>Start</th>
-                                    <th>Status</th>
+                                    <th>Entry Status</th>
                                 </tr>
                             </thead>
                             <tbody>
-                            <tr>
-                                <th scope="row">2018 Indoor League Series</th>
-                                <td>13-07-2018</td>
-                                <td>Open</td>
-                            </tr>
-                            <tr>
-                                <th scope="row">2018 ADAA Indoor Championships</th>
-                                <td>13-07-2018</td>
-                                <td>Open</td>
-                            </tr>
-                            <tr>
-                                <th scope="row">2018 Something Event</th>
-                                <td>21-07-2018</td>
-                                <td>Open</td>
-                            </tr>
-
+                            @foreach($myevents as $event)
+                                <tr>
+                                    <th scope="row"><a href="{{route('event', ['eventurl'=>$event->eventurl])}}">{{$event->label}}</a></th>
+                                    <td>{{date('d F Y', strtotime($event->start))}}</td>
+                                    <td>{{$event->status}}</td>
+                                </tr>
+                            @endforeach
                             </tbody>
                         </table>
                     </div>
