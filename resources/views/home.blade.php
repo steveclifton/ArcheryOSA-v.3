@@ -17,16 +17,16 @@
         {{-- <p class="text-muted m-b-30 font-13">A slideshow component for cycling through elements, like a carousel.</p> --}}
 
         <div class="panel panel-default text-center text-white slider-bg m-b-0"
-             style="background: url(https://www.streamsongresort.com/wp-content/uploads/2016/01/archery-hero-1800.jpg);">
+             style="background: url({{asset('/images/archerybanner.jpg')}});">
             <div class="slider-overlay br-radius"></div>
             <div class="panel-body p-0">
                 <div class="">
                     <div id="owl-slider-2" class="owl-carousel">
                         <div class="item">
-                            <h3><a href="#" class="text-white font-600">Welcome to Archery OSA!</a></h3>
+                            <h3><a href="#" class="text-white font-600">Archery OSA</a></h3>
                             {{-- <p class="small">02 April, 2015</p> --}}
-                            <p class="m-t-30"><em>Our Most recent event was bla bla bla</em></p>
-                            <button class="btn btn-inverse btn-sm m-t-40">See Scores</button>
+                            <p class="m-t-30"><em></em></p>
+                            <button class="btn btn-inverse btn-sm m-t-40">Latest Results</button>
                         </div><!-- /.item -->
 
 
