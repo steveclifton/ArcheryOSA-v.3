@@ -90,7 +90,7 @@
                     <label for="label" class="col-sm-12 col-md-3 col-form-label">Entries Close</label>
                     <div class="col-md-9">
                         <input type="text" name="entryclose" class="datepicker-autoclose form-control {{ $errors->has('entryclose') ? 'is-invalid' : '' }}"
-                               placeholder="Choose Date" value="{{ $event->entryclose ?? old('entryclose')}}" id="datepicker-autoclose">
+                               placeholder="Choose Date" value="{{ date('d-m-Y', strtotime($event->entryclose)) ?? old('entryclose')}}" id="datepicker-autoclose">
 
                         @if ($errors->has('entryclose'))
                             <span class="invalid-feedback" role="alert">
@@ -104,7 +104,7 @@
                     <label for="label" class="col-sm-12 col-md-3 col-form-label">Start Date*</label>
                     <div class="col-md-9">
                         <input type="text" name="start" class="datepicker-autoclose form-control {{ $errors->has('start') ? 'is-invalid' : '' }}"
-                               placeholder="Choose Date" value="{{ $event->start ?? old('start')}}" id="datepicker-autoclose">
+                               placeholder="Choose Date" value="{{ date('d-m-Y', strtotime($event->start)) ?? old('start')}}" id="datepicker-autoclose">
 
                         @if ($errors->has('start'))
                             <span class="invalid-feedback" role="alert">
@@ -118,7 +118,7 @@
                     <label for="label" class="col-sm-12 col-md-3 col-form-label">End Date*</label>
                     <div class="col-md-9">
                         <input type="text" name="end" class="datepicker-autoclose form-control {{ $errors->has('end') ? 'is-invalid' : '' }}"
-                               placeholder="Choose Date" value="{{ $event->end ?? old('end')}}" id="datepicker-autoclose">
+                               placeholder="Choose Date" value="{{ date('d-m-Y', strtotime($event->end)) ?? old('end')}}" id="datepicker-autoclose">
 
                         @if ($errors->has('end'))
                             <span class="invalid-feedback" role="alert">
