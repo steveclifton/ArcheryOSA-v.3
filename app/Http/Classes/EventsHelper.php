@@ -118,4 +118,49 @@ class EventsHelper
         return $complabels;
 
     }
+
+    public function getEventDivisions($eventcompetitions)
+    {
+
+        if (empty($eventcompetitions)) {
+            return false;
+        }
+
+        $returnarr = [];
+
+        foreach ($eventcompetitions as $comp){
+            $divisions = Division::wherein('divisionid', json_decode($comp->divisionids))->get();
+
+            foreach ($divisions as $division) {
+                $returnarr[$division->divisionid] = $division->label;
+            }
+        }
+
+        return $returnarr;
+
+
+    }
+
+
+    public function getEventCompetitions($eventcompetitions)
+    {
+
+        if (empty($eventcompetitions)) {
+            return false;
+        }
+
+        $returnarr = [];
+
+        foreach ($eventcompetitions as $comp){
+            $competitions = Competition::wherein('competitionid', json_decode($comp->competitionids))->get();
+
+            foreach ($competitions as $competition) {
+                $returnarr[$competition->competitionid] = $competition->label;
+            }
+        }
+
+        return $returnarr;
+
+
+    }
 }
