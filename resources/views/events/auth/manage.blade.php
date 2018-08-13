@@ -61,7 +61,7 @@
         </div>
 
         <div class="col-lg-4 col-md-4 col-sm-4">
-            <a href="#">
+            <a href="/event/scoring/{{$event->eventurl}}">
                 <div class="db-social-box bottomLine">
                     <span class="fa fa-clipboard"></span>
                     <h5>Event Scoring</h5>
