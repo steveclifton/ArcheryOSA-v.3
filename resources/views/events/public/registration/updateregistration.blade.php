@@ -185,31 +185,41 @@
                 <div class="form-group row">
                     <label class="col-sm-12 col-md-3 col-form-label">Competitions*</label>
                     <div class="col-md-9">
-                        <div class="">
-                            <div class="card-box">
-                                <h4 class="text-dark header-title m-t-0 m-b-30">Select the competitions you wish to enter</h4>
-                                @php $i = 1 @endphp
-                                <div id="checkTree">
-                                    @foreach($competitionsfinal as $date => $eventcompetition)
-                                        <ul>
-                                            <li data-jstree='{"opened":{{$i++ == 1 ? 'true' : 'false'}}, "icon": "ion-calendar"}'>{{date('D d F', strtotime($date))}}
-                                                @foreach($eventcompetition->competitions as $competition)
-                                                    <ul>
-            <li data-eventcompetitionid="{{$eventcompetition->eventcompetitionid}}"
-                data-competitionid="{{$competition->competitionid}}"
-                data-jstree='{"opened":true, "icon": "ion-star",
-                        "selected":"{{ !empty($entrycompetitionids[$eventcompetition->eventcompetitionid][$competition->competitionid]) ? 'true' : '' }}" }'
-                >{{$competition->label}}</li>
-                                                    </ul>
-                                                @endforeach
-                                            </li>
-                                        </ul>
-                                    @endforeach
-                                </div>
+                    <div class="">
+                    <div class="card-box">
+                        <h4 class="text-dark header-title m-t-0 m-b-30">Select the competitions you wish to enter</h4>
+                        @php $i = 1 @endphp
+                        <div id="checkTree">
+                            @foreach($competitionsfinal as $date => $eventcompetition)
+                                <ul>
+                                    <li data-jstree='{"opened":{{$i++ == 1 ? 'true' : 'false'}}, "icon": "ion-calendar"}'>{{date('D d F', strtotime($date))}}
+                                    <ul>
+                                    @foreach($eventcompetition->competitions as $competition)
+                                        <li data-eventcompetitionid="{{$eventcompetition->eventcompetitionid}}"
+                                            data-competitionid="{{$competition->competitionid}}"
+                                            data-jstree='{"opened":true, "icon": "ion-star"}'>{{$competition->label}}
 
-                            </div>
-                        </div><!-- end col -->
-                        <div id="comperror" class="alert alert-danger hidden">Please select at least 1 competition</div>
+                                        <ul>
+                                            @foreach($competition->rounds as $round)
+                                                <li data-eventcompetitionid="{{$eventcompetition->eventcompetitionid}}"
+                                                    data-competitionid="{{$competition->competitionid}}"
+                                                    data-roundid="{{$round->roundid}}"
+                                                    data-jstree='{"opened":true, "icon": "ion-star",
+                                                    "selected":"{{ !empty($entrycompetitionids[$eventcompetition->eventcompetitionid][$competition->competitionid][$round->roundid]) ? 'true' : '' }}"
+                                                    }'>{{$round->label}}</li>
+                                            @endforeach
+                                        </ul>
+
+                                    @endforeach
+                                    </ul>
+                                    </li>
+                                </ul>
+                            @endforeach
+                        </div>
+
+                    </div>
+                    </div><!-- end col -->
+                    <div id="comperror" class="alert alert-danger hidden">Please select at least 1 competition</div>
                     </div>
                 </div>
 
