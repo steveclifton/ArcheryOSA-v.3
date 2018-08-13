@@ -8,7 +8,7 @@ $(function () {
         $.each(selectedElmsIds, function() {
 
             if (typeof this.data.competitionid !== 'undefined') {
-                checkedCompetitions.push(this.data.eventcompetitionid + '-' + this.data.competitionid);
+                checkedCompetitions.push(this.data.eventcompetitionid + '-' + this.data.competitionid + '-' + this.data.roundid);
             }
         });
 
