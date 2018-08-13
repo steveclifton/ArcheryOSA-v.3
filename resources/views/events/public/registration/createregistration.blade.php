@@ -81,10 +81,9 @@
                     <label for="label" class="col-sm-12 col-md-3 col-form-label">Date of Birth*</label>
                     <div class="col-md-9">
 
-                        <input type="text" name="dateofbirth" class="form-control {{ $errors->has('dateofbirth') ? 'is-invalid' : '' }}"
+                        <input type="text" name="dateofbirth" class="form-control datepicker-autoclose {{ $errors->has('dateofbirth') ? 'is-invalid' : '' }}"
                                placeholder="Date of Birth"
-                               value="{{old('dateofbirth') ?? $user->dateofbirth ?? ''}}"
-                               id="datepicker-autoclose">
+                               value="{{old('dateofbirth') ?? $user->dateofbirth ?? ''}}">
 
                         @if ($errors->has('dateofbirth'))
                             <span class="invalid-feedback" role="alert">
@@ -180,7 +179,6 @@
                         </div>
                     </div>
                 </div>
-
                 <div class="form-group row">
                     <label class="col-sm-12 col-md-3 col-form-label">Competitions*</label>
                     <div class="col-md-9">
@@ -192,13 +190,22 @@
                                     @foreach($competitionsfinal as $date => $eventcompetition)
                                         <ul>
                                             <li data-jstree='{"opened":{{$i++ == 1 ? 'true' : 'false'}}, "icon": "ion-calendar"}'>{{date('D d F', strtotime($date))}}
-                                                @foreach($eventcompetition->competitions as $competition)
                                                 <ul>
-                                                    <li data-eventcompetitionid="{{$eventcompetition->eventcompetitionid}}"
-                                                        data-competitionid="{{$competition->competitionid}}"
-                                                        data-jstree='{"opened":true, "icon": "ion-star"}'>{{$competition->label}}</li>
+                                                    @foreach($eventcompetition->competitions as $competition)
+
+                                                        <li data-eventcompetitionid="{{$eventcompetition->eventcompetitionid}}"
+                                                            data-competitionid="{{$competition->competitionid}}"
+                                                            data-jstree='{"opened":true, "icon": "ion-star"}'>{{$competition->label}}
+                                                        <ul>
+                                                            @foreach($competition->rounds as $round)
+                                                                <li data-eventcompetitionid="{{$eventcompetition->eventcompetitionid}}"
+                                                                    data-competitionid="{{$competition->competitionid}}"
+                                                                    data-roundid="{{$round->roundid}}"
+                                                                    data-jstree='{"opened":true, "icon": "ion-star"}'>{{$round->label}}</li>
+                                                            @endforeach
+                                                        </ul>
+                                                    @endforeach
                                                 </ul>
-                                                @endforeach
                                             </li>
                                         </ul>
                                     @endforeach
@@ -211,9 +218,6 @@
                 </div>
 
                 <input name="competitionids" type="hidden" id="jsfields" value="" />
-
-
-
 
                 <div class="form-group mb-0 justify-content-start row">
                     <div class="col-sm-12 col-md-3 col-form-label"></div>
