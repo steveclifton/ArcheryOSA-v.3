@@ -62,7 +62,6 @@ class DivisionController extends Controller
     {
         $validated = $request->validated();
 
-
         $division = new Division();
         $division->label          = ucwords($validated['label']);
         $division->organisationid = intval($validated['organisationid']);
@@ -70,6 +69,7 @@ class DivisionController extends Controller
         $division->description    = !empty($validated['description'])     ? strtolower($validated['description']) : null;
         $division->visible        = !empty($validated['visible'])         ? 1 : 0;
         $division->createdby      = Auth::id();
+        $division->bowtype           = $this->getBowType($validated['label']);
         $division->save();
 
         return redirect('/admin/divisions')->with('success', 'Division Created!');
@@ -92,11 +92,38 @@ class DivisionController extends Controller
         $division->code           = !empty($validated['code'])            ? strtolower($validated['code']) : null;
         $division->description    = !empty($validated['description'])     ? strtolower($validated['description']) : null;
         $division->visible        = !empty($validated['visible'])         ? 1 : 0;
+        $division->bowtype           = $this->getBowType($validated['label']);
+
         $division->save();
 
         return redirect('/admin/divisions')->with('success', 'Division Updated!');
 
 
+    }
+
+
+    private function getBowType($type)
+    {
+
+        switch (1) {
+            case (stripos($type, 'compound') > 0) :
+                return 'compound';
+                break;
+            case (stripos($type, 'recurve') > 0) :
+                return 'recurve';
+                break;
+            case (stripos($type, 'barebow') > 0) :
+                return 'barebow';
+                break;
+            case (stripos($type, 'longbow') > 0) :
+                return 'longbow';
+                break;
+            case (stripos($type, 'crossbow') > 0) :
+                return 'crossbow';
+                break;
+        }
+
+        return 'other';
     }
 
 
