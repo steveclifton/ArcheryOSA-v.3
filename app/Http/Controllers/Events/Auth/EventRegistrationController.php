@@ -7,11 +7,13 @@ use App\Http\Requests\Auth\EventRegistration\UpdateRegistration;
 use App\Jobs\SendEntryReceived;
 use App\Models\Club;
 use App\Models\Competition;
+use App\Models\CompetitionRound;
 use App\Models\Division;
 use App\Models\EntryCompetition;
 use App\Models\Event;
 use App\Models\EventCompetition;
 use App\Models\EventEntry;
+use App\Models\Round;
 use App\Models\UserRelation;
 use App\User;
 use Illuminate\Http\Request;
@@ -88,6 +90,9 @@ class EventRegistrationController extends EventController
             $competitions = Competition::wherein('competitionid', json_decode($eventcompetition->competitionids))->get();
 
             foreach ($competitions as $competition) {
+                $comproundids = CompetitionRound::where('competitionid', $competition->competitionid)->pluck('roundid')->toArray();
+                $competition->rounds = Round::wherein('roundid', $comproundids)->get();
+
                 $eventcompetition->competitions[] = $competition;
             }
             $competitionsfinal[$eventcompetition->date] = $eventcompetition;
@@ -104,10 +109,8 @@ class EventRegistrationController extends EventController
 
         $entrycompetitionids = [];
         foreach ($entrycompetitions as $entrycompetition) {
-            $entrycompetitionids[$entrycompetition->eventcompetitionid][$entrycompetition->competitionid] = $entrycompetition->competitionid;
+            $entrycompetitionids[$entrycompetition->eventcompetitionid][$entrycompetition->competitionid][$entrycompetition->roundid] = $entrycompetition->roundid;
         }
-
-
 
         // Not empty, means they have entered the event already,
         return view('events.public.registration.updateregistration',
@@ -130,6 +133,10 @@ class EventRegistrationController extends EventController
                 ->where('relationid', $validated['userid'])
                 ->get()
                 ->first();
+
+            if (!empty($user)) {
+                $user = User::where('userid', $validated['userid'])->get()->first();
+            }
         }
 
         if (empty($event) || empty($user)) {
@@ -164,11 +171,11 @@ class EventRegistrationController extends EventController
         $eventcompetitionids = !empty($validated['competitionids']) ? explode(',', $validated['competitionids']) : [];
         foreach ($eventcompetitionids as $competitionid) {
 
-            @list($eventcompetitionid, $competitionid) = explode('-', $competitionid);
-
-            if (empty($eventcompetitionid) || empty($competitionid)) {
+            @list($eventcompetitionid, $competitionid, $roundid) = explode('-', $competitionid);
+            if (empty($eventcompetitionid) || empty($competitionid) || empty($roundid)) {
                 continue;
             }
+
 
             $entrycompetition = new EntryCompetition();
             $entrycompetition->entryid            = $evententry->entryid;
@@ -177,6 +184,8 @@ class EventRegistrationController extends EventController
             $entrycompetition->userid             = $validated['userid'];
             $entrycompetition->divisionid         = $validated['divisionid'];
             $entrycompetition->competitionid      = $competitionid;
+            $entrycompetition->roundid            = $roundid;
+
             $entrycompetition->save();
         }
 
@@ -200,6 +209,10 @@ class EventRegistrationController extends EventController
                 ->where('relationid', $validated['userid'])
                 ->get()
                 ->first();
+
+            if (!empty($user)) {
+                $user = User::where('userid', $validated['userid'])->get()->first();
+            }
         }
 
         if (empty($event) || empty($user)) {
@@ -241,15 +254,16 @@ class EventRegistrationController extends EventController
         foreach ($eventcompetitionids as $competitionid) {
 
             // explode out the ids
-            @list($eventcompetitionid, $competitionid) = explode('-', $competitionid);
+            @list($eventcompetitionid, $competitionid, $roundid) = explode('-', $competitionid);
 
-            if (empty($eventcompetitionid) || empty($competitionid)) {
+            if (empty($eventcompetitionid) || empty($competitionid) || empty($roundid)) {
                 continue;
             }
 
             // try to get the entry that matches the ids
             $entrycompetition = EntryCompetition::where('eventcompetitionid', $eventcompetitionid)
                                                 ->where('competitionid', $competitionid)
+                                                ->where('roundid', $roundid)
                                                 ->get()
                                                 ->first();
 
@@ -262,16 +276,21 @@ class EventRegistrationController extends EventController
                 $entrycompetition->userid             = $validated['userid'];
                 $entrycompetition->divisionid         = $validated['divisionid'];
                 $entrycompetition->competitionid      = $competitionid;
+                $entrycompetition->roundid            = $roundid;
                 $entrycompetition->save();
             }
             else {
+
+                $entrycompetition->divisionid = $validated['divisionid'];
+                $entrycompetition->save();
                 // It does exist, so remove it from the array
                 foreach ($entrycompetitions as $key => $ec) {
 
                     $entrycomp = $ec->eventcompetitionid == $entrycompetition->eventcompetitionid;
                     $comp      = $ec->competitionid      == $entrycompetition->competitionid;
+                    $roundid   = $ec->roundid            == $entrycompetition->roundid;
 
-                    if ($entrycomp && $comp) {
+                    if ($entrycomp && $comp && $roundid) {
                         unset($entrycompetitions[$key]);
                     }
                 }
