@@ -96,6 +96,12 @@ Route::middleware(['web'])->group(function() {
         Route::get('/scoring', 'Events\Auth\EventController@getUserEventScoring');
 
 
+        // Event Scoring
+        Route::get('/event/scoring/{eventurl}', 'Events\Scoring\ScoringController@getEventScoringList');
+
+        Route::get('/event/manage/scoring/{eventurl}/{eventcompetitionid}/{competitionid}', 'Events\Scoring\ScoringController@getEventScoringView');
+        Route::post('/events/scoring/{eventurl}', 'Events\Scoring\ScoringController@postScores');
+
         /*****************
          *  User profile
          ****************/
