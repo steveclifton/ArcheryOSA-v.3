@@ -1,7 +1,7 @@
 <div class="form-group row">
     <label class="col-sm-12 col-md-3 col-form-label">Scoring Level</label>
     <div class="col-md-9">
-        <select id="scoringlevel" class="form-control">
+        <select name="scoringlevel" id="scoringlevel" class="form-control">
             @foreach($scoringlevels as $level)
                 <option value="{{$level->scorelevelid}}" {{ (old('scoringlevel') ?? $competition['scoringlevel']) == $level->scorelevelid ? 'selected' : ''}}>
                     {{ $level->label }}
