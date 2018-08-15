@@ -29,7 +29,7 @@
                 <input type="hidden" name="eventid" value="{{$event->eventid}}">
 
                 <div class="form-group row">
-                    <label class="col-sm-12 col-md-3 col-form-label">Host Club</label>
+                    <label class="col-sm-12 col-md-3 col-form-label">Event Status</label>
                     <div class="col-md-9">
                         <select name="eventstatusid" class="form-control">
 
