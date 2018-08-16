@@ -23,7 +23,7 @@ class DivisionController extends Controller
      */
     public function get()
     {
-        $divisions = Division::get();
+        $divisions = Division::orderby('bowtype')->get();
         return view('admin.divisions.divisions', compact('divisions'));
     }
 
