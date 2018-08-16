@@ -10,7 +10,6 @@ use App\Models\Event;
 use App\Models\EventAdmin;
 use App\Models\EventCompetition;
 use App\Models\EventEntry;
-use App\Models\Round;
 use App\Models\Score;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
@@ -50,6 +49,7 @@ class ScoringController extends Controller
 
         $eventcompetitions = EventCompetition::where('eventid', $event->eventid)->orderBy('date', 'asc')->get();
         $competitions = [];
+
         foreach ($eventcompetitions as $eventcompetition) {
             $comps = Competition::wherein('competitionid', json_decode($eventcompetition->competitionids))->get();
 
@@ -94,7 +94,7 @@ class ScoringController extends Controller
         // Event Entries
         $entrys = DB::select("
             SELECT ee.*, ec.entrycompetitionid, ec.roundid, d.label as divisionname, d.bowtype,
-                  r.dist1,r.dist2,r.dist3,r.dist4, r.unit
+                  r.dist1,r.dist2,r.dist3,r.dist4,r.dist1max,r.dist2max,r.dist3max,r.dist4max,r.unit
             FROM `evententrys` ee
             JOIN `entrycompetitions` ec USING (`entryid`)
             JOIN `divisions` d ON (`ec`.`divisionid` = `d`.`divisionid`)
@@ -116,24 +116,20 @@ class ScoringController extends Controller
                             ->get();
 
 
-            $entry->total = DB::table('scores')
-                            ->where('entryid', $entry->entryid)
-                            ->where('roundid', $entry->roundid)
-                            ->sum('score');
-
-            $entry->inners = DB::table('scores')
-                            ->where('entryid', $entry->entryid)
-                            ->where('roundid', $entry->roundid)
-                            ->sum('inners');
-            $entry->max   = DB::table('scores')
-                            ->where('entryid', $entry->entryid)
-                            ->where('roundid', $entry->roundid)
-                            ->sum('max');
-
             $i = 1;
             foreach ($scores as $score) {
                 $label = 'score' . $i++;
                 $entry->{$label} = $score;
+
+                if ($score->key == 'total') {
+                    $entry->total = $score;
+                }
+                else if ($score->key == 'max') {
+                    $entry->max = $score;
+                }
+                else if ($score->key == 'inners') {
+                    $entry->inners = $score;
+                }
             }
 
             $evententrys[$entry->bowtype][$entry->divisionname][] = $entry;
@@ -141,7 +137,7 @@ class ScoringController extends Controller
 
         }
 
-//        dd($evententrys);
+        dd($evententrys);
 
         return view('events.scoring.event-scoring', compact('event', 'evententrys'));
     }
@@ -196,13 +192,9 @@ class ScoringController extends Controller
                             ->first();
 
 
-
             if (empty($scores)) {
                 // create
                 foreach ($result['score'] ?? [] as $data) {
-
-
-
                     $score = new Score();
                     $score->entryid            = $evententry->entryid;
                     $score->entrycompetitionid = $entrycompetition->entrycompetitionid;
@@ -211,19 +203,18 @@ class ScoringController extends Controller
                     $score->eventid            = $event->eventid;
                     $score->eventcompetitionid = $entrycompetition->eventcompetitionid;
                     $score->divisionid         = $evententry->divisionid;
-                    $score->distance           = $data['distance'] ?? '';
+                    $score->key                = $data['key'] ?? '';
                     //$score->unit               = 1;
-                    $score->score              = $data['score'] ?? 0;
-                    $score->hits               = $data['hits'] ?? 0;
-                    $score->max                = $data['max'] ?? 0;
-                    $score->inners             = $data['inners'] ?? 0;
+                    $score->score              = intval($data['score'] ?? 0);
+                    $score->hits               = intval($data['hits'] ?? 0);
+                    $score->max                = intval($data['max'] ?? 0);
+                    $score->inners             = intval($data['inners'] ?? 0);
                     $score->save();
                 }
 
             }
             else {
                 foreach ($result['score'] ?? [] as $data) {
-
 
                     $score = Score::where('scoreid', $data['scoreid'])
                                     ->where('entryid', $evententry->entryid)
@@ -236,12 +227,12 @@ class ScoringController extends Controller
                         continue;
                     }
 
-                    $score->distance           = $data['distance'] ?? '';
+                    $score->key                = $data['key'] ?? '';
                     //$score->unit               = 1;
-                    $score->score              = $data['score'] ?? 0;
-                    $score->hits               = $data['hits'] ?? 0;
-                    $score->max                = $data['max'] ?? 0;
-                    $score->inners             = $data['inners'] ?? 0;
+                    $score->score              = intval($data['score'] ?? 0);
+                    $score->hits               = intval($data['hits'] ?? 0);
+                    $score->max                = intval($data['max'] ?? 0);
+                    $score->inners             = intval($data['inners'] ?? 0);
                     $score->save();
                 }
             }
