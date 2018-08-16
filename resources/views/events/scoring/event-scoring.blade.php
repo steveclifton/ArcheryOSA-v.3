@@ -32,7 +32,7 @@
 
             <div class="tab-content">
                 <div style="margin-tops: 20px">
-                    <div class="alert alert-success hidden" role="alert" ></div>
+                    <div class="alert hidden" role="alert" ></div>
                 </div>
             <a role="button" href="javascript:;" class="myButton btn btn-inverse btn-info waves-effect waves-light">Save Results</a>
 
@@ -64,8 +64,8 @@
 
 
                                     <th scope="row" width="15%">{{$a->firstname . ' ' . $a->lastname}}</th>
-                                    <td width="10%" data-type="distance" data-value="{{$data->dist1}}" data-sid="{{!empty($a->score1) ? $a->score1->scoreid : '0' }}">
-                                        <input type="text" class="form-control" value="{{!empty($a->score1) ? $a->score1->score : '0' }}" placeholder="">
+                                    <td width="10%" data-type="distance" data-max="{{$data->dist1max}}" data-value="{{$data->dist1}}" data-sid="{{!empty($a->score1) ? $a->score1->scoreid : '0' }}">
+                                        <input type="text" class="form-control"  value="{{!empty($a->score1) ? $a->score1->score : '0' }}" placeholder="">
                                         <i class="md-add-box showMore"></i>
 
                                         <div class="hidden">
@@ -75,7 +75,7 @@
                                         </div>
                                     </td>
                                     @if(!empty($data->dist2))
-                                        <td width="10%" data-type="distance" data-value="{{$data->dist2}}" data-sid="{{!empty($a->score2) ? $a->score2->scoreid : '0' }}">
+                                        <td width="10%" data-type="distance" data-max="{{$data->dist2max}}" data-value="{{$data->dist2}}" data-sid="{{!empty($a->score2) ? $a->score2->scoreid : '0' }}">
                                             <input type="text" class="form-control" value="{{!empty($a->score2) ? $a->score2->score : '0' }}" placeholder="">
                                             <i class="md-add-box showMore"></i>
 
@@ -87,7 +87,7 @@
                                         </td>
                                     @endif
                                     @if(!empty($data->dist3))
-                                        <td width="10%" data-type="distance" data-value="{{$data->dist3}}" data-sid="{{!empty($a->score3) ? $a->score3->scoreid : '0' }}">
+                                        <td width="10%" data-type="distance" data-max="{{$data->dist3max}}" data-value="{{$data->dist3}}" data-sid="{{!empty($a->score3) ? $a->score3->scoreid : '0' }}">
                                             <input type="text" class="form-control" value="{{!empty($a->score3) ? $a->score3->score : '0' }}" placeholder="">
                                             <i class="md-add-box showMore"></i>
 
@@ -99,7 +99,7 @@
                                         </td>
                                     @endif
                                     @if(!empty($data->dist4))
-                                        <td width="10%" data-type="distance" data-value="{{$data->dist4}}" data-sid="{{!empty($a->score4) ? $a->score4->scoreid : '0' }}">
+                                        <td width="10%" data-type="distance" data-max="{{$data->dist4max}}" data-value="{{$data->dist4}}" data-sid="{{!empty($a->score4) ? $a->score4->scoreid : '0' }}">
                                             <input type="text" class="form-control" value="{{!empty($a->score4) ? $a->score4->score : '0' }}" placeholder="">
                                             <i class="md-add-box showMore"></i>
 
@@ -111,14 +111,14 @@
                                         </td>
                                     @endif
 
-                                    <td width="10%" data-type="sum" data-value="total">
-                                        <input type="text" class="form-control" value="{{ !empty($a->total) ? $a->total : '0' }}">
+                                    <td width="10%" data-type="sum" data-value="total" data-sid="{{!empty($a->total) ? $a->total->scoreid : '0' }}">
+                                        <input type="text" class="form-control" value="{{ !empty($a->total) ? $a->total->score : '0' }}">
                                     </td>
-                                    <td width="10%" data-type="sum" data-value="max">
-                                        <input type="text" class="form-control" value="{{ !empty($a->inners) ? $a->inners : '0' }}">
+                                    <td width="10%" data-type="sum" data-value="max" data-sid="{{!empty($a->max) ? $a->max->scoreid : '0' }}">
+                                        <input type="text" class="form-control" value="{{ !empty($a->max) ? $a->max->score : '0' }}">
                                     </td>
-                                    <td width="10%" data-type="sum" data-value="inner">
-                                        <input type="text" class="form-control" value="{{ !empty($a->max) ? $a->max : '0' }}">
+                                    <td width="10%" data-type="sum" data-value="inners" data-sid="{{!empty($a->inners) ? $a->inners->scoreid : '0' }}">
+                                        <input type="text" class="form-control" value="{{ !empty($a->inners) ? $a->inners->score : '0' }}">
                                     </td>
                                 </tr>
                             @endforeach
@@ -148,7 +148,7 @@
                 // on score submit
                 $(document).on('click', '.myButton', function () {
 
-                    $('.alert').addClass('hidden');
+                    $('.alert').addClass('hidden').removeClass('alert-danger').removeClass('alert-success');
 
                     // get all the results
                     var results = $('.results');
@@ -156,11 +156,14 @@
                     // array for data to be sent
                     var sendJson = [];
 
+                    var errors       = false;
+                    var errormessage = ['<h6>Errors</h6>'];
+
                     // loop over each row
                     results.each(function() {
 
 
-                       var entryid = $(this).attr('data-entryid');
+                       var entryid            = $(this).attr('data-entryid');
                        var entrycompetitionid = $(this).attr('data-entrycompetitionid');
                        if (typeof entryid == 'undefined') {
                            return;
@@ -178,33 +181,51 @@
                        // array of scores
                        jsonData.score = [];
 
+                       var totalScore = 0;
+                       var total      = 0;
                        children.each(function() {
+                            // Remove errors
+                           $(this).find('input').removeClass('error');
+
+
 
                            // check to see its a distance score, thats all we want
                            if ($(this).attr('data-type') == 'distance') {
 
-                               var dist = $(this).attr('data-value');
-                               var score = $(this).find('input').val();
-                               var scoreid = $(this).attr('data-sid');
+                               var distMax = parseInt($(this).attr('data-max'));
+                               var dist    = $(this).attr('data-value');
+                               var score   = parseInt($(this).find('input').val());
+                               var scoreid = parseInt($(this).attr('data-sid'));
 
-                               var extras = $(this).find('div').children('input');
-                               var hits = 0;
-                               var inners = 0;
-                               var max = 0;
+                               if (score > distMax) {
+                                   errors = true;
+                                   errormessage.push('- Scores exceed max for round<br>');
+                                   $(this).find('input').addClass('error');
+                                   return;
+                               }
+
+                               // add the score to the total
+                               totalScore += score;
+
+
+                               var extras  = $(this).find('div').children('input');
+                               var hits    = 0;
+                               var inners  = 0;
+                               var max     = 0;
 
 
                                extras.each(function () {
                                   switch ($(this).attr('data-type')) {
                                       case 'hits':
-                                          hits = $(this).val();
+                                          hits = parseInt($(this).val());
                                           break;
 
-                                      case 'inner':
-                                          inners = $(this).val();
+                                      case 'inners':
+                                          inners = parseInt($(this).val());
                                           break;
 
                                       case 'max':
-                                          max = $(this).val();
+                                          max = parseInt($(this).val());
                                           break;
                                   }
                                });
@@ -212,20 +233,50 @@
                                // build the cols score data
                                var data = {
                                    scoreid : scoreid,
-                                   distance : dist,
-                                   score : score,
-                                   hits : hits,
-                                   inners : inners,
-                                   max : max
+                                   key     : dist,
+                                   score   : score,
+                                   hits    : hits,
+                                   inners  : inners,
+                                   max     : max
                                }
 
                                jsonData.score.push(data);
                            }
+                           else {
+                               var dist    = $(this).attr('data-value');
+                               var score   = parseInt($(this).find('input').val());
+                               var scoreid = parseInt($(this).attr('data-sid'));
 
+                               // set the total to be the input total, to be checked later
+                               if (dist == 'total') {
+                                   total = score;
+                               }
+
+                               var data = {
+                                   scoreid : scoreid,
+                                   key     : dist,
+                                   score   : score
+                               }
+                               jsonData.score.push(data);
+
+                           }
                        });
+
+                       if (total != totalScore) {
+                           console.log(total, totalScore);
+                           errors = true;
+                           errormessage.push('- Scores and total do not match<br>');
+                           $(this).find('th').addClass('error');
+                           return;
+                       }
 
                        sendJson.push(jsonData) ;
                    });
+
+                    if (errors) {
+                        $('.alert').addClass('alert-danger').html(errormessage.join('')).removeClass('hidden');
+                        return;
+                    }
 
                     $.ajax({
                         method: "POST",
@@ -236,7 +287,10 @@
                         data: {data:sendJson}
                     }).done(function( json ) {
                         if (json.success) {
-                            $('.alert').html('Scores Entered Succesfully').removeClass('hidden');
+                            $('.alert').addClass('alert-success').html('Scores Entered Succesfully').removeClass('hidden');
+                        }
+                        else {
+                            $('.alert').addClass('alert-danger').html(errormessage.join('')).removeClass('hidden');
                         }
                     });
                 });
