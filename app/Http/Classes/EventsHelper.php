@@ -36,9 +36,11 @@ class EventsHelper
         $competitions = DB::select("
             SELECT c.*, o.label as orgname
             FROM `competitions` c
-            JOIN `organisations` o USING (`organisationid`)
+            LEFT JOIN `organisations` o USING (`organisationid`)
             WHERE c.visible = 1
         ");
+
+
 
         $mappedcompetitions = [];
         foreach ($competitions as $competition) {
