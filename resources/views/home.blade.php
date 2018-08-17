@@ -26,7 +26,7 @@
                             <h3><a href="#" class="text-white font-600">Archery OSA</a></h3>
                             {{-- <p class="small">02 April, 2015</p> --}}
                             <p class="m-t-30"><em></em></p>
-                            <button class="btn btn-inverse btn-sm m-t-40">Latest Results</button>
+                            <a href="/results" class="btn btn-inverse waves-effect waves-light">Latest Results!</a>
                         </div><!-- /.item -->
                     </div><!-- /#tiles-slide-2 -->
                 </div>
@@ -43,7 +43,7 @@
                             <h3><a href="#" class="archeryHeadText">Archery OSA</a></h3>
                             {{-- <p class="small">02 April, 2015</p> --}}
                             <p class="m-t-30"><em></em></p>
-                            <button class="btn btn-inverse btn-sm m-t-40">Latest Results</button>
+                            <a href="/results" class="btn btn-inverse waves-effect waves-light">Latest Results!</a>
                         </div><!-- /.item -->
                     </div><!-- /#tiles-slide-2 -->
                 </div>
