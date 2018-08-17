@@ -47,13 +47,13 @@
     {{--</div>--}}
 {{--</div>--}}
 
-<div class="form-group row justify-content-end">
-    <div class=" col-md-9">
-        <div class="checkbox checkbox-primary">
-            <input name="visible" id="checkbox3" type="checkbox" {{ (old('visible') ?? $competition['visible']) ? 'checked' : ''}}>
-            <label for="checkbox3">
-                Visible
-            </label>
-        </div>
-    </div>
-</div>
+{{--<div class="form-group row justify-content-end">--}}
+    {{--<div class=" col-md-9">--}}
+        {{--<div class="checkbox checkbox-primary">--}}
+            {{--<input name="visible" id="checkbox3" type="checkbox" checked>--}}
+            {{--<label for="checkbox3">--}}
+                {{--Visible--}}
+            {{--</label>--}}
+        {{--</div>--}}
+    {{--</div>--}}
+{{--</div>--}}
