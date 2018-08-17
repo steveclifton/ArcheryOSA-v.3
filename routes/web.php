@@ -36,6 +36,8 @@ Route::get('/records/nz', 'Record\RecordController@getCountryRecords');
 Route::get('/users/{username}', 'Auth\PublicProfile\UserController@getPublicProfile');
 
 
+Route::get('profile/relationship/authorise/{hash}', 'Auth\ProfileController@authoriseRelation');
+
 Route::middleware(['web'])->group(function() {
 
     Route::middleware(['guest'])->group(function () {
@@ -110,6 +112,12 @@ Route::middleware(['web'])->group(function() {
         Route::get('profile', 'Auth\ProfileController@getDashboard');
         Route::get('profile/mydetails', 'Auth\ProfileController@getMyDetails');
         Route::post('profile/mydetails', 'Auth\ProfileController@updateProfile')->name('updateprofile');
+
+        // Relationships
+        Route::get('profile/relationships', 'Auth\ProfileController@getRelationshipsList');
+        Route::get('profile/relationships/request', 'Auth\ProfileController@getRelationshipsRequest');
+        Route::post('profile/relationships/request', 'Auth\ProfileController@requestRelationship');
+        Route::post('profile/relationships/remove', 'Auth\ProfileController@removeRelationship');
 
         // Show my events
         Route::get('profile/myevents', 'Auth\ProfileController@getMyEvents');
