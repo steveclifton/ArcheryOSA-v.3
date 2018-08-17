@@ -112,7 +112,7 @@ class EventController extends Controller
         $events = DB::select("
             SELECT e.*, es.label as eventstatus
             FROM `events` e
-            JOIN `eventadmins` ea USING (`eventid`)
+            LEFT JOIN `eventadmins` ea USING (`eventid`)
             JOIN `eventcompetitions` ec USING (`eventid`)
             JOIN `eventstatus` es USING (`eventstatusid`)
             WHERE `ea`.`userid` = :userid
