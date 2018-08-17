@@ -36,7 +36,7 @@ class UpdateRegistration extends FormRequest
             'notes'          => 'nullable',
             'clubid'         => 'nullable',
             'gender'         => 'nullable',
-            'competitionids' => 'required',
+            'roundids'       => 'required',
             'divisionid'     => 'required',
             'dateofbirth'    => 'required|date',
         ];
