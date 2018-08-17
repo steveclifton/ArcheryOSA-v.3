@@ -8,9 +8,10 @@
         <div class="col-sm-12">
             <div class="page-title-box">
                 <h4 class="page-title">
-                    <a href="/events/manage">Events</a>
-                    <i class="ion-arrow-right-c"></i>
+
                     <a href="/events/manage/{{$event->eventurl}}">{{ucwords($event->label)}}</a>
+                    <i class="ion-arrow-right-c"></i>
+                    <a href="/event/scoring/{{$event->eventurl}}">{{ucwords($eventcompetition->label)}}</a>
                     <i class="ion-arrow-right-c"></i>
                     <a href="javascript:;">Scoring</a>
                 </h4>
@@ -39,92 +40,97 @@
             @php $i = 1; @endphp
             @foreach($evententrys as $bowtype => $ee)
                 <div class="tab-pane {!! $i++ === 1 ? 'active' : '' !!}" id="{{$bowtype}}"><br>
-                    @foreach($ee as $division => $aa)
-                    <h5 class="tableTitle">{{$division}}</h5>
-                    @php $data = reset($aa) @endphp
-                    <div class="table-responsive">
-                        <table class="table table-bordered table-hover">
-                            <thead class="thead-light">
-                            <tr>
-                                <th>Archer</th>
-                                <th>{{$data->dist1. $data->unit}}</th>
-                                @if(!empty($data->dist2))<th>{{$data->dist2. $data->unit}}</th>@endif
-                                @if(!empty($data->dist3))<th>{{$data->dist3. $data->unit}}</th>@endif
-                                @if(!empty($data->dist4))<th>{{$data->dist4. $data->unit}}</th>@endif
-                                <th>Total</th>
-                                <th>10+X</th>
-                                <th>X</th>
-                            </tr>
-                            </thead>
-                            <tbody>
-                            @foreach($aa as $a)
-                                <tr class="results"
-                                    data-entryid="{{$a->entryid}}"
-                                    data-entrycompetitionid="{{$a->entrycompetitionid}}">
+                    @foreach($ee as $division => $rounds)
+
+                        <h5 class="tableTitle">{{$division}}</h5>
 
 
-                                    <th scope="row" width="15%">{{$a->firstname . ' ' . $a->lastname}}</th>
-                                    <td width="10%" data-type="distance" data-max="{{$data->dist1max}}" data-value="{{$data->dist1}}" data-sid="{{!empty($a->score1) ? $a->score1->scoreid : '0' }}">
-                                        <input type="text" class="form-control"  value="{{!empty($a->score1) ? $a->score1->score : '0' }}" placeholder="">
-                                        <i class="md-add-box showMore"></i>
-
-                                        <div class="hidden">
-                                            Hits<input type="text" class="form-control" value="{{!empty($a->score1) ? $a->score1->hits : '' }}" data-type="hits" placeholder="Hits">
-                                            10+X<input type="text" class="form-control" value="{{!empty($a->score1) ? $a->score1->inners : '' }}" data-type="inner" placeholder="10">
-                                            X<input type="text" class="form-control" value="{{!empty($a->score1) ? $a->score1->max : '' }}" data-type="max" placeholder="X">
-                                        </div>
-                                    </td>
-                                    @if(!empty($data->dist2))
-                                        <td width="10%" data-type="distance" data-max="{{$data->dist2max}}" data-value="{{$data->dist2}}" data-sid="{{!empty($a->score2) ? $a->score2->scoreid : '0' }}">
-                                            <input type="text" class="form-control" value="{{!empty($a->score2) ? $a->score2->score : '0' }}" placeholder="">
-                                            <i class="md-add-box showMore"></i>
-
-                                            <div class="hidden">
-                                                Hits<input type="text" class="form-control" value="{{!empty($a->score2) ? $a->score2->hits : '' }}" data-type="hits" placeholder="Hits">
-                                                10+X<input type="text" class="form-control" value="{{!empty($a->score2) ? $a->score2->inners : '' }}" data-type="inner" placeholder="10">
-                                                X<input type="text" class="form-control" value="{{!empty($a->score2) ? $a->score2->max : '' }}" data-type="max" placeholder="X">
-                                            </div>
-                                        </td>
-                                    @endif
-                                    @if(!empty($data->dist3))
-                                        <td width="10%" data-type="distance" data-max="{{$data->dist3max}}" data-value="{{$data->dist3}}" data-sid="{{!empty($a->score3) ? $a->score3->scoreid : '0' }}">
-                                            <input type="text" class="form-control" value="{{!empty($a->score3) ? $a->score3->score : '0' }}" placeholder="">
-                                            <i class="md-add-box showMore"></i>
-
-                                            <div class="hidden">
-                                                Hits<input type="text" class="form-control" value="{{!empty($a->score3) ? $a->score3->hits : '' }}" data-type="hits" placeholder="Hits">
-                                                10+X<input type="text" class="form-control" value="{{!empty($a->score3) ? $a->score3->inners : '' }}" data-type="inner" placeholder="10">
-                                                X<input type="text" class="form-control" value="{{!empty($a->score3) ? $a->score3->max : '' }}" data-type="max" placeholder="X">
-                                            </div>
-                                        </td>
-                                    @endif
-                                    @if(!empty($data->dist4))
-                                        <td width="10%" data-type="distance" data-max="{{$data->dist4max}}" data-value="{{$data->dist4}}" data-sid="{{!empty($a->score4) ? $a->score4->scoreid : '0' }}">
-                                            <input type="text" class="form-control" value="{{!empty($a->score4) ? $a->score4->score : '0' }}" placeholder="">
-                                            <i class="md-add-box showMore"></i>
-
-                                            <div class="hidden">
-                                                Hits<input type="text" class="form-control" value="{{!empty($a->score4) ? $a->score4->hits : '' }}" data-type="hits" placeholder="Hits">
-                                                10+X<input type="text" class="form-control" value="{{!empty($a->score4) ? $a->score4->inners : '' }}" data-type="inner" placeholder="10">
-                                                X<input type="text" class="form-control" value="{{!empty($a->score4) ? $a->score4->max : '' }}" data-type="max" placeholder="X">
-                                            </div>
-                                        </td>
-                                    @endif
-
-                                    <td width="10%" data-type="sum" data-value="total" data-sid="{{!empty($a->total) ? $a->total->scoreid : '0' }}">
-                                        <input type="text" class="form-control" value="{{ !empty($a->total) ? $a->total->score : '0' }}">
-                                    </td>
-                                    <td width="10%" data-type="sum" data-value="max" data-sid="{{!empty($a->max) ? $a->max->scoreid : '0' }}">
-                                        <input type="text" class="form-control" value="{{ !empty($a->max) ? $a->max->score : '0' }}">
-                                    </td>
-                                    <td width="10%" data-type="sum" data-value="inners" data-sid="{{!empty($a->inners) ? $a->inners->scoreid : '0' }}">
-                                        <input type="text" class="form-control" value="{{ !empty($a->inners) ? $a->inners->score : '0' }}">
-                                    </td>
+                        @foreach($rounds as $aa)
+                        @php $data = reset($aa) @endphp
+                            <div class="table-responsive">
+                            <table class="table table-bordered table-hover">
+                                <thead class="thead-light">
+                                <tr>
+                                    <th>Archer</th>
+                                    <th>{{$data->dist1. $data->unit}}</th>
+                                    @if(!empty($data->dist2))<th>{{$data->dist2. $data->unit}}</th>@endif
+                                    @if(!empty($data->dist3))<th>{{$data->dist3. $data->unit}}</th>@endif
+                                    @if(!empty($data->dist4))<th>{{$data->dist4. $data->unit}}</th>@endif
+                                    <th>Total</th>
+                                    <th>10+X</th>
+                                    <th>X</th>
                                 </tr>
+                                </thead>
+                                <tbody>
+                                @foreach($aa as $a)
+                                    <tr class="results"
+                                        data-entryhash="{{$a->hash}}"
+                                        data-entrycompetitionid="{{$a->entrycompetitionid}}">
+
+
+                                        <th scope="row" width="15%">{{$a->firstname . ' ' . $a->lastname}}</th>
+                                        <td width="10%" data-type="distance" data-max="{{$data->dist1max}}" data-value="{{$data->dist1}}" data-sid="{{!empty($a->score1) ? $a->score1->scoreid : '0' }}">
+                                            <input type="text" class="form-control"  value="{{!empty($a->score1) ? $a->score1->score : '0' }}" placeholder="">
+                                            <i class="md-add-box showMore"></i>
+
+                                            <div class="hidden">
+                                                Hits<input type="text" class="form-control" value="{{!empty($a->score1) ? $a->score1->hits : '' }}" data-type="hits" placeholder="Hits">
+                                                10+X<input type="text" class="form-control" value="{{!empty($a->score1) ? $a->score1->inners : '' }}" data-type="inner" placeholder="10">
+                                                X<input type="text" class="form-control" value="{{!empty($a->score1) ? $a->score1->max : '' }}" data-type="max" placeholder="X">
+                                            </div>
+                                        </td>
+                                        @if(!empty($data->dist2))
+                                            <td width="10%" data-type="distance" data-max="{{$data->dist2max}}" data-value="{{$data->dist2}}" data-sid="{{!empty($a->score2) ? $a->score2->scoreid : '0' }}">
+                                                <input type="text" class="form-control" value="{{!empty($a->score2) ? $a->score2->score : '0' }}" placeholder="">
+                                                <i class="md-add-box showMore"></i>
+
+                                                <div class="hidden">
+                                                    Hits<input type="text" class="form-control" value="{{!empty($a->score2) ? $a->score2->hits : '' }}" data-type="hits" placeholder="Hits">
+                                                    10+X<input type="text" class="form-control" value="{{!empty($a->score2) ? $a->score2->inners : '' }}" data-type="inner" placeholder="10">
+                                                    X<input type="text" class="form-control" value="{{!empty($a->score2) ? $a->score2->max : '' }}" data-type="max" placeholder="X">
+                                                </div>
+                                            </td>
+                                        @endif
+                                        @if(!empty($data->dist3))
+                                            <td width="10%" data-type="distance" data-max="{{$data->dist3max}}" data-value="{{$data->dist3}}" data-sid="{{!empty($a->score3) ? $a->score3->scoreid : '0' }}">
+                                                <input type="text" class="form-control" value="{{!empty($a->score3) ? $a->score3->score : '0' }}" placeholder="">
+                                                <i class="md-add-box showMore"></i>
+
+                                                <div class="hidden">
+                                                    Hits<input type="text" class="form-control" value="{{!empty($a->score3) ? $a->score3->hits : '' }}" data-type="hits" placeholder="Hits">
+                                                    10+X<input type="text" class="form-control" value="{{!empty($a->score3) ? $a->score3->inners : '' }}" data-type="inner" placeholder="10">
+                                                    X<input type="text" class="form-control" value="{{!empty($a->score3) ? $a->score3->max : '' }}" data-type="max" placeholder="X">
+                                                </div>
+                                            </td>
+                                        @endif
+                                        @if(!empty($data->dist4))
+                                            <td width="10%" data-type="distance" data-max="{{$data->dist4max}}" data-value="{{$data->dist4}}" data-sid="{{!empty($a->score4) ? $a->score4->scoreid : '0' }}">
+                                                <input type="text" class="form-control" value="{{!empty($a->score4) ? $a->score4->score : '0' }}" placeholder="">
+                                                <i class="md-add-box showMore"></i>
+
+                                                <div class="hidden">
+                                                    Hits<input type="text" class="form-control" value="{{!empty($a->score4) ? $a->score4->hits : '' }}" data-type="hits" placeholder="Hits">
+                                                    10+X<input type="text" class="form-control" value="{{!empty($a->score4) ? $a->score4->inners : '' }}" data-type="inner" placeholder="10">
+                                                    X<input type="text" class="form-control" value="{{!empty($a->score4) ? $a->score4->max : '' }}" data-type="max" placeholder="X">
+                                                </div>
+                                            </td>
+                                        @endif
+
+                                        <td width="10%" data-type="sum" data-value="total" data-sid="{{!empty($a->total) ? $a->total->scoreid : '0' }}">
+                                            <input type="text" class="form-control" value="{{ !empty($a->total) ? $a->total->score : '0' }}">
+                                        </td>
+                                        <td width="10%" data-type="sum" data-value="max" data-sid="{{!empty($a->max) ? $a->max->scoreid : '0' }}">
+                                            <input type="text" class="form-control" value="{{ !empty($a->max) ? $a->max->score : '0' }}">
+                                        </td>
+                                        <td width="10%" data-type="sum" data-value="inners" data-sid="{{!empty($a->inners) ? $a->inners->scoreid : '0' }}">
+                                            <input type="text" class="form-control" value="{{ !empty($a->inners) ? $a->inners->score : '0' }}">
+                                        </td>
+                                    </tr>
+                                @endforeach
+                                </tbody>
+                            </table>
+                        </div>
                             @endforeach
-                            </tbody>
-                        </table>
-                    </div>
                     @endforeach
                 </div>
             @endforeach
@@ -149,6 +155,9 @@
                 $(document).on('click', '.myButton', function () {
 
                     $('.alert').addClass('hidden').removeClass('alert-danger').removeClass('alert-success');
+                    $('th').each(function() {
+                       $(this).removeClass('error');
+                    });
 
                     // get all the results
                     var results = $('.results');
@@ -157,21 +166,20 @@
                     var sendJson = [];
 
                     var errors       = false;
-                    var errormessage = ['<h6>Errors</h6>'];
+                    var errormessage = ['<h6>Errors - Unable to submit scores</h6>'];
 
                     // loop over each row
                     results.each(function() {
 
-
-                       var entryid            = $(this).attr('data-entryid');
+                       var entryhash          = $(this).attr('data-entryhash');
                        var entrycompetitionid = $(this).attr('data-entrycompetitionid');
-                       if (typeof entryid == 'undefined') {
+                       if (typeof entryhash == 'undefined') {
                            return;
                        }
 
                        // create new object with required data
                        var jsonData = {
-                           entryid:entryid,
+                           entryhash:entryhash,
                            entrycompetitionid:entrycompetitionid
                        }
 
@@ -186,8 +194,6 @@
                        children.each(function() {
                             // Remove errors
                            $(this).find('input').removeClass('error');
-
-
 
                            // check to see its a distance score, thats all we want
                            if ($(this).attr('data-type') == 'distance') {
