@@ -45,11 +45,12 @@ class Ajax extends EventController
         /*
          * Get the compeititon tree info
          */
-        $mappedcompetitions = $this->helper->getMappedCompetitionTree();
-        $mappeddivisions = $this->helper->getMappedDivisionsTree();
+        //$mappedcompetitions = $this->helper->getMappedCompetitionTree();
+        $mappeddivisions    = $this->helper->getMappedDivisionsTree();
+        $mappedrounds       = $this->helper->getMappedRoundTree();
 
         // Make the view
-        $view = View::make('events.auth.management.includes.competitiontree', compact('competition','mappedcompetitions', 'mappeddivisions'));
+        $view = View::make('events.auth.management.includes.competitiontree', compact('competition', 'mappedrounds', 'mappeddivisions'));
         $html .= $view->render();
 
 
