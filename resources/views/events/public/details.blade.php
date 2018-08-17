@@ -113,8 +113,8 @@
                                     <td>{!! date('d F Y', strtotime($event->end)) !!}</td>
                                 </tr>
                                 <tr>
-                                    <th scope="row">Competitions</th>
-                                    <td>{!! implode('<br>', $competitionlabels) !!}</br>
+                                    <th scope="row">Rounds</th>
+                                    <td>{!! implode('<br>', $roundlabels) !!}</br>
                                     </td>
                                 </tr>
                                 <tr>
