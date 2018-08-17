@@ -191,19 +191,12 @@
                                         <ul>
                                             <li data-jstree='{"opened":{{$i++ == 1 ? 'true' : 'false'}}, "icon": "ion-calendar"}'>{{date('D d F', strtotime($date))}}
                                                 <ul>
-                                                    @foreach($eventcompetition->competitions as $competition)
+                                                    @foreach($eventcompetition->rounds as $round)
 
                                                         <li data-eventcompetitionid="{{$eventcompetition->eventcompetitionid}}"
-                                                            data-competitionid="{{$competition->competitionid}}"
-                                                            data-jstree='{"opened":true, "icon": "ion-star"}'>{{$competition->label}}
-                                                        <ul>
-                                                            @foreach($competition->rounds as $round)
-                                                                <li data-eventcompetitionid="{{$eventcompetition->eventcompetitionid}}"
-                                                                    data-competitionid="{{$competition->competitionid}}"
-                                                                    data-roundid="{{$round->roundid}}"
-                                                                    data-jstree='{"opened":true, "icon": "ion-star"}'>{{$round->label}}</li>
-                                                            @endforeach
-                                                        </ul>
+                                                            data-roundid="{{$round->roundid}}"
+                                                            data-jstree='{"opened":true, "icon": "ion-star"}'>{{$round->label}}
+
                                                     @endforeach
                                                 </ul>
                                             </li>
@@ -217,7 +210,7 @@
                     </div>
                 </div>
 
-                <input name="competitionids" type="hidden" id="jsfields" value="" />
+                <input name="roundids" type="hidden" id="jsfields" value="" />
 
                 <div class="form-group mb-0 justify-content-start row">
                     <div class="col-sm-12 col-md-3 col-form-label"></div>
