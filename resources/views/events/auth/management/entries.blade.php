@@ -98,6 +98,7 @@
             //Buttons examples
             var table = $('#datatable-buttons').DataTable({
                 lengthChange: false,
+                pageLength:30,
                 buttons: ['excel', 'pdf']
             });
 
