@@ -39,10 +39,10 @@
                         </tr>
                         </thead>
                         <tbody>
-                        @foreach($competitions as $date=>$comp)
+                        @foreach($eventcompetitions as $comp)
                             <tr>
                                 <td scope="row" >
-                                    <a href="/event/manage/scoring/{{$event->eventurl}}/{{$comp->eventcompetitionid}}/{{$comp->competitionid}}">{{$comp->label}}</a>
+                                    <a href="/event/manage/scoring/{{$event->eventurl}}/{{$comp->eventcompetitionid}}">{{$comp->label}}</a>
                                 </td>
                                 <td>
                                     {{$comp->date}}
