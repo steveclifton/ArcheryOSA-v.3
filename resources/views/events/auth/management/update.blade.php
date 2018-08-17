@@ -214,21 +214,7 @@
                     </div>
                 </div>
 
-                <div class="form-group row justify-content-end">
-                    <div class=" col-md-9">
-                        <div class="checkbox checkbox-primary">
-                            <input name="visible" id="checkbox2" type="checkbox" {{$event->visible ? 'checked' : ''}}>
-                            <label for="checkbox2">
-                                Active
-                            </label>
-                            @if (session('visible'))
-                                <div class="alert alert-danger">
-                                    Cannot be active at this stage
-                                </div>
-                            @endif
-                        </div>
-                    </div>
-                </div>
+
 
                 <div class="form-group mb-0 justify-content-start row">
                     <div class="col-sm-12 col-md-3 col-form-label"></div>
