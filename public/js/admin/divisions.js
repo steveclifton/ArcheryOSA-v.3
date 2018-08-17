@@ -9,13 +9,13 @@ $(function () {
 
         // Competitions and rounds
         var selectedElmsIds = $('#checkTree').jstree("get_selected", true);
-        var checkedCompetitions = [];
+        var checkedRounds = [];
         $.each(selectedElmsIds, function() {
-            if (this.data.competitionid != '') {
-                checkedCompetitions.push(this.data.competitionid);
+            if (this.data.roundid != '') {
+                checkedRounds.push(this.data.roundid);
             }
         });
-        document.getElementById('jsfields').value = checkedCompetitions.join(",");
+        document.getElementById('roundfields').value = checkedRounds.join(",");
 
 
         // Divisions
@@ -34,7 +34,7 @@ $(function () {
             errors = true;
         }
 
-        if (checkedCompetitions.length == 0 ) {
+        if (checkedRounds.length == 0 ) {
             $('#comperror').removeClass('hidden');
             errors = true;
         }

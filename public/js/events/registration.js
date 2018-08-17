@@ -4,22 +4,21 @@ $(function () {
 
         // Competitions and rounds
         var selectedElmsIds = $('#checkTree').jstree("get_selected", true);
-        var checkedCompetitions = [];
+        var checkedRounds = [];
         $.each(selectedElmsIds, function() {
 
-            if (typeof this.data.competitionid !== 'undefined') {
-                checkedCompetitions.push(this.data.eventcompetitionid + '-' + this.data.competitionid + '-' + this.data.roundid);
+            if (typeof this.data.roundid !== 'undefined' && typeof this.data.eventcompetitionid !== 'undefined') {
+                checkedRounds.push(this.data.eventcompetitionid + '-' + this.data.roundid);
             }
         });
 
 
-        if (checkedCompetitions.length == 0 ) {
+        if (checkedRounds.length == 0 ) {
             $('#comperror').removeClass('hidden');
             return false;
         }
 
-        document.getElementById('jsfields').value = checkedCompetitions.join(",");
-
+        document.getElementById('jsfields').value = checkedRounds.join(",");
         this.submit();
     });
 
