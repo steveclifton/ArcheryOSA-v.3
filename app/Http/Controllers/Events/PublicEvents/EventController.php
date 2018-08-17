@@ -59,24 +59,24 @@ class EventController extends Controller
             return redirect('/');
         }
 
-        $entrycount = DB::table('evententrys')
+        $entrycount     = DB::table('evententrys')
                         ->where('eventid', $event->eventid)
                         ->count();
 
-        $scorecount = DB::table('scores')
+        $scorecount     = DB::table('scores')
                         ->where('eventid', $event->eventid)
                         ->count();
 
         $evententryopen = $event->eventstatusid == 1 ? true : false;
 
-        $competitionlabels = $this->helper->getCompetitionLabels($event->eventid);
+        $roundlabels    = $this->helper->getCompetitionRoundLabels($event->eventid);
 
         $competitiontype = EventType::where('eventtypeid', $event->eventtypeid)->pluck('label')->first();
 
-        $clublabel = Club::where('clubid', $event->clubid)->pluck('label')->first();
+        $clublabel       = Club::where('clubid', $event->clubid)->pluck('label')->first();
 
         return view('events.public.details',
-            compact('event', 'entrycount', 'scorecount', 'evententryopen', 'competitionlabels', 'competitiontype', 'clublabel'));
+            compact('event', 'entrycount', 'scorecount', 'evententryopen', 'roundlabels', 'competitiontype', 'clublabel'));
     }
 
 

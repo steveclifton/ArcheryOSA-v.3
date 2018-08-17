@@ -66,16 +66,8 @@ class EventRegistrationController extends EventController
             SELECT *
             FROM `eventcompetitions`
             WHERE `eventid` = :eventid
-            AND `visible` = 1
         ", ['eventid' => $event->eventid]);
 
-
-        $evententry = EventEntry::where('eventid', $event->eventid)
-                                ->where('userid', $user->userid)
-                                ->get()
-                                ->first();
-
-        $clubs = Club::where('visible', 1)->get();
 
         $divisionsfinal    = [];
         $competitionsfinal = [];
@@ -87,17 +79,18 @@ class EventRegistrationController extends EventController
                 $divisionsfinal[$division->divisionid] = $division;
             }
 
-            $competitions = Competition::wherein('competitionid', json_decode($eventcompetition->competitionids))->get();
+            $eventcompetition->rounds = Round::wherein('roundid', json_decode($eventcompetition->roundids))->get();
 
-            foreach ($competitions as $competition) {
-                $comproundids = CompetitionRound::where('competitionid', $competition->competitionid)->pluck('roundid')->toArray();
-                $competition->rounds = Round::wherein('roundid', $comproundids)->get();
-
-                $eventcompetition->competitions[] = $competition;
-            }
             $competitionsfinal[$eventcompetition->date] = $eventcompetition;
 
         }
+
+        $clubs = Club::where('visible', 1)->get();
+
+        $evententry = EventEntry::where('eventid', $event->eventid)
+            ->where('userid', $user->userid)
+            ->get()
+            ->first();
 
         // Means they need to create an event
         if (empty($evententry)) {
@@ -109,7 +102,7 @@ class EventRegistrationController extends EventController
 
         $entrycompetitionids = [];
         foreach ($entrycompetitions as $entrycompetition) {
-            $entrycompetitionids[$entrycompetition->eventcompetitionid][$entrycompetition->competitionid][$entrycompetition->roundid] = $entrycompetition->roundid;
+            $entrycompetitionids[$entrycompetition->eventcompetitionid][$entrycompetition->roundid] = $entrycompetition->roundid;
         }
 
         // Not empty, means they have entered the event already,
@@ -168,11 +161,11 @@ class EventRegistrationController extends EventController
 
 
         // Get the competitionids for the entry
-        $eventcompetitionids = !empty($validated['competitionids']) ? explode(',', $validated['competitionids']) : [];
+        $eventcompetitionids = !empty($validated['roundids']) ? explode(',', $validated['roundids']) : [];
         foreach ($eventcompetitionids as $competitionid) {
 
-            @list($eventcompetitionid, $competitionid, $roundid) = explode('-', $competitionid);
-            if (empty($eventcompetitionid) || empty($competitionid) || empty($roundid)) {
+            @list($eventcompetitionid, $roundid) = explode('-', $competitionid);
+            if (empty($eventcompetitionid) || empty($roundid)) {
                 continue;
             }
 
@@ -183,7 +176,7 @@ class EventRegistrationController extends EventController
             $entrycompetition->eventcompetitionid = $eventcompetitionid;
             $entrycompetition->userid             = $validated['userid'];
             $entrycompetition->divisionid         = $validated['divisionid'];
-            $entrycompetition->competitionid      = $competitionid;
+            $entrycompetition->competitionid      = '';
             $entrycompetition->roundid            = $roundid;
 
             $entrycompetition->save();
@@ -250,19 +243,18 @@ class EventRegistrationController extends EventController
 
 
         // Get the competitionids for the entry
-        $eventcompetitionids = !empty($validated['competitionids']) ? explode(',', $validated['competitionids']) : [];
+        $eventcompetitionids = !empty($validated['roundids']) ? explode(',', $validated['roundids']) : [];
         foreach ($eventcompetitionids as $competitionid) {
 
             // explode out the ids
-            @list($eventcompetitionid, $competitionid, $roundid) = explode('-', $competitionid);
+            @list($eventcompetitionid, $roundid) = explode('-', $competitionid);
 
-            if (empty($eventcompetitionid) || empty($competitionid) || empty($roundid)) {
+            if (empty($eventcompetitionid) || empty($roundid)) {
                 continue;
             }
 
             // try to get the entry that matches the ids
             $entrycompetition = EntryCompetition::where('eventcompetitionid', $eventcompetitionid)
-                                                ->where('competitionid', $competitionid)
                                                 ->where('roundid', $roundid)
                                                 ->get()
                                                 ->first();
@@ -275,7 +267,7 @@ class EventRegistrationController extends EventController
                 $entrycompetition->eventcompetitionid = $eventcompetitionid;
                 $entrycompetition->userid             = $validated['userid'];
                 $entrycompetition->divisionid         = $validated['divisionid'];
-                $entrycompetition->competitionid      = $competitionid;
+                $entrycompetition->competitionid      = '';
                 $entrycompetition->roundid            = $roundid;
                 $entrycompetition->save();
             }
@@ -287,10 +279,10 @@ class EventRegistrationController extends EventController
                 foreach ($entrycompetitions as $key => $ec) {
 
                     $entrycomp = $ec->eventcompetitionid == $entrycompetition->eventcompetitionid;
-                    $comp      = $ec->competitionid      == $entrycompetition->competitionid;
+
                     $roundid   = $ec->roundid            == $entrycompetition->roundid;
 
-                    if ($entrycomp && $comp && $roundid) {
+                    if ($entrycomp && $roundid) {
                         unset($entrycompetitions[$key]);
                     }
                 }

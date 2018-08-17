@@ -76,7 +76,9 @@ class EventCompetitionController extends EventController
         }
 
         // get the competitions mapped into a tree
-        $mappedcompetitions = $this->helper->getMappedCompetitionTree();
+        //$mappedcompetitions = $this->helper->getMappedCompetitionTree();
+
+        $mappedrounds = $this->helper->getMappedRoundTree();
 
         $mappeddivisions = $this->helper->getMappedDivisionsTree();
 
@@ -92,7 +94,7 @@ class EventCompetitionController extends EventController
         $formaction = empty($competition) ? 'create' : 'update';
 
         return view('events.auth.management.competitions',
-                compact('event', 'mappedcompetitions', 'competition', 'scoringlevels', 'leagueweeks', 'formaction', 'mappeddivisions')
+                compact('event',  'mappedrounds', 'competition', 'scoringlevels', 'leagueweeks', 'formaction', 'mappeddivisions')
         );
     }
 
@@ -120,15 +122,16 @@ class EventCompetitionController extends EventController
             return redirect()->back()->with('failure', 'Invalid request');
         }
 
-        // Get array of competitionids
-        $competitionids = !empty($validated['competitionids']) ? explode(',', $validated['competitionids']) : [];
-        $competitionidsfinal = [];
-        foreach ($competitionids as $competitionid) {
-            if (empty($competitionid)) {
+        // Get array of roundids
+        $roundids = !empty($validated['roundids']) ? explode(',', $validated['roundids']) : [];
+        $roundidsfinal = [];
+        foreach ($roundids as $roundid) {
+            if (empty($roundid)) {
                 continue;
             }
-            $competitionidsfinal[] = $competitionid;
+            $roundidsfinal[] = $roundid;
         }
+
 
         // Get array of divisionids
         $divisionids = !empty($validated['divisionids']) ? explode(',', $validated['divisionids']) : [];
@@ -142,18 +145,17 @@ class EventCompetitionController extends EventController
 
 
         $eventcompetition = new EventCompetition();
-        $eventcompetition->eventid    = !empty($validated['eventid'])    ? intval($validated['eventid']) : '';
-        $eventcompetition->label      = !empty($validated['label'])      ? ucwords($validated['label']) : '';
-        $eventcompetition->date       = !empty($validated['date'])       ? $validated['date'] : '';
-        $eventcompetition->location   = !empty($validated['location'])   ? $validated['location'] : '';
-        $eventcompetition->schedule   = !empty($validated['schedule'])   ? $validated['schedule'] : '';
-        $eventcompetition->competitionids  = !empty($competitionidsfinal) ? json_encode($competitionidsfinal) : json_encode('');
-        $eventcompetition->divisionids  = !empty($divisionidsfinal) ? json_encode($divisionidsfinal) : json_encode('');
-
-        $eventcompetition->scoringlevel     = !empty($validated['scoringlevel']) ? intval($validated['scoringlevel']) : 0;
-//        $eventcompetition->ignoregenders    = empty($validated['ignoregenders']) ? 0 : 1;
+        $eventcompetition->eventid          = !empty($validated['eventid'])       ? intval($validated['eventid']) : '';
+        $eventcompetition->label            = !empty($validated['label'])         ? ucwords($validated['label']) : '';
+        $eventcompetition->date             = !empty($validated['date'])          ? $validated['date'] : '';
+        $eventcompetition->location         = !empty($validated['location'])      ? $validated['location'] : '';
+        $eventcompetition->schedule         = !empty($validated['schedule'])      ? $validated['schedule'] : '';
+        $eventcompetition->roundids         = !empty($roundidsfinal)              ? json_encode($roundidsfinal) : json_encode('');
+        $eventcompetition->divisionids      = !empty($divisionidsfinal)           ? json_encode($divisionidsfinal) : json_encode('');
+        $eventcompetition->scoringlevel     = !empty($validated['scoringlevel'])  ? intval($validated['scoringlevel']) : 0;
+      //$eventcompetition->ignoregenders    = empty($validated['ignoregenders'])  ? 0 : 1;
         $eventcompetition->scoringenabled   = empty($validated['scoringenabled']) ? 0 : 1;
-        $eventcompetition->visible          = empty($validated['visible']) ? 0 : 1;
+        $eventcompetition->visible          = 1;
         $eventcompetition->save();
 
         return redirect()->back()->with('success', 'Competition created!');
@@ -168,6 +170,7 @@ class EventCompetitionController extends EventController
      */
     public function updateEventCompetition(UpdateEventCompetition $request)
     {
+
         $validated = $request->validated();
 
         $event = Event::where('eventid', $validated['eventid'] ?? -1)->get()->first();
@@ -180,14 +183,14 @@ class EventCompetitionController extends EventController
             return redirect()->back()->with('failure', 'Invalid request');
         }
 
-        // Get array of competitionids
-        $competitionids = !empty($validated['competitionids']) ? explode(',', $validated['competitionids']) : [];
-        $competitionidsfinal = [];
-        foreach ($competitionids as $competitionid) {
-            if (empty($competitionid)) {
+        // Get array of roundids
+        $roundids = !empty($validated['roundids']) ? explode(',', $validated['roundids']) : [];
+        $roundidsfinal = [];
+        foreach ($roundids as $roundid) {
+            if (empty($roundid)) {
                 continue;
             }
-            $competitionidsfinal[] = $competitionid;
+            $roundidsfinal[] = $roundid;
         }
 
         // Get array of divisionids
@@ -201,18 +204,17 @@ class EventCompetitionController extends EventController
         }
 
 
-        $eventcompetition->eventid    = !empty($validated['eventid'])    ? intval($validated['eventid']) : '';
-        $eventcompetition->label      = !empty($validated['label'])      ? ucwords($validated['label']) : '';
-        $eventcompetition->date       = !empty($validated['date'])       ? $validated['date'] : '';
-        $eventcompetition->location   = !empty($validated['location'])   ? $validated['location'] : '';
-        $eventcompetition->schedule   = !empty($validated['schedule'])   ? $validated['schedule'] : '';
-        $eventcompetition->competitionids  = !empty($competitionidsfinal) ? json_encode($competitionidsfinal) : json_encode('');
-        $eventcompetition->divisionids  = !empty($divisionidsfinal) ? json_encode($divisionidsfinal) : json_encode('');
-
-        $eventcompetition->scoringlevel     = !empty($validated['scoringlevel']) ? intval($validated['scoringlevel']) : 0;
-//        $eventcompetition->ignoregenders    = empty($validated['ignoregenders']) ? 0 : 1;
+        $eventcompetition->eventid          = !empty($validated['eventid'])       ? intval($validated['eventid']) : '';
+        $eventcompetition->label            = !empty($validated['label'])         ? ucwords($validated['label']) : '';
+        $eventcompetition->date             = !empty($validated['date'])          ? $validated['date'] : '';
+        $eventcompetition->location         = !empty($validated['location'])      ? $validated['location'] : '';
+        $eventcompetition->schedule         = !empty($validated['schedule'])      ? $validated['schedule'] : '';
+        $eventcompetition->roundids         = !empty($roundidsfinal)              ? json_encode($roundidsfinal) : json_encode('');
+        $eventcompetition->divisionids      = !empty($divisionidsfinal)           ? json_encode($divisionidsfinal) : json_encode('');
+        $eventcompetition->scoringlevel     = !empty($validated['scoringlevel'])  ? intval($validated['scoringlevel']) : 0;
+        // $eventcompetition->ignoregenders = empty($validated['ignoregenders']) ? 0 : 1;
         $eventcompetition->scoringenabled   = empty($validated['scoringenabled']) ? 0 : 1;
-        $eventcompetition->visible          = empty($validated['visible']) ? 0 : 1;
+//        $eventcompetition->visible          = empty($validated['visible'])        ? 0 : 1;
         $eventcompetition->save();
 
         return redirect()->back()->with('success', 'Competition updated!');
