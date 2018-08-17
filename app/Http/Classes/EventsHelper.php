@@ -5,6 +5,7 @@ namespace App\Http\Classes;
 use App\Models\Competition;
 use App\Models\Division;
 use App\Models\EventCompetition;
+use App\Models\Round;
 use Illuminate\Support\Facades\DB;
 
 class EventsHelper
@@ -29,6 +30,40 @@ class EventsHelper
 
         return $daterange;
     }
+
+
+    public function getMappedRoundTree()
+    {
+        // Get all available competitions
+        $rounds = DB::select("
+            SELECT c.*, o.label as orgname
+            FROM `rounds` c
+            LEFT JOIN `organisations` o USING (`organisationid`)
+            WHERE c.visible = 1
+        ");
+
+
+        $mappedRounds = [];
+        foreach ($rounds as $round) {
+            $orgname = !empty($round->orgname) ? $round->orgname : 'Other';
+
+            $roundtype = 'Outdoor';
+            if ($round->type == 'i') {
+                $roundtype = 'Indoor';
+            }
+            else if ($round->type == 'f') {
+                $roundtype = 'Field';
+            }
+            else if ($round->type == 'c') {
+                $roundtype = 'Clout';
+            }
+            $mappedRounds[$orgname][$roundtype][] = $round;
+        }
+
+
+        return $mappedRounds;
+    }
+
 
     public function getMappedCompetitionTree()
     {
@@ -101,23 +136,22 @@ class EventsHelper
 
     }
 
-    public function getCompetitionLabels($eventid)
+    public function getCompetitionRoundLabels($eventid)
     {
         $eventcompetitions = EventCompetition::where('eventid', $eventid ?? NULL)->get();
-
         if (empty($eventcompetitions)) {
             return '';
         }
 
-        $complabels = [];
+        $roundLabels = [];
         foreach ($eventcompetitions as $eventcompetition) {
-            $competitions = Competition::wherein('competitionid', json_decode($eventcompetition->competitionids))->get();
-            foreach ($competitions as $comp) {
-                $complabels[$comp->competitionid] = $comp->label;
+            $rounds = Round::wherein('roundid', json_decode($eventcompetition->roundids))->get();
+            foreach ($rounds as $r) {
+                $roundLabels[$r->roundid] = $r->label;
             }
         }
 
-        return $complabels;
+        return $roundLabels;
 
     }
 
