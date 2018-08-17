@@ -155,5 +155,5 @@
         </div>
     </div>
 
-</div>
+
 @endsection
