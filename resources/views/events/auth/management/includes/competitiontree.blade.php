@@ -1,30 +1,30 @@
 @php
     $arr =[];
-    if (!empty(old('competitionids'))) {
-        $arr = explode(',', old('competitionids'));
+    if (!empty(old('roundids'))) {
+        $arr = explode(',', old('roundids'));
     }
-    else if (!empty($competition['competitionids'])) {
-        $arr = json_decode($competition['competitionids']);
+    else if (!empty($competition['roundids'])) {
+        $arr = json_decode($competition['roundids']);
     }
 @endphp
 <div class="form-group row">
-    <label class="col-sm-12 col-md-3 col-form-label">Competitions*</label>
+    <label class="col-sm-12 col-md-3 col-form-label">Rounds*</label>
     <div class="col-md-9">
         <div class="">
             <div class="card-box">
-                <h4 class="text-dark header-title m-t-0 m-b-30">Select the competitions required for this day</h4>
+                <h4 class="text-dark header-title m-t-0 m-b-30">Select the rounds required for this day</h4>
 
                 <div id="checkTree">
-                @foreach($mappedcompetitions as $orgname => $roundtype)
+                @foreach($mappedrounds as $orgname => $roundtype)
                     <ul>
                         <li data-jstree='{"opened":true, "icon": "ti-angle-right"}'>{{$orgname}}
                             <ul>
                             @foreach($roundtype as $rtype => $type)
-                                <li data-jstree='{"opened":true, "icon": "ti-angle-right"}'>{{$rtype}}
+                                <li data-jstree='{"opened":false, "icon": "ti-angle-right"}'>{{$rtype}}
                                     <ul>
                                     @foreach($type as $t)
-                                        <li data-competitionid="{{$t->competitionid}}"
-                                            data-jstree='{"icon":"ti-angle-right","selected":"{!!in_array($t->competitionid, $arr)!!}"}'
+                                        <li data-roundid="{{$t->roundid}}"
+                                            data-jstree='{"icon":"ti-angle-right","selected":"{!!in_array($t->roundid, $arr)!!}"}'
                                             class="round">{{$t->label}}</li>
                                     @endforeach
                                     </ul>
@@ -41,7 +41,7 @@
     </div>
 </div>
 
-<input name="competitionids" type="hidden" id="jsfields" value="" />
+<input name="roundids" type="hidden" id="roundfields" value="" />
 
 @php
     $arr =[];
@@ -66,7 +66,7 @@
                             <ul>
                                 @foreach($division as $d)
                                 <li data-divisionid="{{$d->divisionid}}"
-                                    data-jstree='{"opened":true,"icon":"ti-angle-right","selected":"{{ in_array($d->divisionid, $arr)}}"}'>{{$d->label}}
+                                    data-jstree='{"opened":false,"icon":"ti-angle-right","selected":"{{ in_array($d->divisionid, $arr)}}"}'>{{$d->label}}
                                 @endforeach
                             </ul>
                         </li>
@@ -79,3 +79,5 @@
     </div>
 </div>
 <input name="divisionids" type="hidden" id="divisionfields" value="" />
+
+
