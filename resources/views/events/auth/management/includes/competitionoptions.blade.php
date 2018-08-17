@@ -30,30 +30,9 @@
         <div class="checkbox checkbox-primary">
             <input name="scoringenabled" id="checkbox1" type="checkbox" {{ (old('scoringenabled') ?? $competition['scoringenabled']) ? 'checked' : ''}}>
             <label for="checkbox1">
-                Scoring Enabled
+                Scoring Enabled (Required for Open Scoring)
             </label>
         </div>
     </div>
 </div>
 
-{{--<div class="form-group row justify-content-end">--}}
-    {{--<div class=" col-md-9">--}}
-        {{--<div class="checkbox checkbox-primary">--}}
-            {{--<input name="ignoregenders" id="checkbox2" type="checkbox" {{ (old('ignoregenders') ?? $competition['ignoregenders']) ? 'checked' : ''}}>--}}
-            {{--<label for="checkbox2">--}}
-                {{--Ignore Genders--}}
-            {{--</label>--}}
-        {{--</div>--}}
-    {{--</div>--}}
-{{--</div>--}}
-
-{{--<div class="form-group row justify-content-end">--}}
-    {{--<div class=" col-md-9">--}}
-        {{--<div class="checkbox checkbox-primary">--}}
-            {{--<input name="visible" id="checkbox3" type="checkbox" checked>--}}
-            {{--<label for="checkbox3">--}}
-                {{--Visible--}}
-            {{--</label>--}}
-        {{--</div>--}}
-    {{--</div>--}}
-{{--</div>--}}
