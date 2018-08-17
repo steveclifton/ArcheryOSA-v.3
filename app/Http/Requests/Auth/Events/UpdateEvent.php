@@ -52,7 +52,6 @@ class UpdateEvent extends FormRequest
             'info'           => 'nullable',
             'organisationid' => 'nullable|integer',
             'clubid'         => 'nullable|integer',
-            'visible'        => 'nullable',
             'eventtypeid'    => 'required',
         ];
     }
