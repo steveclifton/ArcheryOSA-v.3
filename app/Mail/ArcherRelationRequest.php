@@ -14,17 +14,19 @@ class ArcherRelationRequest extends Mailable
     private $firstname;
     private $requestusername;
     private $hash;
+    private $url;
 
     /**
      * Create a new message instance.
      *
      * @return void
      */
-    public function __construct($firstname, $requestusername, $hash)
+    public function __construct($firstname, $requestusername, $hash, $url)
     {
         $this->firstname = ucwords($firstname);
         $this->requestusername = ucwords($requestusername);
         $this->hash = $hash;
+        $this->url = $url;
     }
 
     /**
@@ -36,9 +38,10 @@ class ArcherRelationRequest extends Mailable
     {
         return $this->view('emails.authorisearcherrelationship')
             ->with([
-                'firstname' => $this->firstname,
+                'firstname'       => $this->firstname,
                 'requestusername' => $this->requestusername,
-                'hash' => $this->hash
+                'hash'            => $this->hash,
+                'url'             => $this->url
             ]);
     }
 
