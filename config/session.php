@@ -194,4 +194,6 @@ return [
 
     'same_site' => null,
 
+    'queries' => []
+
 ];
