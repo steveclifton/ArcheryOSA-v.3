@@ -19,7 +19,7 @@ Route::get('/', 'HomeController@index');
 
 
 Route::get('/events', 'Events\PublicEvents\EventController@getAllEvents');
-Route::get('/events/previous', 'Events\PublicEvents\EventController@getPreviousEvents');
+Route::get('/events/previous', 'Events\PublicEvents\EventController@getPreviousEventsList');
 
 // Define create in public route to show users they can apply to create events
 Route::get('/events/create', 'Events\Auth\EventController@getCreateEventView');
@@ -27,16 +27,20 @@ Route::get('/events/create', 'Events\Auth\EventController@getCreateEventView');
 // Get specific event details
 Route::get('/event/details/{eventurl}', 'Events\PublicEvents\EventController@getEventDetails')->name('event');
 
+// Get specific event results
 Route::get('/event/results/{eventurl}', 'Events\PublicEvents\EventController@getEventResults');
 
 // Results and Ranking
 Route::get('/rankings/nz', 'Ranking\RankingController@getCountryRankings');
 Route::get('/records/nz', 'Record\RecordController@getCountryRecords');
 
+
+// Get users public profile
 Route::get('/users/{username}', 'Auth\PublicProfile\UserController@getPublicProfile');
 
-
 Route::get('profile/relationship/authorise/{hash}', 'Auth\ProfileController@authoriseRelation');
+
+
 
 Route::middleware(['web'])->group(function() {
 
@@ -186,8 +190,6 @@ Route::middleware(['web'])->group(function() {
         // Users
         Route::get('admin/users', 'Admin\UsersController@get');
     });
-
-
 
 
 });
