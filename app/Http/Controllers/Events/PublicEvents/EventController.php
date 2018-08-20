@@ -5,9 +5,7 @@ namespace App\Http\Controllers\Events\PublicEvents;
 
 use App\Http\Classes\EventsHelper;
 use App\Models\Club;
-use App\Models\Competition;
 use App\Models\Event;
-use App\Models\EventCompetition;
 use App\Models\EventType;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
@@ -101,9 +99,9 @@ class EventController extends Controller
     }
 
 
-    public function getPreviousEvents()
+    public function getPreviousEventsList()
     {
-        return view('events.completed.events');
+        return view('events.completed.events-list');
     }
 
 
