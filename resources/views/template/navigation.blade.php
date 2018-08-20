@@ -90,7 +90,7 @@
                                     <a href="/profile/myevents">My Events</a>
                                 </li>
                                 <li>
-                                    <a href="/profile/myresults">My Results</a>
+                                    {{--<a href="/profile/myresults">My Results</a>--}}
                                 </li>
                             </ul>
                         </li>
