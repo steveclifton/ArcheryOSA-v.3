@@ -1,3 +1,5 @@
+
+@include('template.logs')
 <!-- Footer -->
 <footer class="footer">
     <div class="container">
@@ -9,3 +11,5 @@
     </div>
 </footer>
 <!-- End Footer -->
+
+
