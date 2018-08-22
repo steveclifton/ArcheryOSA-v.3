@@ -10,6 +10,7 @@ use App\User;
 
 use Illuminate\Support\Facades\Auth;
 Use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class ProfileController extends Controller
 {
@@ -46,7 +47,18 @@ class ProfileController extends Controller
 
     public function getMyEvents()
     {
-        return view('profile.auth.events.myevents');
+        $myevents = DB::select("
+            SELECT e.label, e.start, e.eventurl, es.label as status, evs.label as eventstatus
+            FROM `events` e
+            JOIN `evententrys` ee USING (`eventid`)
+            JOIN `eventstatus` evs USING (`eventstatusid`)
+            JOIN `entrystatus` es ON (ee.entrystatusid = es.entrystatusid)
+            WHERE `ee`.`userid` = '".Auth::id()."'
+            ORDER BY `e`.`start` DESC
+        ");
+
+
+        return view('profile.auth.events.myevents', compact('myevents'));
     }
 
     public function getMyResults()
@@ -75,10 +87,12 @@ class ProfileController extends Controller
 
         return view('profile.auth.relationships-list', compact('relations'));
     }
+
     public function getRelationshipsRequest()
     {
         return view('profile.auth.relation', compact('relation'));
     }
+
     public function requestRelationship(Request $request)
     {
         $user = User::where('email', $request->input('email', null) ?? '')->get()->first();
