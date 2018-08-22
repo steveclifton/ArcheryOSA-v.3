@@ -78,6 +78,7 @@
                     </div>
                 </div>
 
+                @if ($event->dateofbirth)
                 <div class="form-group row">
                     <label for="label" class="col-sm-12 col-md-3 col-form-label">Date of Birth*</label>
                     <div class="col-md-9">
@@ -96,7 +97,7 @@
 
                     </div>
                 </div>
-
+                @endif
 
                 <div class="form-group row">
                     <label for="label" class="col-sm-12 col-md-3 col-form-label">Membership</label>
