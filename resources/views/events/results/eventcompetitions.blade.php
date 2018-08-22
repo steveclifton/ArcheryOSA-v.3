@@ -60,14 +60,14 @@
                         @foreach($eventcompetitions as $comp)
                             <tr>
                                 <td scope="row" >
-                                    @if (!empty($comp->scores))
+                                    @if (!empty($comp->score))
                                         <a href="/event/results/{{$event->eventurl}}/{{$comp->eventcompetitionid}}">{{$comp->label}}</a>
                                     @else
                                         <a href="javascript:;">{{$comp->label}}</a>
                                     @endif
                                 </td>
                                 <td scope="row">
-                                    @if (!empty($comp->scores))
+                                    @if (!empty($comp->score))
                                         <a href="/event/results/{{$event->eventurl}}/{{$comp->eventcompetitionid}}">See Results</a>
                                     @else
                                         No Results Yet
