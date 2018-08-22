@@ -80,8 +80,8 @@
                                        class="btn btn-inverse waves-effect waves-light">See Results</a>
                                 @else
                                     <p class="text-muted font-14">No Results Yet</p>
-                                    <a href="javascript:;"
-                                       class="btn btn-inverse waves-effect waves-light">Coming soon!</a>
+                                    <a href="/event/results/{{$event->eventurl}}"
+                                       class="btn btn-inverse waves-effect waves-light">Results</a>
                                 @endif
 
                             </div>
