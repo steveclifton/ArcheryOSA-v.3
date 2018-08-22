@@ -58,6 +58,7 @@ class EventSettingsController extends EventController
         $event->entrylimit         = empty($request->input('entrylimit'))         ? NULL : intval($request->input('entrylimit'));
         $event->eventstatusid      = intval($request->input('eventstatusid'));
         $event->visible            = !empty($request->input('visible'))           ? 1 : 0;
+        $event->dateofbirth        = !empty($request->input('dateofbirth'))       ? 1 : 0;
         $event->save();
 
         return back()->with('success', 'Event updated');
