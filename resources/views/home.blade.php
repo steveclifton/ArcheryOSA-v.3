@@ -26,7 +26,7 @@
                             <h3><a href="#" class="text-white font-600">Archery OSA</a></h3>
                             {{-- <p class="small">02 April, 2015</p> --}}
                             <p class="m-t-30"><em></em></p>
-                            <a href="/results" class="btn btn-inverse waves-effect waves-light">Latest Results!</a>
+                            <a href="{{route('results')}}" class="btn btn-inverse waves-effect waves-light">Latest Results!</a>
                         </div><!-- /.item -->
                     </div><!-- /#tiles-slide-2 -->
                 </div>
@@ -43,7 +43,7 @@
                             <h3><a href="#" class="archeryHeadText">Archery OSA</a></h3>
                             {{-- <p class="small">02 April, 2015</p> --}}
                             <p class="m-t-30"><em></em></p>
-                            <a href="/results" class="btn btn-inverse waves-effect waves-light">Latest Results!</a>
+                            <a href="{{route('results')}}" class="btn btn-inverse waves-effect waves-light">Latest Results!</a>
                         </div><!-- /.item -->
                     </div><!-- /#tiles-slide-2 -->
                 </div>
@@ -72,14 +72,19 @@
                 @endif
                 <li class="nav-item tab">
                     <a href="#upcoming" data-toggle="tab" aria-expanded="false" class="nav-link active show">
-                        Upcoming Events
+                        Upcoming
+                    </a>
+                </li>
+                <li class="nav-item tab">
+                    <a href="#results" data-toggle="tab" aria-expanded="false" class="nav-link">
+                        Results
                     </a>
                 </li>
             </ul>
 
             <div class="tab-content">
                 @if(Auth::check())
-                    <div class="tab-pane" id="myevents">
+                <div class="tab-pane" id="myevents">
                     <div class="table-responsive">
                         <table class="table table-hover">
                             <thead class="thead-light">
@@ -141,6 +146,46 @@
                         <h4 class="page-title"><a href="/events">See all events</a></h4>
                     @endif
                 </div>
+
+                <div class="tab-pane " id="results">
+                        <div class="card-columns">
+                            @foreach(array_slice($resultevents, 0, 3) as $event)
+                                <a href="/event/details/{{$event->eventurl}}">
+                                    <div class="card m-b-20">
+                                        <img class="card-img-top img-fluid" src="{{URL::asset('/images/' . $event->imagedt)}}"
+                                             alt="Card image cap">
+                                        <div class="card-body">
+                                            <h4 class="card-title font-18 mt-0">{{$event->label}}</h4>
+                                            <p class="card-text">Start : {!! date('d F Y', strtotime($event->start)) !!}</p>
+                                        </div>
+                                    </div>
+                                </a>
+                            @endforeach
+                        </div>
+                        @if (!empty(array_slice($resultevents, 3)))
+                            <div class="table-responsive">
+                                <table class="table table-hover">
+                                    <thead class="thead-light">
+                                    <tr>
+                                        <th>Name</th>
+                                        <th>Start</th>
+                                        <th>Status</th>
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+                                    @foreach(array_slice($upcomingevents, 3) as $event)
+                                        <tr>
+                                            <th scope="row"><a href="/event/details/{{$event->eventurl}}">{{$event->label}}</a></th>
+                                            <td>{{date('d F Y', strtotime($event->start))}}</td>
+                                            <td class="text-success">{{$event->eventstatus}}</td>
+                                        </tr>
+                                    @endforeach
+                                    </tbody>
+                                </table>
+                            </div>
+                            <h4 class="page-title"><a href="/events">See all events</a></h4>
+                        @endif
+                    </div>
             </div>
         </div>
     {{--  </div>
