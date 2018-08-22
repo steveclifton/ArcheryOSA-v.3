@@ -73,6 +73,18 @@
                     </div>
                 </div>
 
+                <div class="form-group row justify-content-end">
+                    <div class=" col-md-9">
+                        <div class="checkbox checkbox-primary">
+                            <input name="dateofbirth" id="dateofbirth" type="checkbox" {{$event->dateofbirth ? 'checked' : ''}}>
+                            <label for="dateofbirth">
+                                Date of Birth Required
+                            </label>
+
+                        </div>
+
+                    </div>
+                </div>
 
                 <div class="form-group row justify-content-end">
                     <div class=" col-md-9">
