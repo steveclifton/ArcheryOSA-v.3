@@ -20,7 +20,7 @@ Route::get('/', 'HomeController@index');
 
 Route::get('/events', 'Events\PublicEvents\EventController@getAllEvents');
 
-Route::get('/events/results', 'Events\PublicEvents\EventController@getPreviousEventsList');
+Route::get('/events/results', 'Events\PublicEvents\EventController@getPreviousEventsList')->name('results');
 // Get specific event results
 Route::get('/event/results/{eventurl}', 'Events\PublicEvents\EventResultsController@getEventResults');
 
