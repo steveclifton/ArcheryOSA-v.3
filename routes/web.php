@@ -19,7 +19,13 @@ Route::get('/', 'HomeController@index');
 
 
 Route::get('/events', 'Events\PublicEvents\EventController@getAllEvents');
-Route::get('/events/previous', 'Events\PublicEvents\EventController@getPreviousEventsList');
+
+Route::get('/events/results', 'Events\PublicEvents\EventController@getPreviousEventsList');
+// Get specific event results
+Route::get('/event/results/{eventurl}', 'Events\PublicEvents\EventResultsController@getEventResults');
+
+Route::get('/event/results/{eventurl}/{eventcompetitionid}', 'Events\PublicEvents\EventResultsController@getEventCompetitionResults');
+
 
 // Define create in public route to show users they can apply to create events
 Route::get('/events/create', 'Events\Auth\EventController@getCreateEventView');
@@ -27,8 +33,7 @@ Route::get('/events/create', 'Events\Auth\EventController@getCreateEventView');
 // Get specific event details
 Route::get('/event/details/{eventurl}', 'Events\PublicEvents\EventController@getEventDetails')->name('event');
 
-// Get specific event results
-Route::get('/event/results/{eventurl}', 'Events\PublicEvents\EventController@getEventResults');
+
 
 // Results and Ranking
 Route::get('/rankings/nz', 'Ranking\RankingController@getCountryRankings');
