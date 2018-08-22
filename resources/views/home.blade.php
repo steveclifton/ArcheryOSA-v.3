@@ -84,28 +84,44 @@
 
             <div class="tab-content">
                 @if(Auth::check())
-                <div class="tab-pane" id="myevents">
-                    <div class="table-responsive">
-                        <table class="table table-hover">
-                            <thead class="thead-light">
-                                <tr>
-                                    <th>Name</th>
-                                    <th>Start</th>
-                                    <th>Entry Status</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                            @foreach($myevents as $event)
-                                <tr>
-                                    <th scope="row"><a href="{{route('event', ['eventurl'=>$event->eventurl])}}">{{$event->label}}</a></th>
-                                    <td>{{date('d F Y', strtotime($event->start))}}</td>
-                                    <td>{{$event->status}}</td>
-                                </tr>
+                    <div class="tab-pane" id="myevents">
+                        <div class="card-columns">
+                            @foreach(array_slice($myevents, 0, 3) as $event)
+                                <a href="/event/details/{{$event->eventurl}}">
+                                    <div class="card m-b-20">
+                                        <img class="card-img-top img-fluid" src="{{URL::asset('/images/' . $event->imagedt)}}"
+                                             alt="Card image cap">
+                                        <div class="card-body">
+                                            <h4 class="card-title font-18 mt-0">{{$event->label}}</h4>
+                                            <p class="card-text">Start : {!! date('d F Y', strtotime($event->start)) !!}</p>
+                                        </div>
+                                    </div>
+                                </a>
                             @endforeach
-                            </tbody>
-                        </table>
+                        </div>
+                        @if (!empty(array_slice($upcomingevents, 3)))
+                            <div class="table-responsive">
+                                <table class="table table-hover">
+                                    <thead class="thead-light">
+                                        <tr>
+                                            <th>Name</th>
+                                            <th>Start</th>
+                                            <th>Entry Status</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                    @foreach(array_slice($myevents, 3) as $event)
+                                        <tr>
+                                            <th scope="row"><a href="{{route('event', ['eventurl'=>$event->eventurl])}}">{{$event->label}}</a></th>
+                                            <td>{{date('d F Y', strtotime($event->start))}}</td>
+                                            <td>{{$event->status}}</td>
+                                        </tr>
+                                    @endforeach
+                                    </tbody>
+                                </table>
+                            </div>
+                        @endif
                     </div>
-                </div>
                 @endif
                 <div class="tab-pane active" id="upcoming">
                     <div class="card-columns">
