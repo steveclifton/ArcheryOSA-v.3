@@ -5,7 +5,9 @@
             {{Session::get('time')}}ms
         </div>
         <div class="row">
-            @php debug(Session::get('queries')) @endphp
+            <div class="col-lg-12">
+                @php debug(Session::get('queries')) @endphp
+            </div>
         </div>
     </div>
     @php Session::forget(['queries', 'time']) @endphp
