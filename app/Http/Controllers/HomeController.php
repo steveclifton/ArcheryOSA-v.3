@@ -36,7 +36,7 @@ class HomeController extends Controller
         $myevents = [];
         if (Auth::check()) {
             $myevents = DB::select("
-                SELECT e.label, e.start, e.eventurl, es.label as status
+                SELECT e.label, e.start, e.eventurl, e.imagedt, es.label as status
                 FROM `events` e
                 JOIN `evententrys` ee USING (`eventid`)
                 JOIN `entrystatus` es ON (ee.entrystatusid = es.entrystatusid)
@@ -45,6 +45,14 @@ class HomeController extends Controller
 
         }
 
-        return view('home', compact('upcomingevents', 'myevents'));
+        $resultevents = DB::select("
+            SELECT e.*, es.label as eventstatus
+            FROM `events` e 
+            JOIN `eventstatus` es USING (`eventstatusid`)
+            WHERE `e`.`start` <= '".date('Y-m-d')."'
+            ORDER BY `e`.`promoted` DESC, IFNULL(e.entryclose, e.start) 
+        ");
+
+        return view('home', compact('upcomingevents', 'myevents', 'resultevents'));
     }
 }
