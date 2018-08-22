@@ -2,6 +2,7 @@
 
 namespace App\Http\Requests\Auth\EventRegistration;
 
+use App\Models\Event;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Support\Facades\Auth;
 
@@ -24,6 +25,12 @@ class UpdateRegistration extends FormRequest
      */
     public function rules()
     {
+        $event = Event::where('eventid', $this->eventid)->get()->first();
+
+        $dobstate = 'nullable|date';
+        if ($event->dateofbirth ?? false) {
+            $dobstate = 'required|date';
+        }
         return [
             'eventid'        => 'required',
             'userid'         => 'required',
@@ -38,7 +45,7 @@ class UpdateRegistration extends FormRequest
             'gender'         => 'nullable',
             'roundids'       => 'required',
             'divisionid'     => 'required',
-            'dateofbirth'    => 'required|date',
+            'dateofbirth'    => $dobstate,
         ];
     }
 
