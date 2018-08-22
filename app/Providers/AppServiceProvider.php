@@ -18,7 +18,7 @@ class AppServiceProvider extends ServiceProvider
     {
 
         \Event::listen('Illuminate\Database\Events\QueryExecuted', function ($query) {
-            Session::push('queries', ['query' => $query->sql, 'Time' =>$query->time]);
+            Session::push('queries', ['query' => $query->sql, 'Time' => $query->time]);
             Session::put('time', Session::get('time') + $query->time);
         });
 
