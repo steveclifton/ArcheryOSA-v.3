@@ -100,7 +100,7 @@
                     <li class="has-submenu">
                         <a href="#"><i class="ion-trophy"></i>Results</a>
                         <ul class="submenu">
-                            <li><a href="/events/previous">Event Results</a></li>
+                            <li><a href="/events/results">Event Results</a></li>
                             <li><a href="/records/nz">NZ Records</a></li>
                             <li><a href="/rankings/nz">NZ Rankings</a></li>
                         </ul>
@@ -137,7 +137,7 @@
                                                 <span>Setup</span>
                                             </li>
                                             <li><a href="/admin/clubs">Clubs</a></li>
-                                            <li><a href="/admin/competitions">Competitions</a></li>
+                                            {{--<li><a href="/admin/competitions">Competitions</a></li>--}}
                                             <li><a href="/admin/divisions">Divisions</a></li>
                                             <li><a href="/admin/organisations">Organisations</a></li>
                                             <li><a href="/admin/rounds">Rounds</a></li>
