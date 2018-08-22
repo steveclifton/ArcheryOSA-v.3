@@ -38,7 +38,7 @@ class EventRegistrationController extends EventController
         // Try get an existing entry | redirect if exists
         $evententry = EventEntry::where('eventid', $event->eventid)->get()->first();
 
-        $relations = UserRelation::where('userid', Auth::id())->pluck('relationid')->toarray();
+        $relations = UserRelation::where('userid', Auth::id())->where('authorised', 1)->pluck('relationid')->toarray();
 
         if (!empty($relations)) {
             $relations = User::wherein('userid', $relations)->get();
@@ -124,6 +124,7 @@ class EventRegistrationController extends EventController
             // make sure the person logged in can enter the person
             $user = UserRelation::where('userid', Auth::id())
                 ->where('relationid', $validated['userid'])
+                ->where('authorised', 1)
                 ->get()
                 ->first();
 
@@ -200,6 +201,7 @@ class EventRegistrationController extends EventController
             // make sure the person logged in can enter the person
             $user = UserRelation::where('userid', Auth::id())
                 ->where('relationid', $validated['userid'])
+                ->where('authorised', 1)
                 ->get()
                 ->first();
 
