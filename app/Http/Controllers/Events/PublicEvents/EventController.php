@@ -6,6 +6,7 @@ namespace App\Http\Controllers\Events\PublicEvents;
 use App\Http\Classes\EventsHelper;
 use App\Models\Club;
 use App\Models\Event;
+use App\Models\EventCompetition;
 use App\Models\EventType;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
@@ -82,15 +83,10 @@ class EventController extends Controller
 
 
 
-    public function getEventResults(Request $request)
-    {
-        $event = Event::where('eventurl', $request->eventurl)->get()->first();
 
-        if (empty($event)) {
-            return redirect('/');
-        }
-        return view('events.public.results', compact('event'));
-    }
+
+
+
 
 
     public function getEventScoring(Request $request)
@@ -101,7 +97,17 @@ class EventController extends Controller
 
     public function getPreviousEventsList()
     {
-        return view('events.completed.events-list');
+        $events = DB::select("
+            SELECT e.*, es.label as eventstatus
+            FROM `events` e 
+            JOIN `eventstatus` es USING (`eventstatusid`)
+            WHERE `e`.`start` <= '".date('Y-m-d')."'
+            ORDER BY `e`.`promoted` DESC, IFNULL(e.entryclose, e.start) 
+        ");
+
+//        dd($events);
+
+        return view('events.results.events-list', compact('events'));
     }
 
 
