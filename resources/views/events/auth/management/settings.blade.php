@@ -4,6 +4,8 @@
 
 @section('content')
 
+
+
     <div class="row">
         <div class="col-sm-12">
             <div class="page-title-box">
@@ -23,7 +25,7 @@
             @include('template.alerts')
             <h4 class="m-t-0 m-b-30 text-center addFormHeader header-title">Event Settings</h4>
 
-            <form class="form-horizontal myForms" action="/events/manage/settings/{{$event->eventurl}}" method="POST" role="form">
+            <form class="form-horizontal myForms" action="/events/manage/settings/{{$event->eventurl}}" method="POST" role="form" enctype="multipart/form-data">
                 @csrf
 
                 <input type="hidden" name="eventid" value="{{$event->eventid}}">
@@ -85,6 +87,32 @@
 
                     </div>
                 </div>
+
+                @if (!empty($event->imagedt))
+                    <div class="form-group row justify-content-end">
+                        <div class=" col-md-9">
+                            <img src="{{URL::asset('/images/events/' . $event->imagedt)}}" alt="" style="width: 100px; height: 100px">
+                        </div>
+                    </div>
+                @endif
+
+
+                <div class="form-group row justify-content-end">
+                    <div class=" col-md-9">
+                        <label class="control-label">Image (1024px X 640px)</label>
+                    <input name="imagedt" type="file" class="filestyle" data-iconname="fa fa-cloud-upload" id="filestyle-6" tabindex="-1" style="position: absolute; clip: rect(0px, 0px, 0px, 0px);">
+                        <div class="bootstrap-filestyle input-group">
+                            <input type="text" class="form-control " placeholder="" disabled="" value="{{$event->imagedt ?? ''}}">
+                            <span class="group-span-filestyle input-group-btn" tabindex="0">
+                                <label for="filestyle-6" class="btn btn-default btn-inverse ">
+                                    <span class="icon-span-filestyle fa fa-cloud-upload"></span>
+                                    <span class="buttonText">Choose file</span>
+                                </label>
+                            </span>
+                        </div>
+                    </div>
+                </div>
+
 
                 <div class="form-group row justify-content-end">
                     <div class=" col-md-9">
