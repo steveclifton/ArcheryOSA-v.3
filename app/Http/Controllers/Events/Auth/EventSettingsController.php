@@ -8,12 +8,14 @@ use App\Models\EventCompetition;
 use App\Models\EventStatus;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Image;
 
 class EventSettingsController extends EventController
 {
 
     public function getEventSettingsView(Request $request)
     {
+
         $event = Event::where('eventurl', $request->eventurl)->get()->first();
 
         if (empty($event)) {
@@ -52,6 +54,36 @@ class EventSettingsController extends EventController
                     ->with('visible', true);
             }
         }
+
+        if (!empty($request->file('imagedt'))) {
+
+            //clean up old image
+            if (!empty($event->imagedt)) {
+                if (is_file(public_path('images/events/' . $event->imagedt))) {
+                    unlink(public_path('images/events/' . $event->imagedt));
+                }
+            }
+
+            if (!empty($event->imagebanner)) {
+                if (is_file(public_path('images/events/' . $event->imagebanner))) {
+                    unlink(public_path('images/events/' . $event->imagebanner));
+                }
+            }
+            $image = $request->file('imagedt');
+
+            // Create for cards
+            $filename = time() . rand(0,999) . '.' . $image->getClientOriginalExtension();
+            $location = public_path('images/events/' . $filename);
+            Image::make($image)->resize(1024, 641)->save($location);
+            $event->imagedt = $filename;
+
+            // Create for banner
+            $filename = time() . rand(0,999) . '.' . $image->getClientOriginalExtension();
+            $location = public_path('images/events/' . $filename);
+            Image::make($image)->resize(1400, 587)->save($location);
+            $event->imagebanner = $filename;
+        }
+
 
 
         $event->adminnotifications = empty($request->input('adminnotifications')) ? 0 : 1;
