@@ -22,7 +22,7 @@ Route::get('/events', 'Events\PublicEvents\EventController@getAllEvents');
 
 Route::get('/events/results', 'Events\PublicEvents\EventController@getPreviousEventsList')->name('results');
 // Get specific event results
-Route::get('/event/results/{eventurl}', 'Events\PublicEvents\EventResultsController@getEventResults');
+Route::get('/event/results/{eventurl}', 'Events\PublicEvents\EventResultsController@getEventResultsList');
 
 Route::get('/event/results/{eventurl}/{eventcompetitionid}', 'Events\PublicEvents\EventResultsController@getEventCompetitionResults');
 
