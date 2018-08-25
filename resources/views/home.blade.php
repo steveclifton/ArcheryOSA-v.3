@@ -89,7 +89,7 @@
                             @foreach(array_slice($myevents, 0, 3) as $event)
                                 <a href="/event/details/{{$event->eventurl}}">
                                     <div class="card m-b-20">
-                                        <img class="card-img-top img-fluid" src="{{URL::asset('/images/' . $event->imagedt)}}"
+                                        <img class="card-img-top img-fluid" src="{{URL::asset('/images/events/' . $event->imagedt)}}"
                                              alt="Card image cap">
                                         <div class="card-body">
                                             <h4 class="card-title font-18 mt-0">{{$event->label}}</h4>
@@ -128,7 +128,7 @@
                         @foreach(array_slice($upcomingevents, 0, 3) as $event)
                             <a href="/event/details/{{$event->eventurl}}">
                                 <div class="card m-b-20">
-                                    <img class="card-img-top img-fluid" src="{{URL::asset('/images/' . $event->imagedt)}}"
+                                    <img class="card-img-top img-fluid" src="{{URL::asset('/images/events/' . $event->imagedt)}}"
                                          alt="Card image cap">
                                     <div class="card-body">
                                         <h4 class="card-title font-18 mt-0">{{$event->label}}</h4>
@@ -168,7 +168,7 @@
                             @foreach(array_slice($resultevents, 0, 3) as $event)
                                 <a href="/event/details/{{$event->eventurl}}">
                                     <div class="card m-b-20">
-                                        <img class="card-img-top img-fluid" src="{{URL::asset('/images/' . $event->imagedt)}}"
+                                        <img class="card-img-top img-fluid" src="{{URL::asset('/images/events/' . $event->imagedt)}}"
                                              alt="Card image cap">
                                         <div class="card-body">
                                             <h4 class="card-title font-18 mt-0">{{$event->label}}</h4>
