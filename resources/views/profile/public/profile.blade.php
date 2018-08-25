@@ -25,7 +25,7 @@
         <div class="col-md-4 col-lg-3">
             <div class="profile-detail card-box">
                 <div>
-                    <img src="{{URL::asset('/images/event1.jpg')}}" class="rounded-circle" alt="profile-image">
+                    <img src="{{URL::asset('/images/events/event1.jpg')}}" class="rounded-circle" alt="profile-image">
 
                     <ul class="list-inline status-list m-t-20">
                         <li class="list-inline-item">
