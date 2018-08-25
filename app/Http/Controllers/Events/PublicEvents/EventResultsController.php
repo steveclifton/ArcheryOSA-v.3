@@ -10,8 +10,13 @@ use Illuminate\Http\Request;
 
 class EventResultsController extends EventController
 {
-
-    public function getEventResults(Request $request)
+    /**
+     * Get the Events competitions and their results status
+     *
+     * @param Request $request
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\Http\RedirectResponse|\Illuminate\Routing\Redirector|\Illuminate\View\View
+     */
+    public function getEventResultsList(Request $request)
     {
         $event = Event::where('eventurl', $request->eventurl)->get()->first();
 
@@ -39,8 +44,34 @@ class EventResultsController extends EventController
     }
 
 
+    /**
+     *
+     * @param Request $request
+     * @return \Illuminate\Http\RedirectResponse|void
+     */
     public function getEventCompetitionResults(Request $request)
     {
+        if (empty($request->eventcompetitionid) || empty($request->eventurl)) {
+            return back()->with('failure', 'Invalid Request');
+        }
+
+        $event = Event::where('eventurl', $request->eventurl)->get()->first();
+
+        if (strcasecmp($request->eventcompetitionid, 'overall') === 0) {
+            return $this->getEventOverallResults($event);
+        }
+
+        // Get the results for the event and the eventcompetitionid
+
         dd($request);
     }
+
+    private function getEventOverallResults(Event $event)
+    {
+        return view('events.results.results');
+        dd($event);
+    }
+
+
+
 }
