@@ -30,7 +30,7 @@
                         {{--</ol>--}}
                         <div class="carousel-inner" role="listbox">
                             <div class="carousel-item active">
-                                <img class="d-block img-fluid" src="{{URL::asset('/images/' . $event->imagedt)}}"
+                                <img class="d-block img-fluid" src="{{URL::asset('/images/events/' . $event->imagedt)}}"
                                      alt="First slide"/>
                                 {{--<div class="carousel-caption d-none d-md-block">--}}
                                     {{-- <h3 class="text-white">First slide label</h3> --}}
