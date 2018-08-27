@@ -14,7 +14,7 @@ class EventResultsController extends EventController
      * Get the Events competitions and their results status
      *
      * @param Request $request
-     * @return \Illuminate\Contracts\View\Factory|\Illuminate\Http\RedirectResponse|\Illuminate\Routing\Redirector|\Illuminate\View\View
+     * @return \Illuminate\Contracts\View\Factory| \Illuminate\Http\RedirectResponse| \Illuminate\Routing\Redirector| \Illuminate\View\View
      */
     public function getEventResultsList(Request $request)
     {
@@ -46,6 +46,7 @@ class EventResultsController extends EventController
 
     /**
      *
+     *
      * @param Request $request
      * @return \Illuminate\Http\RedirectResponse|void
      */
@@ -66,9 +67,19 @@ class EventResultsController extends EventController
         dd($request);
     }
 
+
+    /**
+     * @param Event $event
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     */
     private function getEventOverallResults(Event $event)
     {
-        return view('events.results.results');
+        $results = Score::where('eventid', $event->eventid)->get();
+
+        //dd($results);
+
+
+        return view('events.results.results', compact('event'));
         dd($event);
     }
 
