@@ -10,6 +10,7 @@ use App\Models\Event;
 use App\Models\EventAdmin;
 use App\Models\EventCompetition;
 use App\Models\EventEntry;
+use App\Models\FlatScore;
 use App\Models\Round;
 use App\Models\Score;
 use Illuminate\Http\Request;
@@ -118,8 +119,6 @@ class ScoringController extends Controller
             $evententrys[$entry->bowtype][$gender . $entry->divisionname][$entry->roundid][] = $entry;
         }
 
-//        dd($evententrys);
-
         return view('events.scoring.event-scoring', compact('event', 'evententrys', 'eventcompetition'));
     }
 
@@ -175,26 +174,60 @@ class ScoringController extends Controller
 
             if (empty($scores)) {
                 // create
+
+                $flatscore = new FlatScore();
+
+                $i = 1;
+
                 foreach ($result['score'] ?? [] as $data) {
                     $score = new Score();
-                    $score->entryid            = $evententry->entryid;
+                    $score->entryid = $evententry->entryid;
                     $score->entrycompetitionid = $entrycompetition->entrycompetitionid;
-                    $score->userid             = $evententry->userid;
-                    $score->roundid            = $entrycompetition->roundid;
-                    $score->eventid            = $event->eventid;
+                    $score->userid = $evententry->userid;
+                    $score->roundid = $entrycompetition->roundid;
+                    $score->eventid = $event->eventid;
                     $score->eventcompetitionid = $entrycompetition->eventcompetitionid;
-                    $score->divisionid         = $evententry->divisionid;
-                    $score->key                = $data['key'] ?? '';
+                    $score->divisionid = $evententry->divisionid;
+                    $score->key = $data['key'] ?? '';
                     //$score->unit               = 1;
-                    $score->score              = intval($data['score'] ?? 0);
-                    $score->hits               = intval($data['hits'] ?? 0);
-                    $score->max                = intval($data['max'] ?? 0);
-                    $score->inners             = intval($data['inners'] ?? 0);
+                    $score->score = intval($data['score'] ?? 0);
+                    $score->hits = intval($data['hits'] ?? 0);
+                    $score->max = intval($data['max'] ?? 0);
+                    $score->inners = intval($data['inners'] ?? 0);
                     $score->save();
+
+                    if (is_numeric($data['key'])) {
+
+                        // do the flat scores
+                        $flatscore->entryid = $evententry->entryid;
+                        $flatscore->entrycompetitionid = $entrycompetition->entrycompetitionid;
+                        $flatscore->userid = $evententry->userid;
+                        $flatscore->roundid = $entrycompetition->roundid;
+                        $flatscore->eventid = $event->eventid;
+                        $flatscore->eventcompetitionid = $entrycompetition->eventcompetitionid;
+                        $flatscore->divisionid = $evententry->divisionid;
+                        // add score
+                        $distscore = "dist" . $i . 'score';
+                        $flatscore->{$distscore} = intval($data['score'] ?? 0);
+                        // add distance
+                        $distkey = "dist" . $i++;
+                        $flatscore->{$distkey} = $data['key'] ?? '';
+                    }
+
+                    if ($data['key'] == 'total') {
+                        $flatscore->total = intval($data['score'] ?? 0);
+                    }
+
+
                 }
 
+
+                // Save the flat score
+                $flatscore->save();
             }
             else {
+                $i = 1;
+                $flatscore = null;
                 foreach ($result['score'] ?? [] as $data) {
 
                     $score = Score::where('scoreid', $data['scoreid'])
@@ -209,6 +242,15 @@ class ScoringController extends Controller
                         continue;
                     }
 
+                    if (empty($flatscore)) {
+                        $flatscore = FlatScore::where('entryid', $evententry->entryid)
+                            ->where('entrycompetitionid', $entrycompetition->entrycompetitionid)
+                            ->where('userid', $evententry->userid)
+                            ->get()->first();
+
+                    }
+
+
                     $score->key                = $data['key'] ?? '';
                     //$score->unit               = 1;
                     $score->score              = intval($data['score'] ?? 0);
@@ -216,7 +258,25 @@ class ScoringController extends Controller
                     $score->max                = intval($data['max'] ?? 0);
                     $score->inners             = intval($data['inners'] ?? 0);
                     $score->save();
+
+                    // flatscore update
+                    if (is_numeric($data['key'])) {
+
+                        // add score
+                        $distscore = "dist" . $i . 'score';
+                        $flatscore->{$distscore} = intval($data['score'] ?? 0);
+                        // add distance
+                        $distkey = "dist" . $i++;
+                        $flatscore->{$distkey} = $data['key'] ?? '';
+                    }
+
+
+                    if ($data['key'] == 'total') {
+                        $flatscore->total = intval($data['score'] ?? 0);
+                    }
+
                 }
+                $flatscore->save();
             }
 
         }
