@@ -7,7 +7,7 @@
         <div class="col-sm-12">
             <div class="page-title-box">
                 <h4 class="page-title">
-                    <a href="/events/manage">Events</a>
+                    <a href="/events">Events</a>
                     <i class="ion-arrow-right-c"></i>
                     <a href="/event/details/{{$event->eventurl}}">{{ucwords($event->label)}}</a>
                     <i class="ion-arrow-right-c"></i>
@@ -39,23 +39,17 @@
                         </tr>
                         </thead>
                         <tbody>
-                        <tr>
-                            <td scope="row" >
-                                @if (!empty($overall))
+                        @if (!empty($overall))
+                            <tr>
+                                <td scope="row" >
                                     <a href="/event/results/{{$event->eventurl}}/overall">Overall</a>
-                                @else
-                                    <a href="javascript:;">Overall</a>
-                                @endif
-                            </td>
-                            <td scope="row">
-                                @if (!empty($overall))
+                                </td>
+                                <td scope="row">
                                     <a href="/event/results/{{$event->eventurl}}/overall">See Results</a>
-                                @else
-                                    No Results Yet
-                                @endif
-                            </td>
-                            <td></td>
-                        </tr>
+                                </td>
+                                <td></td>
+                            </tr>
+                        @endif
 
                         @foreach($eventcompetitions as $comp)
                             <tr>
