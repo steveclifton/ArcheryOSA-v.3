@@ -6,6 +6,7 @@ use App\Models\Event;
 use App\Models\EventCompetition;
 use App\Models\Score;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 
 class EventResultsController extends EventController
@@ -26,20 +27,15 @@ class EventResultsController extends EventController
 
         $eventcompetitions = EventCompetition::where('eventid', $event->eventid)->orderBy('date', 'asc')->get();
 
-        $overall = false;
+        $overall = $event->showoverall;
         foreach ($eventcompetitions as $eventcompetition) {
 
             $eventcompetition->score = Score::where('eventid', $eventcompetition->eventid)
-                                            ->whereIn('roundid', json_decode($eventcompetition->roundids))
+                                            ->where('eventcompetitionid', $eventcompetition->eventcompetitionid)
                                             ->get()
                                             ->first();
 
-            if (!empty($eventcompetition->score)) {
-                $overall = true;
-            }
-
         }
-
         return view('events.results.eventcompetitions', compact('event', 'eventcompetitions', 'overall'));
     }
 
@@ -63,8 +59,9 @@ class EventResultsController extends EventController
         }
 
         // Get the results for the event and the eventcompetitionid
+        return $this->getEventCompResults($event, $request->eventcompetitionid);
 
-        dd($request);
+
     }
 
 
@@ -74,15 +71,63 @@ class EventResultsController extends EventController
      */
     private function getEventOverallResults(Event $event)
     {
-        $results = Score::where('eventid', $event->eventid)->get();
+        return back()->with('failure', 'Coming soon');
 
-        //dd($results);
+        // Event Entries
+        $entrys = DB::select("
+            SELECT ee.*, ec.entrycompetitionid, ec.eventcompetitionid, ec.roundid, d.label as divisionname, d.bowtype, r.unit
+            FROM `evententrys` ee
+            JOIN `entrycompetitions` ec USING (`entryid`)
+            JOIN `divisions` d ON (`ec`.`divisionid` = `d`.`divisionid`)
+            JOIN `rounds` r ON (ec.roundid = r.roundid)
+            WHERE `ee`.`eventid` = '".$event->eventid."'
+            AND `ee`.`entrystatusid` = 2
+            ORDER BY `d`.label      
+        ");
 
 
-        return view('events.results.results', compact('event'));
-        dd($event);
+
+        $evententrys = [];
+        foreach ($entrys as $entry) {
+            $gender = $entry->gender == 'm' ? 'Men\'s ' : 'Women\'s ';
+            $evententrys[$entry->bowtype][$gender . $entry->divisionname][$entry->userid][] = $entry;
+        }
+
+
+        return view('events.results.results', compact('event', 'evententrys', 'eventcompetition'));
+
     }
 
 
+
+    private function getEventCompResults(Event $event, $eventcompetitionid)
+    {
+        $entrys = DB::select("
+            SELECT ee.firstname, ee.lastname, ee.gender, ec.entrycompetitionid, 
+                ec.eventcompetitionid, ec.roundid, d.label as divisionname, d.bowtype, r.unit,
+                sf.*
+            FROM `evententrys` ee
+            JOIN `entrycompetitions` ec USING (`entryid`)
+            JOIN `divisions` d ON (`ec`.`divisionid` = `d`.`divisionid`)
+            JOIN `rounds` r ON (ec.roundid = r.roundid)
+            LEFT JOIN `scores_flat` sf ON (ee.entryid = sf.entryid AND ec.entrycompetitionid = sf.entrycompetitionid AND ec.roundid = sf.roundid)
+            WHERE `ee`.`eventid` = '".$event->eventid."'
+            AND `ec`.`eventcompetitionid` = :eventcompetitionid
+            AND `ee`.`entrystatusid` = 2
+            ORDER BY `d`.label      
+        ", ['eventcompetitionid' => $eventcompetitionid]);
+
+
+        $evententrys = [];
+        foreach ($entrys as $entry) {
+            $gender = $entry->gender == 'm' ? 'Men\'s ' : 'Women\'s ';
+            $evententrys[$entry->bowtype][$gender . $entry->divisionname][] = $entry;
+        }
+
+        $eventcompetition = EventCompetition::where('eventcompetitionid', $eventcompetitionid)->get()->first();
+
+        return view('events.results.results', compact('event', 'evententrys', 'eventcompetition'));
+
+    }
 
 }
