@@ -44,10 +44,7 @@
                         </select>
                     </div>
                 </div>
-
-
-
-
+                <br>
 
                 <div class="form-group row">
                     <label class="col-sm-12 col-md-3 col-form-label">Entries Limit</label>
@@ -59,8 +56,8 @@
                     </div>
 
                 </div>
-
                 <br>
+
                 <div class="form-group row justify-content-end">
                     <div class=" col-md-9">
                         <div class="checkbox checkbox-primary">
@@ -74,6 +71,24 @@
 
                     </div>
                 </div>
+                <br>
+
+                {{--<div class="form-group row justify-content-end">--}}
+                    {{--<div class=" col-md-9">--}}
+                        {{--<div class="checkbox checkbox-primary">--}}
+                            {{--<input name="showoverall" id="emailshow" type="checkbox" {{$event->showoverall ? 'checked' : ''}}>--}}
+                            {{--<label for="emailshow">--}}
+                                {{--Show Overall--}}
+                            {{--</label>--}}
+
+                        {{--</div>--}}
+                        {{--<span class="help-block"><small>This creates an 'Overall' results section, combining results into 1 overall result</small></span>--}}
+
+                    {{--</div>--}}
+                {{--</div>--}}
+                {{--<br>--}}
+
+
 
                 <div class="form-group row justify-content-end">
                     <div class=" col-md-9">
@@ -87,6 +102,25 @@
 
                     </div>
                 </div>
+                <br>
+
+                <div class="form-group row justify-content-end">
+                    <div class=" col-md-9">
+                        <div class="checkbox checkbox-primary">
+                            <input name="visible" id="checkbox2" type="checkbox" {{$event->visible ? 'checked' : ''}}>
+                            <label for="checkbox2">
+                                Active
+                            </label>
+                            @if (session('visible'))
+                                <div class="alert alert-danger">
+                                    Cannot be active at this stage
+                                </div>
+                            @endif
+                        </div>
+                    </div>
+                </div>
+
+                <hr><br>
 
                 @if (!empty($event->imagedt))
                     <div class="form-group row justify-content-end">
@@ -121,22 +155,6 @@
                     </div>
                 </div>
 
-
-                <div class="form-group row justify-content-end">
-                    <div class=" col-md-9">
-                        <div class="checkbox checkbox-primary">
-                            <input name="visible" id="checkbox2" type="checkbox" {{$event->visible ? 'checked' : ''}}>
-                            <label for="checkbox2">
-                                Active
-                            </label>
-                            @if (session('visible'))
-                                <div class="alert alert-danger">
-                                    Cannot be active at this stage
-                                </div>
-                            @endif
-                        </div>
-                    </div>
-                </div>
 
                 <div class="form-group mb-0 justify-content-start row">
                     <div class="col-sm-12 col-md-3 col-form-label"></div>
