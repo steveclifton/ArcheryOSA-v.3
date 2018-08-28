@@ -294,9 +294,17 @@
                     }).done(function( json ) {
                         if (json.success) {
                             $('.alert').addClass('alert-success').html('Scores Entered Succesfully').removeClass('hidden');
+                            setTimeout(function (e) {
+                                location.reload();
+                            }, 1000);
+
                         }
                         else {
                             $('.alert').addClass('alert-danger').html(errormessage.join('')).removeClass('hidden');
+                            setTimeout(function (e) {
+                                location.reload();
+                            }, 1000);
+
                         }
                     });
                 });
