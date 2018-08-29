@@ -71,20 +71,22 @@ class EventResultsController extends EventController
      */
     private function getEventOverallResults(Event $event)
     {
-        return back()->with('failure', 'Coming soon');
-
-        // Event Entries
         $entrys = DB::select("
-            SELECT ee.*, ec.entrycompetitionid, ec.eventcompetitionid, ec.roundid, d.label as divisionname, d.bowtype, r.unit
+            SELECT ee.firstname, ee.lastname, ee.gender, ec.entrycompetitionid, 
+                ec.eventcompetitionid, ec.roundid, d.label as divisionname, d.bowtype, r.unit, r.label as roundname, r.code,
+                sf.*, eec.date as compdate
             FROM `evententrys` ee
             JOIN `entrycompetitions` ec USING (`entryid`)
             JOIN `divisions` d ON (`ec`.`divisionid` = `d`.`divisionid`)
             JOIN `rounds` r ON (ec.roundid = r.roundid)
+            JOIN `scores_flat` sf ON (ee.entryid = sf.entryid 
+                                        AND ec.eventcompetitionid = sf.eventcompetitionid 
+                                        AND ec.roundid = sf.roundid)
+            JOIN `eventcompetitions` eec ON (sf.eventcompetitionid = eec.eventcompetitionid)
             WHERE `ee`.`eventid` = '".$event->eventid."'
             AND `ee`.`entrystatusid` = 2
-            ORDER BY `d`.label      
+            ORDER BY d.label, ee.userid, ec.eventcompetitionid
         ");
-
 
 
         $evententrys = [];
@@ -93,8 +95,40 @@ class EventResultsController extends EventController
             $evententrys[$entry->bowtype][$gender . $entry->divisionname][$entry->userid][] = $entry;
         }
 
+        $finalResults = [];
+        foreach ($evententrys as $bowtype => $div) {
+            foreach($div as $divname => $archers) {
 
-        return view('events.results.results', compact('event', 'evententrys', 'eventcompetition'));
+                // here is the list of archers results for this particular bowtype and division
+                // combine the results
+                foreach ($archers as $archer) {
+
+                    $data = new \stdClass();
+                    $i = 1;
+                    foreach ($archer as $a) {
+
+                        $data->name     = $a->firstname . ' ' . $a->lastname;
+                        $data->unit     = $a->unit;
+                        $dist           = 'dist' . $i;
+                        $data->{$dist}  = $a->roundname . ' (' . date('d-m', strtotime($a->compdate)) . ')';
+                        $dist           = 'dist' . $i++ . 'score';
+                        $data->{$dist}  = $a->total;
+                        if (empty($data->total)) {
+                            $data->total = $a->total;
+                        }
+                        else {
+                            $data->total += $a->total;
+                        }
+
+                    }
+                    $finalResults[$bowtype][$divname][] = $data;
+                }
+            }
+        }
+
+
+
+        return view('events.results.results-overall', compact('event', 'finalResults', 'eventcompetition'));
 
     }
 
@@ -114,7 +148,7 @@ class EventResultsController extends EventController
             WHERE `ee`.`eventid` = '".$event->eventid."'
             AND `ec`.`eventcompetitionid` = :eventcompetitionid
             AND `ee`.`entrystatusid` = 2
-            ORDER BY `d`.label      
+            ORDER BY `d`.label
         ", ['eventcompetitionid' => $eventcompetitionid]);
 
 
