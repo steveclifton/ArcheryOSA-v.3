@@ -101,7 +101,8 @@ class EventController extends Controller
             SELECT e.*, es.label as eventstatus
             FROM `events` e 
             JOIN `eventstatus` es USING (`eventstatusid`)
-            WHERE `e`.`start` <= '".date('Y-m-d')."'
+            JOIN `scores` s USING (`eventid`)
+            GROUP BY `s`.`eventid`
             ORDER BY `e`.`promoted` DESC, IFNULL(e.entryclose, e.start) 
         ");
 
