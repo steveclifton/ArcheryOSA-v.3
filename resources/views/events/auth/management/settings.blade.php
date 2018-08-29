@@ -73,20 +73,20 @@
                 </div>
                 <br>
 
-                {{--<div class="form-group row justify-content-end">--}}
-                    {{--<div class=" col-md-9">--}}
-                        {{--<div class="checkbox checkbox-primary">--}}
-                            {{--<input name="showoverall" id="emailshow" type="checkbox" {{$event->showoverall ? 'checked' : ''}}>--}}
-                            {{--<label for="emailshow">--}}
-                                {{--Show Overall--}}
-                            {{--</label>--}}
+                <div class="form-group row justify-content-end">
+                    <div class=" col-md-9">
+                        <div class="checkbox checkbox-primary">
+                            <input name="showoverall" id="emailshow" type="checkbox" {{$event->showoverall ? 'checked' : ''}}>
+                            <label for="emailshow">
+                                Show Overall
+                            </label>
 
-                        {{--</div>--}}
-                        {{--<span class="help-block"><small>This creates an 'Overall' results section, combining results into 1 overall result</small></span>--}}
+                        </div>
+                        <span class="help-block"><small>This creates an 'Overall' results section, combining results into 1 overall result</small></span>
 
-                    {{--</div>--}}
-                {{--</div>--}}
-                {{--<br>--}}
+                    </div>
+                </div>
+                <br>
 
 
 
