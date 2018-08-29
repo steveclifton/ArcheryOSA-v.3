@@ -102,7 +102,7 @@
                                 <div class="table-responsive">
                                     <table class="table table-striped table-bordered datatable-buttons" cellspacing="0" width="100%">
                                         <thead>
-                                            <tr>
+                                            <tr id="tabltr">
                                                 <th>Archer</th>
                                                 <th>{{$data->dist1. $data->unit}}</th>
                                                 @if(!empty($data->dist2))<th>{{$data->dist2. $data->unit}}</th>@endif
@@ -182,11 +182,13 @@
     <script type="text/javascript">
         $(document).ready(function () {
             //Buttons examples
+            var index = $('#tabltr').find('th:last').index();
             var table = $('.datatable-buttons').DataTable({
                 lengthChange: false,
                 bPaginate: false,
                 bInfo : false,
-                searching : false
+                searching : false,
+                "order": [[ index, "desc" ]]
                 // buttons: ['excel', 'pdf']
             });
             //

@@ -12,13 +12,18 @@
 
 
     <div class="row">
-
-		<div class="col-sm-12">
-	    	<div class="page-title-box">
-	        	<h4 class="page-title">Events</h4>
-	    	</div>
-		</div>
-	</div>
+        <div class="col-sm-12">
+            <div class="page-title-box">
+                <h4 class="page-title">
+                    <a href="/events">Events</a>
+                    <i class="ion-arrow-right-c"></i>
+                    <a href="/event/results/{{$event->eventurl}}">{{ucwords($event->label)}}</a>
+                    <i class="ion-arrow-right-c"></i>
+                    <a href="javascript:;">Overall</a>
+                </h4>
+            </div>
+        </div>
+    </div>
 
     <div class="col-md-12 homePageBanner">
         <div class="panel panel-default text-center d-lg-none text-white slider-bg m-b-0"
@@ -170,7 +175,9 @@
 
             var table = $('.datatable-buttons').DataTable({
                 lengthChange: false,
-                pageLength:30,
+                bPaginate: false,
+                bInfo : false,
+                searching : false,
                 "order": [[ index, "desc" ]]
             });
 
