@@ -189,7 +189,7 @@
                                     </tr>
                                     </thead>
                                     <tbody>
-                                    @foreach(array_slice($upcomingevents, 3) as $event)
+                                    @foreach(array_slice($resultevents, 3) as $event)
                                         <tr>
                                             <th scope="row"><a href="/event/details/{{$event->eventurl}}">{{$event->label}}</a></th>
                                             <td>{{date('d F Y', strtotime($event->start))}}</td>
