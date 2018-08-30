@@ -97,16 +97,7 @@ class EventController extends Controller
 
     public function getPreviousEventsList()
     {
-        $events = DB::select("
-            SELECT e.*, es.label as eventstatus
-            FROM `events` e 
-            JOIN `eventstatus` es USING (`eventstatusid`)
-            JOIN `scores` s USING (`eventid`)
-            GROUP BY `s`.`eventid`
-            ORDER BY `e`.`promoted` DESC, IFNULL(e.entryclose, e.start) 
-        ");
-
-//        dd($events);
+        $events = $this->helper->getPreviousEvents(true, 99);
 
         return view('events.results.events-list', compact('events'));
     }
@@ -115,3 +106,9 @@ class EventController extends Controller
 
 
 }
+
+
+
+
+
+
