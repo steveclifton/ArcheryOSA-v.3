@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Classes\EventsHelper;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 
@@ -14,7 +15,7 @@ class HomeController extends Controller
      */
     public function __construct()
     {
-        //$this->middleware('auth');
+        $this->eventhelper = new EventsHelper();
     }
 
     /**
@@ -45,14 +46,7 @@ class HomeController extends Controller
 
         }
 
-        $resultevents = DB::select("
-            SELECT e.*, es.label as eventstatus
-            FROM `events` e 
-            JOIN `eventstatus` es USING (`eventstatusid`)
-            JOIN `scores` s USING (`eventid`)
-            GROUP BY `s`.`eventid`
-            ORDER BY `e`.`promoted` DESC, IFNULL(e.entryclose, e.start) 
-        ");
+        $resultevents = $this->eventhelper->getPreviousEvents(true, 10);
 
         return view('home', compact('upcomingevents', 'myevents', 'resultevents'));
     }
