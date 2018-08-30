@@ -15,6 +15,28 @@ class EventsHelper
 
     }
 
+    public function getPreviousEvents($showall = false, $limit = 10)
+    {
+        $join_scores = ' JOIN `scores` s USING (`eventid`) ';
+        $where       = '';
+        if ($showall) {
+            $join_scores = ' LEFT JOIN `scores` s USING (`eventid`) ';
+            $where       = ' WHERE `e`.`start` < NOW() ';
+        }
+
+        return DB::select("
+            SELECT e.*, es.label as eventstatus
+            FROM `events` e 
+            JOIN `eventstatus` es USING (`eventstatusid`)
+            $join_scores
+            $where
+            GROUP BY IFNULL(`s`.`eventid`, `e`.`eventid`)
+            ORDER BY `e`.`promoted` DESC, e.start DESC
+            LIMIT $limit
+        ");
+
+    }
+
 
     public function getEventsDateRange($event)
     {
