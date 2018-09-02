@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Events\Auth;
 use App\Http\Requests\Auth\EventRegistration\CreateRegistration;
 use App\Http\Requests\Auth\EventRegistration\UpdateRegistration;
 use App\Jobs\SendEntryReceived;
+use App\Jobs\SendEventAdminEntryReceived;
 use App\Models\Club;
 use App\Models\Competition;
 use App\Models\CompetitionRound;
@@ -184,6 +185,10 @@ class EventRegistrationController extends EventController
         }
 
         SendEntryReceived::dispatch($evententry->email, $event->label);
+
+        if ($event->adminnotifications) {
+            SendEventAdminEntryReceived::dispatch($event->email, $event->label, $validated['email']);
+        }
 
         return redirect('/event/register/' . $event->eventurl)->with('success', 'Entry Received!');
     }
