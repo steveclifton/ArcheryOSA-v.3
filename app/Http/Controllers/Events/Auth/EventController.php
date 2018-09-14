@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Events\Auth;
 
 use App\Http\Classes\EventsHelper;
 use App\Http\Controllers\Controller;
+use App\Http\Controllers\League\LeagueController;
 use App\Http\Requests\Auth\Events\CreateEvent;
 use App\Http\Requests\Auth\Events\UpdateEvent;
 use App\Models\Club;
@@ -33,13 +34,13 @@ class EventController extends Controller
     {
         // if the user is not logged in, or they are just a regular user
         // - redirect to the apply to create page
-        if ( !Auth::check() || Auth::user()->roleid > 3) {
+        if (!Auth::check() || Auth::user()->roleid > 3) {
             return view('events.public.apply');
         }
 
         $organisations = Organisation::where('visible', 1)->get();
-        $clubs         = Club::where('visible', 1)->get();
-        $eventtypes    = EventType::get();
+        $clubs = Club::where('visible', 1)->get();
+        $eventtypes = EventType::get();
 
         // Do some auth checking here. Can the user create an event?
         return view('events.auth.management.create', compact('organisations', 'clubs', 'eventtypes'));
@@ -60,8 +61,6 @@ class EventController extends Controller
     }
 
 
-
-
     /*****************************************
      *
      *****************************************/
@@ -75,6 +74,7 @@ class EventController extends Controller
             JOIN `eventadmins` ea USING (`eventid`)
             JOIN `eventstatus` es USING (`eventstatusid`)
             WHERE `ea`.`userid` = :userid
+            ORDER BY `e`.`start`
         ", ['userid' => Auth::id()]);
 
         return view('events.auth.events', compact('events'));
@@ -106,7 +106,7 @@ class EventController extends Controller
 
 
     // Scoring
-    public function getUserEventScoring()
+    public function getUserEventScoringList()
     {
         // get all the events the user can manage
         $events = DB::select("
@@ -122,6 +122,24 @@ class EventController extends Controller
 
 
         return view('events.auth.scoringlist', compact('events'));
+    }
+
+
+    public function getUserEventScoringView(Request $request)
+    {
+        $event = Event::where('eventurl', $request->eventurl ?? -1)->get()->first();
+
+        if (empty($event)) {
+            return redirect('/');
+        }
+
+        if ($event->eventtypeid == 2) {
+            $leagueController = new LeagueController();
+            return $leagueController->getUserLeagueScoringView($event);
+        }
+
+        return back()->with('failure', 'Not supported currently');
+        dd($request);
     }
 
 
@@ -169,6 +187,7 @@ class EventController extends Controller
         $event->organisationid  = !empty($validated['organisationid']) ? $validated['organisationid'] : null;
         $event->visible         = 0;
         $event->imagedt         = 'event' . rand(1,2) . '.jpg';
+        $event->eventtypeid     = intval($validated['eventtypeid']);
         $event->save();
 
         $event->eventurl    = makeurl($validated['label'], $event->eventid);
@@ -224,6 +243,8 @@ class EventController extends Controller
         $event->info           = !empty($validated['info'])            ? $validated['info']          : null;
         $event->clubid         = !empty($validated['clubid']) ? $validated['clubid'] : null;
         $event->organisationid = !empty($validated['organisationid']) ? $validated['organisationid'] : null;
+        $event->eventtypeid     = intval($validated['eventtypeid']);
+
         $event->save();
 
         $event->eventurl       = makeurl($validated['label'], $event->eventid);
