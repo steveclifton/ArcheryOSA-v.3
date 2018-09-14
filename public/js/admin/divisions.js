@@ -67,7 +67,7 @@ $(function () {
             }
         },
         'plugins' : ['types', 'checkbox']
-    }
+    };
 
     $('#checkTree').jstree(jsTreeObj);
     $('#checkTreeDivisions').jstree(jsTreeObj);

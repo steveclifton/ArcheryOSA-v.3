@@ -69,22 +69,33 @@ class EventRegistrationController extends EventController
             WHERE `eventid` = :eventid
         ", ['eventid' => $event->eventid]);
 
+        $leaguecompround = null;
+        if ($event->eventtypeid == 2) {
+            $leaguecompround = reset($eventcompetitions);
+            $leaguecompround = $leaguecompround->eventcompetitionid . '-' . $leaguecompround->roundids;
+        }
+
 
         $divisionsfinal    = [];
         $competitionsfinal = [];
         foreach ($eventcompetitions as $eventcompetition) {
-
 
             $divisions = Division::wherein('divisionid', json_decode($eventcompetition->divisionids))->get();
             foreach ($divisions as $division) {
                 $divisionsfinal[$division->divisionid] = $division;
             }
 
-            $eventcompetition->rounds = Round::wherein('roundid', json_decode($eventcompetition->roundids))->get();
+            if ($event->eventtypeid == 2) {
+                $eventcompetition->rounds = Round::where('roundid', $eventcompetition->roundids)->get();
+            }
+            else {
+                $eventcompetition->rounds = Round::wherein('roundid', json_decode($eventcompetition->roundids))->get();
+            }
 
             $competitionsfinal[$eventcompetition->date] = $eventcompetition;
-
         }
+
+
 
         $clubs = Club::where('visible', 1)->get();
 
@@ -96,7 +107,7 @@ class EventRegistrationController extends EventController
         // Means they need to create an event
         if (empty($evententry)) {
             return view('events.public.registration.createregistration',
-                    compact('user', 'event', 'clubs', 'divisionsfinal', 'competitionsfinal'));
+                    compact('user', 'event', 'clubs', 'divisionsfinal', 'competitionsfinal', 'leaguecompround'));
         }
 
         $entrycompetitions = EntryCompetition::where('entryid', $evententry->entryid)->get();
@@ -108,7 +119,7 @@ class EventRegistrationController extends EventController
 
         // Not empty, means they have entered the event already,
         return view('events.public.registration.updateregistration',
-                compact('user', 'event', 'evententry', 'clubs', 'divisionsfinal', 'competitionsfinal', 'entrycompetitions', 'entrycompetitionids'));
+                compact('user', 'event', 'evententry', 'clubs', 'divisionsfinal', 'competitionsfinal', 'entrycompetitions', 'entrycompetitionids', 'leaguecompround'));
     }
 
 

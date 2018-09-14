@@ -30,6 +30,21 @@
 
                 <input type="hidden" name="eventid" value="{{$event->eventid}}">
 
+                @if(!empty($leagueweeks))
+                    <div class="form-group row">
+                        <label class="col-sm-12 col-md-3 col-form-label">Current League Week</label>
+                        <div class="col-md-9">
+                            <select name="currentweek" id="$currentweek" class="form-control">
+                                @foreach(range(1, $leagueweeks) as $week)
+                                    <option value="{{$week}}" {!! ($currentweek ?? -1) == $week ? 'selected' : '' !!}>
+                                        {{ 'Week ' . $week }}
+                                    </option>
+                                @endforeach
+                            </select>
+                        </div>
+                    </div>
+                @endif
+
                 <div class="form-group row">
                     <label class="col-sm-12 col-md-3 col-form-label">Event Status</label>
                     <div class="col-md-9">
@@ -44,7 +59,6 @@
                         </select>
                     </div>
                 </div>
-                <br>
 
                 <div class="form-group row">
                     <label class="col-sm-12 col-md-3 col-form-label">Entries Limit</label>
@@ -87,6 +101,10 @@
                     </div>
                 </div>
                 <br>
+
+
+
+
 
 
 

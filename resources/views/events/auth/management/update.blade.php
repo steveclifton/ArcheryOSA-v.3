@@ -43,7 +43,7 @@
                 <div class="form-group row">
                     <label class="col-sm-12 col-md-3 col-form-label">Event Type</label>
                     <div class="col-md-9">
-                        <select name="eventtypeid" class="form-control">
+                        <select name="eventtypeid" class="form-control" disabled>
                             @foreach($eventtypes as $eventtype)
                                 <option value="{{$eventtype->eventtypeid}}"
                                         {{ $event->eventtypeid == $eventtype->eventtypeid ? 'selected' : ''}}>

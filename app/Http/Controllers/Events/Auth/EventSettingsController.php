@@ -24,13 +24,18 @@ class EventSettingsController extends EventController
 
         $eventstatuses = EventStatus::get();
 
-        return view('events.auth.management.settings', compact('event', 'eventstatuses'));
+        $leagueweeks = null;
+        $currentweek = 1;
+        if ($event->eventtypeid == 2) {
+            $leagueweeks = ceil($event->daycount / 7);
+            $currentweek = EventCompetition::where('eventid', $event->eventid)->pluck('currentweek')->first();
+        }
+
+        return view('events.auth.management.settings', compact('event', 'eventstatuses', 'leagueweeks', 'currentweek'));
     }
 
     public function updateEventSettings(Request $request)
     {
-
-//        dd($request);
         $event = Event::where('eventurl', $request->eventurl)->get()->first();
 
         if (empty($event)) {
@@ -94,17 +99,21 @@ class EventSettingsController extends EventController
             $event->imagebanner = $filename;
         }
 
-
-
-
         $event->adminnotifications = empty($request->input('adminnotifications')) ? 0 : 1;
         $event->entrylimit         = empty($request->input('entrylimit'))         ? NULL : intval($request->input('entrylimit'));
         $event->eventstatusid      = intval($request->input('eventstatusid'));
         $event->visible            = !empty($request->input('visible'))           ? 1 : 0;
         $event->showoverall        = !empty($request->input('showoverall'))           ? 1 : 0;
         $event->dateofbirth        = !empty($request->input('dateofbirth'))       ? 1 : 0;
-
         $event->save();
+
+
+        $eventcompetition = EventCompetition::where('eventid', $event->eventid)->get()->first();
+
+        if (!empty($eventcompetition)) {
+            $eventcompetition->currentweek = !empty($request->input('currentweek')) ? intval($request->input('currentweek')) : 1;
+            $eventcompetition->save();
+        }
 
         return back()->with('success', 'Event updated');
     }

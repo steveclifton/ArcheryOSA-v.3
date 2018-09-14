@@ -83,6 +83,11 @@ Route::middleware(['web'])->group(function() {
         Route::post('events/manage/competitions/update/{eventurl}', 'Events\Auth\EventCompetitionController@updateEventCompetition');
 
 
+        // League event competitions
+        Route::post('events/manage/competitions/league/create/{eventurl}', 'Events\Auth\EventCompetitionController@createLeagueCompetition');
+        Route::post('events/manage/competitions/league/update/{eventurl}', 'Events\Auth\EventCompetitionController@updateLeagueCompetition');
+
+
         // event settings
         Route::get('events/manage/settings/{eventurl}', 'Events\Auth\EventSettingsController@getEventSettingsView');
         Route::post('events/manage/settings/{eventurl}', 'Events\Auth\EventSettingsController@updateEventSettings');
@@ -103,8 +108,9 @@ Route::middleware(['web'])->group(function() {
         Route::get('logout', 'Auth\LoginController@logout')->name('logout');
 
 
-        // User scoring
-        Route::get('/scoring', 'Events\Auth\EventController@getUserEventScoring');
+        // User scoring - Only Leagues are supported now
+        Route::get('/scoring', 'Events\Auth\EventController@getUserEventScoringList');
+        Route::get('/scoring/{eventurl}', 'Events\Auth\EventController@getUserEventScoringView');
 
 
         // Event Scoring

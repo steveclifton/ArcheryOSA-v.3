@@ -183,38 +183,41 @@
                     </div>
                 </div>
 
-                <div class="form-group row">
-                    <label class="col-sm-12 col-md-3 col-form-label">Competitions*</label>
-                    <div class="col-md-9">
-                    <div class="">
-                    <div class="card-box">
-                        <h4 class="text-dark header-title m-t-0 m-b-30">Select the competitions you wish to enter</h4>
-                        @php $i = 1 @endphp
-                        <div id="checkTree">
-                            @foreach($competitionsfinal as $date => $eventcompetition)
-                                <ul>
-                                    <li data-jstree='{"opened":{{$i++ == 1 ? 'true' : 'false'}}, "icon": "ion-calendar"}'>{{date('D d F', strtotime($date))}}
-                                    <ul>
-                                        @foreach($eventcompetition->rounds as $round)
-                                            <li data-eventcompetitionid="{{$eventcompetition->eventcompetitionid}}"
-                                                data-roundid="{{$round->roundid}}"
-                                                data-jstree='{"opened":true, "icon": "ion-star",
-                                                "selected":"{{ !empty($entrycompetitionids[$eventcompetition->eventcompetitionid][$round->roundid]) ? 'true' : '' }}"
-                                                }'>{{$round->label}}
+                @if ($event->eventtypeid == 2)
+                    <input name="roundids" type="hidden" id="jsfields" value="{{$leaguecompround}}"/>
+                @else
+                    <div class="form-group row">
+                        <label class="col-sm-12 col-md-3 col-form-label">Competitions*</label>
+                        <div class="col-md-9">
+                            <div class="">
+                                <div class="card-box">
+                                    <h4 class="text-dark header-title m-t-0 m-b-30">Select the competitions you wish to enter</h4>
+                                    @php $i = 1 @endphp
+                                    <div id="checkTree">
+                                        @foreach($competitionsfinal as $date => $eventcompetition)
+                                            <ul>
+                                                <li data-jstree='{"opened":{{$i++ == 1 ? 'true' : 'false'}}, "icon": "ion-calendar"}'>{{date('D d F', strtotime($date))}}
+                                                <ul>
+                                                    @foreach($eventcompetition->rounds as $round)
+                                                        <li data-eventcompetitionid="{{$eventcompetition->eventcompetitionid}}"
+                                                            data-roundid="{{$round->roundid}}"
+                                                            data-jstree='{"opened":true, "icon": "ion-star",
+                                                            "selected":"{{ !empty($entrycompetitionids[$eventcompetition->eventcompetitionid][$round->roundid]) ? 'true' : '' }}"
+                                                            }'>{{$round->label}}
+                                                    @endforeach
+                                                </ul>
+                                                </li>
+                                            </ul>
                                         @endforeach
-                                    </ul>
-                                    </li>
-                                </ul>
-                            @endforeach
+                                    </div>
+
+                                </div>
+                                </div><!-- end col -->
+                            <div id="comperror" class="alert alert-danger hidden">Please select at least 1 competition</div>
                         </div>
-
                     </div>
-                    </div><!-- end col -->
-                    <div id="comperror" class="alert alert-danger hidden">Please select at least 1 competition</div>
-                    </div>
-                </div>
-
-                <input name="roundids" type="hidden" id="jsfields" value="" />
+                    <input name="roundids" type="hidden" id="jsfields" value="" />
+                @endif
 
                 <div class="form-group mb-0 justify-content-start row">
                     <div class="col-sm-12 col-md-3 col-form-label"></div>

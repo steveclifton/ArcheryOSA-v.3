@@ -1,32 +1,21 @@
-@php
-    $arr =[];
-    if (!empty(old('roundids'))) {
-        $arr = explode(',', old('roundids'));
-    }
-    else if (!empty($competition['roundids'])) {
-        $arr = json_decode($competition['roundids']);
-    }
-
-@endphp
 <div class="form-group row">
     <label class="col-sm-12 col-md-3 col-form-label">Rounds*</label>
     <div class="col-md-9">
         <div class="">
             <div class="card-box">
-                <h4 class="text-dark header-title m-t-0 m-b-30">Select the rounds required for this day</h4>
-                @if(!empty($entries))<h6 class="text-danger header-title m-t-0 m-b-30">Entries exist - cannot change rounds</h6>@endif
+                <h4 class="text-dark header-title m-t-0 m-b-30">Select the round required for the league (MAX 1)</h4>
 
                 <div id="checkTree">
                 @foreach($mappedrounds as $orgname => $roundtype)
                     <ul>
-                        <li data-jstree='{"checkbox_disabled":{{empty($entries) ? 'false' : 'true'}}, "opened":true, "icon": "ti-angle-right"}'>{{$orgname}}
+                        <li data-jstree='{"opened":true, "icon": "ti-angle-right"}'>{{$orgname}}
                             <ul>
                             @foreach($roundtype as $rtype => $type)
-                                <li data-jstree='{"checkbox_disabled":{{empty($entries) ? 'false' : 'true'}}, "opened":false, "icon": "ti-angle-right"}'>{{$rtype}}
+                                <li data-jstree='{"opened":false, "icon": "ti-angle-right"}'>{{$rtype}}
                                     <ul>
                                     @foreach($type as $t)
                                         <li data-roundid="{{$t->roundid}}"
-                                            data-jstree='{"checkbox_disabled":{{empty($entries) ? 'false' : 'true'}}, "icon":"ti-angle-right", "selected":"{!!in_array($t->roundid, $arr)!!}"}'
+                                            data-jstree='{"icon":"ti-angle-right","selected":"{!! $t->roundid == ($competition->roundids ?? -1) !!}"}'
                                             class="round">{{$t->label}}</li>
                                     @endforeach
                                     </ul>
@@ -60,7 +49,7 @@
     <div class="col-md-9">
         <div class="">
             <div class="card-box">
-                <h4 class="text-dark header-title m-t-0 m-b-30">Select the divisions required for this day's competitions</h4>
+                <h4 class="text-dark header-title m-t-0 m-b-30">Select the divisions required for the league</h4>
                 <div id="checkTreeDivisions">
                     @foreach($mappeddivisions as $bowtype => $division)
                     <ul>

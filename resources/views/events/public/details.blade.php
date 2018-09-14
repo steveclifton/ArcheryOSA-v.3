@@ -114,7 +114,7 @@
                                 </tr>
                                 <tr>
                                     <th scope="row">Rounds</th>
-                                    <td>{!! implode('<br>', $roundlabels) !!}</br>
+                                    <td>{!! is_array($roundlabels) ? implode('<br>', $roundlabels) : $roundlabels !!}</br>
                                     </td>
                                 </tr>
                                 <tr>

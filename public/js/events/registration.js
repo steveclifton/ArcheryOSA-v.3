@@ -13,12 +13,16 @@ $(function () {
         });
 
 
-        if (checkedRounds.length == 0 ) {
+        if (checkedRounds.length == 0 && $('#jsfields').val() == '') {
             $('#comperror').removeClass('hidden');
             return false;
         }
+        // noinspection EqualityComparisonWithCoercionJS
+        if ($('#jsfields').val() == '') {
+            $('#jsfields').attr('value', checkedRounds.join(","));
+        }
 
-        document.getElementById('jsfields').value = checkedRounds.join(",");
+
         this.submit();
     });
 

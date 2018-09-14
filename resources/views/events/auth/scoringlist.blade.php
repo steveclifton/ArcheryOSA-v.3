@@ -15,7 +15,7 @@
 
             <div class="card-columns">
                 @foreach(array_slice($events, 0, 3) as $event)
-                    <a href="javascript:;">
+                    <a href="/scoring/{{$event->eventurl}}">
                         <div class="card m-b-20">
                             <img class="card-img-top img-fluid" src="{{URL::asset('/images/archery.jpg')}}"
                                  alt="Card image cap">

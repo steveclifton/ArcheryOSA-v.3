@@ -6,7 +6,6 @@ namespace App\Http\Controllers\Events\PublicEvents;
 use App\Http\Classes\EventsHelper;
 use App\Models\Club;
 use App\Models\Event;
-use App\Models\EventCompetition;
 use App\Models\EventType;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
@@ -68,7 +67,7 @@ class EventController extends Controller
 
         $evententryopen = $event->eventstatusid == 1 ? true : false;
 
-        $roundlabels    = $this->helper->getCompetitionRoundLabels($event->eventid);
+        $roundlabels    = $this->helper->getCompetitionRoundLabels($event);
 
         $competitiontype = EventType::where('eventtypeid', $event->eventtypeid)->pluck('label')->first();
 
