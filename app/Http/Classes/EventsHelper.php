@@ -4,6 +4,7 @@ namespace App\Http\Classes;
 
 use App\Models\Competition;
 use App\Models\Division;
+use App\Models\Event;
 use App\Models\EventCompetition;
 use App\Models\Round;
 use Illuminate\Support\Facades\DB;
@@ -51,6 +52,19 @@ class EventsHelper
         $daterange = new \DatePeriod($start, $interval ,$end);
 
         return $daterange;
+    }
+
+    public function getEventsDateInterval($event)
+    {
+        if (!is_object($event)) {
+            return false;
+        }
+
+        $start = new \DateTime( $event->start );
+        $end = new \DateTime( $event->end );
+        $end = $end->modify( '+1 day' );
+        $interval = $start->diff($end);
+        return $interval->days ?? 1;
     }
 
 
@@ -158,16 +172,26 @@ class EventsHelper
 
     }
 
-    public function getCompetitionRoundLabels($eventid)
+    public function getCompetitionRoundLabels(Event $event)
     {
-        $eventcompetitions = EventCompetition::where('eventid', $eventid ?? NULL)->get();
+
+        $eventcompetitions = EventCompetition::where('eventid', $event->eventid ?? NULL)->get();
+
         if (empty($eventcompetitions)) {
             return '';
         }
 
         $roundLabels = [];
         foreach ($eventcompetitions as $eventcompetition) {
-            $rounds = Round::wherein('roundid', json_decode($eventcompetition->roundids))->get();
+
+            if ($event->eventtypeid == 2) {
+                return Round::where('roundid', $eventcompetition->roundids)->pluck('label')->first();
+            }
+            else {
+                $rounds = Round::whereIn('roundid', json_decode($eventcompetition->roundids))->get();
+            }
+
+
             foreach ($rounds as $r) {
                 $roundLabels[$r->roundid] = $r->label;
             }
