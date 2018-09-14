@@ -51,6 +51,13 @@ class ScoringController extends Controller
 
         $eventcompetitions = EventCompetition::where('eventid', $event->eventid)->orderBy('date', 'asc')->get();
 
+        // League event, make the event competition date current week
+        if ($event->eventtypeid == 2) {
+            foreach($eventcompetitions as $eventcompetition) {
+                $eventcompetition->date = 'Week ' . $eventcompetition->currentweek;
+            }
+        }
+
         return view('events.scoring.event-scoring-list', compact('event', 'eventcompetitions'));
     }
 
