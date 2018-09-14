@@ -11,20 +11,6 @@
     </div>
 </div>
 
-@if(!is_null($leagueweeks))
-    <div class="form-group row">
-        <label class="col-sm-12 col-md-3 col-form-label">Current League Week</label>
-        <div class="col-md-9">
-            <select id="scoringlevel" class="form-control">
-                @foreach(range(1, $leagueweeks) as $week)
-                    <option value="{{$week}}" {!! $competition['currentweek'] ?? -1 == $week ? 'selected' : '' !!}>
-                        {{ 'Week ' . $week }}
-                    </option>
-                @endforeach
-            </select>
-        </div>
-    </div>
-@endif
 <div class="form-group row justify-content-end">
     <div class=" col-md-9">
         <div class="checkbox checkbox-primary">
