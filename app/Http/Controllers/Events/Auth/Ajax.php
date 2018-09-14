@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Events\Auth;
 
+use App\Models\EntryCompetition;
 use App\Models\Event;
 use App\Models\EventCompetition;
 use App\Models\ScoringLevel;
@@ -35,6 +36,10 @@ class Ajax extends EventController
             $competition = $competition->toArray();
         }
 
+        $entries = EntryCompetition::where('eventid', $event->eventid)
+            ->where('eventcompetitionid',  $competition['eventcompetitionid'])
+            ->get()->first();
+
         /**
          * Get the text box view data
          */
@@ -50,7 +55,7 @@ class Ajax extends EventController
         $mappedrounds       = $this->helper->getMappedRoundTree();
 
         // Make the view
-        $view = View::make('events.auth.management.includes.competitiontree', compact('competition', 'mappedrounds', 'mappeddivisions'));
+        $view = View::make('events.auth.management.includes.competitiontree', compact('competition', 'entries', 'mappedrounds', 'mappeddivisions'));
         $html .= $view->render();
 
 
@@ -75,6 +80,8 @@ class Ajax extends EventController
         if (empty($competition)) {
             $formaction = '/events/manage/competitions/create/'.$event->eventurl;
         }
+
+
 
         return response()->json([
             'success'    => true,
