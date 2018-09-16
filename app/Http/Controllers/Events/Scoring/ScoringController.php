@@ -80,7 +80,6 @@ class ScoringController extends Controller
             return back()->with('failure', 'Invalid, please try again');
         }
 
-
         // Event Entries
         $entrys = DB::select("
             SELECT ee.*, ec.entrycompetitionid, ec.eventcompetitionid, ec.roundid, d.label as divisionname, d.bowtype,
@@ -92,17 +91,19 @@ class ScoringController extends Controller
             WHERE `ee`.`eventid` = '".$event->eventid."'
             AND `ec`.`eventcompetitionid` = :eventcompetitionid
             AND `ee`.`entrystatusid` = 2
+            
             ORDER BY `d`.label
         ", ['eventcompetitionid' => $eventcompetition->eventcompetitionid
         ]);
 
-
         $evententrys = [];
         foreach ($entrys as $entry) {
+
 
             $scores = Score::where('entryid', $entry->entryid)
                             ->where('roundid', $entry->roundid)
                             ->where('eventcompetitionid', $entry->eventcompetitionid)
+                            ->where('week', $eventcompetition->currentweek ?? 0)
                             ->get();
 
 
@@ -143,7 +144,12 @@ class ScoringController extends Controller
 
         $event = $this->event;
 
+        $week = 0;
 
+        // league event, get the current week
+        if ($event->eventtypeid == 2) {
+            $week = EventCompetition::where('eventid', $event->eventid)->pluck('currentweek')->first();
+        }
 
         if (empty($event) || empty($request->data) || !is_array($request->data)) {
             return response()->json([
@@ -166,14 +172,15 @@ class ScoringController extends Controller
                                                 ->where('userid', $evententry->userid ?? -1)
                                                 ->get()
                                                 ->first();
+
             if (empty($evententry) || empty($entrycompetition)) {
                 continue;
             }
 
-
             // check if any scores exist, if none, create, else update
             $scores = Score::where('entryid', $evententry->entryid)
                             ->where('entrycompetitionid', $entrycompetition->entrycompetitionid)
+                            ->where('week', $week)
                             ->where('roundid', $entrycompetition->roundid)
                             ->get()
                             ->first();
@@ -201,6 +208,7 @@ class ScoringController extends Controller
                     $score->hits = intval($data['hits'] ?? 0);
                     $score->max = intval($data['max'] ?? 0);
                     $score->inners = intval($data['inners'] ?? 0);
+                    $score->week = $week;
                     $score->save();
 
                     if (is_numeric($data['key'])) {
@@ -228,11 +236,12 @@ class ScoringController extends Controller
 
                 }
 
-
+                $flatscore->week = $week;
                 // Save the flat score
                 $flatscore->save();
             }
             else {
+                // Update Score
                 $i = 1;
                 $flatscore = null;
                 foreach ($result['score'] ?? [] as $data) {
@@ -241,6 +250,7 @@ class ScoringController extends Controller
                                     ->where('entryid', $evententry->entryid)
                                     ->where('entrycompetitionid', $entrycompetition->entrycompetitionid)
                                     ->where('userid', $evententry->userid)
+                                    ->where('week', $week)
                                     ->get()
                                     ->first();
 
@@ -253,13 +263,13 @@ class ScoringController extends Controller
                         $flatscore = FlatScore::where('entryid', $evententry->entryid)
                             ->where('entrycompetitionid', $entrycompetition->entrycompetitionid)
                             ->where('userid', $evententry->userid)
+                            ->where('week', $week)
                             ->get()->first();
 
                     }
 
 
                     $score->key                = $data['key'] ?? '';
-                    //$score->unit               = 1;
                     $score->score              = intval($data['score'] ?? 0);
                     $score->hits               = intval($data['hits'] ?? 0);
                     $score->max                = intval($data['max'] ?? 0);
@@ -283,7 +293,9 @@ class ScoringController extends Controller
                     }
 
                 }
-                $flatscore->save();
+                if (!empty($flatscore)) {
+                    $flatscore->save();
+                }
             }
 
         }
