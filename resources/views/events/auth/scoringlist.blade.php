@@ -10,6 +10,9 @@
             </div>
         </div>
     </div>
+
+    @include('template.alerts')
+
     <div class="row">
         <div class="col-12">
 
