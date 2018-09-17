@@ -16,13 +16,19 @@ class APIEventsController extends Controller
     public function getUpcomingEvents()
     {
         $events = DB::select("
-            SELECT e.*, es.label as eventstatus
+            SELECT e.eventid, e.label as eventname, e.eventtypeid, e.entryclose, e.start, e.end, e.daycount, 
+             e.contactname, e.phone, e.email, e.location, e.cost, e.bankaccount, e.bankreference, e.schedule, e.info,
+              e.eventurl, e.clubid, e.organisationid, e.entrylimit,  es.label as eventstatus
             FROM `events` e 
             JOIN `eventstatus` es USING (`eventstatusid`)
             WHERE `e`.`end` > NOW()
             AND `e`.`visible` = 1
             ORDER BY IFNULL(e.entryclose, e.start) 
         ");
+
+        foreach ($events as $event) {
+            $event->eventurl = makeEventDetailsUrl($event->eventurl);
+        }
 
         return response()->json([
             'success' => true,
@@ -40,7 +46,9 @@ class APIEventsController extends Controller
     public function getPreviousEvents()
     {
         $events = DB::select("
-            SELECT e.*, es.label as eventstatus
+            SELECT e.eventid, e.label as eventname, e.eventtypeid, e.entryclose, e.start, e.end, e.daycount, 
+              e.contactname, e.phone, e.email, e.location, e.cost, e.bankaccount, e.bankreference, e.schedule, e.info,
+              e.eventurl, e.clubid, e.organisationid, e.entrylimit,  es.label as eventstatus
             FROM `events` e 
             JOIN `eventstatus` es USING (`eventstatusid`)
             WHERE `e`.`end` < NOW()
@@ -48,6 +56,11 @@ class APIEventsController extends Controller
             ORDER BY `e`.`promoted` DESC, IFNULL(e.entryclose, e.start) 
         ");
 
+
+        foreach ($events as $event) {
+            $event->eventurl = makeEventDetailsUrl($event->eventurl);
+        }
+        
         return response()->json([
             'success' => true,
             'date' => [
