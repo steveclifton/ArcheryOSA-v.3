@@ -13,7 +13,7 @@ class APIEventsController extends Controller
      * Gets all upcoming events
      * @return \Illuminate\Http\JsonResponse
      */
-    public function getEvents()
+    public function getUpcomingEvents()
     {
         $events = DB::select("
             SELECT e.*, es.label as eventstatus
