@@ -21,7 +21,7 @@ class APIEventsController extends Controller
             JOIN `eventstatus` es USING (`eventstatusid`)
             WHERE `e`.`end` > NOW()
             AND `e`.`visible` = 1
-            ORDER BY `e`.`promoted` DESC, IFNULL(e.entryclose, e.start) 
+            ORDER BY IFNULL(e.entryclose, e.start) 
         ");
 
         return response()->json([
