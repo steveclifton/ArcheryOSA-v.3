@@ -229,13 +229,27 @@ class ScoringController extends Controller
                         $flatscore->{$distkey} = $data['key'] ?? '';
                     }
 
+
                     if ($data['key'] == 'total') {
                         $flatscore->total = intval($data['score'] ?? 0);
+                    }
+                    if ($data['key'] == 'max') {
+                        if (is_null($flatscore->max)) {
+                            $flatscore->max = 0;
+                        }
+
+                        $flatscore->max += intval($data['score'] ?? 0);
+                    }
+                    if ($data['key'] == 'inners') {
+                        if (is_null($flatscore->inners)) {
+                            $flatscore->inners = 0;
+                        }
+
+                        $flatscore->inners += intval($data['score'] ?? 0);
                     }
 
 
                 }
-
                 $flatscore->week = $week;
                 // Save the flat score
                 $flatscore->save();
@@ -287,9 +301,23 @@ class ScoringController extends Controller
                         $flatscore->{$distkey} = $data['key'] ?? '';
                     }
 
-
                     if ($data['key'] == 'total') {
                         $flatscore->total = intval($data['score'] ?? 0);
+                    }
+
+                    if ($data['key'] == 'max') {
+                        if (is_null($flatscore->max)) {
+                            $flatscore->max = 0;
+                        }
+
+                        $flatscore->max += intval($data['score'] ?? 0);
+                    }
+                    if ($data['key'] == 'inners') {
+                        if (is_null($flatscore->inners)) {
+                            $flatscore->inners = 0;
+                        }
+
+                        $flatscore->inners += intval($data['score'] ?? 0);
                     }
 
                 }
