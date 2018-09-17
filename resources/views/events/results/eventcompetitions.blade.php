@@ -32,24 +32,24 @@
                 <div class="table-responsive">
                     <table class="table table-hover">
                         <thead class="thead-light">
-                        <tr>
-                            <th width="40%">Event Competition</th>
-                            <th width="40%">Status</th>
-                            <th width="20%">Date</th>
-                        </tr>
+                            <tr>
+                                <th width="40%">Event Competition</th>
+                                <th width="40%">Status</th>
+                                <th width="20%">Date</th>
+                            </tr>
                         </thead>
                         <tbody>
-                        @if (!empty($overall))
-                            <tr>
-                                <td scope="row" >
-                                    <a href="/event/results/{{$event->eventurl}}/overall">Overall</a>
-                                </td>
-                                <td scope="row">
-                                    <a href="/event/results/{{$event->eventurl}}/overall">See Results</a>
-                                </td>
-                                <td></td>
-                            </tr>
-                        @endif
+                            @if (!empty($overall))
+                                <tr>
+                                    <td scope="row" >
+                                        <a href="/event/results/{{$event->eventurl}}/overall">Overall</a>
+                                    </td>
+                                    <td scope="row">
+                                        <a href="/event/results/{{$event->eventurl}}/overall">See Results</a>
+                                    </td>
+                                    <td></td>
+                                </tr>
+                            @endif
 
                         @foreach($eventcompetitions as $comp)
                             <tr>
