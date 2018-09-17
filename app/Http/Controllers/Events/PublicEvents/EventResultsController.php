@@ -25,9 +25,19 @@ class EventResultsController extends EventController
             return redirect('/');
         }
 
-        $eventcompetitions = EventCompetition::where('eventid', $event->eventid)->orderBy('date', 'asc')->get();
+
 
         $overall = $event->showoverall;
+
+        // league event
+        if ($event->eventtypeid == 2) {
+            $eventcompetition = EventCompetition::where('eventid', $event->eventid)->get()->first();
+
+            return view('events.results.leaguecompetitions', compact('event', 'eventcompetition', 'overall'));
+        }
+
+        $eventcompetitions = EventCompetition::where('eventid', $event->eventid)->orderBy('date', 'asc')->get();
+
         foreach ($eventcompetitions as $eventcompetition) {
 
             $eventcompetition->score = Score::where('eventid', $eventcompetition->eventid)
@@ -41,12 +51,13 @@ class EventResultsController extends EventController
 
 
     /**
-     *
+     * MAIN entry point into get results.
+     *  - Does filtering between league and events
      *
      * @param Request $request
-     * @return \Illuminate\Http\RedirectResponse|void
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\Http\RedirectResponse|\Illuminate\View\View
      */
-    public function getEventCompetitionResults(Request $request)
+    public function getCompetitionResults(Request $request)
     {
         if (empty($request->eventcompetitionid) || empty($request->eventurl)) {
             return back()->with('failure', 'Invalid Request');
@@ -55,7 +66,23 @@ class EventResultsController extends EventController
         $event = Event::where('eventurl', $request->eventurl)->get()->first();
 
         if (strcasecmp($request->eventcompetitionid, 'overall') === 0) {
+            // league processing
+            if ($event->eventtypeid == 2) {
+                return $this->getLeagueOverallResults($event);
+            }
+
+            // Normal Event
             return $this->getEventOverallResults($event);
+        }
+        // League Handicap results
+        else if (strcasecmp($request->eventcompetitionid, 'handicap') === 0) {
+            return $this->getLeagueHandicapResults($event);
+        }
+
+
+        // league processing
+        if ($event->eventtypeid == 2) {
+            return $this->getLeagueCompetitionResults($event, $request->eventcompetitionid);
         }
 
         // Get the results for the event and the eventcompetitionid
@@ -163,5 +190,50 @@ class EventResultsController extends EventController
         return view('events.results.results', compact('event', 'evententrys', 'eventcompetition'));
 
     }
+
+
+    private function getLeagueOverallResults(Event $event)
+    {
+
+    }
+
+    private function getLeagueCompetitionResults(Event $event, $week)
+    {
+        $entrys = DB::select("
+            SELECT ee.firstname, ee.lastname, ee.gender, ec.entrycompetitionid, 
+                ec.eventcompetitionid, ec.roundid, d.label as divisionname, d.bowtype, r.unit,
+                sf.*
+            FROM `evententrys` ee
+            JOIN `entrycompetitions` ec USING (`entryid`)
+            JOIN `divisions` d ON (`ec`.`divisionid` = `d`.`divisionid`)
+            JOIN `rounds` r ON (ec.roundid = r.roundid)
+            LEFT JOIN `scores_flat` sf ON (ee.entryid = sf.entryid AND ec.entrycompetitionid = sf.entrycompetitionid AND ec.roundid = sf.roundid)
+            WHERE `ee`.`eventid` = '".$event->eventid."'
+            AND `sf`.`week` = :week
+            AND `ee`.`entrystatusid` = 2
+            ORDER BY `d`.label
+        ", ['week' => $week]);
+
+
+
+        $evententrys = [];
+        foreach ($entrys as $entry) {
+            $gender = '';
+            if (!$event->ignoregenders) {
+                $entry->gender == 'm' ? 'Men\'s ' : 'Women\'s ';
+            }
+            $evententrys[$entry->bowtype][$gender . $entry->divisionname][] = $entry;
+        }
+
+        $eventcompetition = EventCompetition::where('eventcompetitionid', $entrys[0]->eventcompetitionid)->get()->first();
+
+        return view('events.results.leagueresults', compact('event', 'evententrys', 'eventcompetition'));
+    }
+
+    private function getLeagueHandicapResults(Event $event)
+    {
+
+    }
+
 
 }
