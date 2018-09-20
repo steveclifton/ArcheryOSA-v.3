@@ -20,6 +20,44 @@
         </div>
     </div>
 
+    @if ($event->isleague())
+        <div class="col-md-8 offset-md-2">
+            <div class="card-box">
+                <button class="processLeague myButton btn btn-inverse btn-info waves-effect waves-light">Process League Points</button>
+                <meta name="csrf-token" content="{{ csrf_token() }}">
+                <meta name="eventurl" content="{{ $event->eventurl}}">
+                <div class="success hidden">All good</div>
+            </div>
+        </div>
+        <script>
+            $(function() {
+                $('.processLeague').on('click', function() {
+                    if (confirm('Are you sure you want to process the league?')) {
+                        var eventurl = $('meta[name="eventurl"]').attr('content');
+
+                        $.ajax({
+                            method: "POST",
+                            headers: {
+                                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                            },
+                            url: "/ajax/events/manage/"+eventurl+"/processleague/",
+                        }).done(function( json ) {
+
+                            if (json.success) {
+                                $('.success').removeClass('hidden');
+                            }
+
+                        });
+                    }
+
+                });
+
+            });
+        </script>
+    @endif
+
+
+
     <div class="col-md-8 offset-md-2">
         <div class="card-box">
             @include('template.alerts')
@@ -36,7 +74,7 @@
                         <div class="col-md-9">
                             <select name="currentweek" id="$currentweek" class="form-control">
                                 @foreach(range(1, $leagueweeks) as $week)
-                                    <option value="{{$week}}" {!! ($currentweek ?? -1) == $week ? 'selected' : '' !!}>
+                                    <option value="{{$week}}" {!! ($eventcompetition->currentweek ?? -1) == $week ? 'selected' : '' !!}>
                                         {{ 'Week ' . $week }}
                                     </option>
                                 @endforeach
@@ -101,8 +139,6 @@
                     </div>
                 </div>
                 <br>
-
-
 
 
 
