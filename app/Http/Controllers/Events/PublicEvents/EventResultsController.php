@@ -7,10 +7,12 @@ use App\Models\EventCompetition;
 use App\Models\Score;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use App\Http\Controllers\Traits\UserResults;
 
 
 class EventResultsController extends EventController
 {
+    use UserResults;
     /**
      * Get the Events competitions and their results status
      *
@@ -30,12 +32,27 @@ class EventResultsController extends EventController
         $overall = $event->showoverall;
 
         // league event
-        if ($event->eventtypeid == 2) {
+        if ($event->isLeague()) {
             $eventcompetition = EventCompetition::where('eventid', $event->eventid)->get()->first();
 
-            return view('events.results.leaguecompetitions', compact('event', 'eventcompetition', 'overall'));
+            $rangeArr = [];
+            foreach (range(1, $eventcompetition->currentweek) as $week) {
+                $score = Score::where('eventid', $eventcompetition->eventid)
+                    ->where('eventcompetitionid', $eventcompetition->eventcompetitionid)
+                    ->where('week', $week)
+                    ->get()
+                    ->first();
+
+                if (!empty($score)) {
+                    $rangeArr[] = $week;
+                }
+            }
+
+            return view('events.results.league.leaguecompetitions', compact('event', 'rangeArr', 'overall'));
         }
 
+
+        // not a league
         $eventcompetitions = EventCompetition::where('eventid', $event->eventid)->orderBy('date', 'asc')->get();
 
         foreach ($eventcompetitions as $eventcompetition) {
@@ -67,21 +84,18 @@ class EventResultsController extends EventController
 
         if (strcasecmp($request->eventcompetitionid, 'overall') === 0) {
             // league processing
-            if ($event->eventtypeid == 2) {
+            if ($event->isLeague()) {
                 return $this->getLeagueOverallResults($event);
             }
 
             // Normal Event
             return $this->getEventOverallResults($event);
         }
-        // League Handicap results
-        else if (strcasecmp($request->eventcompetitionid, 'handicap') === 0) {
-            return $this->getLeagueHandicapResults($event);
-        }
+
 
 
         // league processing
-        if ($event->eventtypeid == 2) {
+        if ($event->isLeague()) {
             return $this->getLeagueCompetitionResults($event, $request->eventcompetitionid);
         }
 
@@ -194,7 +208,37 @@ class EventResultsController extends EventController
 
     private function getLeagueOverallResults(Event $event)
     {
+        $entrys = DB::select("
+            SELECT ee.userid, ee.firstname, ee.lastname, ee.gender, ec.roundid, ee.divisionid,  d.label as divisionname, d.bowtype, r.unit, r.label as roundname 
+            FROM `evententrys` ee
+            JOIN `entrycompetitions` ec USING (`entryid`)
+            JOIN `divisions` d ON (`ec`.`divisionid` = `d`.`divisionid`)
+            JOIN `rounds` r ON (ec.roundid = r.roundid)
+            JOIN `scores_flat` sf ON (ee.entryid = sf.entryid)
+            WHERE `ee`.`eventid` = '".$event->eventid."'
+            AND `ee`.`entrystatusid` = 2
+            GROUP BY `ee`.`entryid`
+            ORDER BY d.label, ee.userid, ec.eventcompetitionid
+        ");
 
+        $eventcompetition = EventCompetition::where('eventid', $event->eventid)->get()->first();
+
+
+        $evententrys = [];
+        foreach ($entrys as $entry) {
+            $entry->top10   = $this->getUserTop10Scores($entry->userid, $entry->divisionid, $event->eventid);
+            $entry->average = $this->getUserAverage($entry->userid, $entry->divisionid, $event->eventid);
+            $entry->top10points = $this->getUserTop10Points($entry->userid, $entry->divisionid, $event->eventid);
+
+            $gender = '';
+            if (!$eventcompetition->ignoregenders) {
+                $entry->gender == 'm' ? 'Men\'s ' : 'Women\'s ';
+            }
+            $evententrys[$entry->bowtype][$gender . $entry->divisionname][] = $entry;
+        }
+
+
+        return view('events.results.league.leagueresults-overall', compact('event', 'evententrys', 'eventcompetition'));
     }
 
     private function getLeagueCompetitionResults(Event $event, $week)
@@ -214,12 +258,17 @@ class EventResultsController extends EventController
             ORDER BY `d`.label
         ", ['week' => $week]);
 
+        if (empty($entrys)) {
+            return back()->with('failure', 'Unable to get results');
+        }
+
+        $eventcompetition = EventCompetition::where('eventid', $event->eventid)->get()->first();
 
 
         $evententrys = [];
         foreach ($entrys as $entry) {
             $gender = '';
-            if (!$event->ignoregenders) {
+            if (!$eventcompetition->ignoregenders) {
                 $entry->gender == 'm' ? 'Men\'s ' : 'Women\'s ';
             }
             $evententrys[$entry->bowtype][$gender . $entry->divisionname][] = $entry;
@@ -227,12 +276,7 @@ class EventResultsController extends EventController
 
         $eventcompetition = EventCompetition::where('eventcompetitionid', $entrys[0]->eventcompetitionid)->get()->first();
 
-        return view('events.results.leagueresults', compact('event', 'evententrys', 'eventcompetition'));
-    }
-
-    private function getLeagueHandicapResults(Event $event)
-    {
-
+        return view('events.results.league.leagueresults', compact('event', 'evententrys', 'eventcompetition'));
     }
 
 
