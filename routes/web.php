@@ -149,6 +149,7 @@ Route::middleware(['web'])->group(function() {
         Route::post('ajax/events/manage/{eventurl}/approveentry', 'Events\Auth\EventEntryController@approveEntry');
         Route::post('ajax/events/manage/{eventurl}/approvepaid', 'Events\Auth\EventEntryController@approvePaid');
         Route::post('ajax/events/manage/{eventurl}/sendconfirmation', 'Events\Auth\EventEntryController@sendApprove');
+        Route::post('ajax/events/manage/{eventurl}/processleague', 'League\LeagueController@processLeagueResults');
 
     });
 
