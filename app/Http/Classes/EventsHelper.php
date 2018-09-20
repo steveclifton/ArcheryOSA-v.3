@@ -11,10 +11,6 @@ use Illuminate\Support\Facades\DB;
 
 class EventsHelper
 {
-    public function __construct()
-    {
-
-    }
 
     public function getPreviousEvents($showall = false, $limit = 10)
     {
