@@ -8,4 +8,9 @@ class Event extends Model
 {
     protected $table = 'events';
     protected $primaryKey = 'eventid';
+
+    public function isLeague()
+    {
+        return $this->eventtypeid == 2;
+    }
 }
