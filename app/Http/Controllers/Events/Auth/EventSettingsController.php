@@ -25,13 +25,12 @@ class EventSettingsController extends EventController
         $eventstatuses = EventStatus::get();
 
         $leagueweeks = null;
-        $currentweek = 1;
-        if ($event->eventtypeid == 2) {
+        if ($event->isleague()) {
             $leagueweeks = ceil($event->daycount / 7);
-            $currentweek = EventCompetition::where('eventid', $event->eventid)->pluck('currentweek')->first();
+            $eventcompetition = EventCompetition::where('eventid', $event->eventid)->get()->first();
         }
 
-        return view('events.auth.management.settings', compact('event', 'eventstatuses', 'leagueweeks', 'currentweek'));
+        return view('events.auth.management.settings', compact('event', 'eventstatuses', 'leagueweeks', 'eventcompetition'));
     }
 
     public function updateEventSettings(Request $request)
@@ -111,7 +110,7 @@ class EventSettingsController extends EventController
         $eventcompetition = EventCompetition::where('eventid', $event->eventid)->get()->first();
 
         if (!empty($eventcompetition)) {
-            $eventcompetition->currentweek = !empty($request->input('currentweek')) ? intval($request->input('currentweek')) : 1;
+            $eventcompetition->currentweek   = !empty($request->input('currentweek')) ? intval($request->input('currentweek')) : 1;
             $eventcompetition->save();
         }
 
