@@ -47,17 +47,9 @@
                                         <a href="/event/results/{{$event->eventurl}}/overall">See Results</a>
                                     </td>
                                 </tr>
-                                <tr>
-                                    <td scope="row" >
-                                        <a href="/event/results/{{$event->eventurl}}/handicap">Handicap</a>
-                                    </td>
-                                    <td scope="row">
-                                        <a href="/event/results/{{$event->eventurl}}/handicap">See Results</a>
-                                    </td>
-                                </tr>
                             @endif
 
-                        @foreach(range(1, $eventcompetition->currentweek) as $week)
+                        @foreach($rangeArr as $week)
                             <tr>
                                 <td scope="row" >
                                     <a href="/event/results/{{$event->eventurl}}/{{$week}}">Week {{$week}}</a>
