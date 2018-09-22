@@ -96,16 +96,18 @@ class ScoringController extends Controller
         ", ['eventcompetitionid' => $eventcompetition->eventcompetitionid
         ]);
 
+        $currentWeek = $event->isLeague() ? $eventcompetition->currentweek : 0;
         $evententrys = [];
         foreach ($entrys as $entry) {
+
+
 
 
             $scores = Score::where('entryid', $entry->entryid)
                             ->where('roundid', $entry->roundid)
                             ->where('eventcompetitionid', $entry->eventcompetitionid)
-                            ->where('week', $eventcompetition->currentweek ?? 0)
+                            ->where('week', $currentWeek)
                             ->get();
-
 
             $i = 1;
             foreach ($scores as $score) {

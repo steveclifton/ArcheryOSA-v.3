@@ -282,6 +282,7 @@ class EventCompetitionController extends EventController
             $divisionidsfinal[] = $did;
         }
 
+        $currentWeek = $event->isLeague() ? 1 : 0;
 
         $eventcompetition = new EventCompetition();
         $eventcompetition->eventid          = !empty($validated['eventid'])       ? intval($validated['eventid']) : '';
@@ -289,7 +290,7 @@ class EventCompetitionController extends EventController
         $eventcompetition->location         = !empty($validated['location'])      ? $validated['location'] : '';
         $eventcompetition->schedule         = !empty($validated['schedule'])      ? $validated['schedule'] : '';
         $eventcompetition->roundids         = intval($roundid);
-        $eventcompetition->currentweek       = 1;
+        $eventcompetition->currentweek      = $currentWeek;
         $eventcompetition->divisionids      = !empty($divisionidsfinal)           ? json_encode($divisionidsfinal) : json_encode('');
         $eventcompetition->scoringlevel     = !empty($validated['scoringlevel'])  ? intval($validated['scoringlevel']) : 0;
         $eventcompetition->ignoregenders    = empty($validated['ignoregenders'])  ? 0 : 1;
