@@ -12,6 +12,13 @@ $(function () {
             }
         });
 
+        var selected = [];
+        $('#checkb input:checked').each(function() {
+            selected.push($(this).attr('value'));
+        });
+
+        $('#mDivid').val(selected.join(','));
+
 
         if (checkedRounds.length == 0 && $('#jsfields').val() == '') {
             $('#comperror').removeClass('hidden');

@@ -33,7 +33,9 @@ class CreateLeagueCompetition extends FormRequest
             'scoringenabled' => 'nullable',
             'roundids'       => 'required',
             'divisionids'    => 'required',
-            'ignoregenders'  => 'nullable'
+            'ignoregenders'  => 'nullable',
+            'multipledivisions' => 'nullable'
+
         ];
     }
 

@@ -144,26 +144,55 @@
                     </div>
                 </div>
 
-                <div class="form-group row">
-                    <label class="col-sm-12 col-md-3 col-form-label">Division*</label>
-                    <div class="col-md-9">
-                        <select name="divisionid" class="form-control {{ $errors->has('divisionid') ? 'is-invalid' : '' }}" required>
-                            <option disabled selected>Pick one</option>
+                @if ($event->isLeague() && $multipledivisions)
+                    <div class="form-group row">
+                        <label class="col-sm-12 col-md-3 col-form-label">Division*</label>
+                        <div class="col-md-9">
                             @foreach($divisionsfinal as $division)
-                                <option value="{{$division->divisionid}}"
-                                        {!! old('divisionid') == $division->divisionid ? 'selected' : '' !!}>
-                                    {{$division->label}}
-                                </option>
+                                <div id="checkb" class="checkbox checkbox-primary">
+                                    <input name="multipledivs[]" id="divids-{{$division->divisionid}}" type="checkbox" value="{{$division->divisionid}}"
+                                            {!! old('divisionid') == $division->divisionid ? 'selected' : '' !!}>
+                                    <label for="divids-{{$division->divisionid}}">
+                                        {{$division->label}}
+
+                                    </label>
+                                </div>
+
                             @endforeach
-                        </select>
-                        @if ($errors->has('divisionid'))
-                            <span class="invalid-feedback" role="alert">
+                            @if ($errors->has('divisionid'))
+                                <span class="invalid-feedback" role="alert">
                                 <strong>{{ $errors->first('divisionid') }}</strong>
                             </span>
-                        @endif
-                        {{--<span class="help-block"><small>Select an organisation the division belongs to</small></span>--}}
+                            @endif
+                            {{--<span class="help-block"><small>Select an organisation the division belongs to</small></span>--}}
+                        </div>
                     </div>
-                </div>
+                    <input type="hidden" name="divisionid" id="mDivid">
+                @else
+                    <div class="form-group row">
+                        <label class="col-sm-12 col-md-3 col-form-label">Division*</label>
+                        <div class="col-md-9">
+                            <select name="divisionid" class="form-control {{ $errors->has('divisionid') ? 'is-invalid' : '' }}" required>
+                                <option disabled selected>Pick one</option>
+                                @foreach($divisionsfinal as $division)
+                                    <option value="{{$division->divisionid}}"
+                                            {!! old('divisionid') == $division->divisionid ? 'selected' : '' !!}>
+                                        {{$division->label}}
+                                    </option>
+                                @endforeach
+                            </select>
+                            @if ($errors->has('divisionid'))
+                                <span class="invalid-feedback" role="alert">
+                                <strong>{{ $errors->first('divisionid') }}</strong>
+                            </span>
+                            @endif
+                            {{--<span class="help-block"><small>Select an organisation the division belongs to</small></span>--}}
+                        </div>
+                    </div>
+                @endif
+
+
+
 
                 <div class="form-group row justify-content-end">
                     <label class="col-sm-12 col-md-3 col-form-label">Gender*</label>
@@ -181,7 +210,7 @@
                     </div>
                 </div>
 
-                @if ($event->eventtypeid == 2)
+                @if ($event->isLeague())
                     <input name="roundids" type="hidden" id="jsfields" value="{{$leaguecompround}}"/>
                 @else
                     <div class="form-group row">

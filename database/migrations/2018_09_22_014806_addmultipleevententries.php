@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class AddDivisionToEventEntry extends Migration
+class Addmultipleevententries extends Migration
 {
     /**
      * Run the migrations.
@@ -13,8 +13,8 @@ class AddDivisionToEventEntry extends Migration
      */
     public function up()
     {
-        Schema::table('evententrys', function($table) {
-            $table->string('divisionid')->nullable();
+        Schema::table('eventcompetitions', function($table) {
+            $table->integer('multipledivisions')->default(0);
         });
     }
 

@@ -294,6 +294,7 @@ class EventCompetitionController extends EventController
         $eventcompetition->divisionids      = !empty($divisionidsfinal)           ? json_encode($divisionidsfinal) : json_encode('');
         $eventcompetition->scoringlevel     = !empty($validated['scoringlevel'])  ? intval($validated['scoringlevel']) : 0;
         $eventcompetition->ignoregenders    = empty($validated['ignoregenders'])  ? 0 : 1;
+        $eventcompetition->multipledivisions    = empty($validated['multipledivisions'])  ? 0 : 1;
         $eventcompetition->scoringenabled   = empty($validated['scoringenabled']) ? 0 : 1;
         $eventcompetition->visible          = 1;
         $eventcompetition->save();
@@ -347,7 +348,9 @@ class EventCompetitionController extends EventController
         $eventcompetition->roundids         = intval($roundid);
         $eventcompetition->divisionids      = !empty($divisionidsfinal)           ? json_encode($divisionidsfinal) : json_encode('');
         $eventcompetition->scoringlevel     = !empty($validated['scoringlevel'])  ? intval($validated['scoringlevel']) : 0;
-        $eventcompetition->ignoregenders = empty($validated['ignoregenders']) ? 0 : 1;
+        $eventcompetition->ignoregenders    = empty($validated['ignoregenders']) ? 0 : 1;
+        $eventcompetition->multipledivisions = empty($validated['multipledivisions'])  ? 0 : 1;
+
         $eventcompetition->scoringenabled   = empty($validated['scoringenabled']) ? 0 : 1;
 //        $eventcompetition->visible          = empty($validated['visible'])        ? 0 : 1;
         $eventcompetition->save();
