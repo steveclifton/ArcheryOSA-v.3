@@ -94,6 +94,8 @@ Route::middleware(['web'])->group(function() {
 
         // event entries
         Route::get('events/manage/evententries/{eventurl}', 'Events\Auth\EventEntryController@getEventEntriesView');
+        Route::get('events/manage/evententries/{eventurl}/add', 'Events\Auth\EventEntryController@getEventEntryAddView');
+
 
         // USERS STUFF
 
@@ -102,6 +104,8 @@ Route::middleware(['web'])->group(function() {
         Route::get('/event/registration/{eventurl}/{username}', 'Events\Auth\EventRegistrationController@getRegistration');
         Route::post('/event/registration/create/{eventurl}', 'Events\Auth\EventRegistrationController@createRegistration');
         Route::post('/event/registration/update/{eventurl}', 'Events\Auth\EventRegistrationController@updateRegistration');
+        Route::post('/event/registration/create/admin/{eventurl}', 'Events\Auth\EventRegistrationController@createAdminRegistration');
+
 
         // Logout
         Route::post('logout', 'Auth\LoginController@logout')->name('logout');
@@ -145,6 +149,8 @@ Route::middleware(['web'])->group(function() {
         /**
          * AJAX
          */
+        Route::post('ajax/evententries/search', 'Events\Auth\Ajax@getUser');
+
         Route::post('ajax/events/manage/competition', 'Events\Auth\Ajax@getMarkup');
         Route::post('ajax/events/manage/{eventurl}/approveentry', 'Events\Auth\EventEntryController@approveEntry');
         Route::post('ajax/events/manage/{eventurl}/approvepaid', 'Events\Auth\EventEntryController@approvePaid');

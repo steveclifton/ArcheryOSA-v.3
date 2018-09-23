@@ -6,11 +6,33 @@ use App\Models\EntryCompetition;
 use App\Models\Event;
 use App\Models\EventCompetition;
 use App\Models\ScoringLevel;
+use App\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\View;
 
 class Ajax extends EventController
 {
+    public function getUser(Request $request)
+    {
+
+        if (is_numeric($request->search)) {
+            $user = User::where('userid', $request->search)->take(3)->get();
+        }
+        else {
+            $user = User::where('email', 'like', $request->search . '%')->take(3)->get();
+        }
+
+        if (!empty($user) && count($user) < 3 && !is_numeric($request->search)) {
+            $user[] = $user;
+            $user = User::where('firstname', 'like', $request->search . '%')->take(3)->get();
+        }
+
+
+        return response()->json([
+            'success' => true,
+            'data'    => $user
+        ]);
+    }
 
     public function getMarkup(Request $request)
     {

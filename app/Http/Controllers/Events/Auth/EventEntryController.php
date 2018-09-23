@@ -3,9 +3,13 @@
 namespace App\Http\Controllers\Events\Auth;
 
 use App\Jobs\SendEntryConfirmation;
+use App\Models\Club;
+use App\Models\Division;
 use App\Models\Event;
 use App\Models\EventAdmin;
 use App\Models\EventEntry;
+use App\Models\Round;
+use App\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
@@ -47,7 +51,57 @@ class EventEntryController extends EventController
     }
 
 
+    public function getEventEntryAddView(Request $request)
+    {
 
+        $event = Event::where('eventurl', $request->eventurl ?? -1)->get()->first();
+
+        if (empty($event)) {
+            return back()->with('failure', 'Cannot add at this stage');
+        }
+
+        $eventcompetitions = DB::select("
+            SELECT *
+            FROM `eventcompetitions`
+            WHERE `eventid` = :eventid
+        ", ['eventid' => $event->eventid]);
+
+        $leaguecompround = null;
+        if ($event->isLeague()) {
+            $leaguecompround = reset($eventcompetitions);
+            $leaguecompround = $leaguecompround->eventcompetitionid . '-' . $leaguecompround->roundids;
+        }
+
+        $multipledivisions = false;
+        $divisionsfinal    = [];
+        $competitionsfinal = [];
+        foreach ($eventcompetitions as $eventcompetition) {
+
+            if (empty($multipledivisions) && $eventcompetition->multipledivisions) {
+                $multipledivisions = true;
+            }
+
+            $divisions = Division::wherein('divisionid', json_decode($eventcompetition->divisionids))->orderBy('bowtype')->get();
+            foreach ($divisions as $division) {
+                $divisionsfinal[$division->divisionid] = $division;
+            }
+
+            if ($event->isLeague()) {
+                $eventcompetition->rounds = Round::where('roundid', $eventcompetition->roundids)->get();
+            }
+            else {
+                $eventcompetition->rounds = Round::wherein('roundid', json_decode($eventcompetition->roundids))->get();
+            }
+
+            $competitionsfinal[$eventcompetition->date] = $eventcompetition;
+        }
+
+        $clubs = Club::where('visible', 1)->get();
+
+
+        return view('events.auth.management.entries.add',
+            compact('user', 'event', 'clubs', 'divisionsfinal', 'competitionsfinal', 'leaguecompround', 'multipledivisions'));
+    }
 
 
 
