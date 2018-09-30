@@ -68,7 +68,18 @@ class EventController extends Controller
     public function getAllEvents()
     {
         // get all the events the user can manage
-        $events = DB::select("
+
+        if (Auth::user()->roleid == 1) {
+            $events = DB::select("
+            SELECT e.*, es.label as status
+            FROM `events` e
+            JOIN `eventadmins` ea USING (`eventid`)
+            JOIN `eventstatus` es USING (`eventstatusid`)
+            ORDER BY `e`.`start`
+        ");
+        }
+        else {
+            $events = DB::select("
             SELECT e.*, es.label as status
             FROM `events` e
             JOIN `eventadmins` ea USING (`eventid`)
@@ -76,6 +87,8 @@ class EventController extends Controller
             WHERE `ea`.`userid` = :userid
             ORDER BY `e`.`start`
         ", ['userid' => Auth::id()]);
+        }
+
 
         return view('events.auth.events', compact('events'));
     }
@@ -241,9 +254,8 @@ class EventController extends Controller
         $event->bankreference  = !empty($validated['bankreference'])   ? $validated['bankreference'] : null;
         $event->schedule       = !empty($validated['schedule'])        ? $validated['schedule']      : null;
         $event->info           = !empty($validated['info'])            ? $validated['info']          : null;
-        $event->clubid         = !empty($validated['clubid']) ? $validated['clubid'] : null;
+        $event->clubid         = !empty($validated['clubid'])          ? $validated['clubid']        : null;
         $event->organisationid = !empty($validated['organisationid']) ? $validated['organisationid'] : null;
-        $event->eventtypeid     = intval($validated['eventtypeid']);
 
         $event->save();
 
