@@ -5,7 +5,7 @@ $(function () {
     $(document).on('keyup', '#searchUser', function() {
         let search = $(this).val();
 
-        if (isNaN(search) && search.length < 3) {
+        if (isNaN(search) && search.length < 3 || search == '') {
             return;
         }
         $('#tableData').empty();
