@@ -365,9 +365,9 @@ class EventRegistrationController extends EventController
         }
 
         $evententry = EventEntry::where('userid', $user->userid)
-                                ->where('eventid', $event->eventid)
-                                ->get()
-                                ->first();
+            ->where('eventid', $event->eventid)
+            ->get()
+            ->first();
 
         if (!empty($evententry)) {
             return back()->with('failure', 'Entry already exists');
@@ -431,6 +431,112 @@ class EventRegistrationController extends EventController
 
         return redirect('/events/manage/evententries/' . $event->eventurl)->with('success', 'Entry Added!');
 
+    }
+
+    public function updateAdminRegistration(UpdateRegistration $request)
+    {
+        $validated = $request->validated();
+
+
+        $event = Event::where('eventid', $validated['eventid'])->get()->first();
+
+        $user = User::where('userid', $validated['userid'])->get()->first();
+
+
+        if (empty($event) || empty($user)) {
+            return back()->with('failure', 'Please try again later');
+        }
+
+        // Store the single event entry
+        $evententry = EventEntry::where('userid', $user->userid)
+            ->where('eventid', $event->eventid)
+            ->get()
+            ->first();
+
+
+        $evententry->userid       = $validated['userid'];
+        $evententry->eventid      = $event->eventid;
+        $evententry->firstname    = !empty($validated['firstname'])      ? strtolower($validated['firstname'])   : '';
+        $evententry->lastname     = !empty($validated['lastname'])       ? strtolower($validated['lastname'])    : '';
+        $evententry->email        = !empty($validated['email'])          ? $validated['email']                   : '';
+        $evententry->address      = !empty($validated['address'])        ? strtolower($validated['address'])     : '';
+        $evententry->phone        = !empty($validated['phone'])          ? strtolower($validated['phone'])       : '';
+        $evententry->membership   = !empty($validated['membership'])     ? strtolower($validated['membership'])  : '';
+        $evententry->notes        = !empty($validated['notes'])          ? strtolower($validated['notes'])       : '';
+        $evententry->clubid       = !empty($validated['clubid'])         ? intval($validated['clubid'])          : '';
+        $evententry->divisionid   = !empty($validated['divisionid'])     ? $validated['divisionid']              : '';
+        $evententry->gender       = !empty($validated['gender'] == 'm')  ? 'm' : 'f';
+        $evententry->dateofbirth  = !empty($validated['dateofbirth'])    ? $validated['dateofbirth'] : '';
+
+        $evententry->save();
+
+        $entrycompetitions = EntryCompetition::where('userid', $user->userid)
+            ->where('entryid', $evententry->entryid)
+            ->get();
+
+
+        $divisionids = explode(',', $validated['divisionid']);
+
+
+        foreach ($divisionids as $divisionid) {
+            // Get the competitionids for the entry
+            $eventcompetitionids = !empty($validated['roundids']) ? explode(',', $validated['roundids']) : [];
+            foreach ($eventcompetitionids as $competitionid) {
+
+                // explode out the ids
+                @list($eventcompetitionid, $roundid) = explode('-', $competitionid);
+
+                if (empty($eventcompetitionid) || empty($roundid)) {
+                    continue;
+                }
+
+                // try to get the entry that matches the ids
+                $entrycompetition = EntryCompetition::where('eventcompetitionid', $eventcompetitionid)
+                    ->where('roundid', $roundid)
+                    ->where('divisionid', $divisionid)
+                    ->where('userid', $user->userid)
+                    ->get()
+                    ->first();
+
+                // doesnt exist, create it
+                if (empty($entrycompetition)) {
+                    $entrycompetition = new EntryCompetition();
+                    $entrycompetition->entryid            = $evententry->entryid;
+                    $entrycompetition->eventid            = $event->eventid;
+                    $entrycompetition->eventcompetitionid = $eventcompetitionid;
+                    $entrycompetition->userid             = $validated['userid'];
+                    $entrycompetition->divisionid         = $divisionid;
+                    $entrycompetition->competitionid      = '';
+                    $entrycompetition->roundid            = $roundid;
+                    $entrycompetition->save();
+                }
+                else {
+
+                    // It does exist, so remove it from the array
+                    foreach ($entrycompetitions as $key => $ec) {
+
+                        $entrycomp = $ec->eventcompetitionid == $entrycompetition->eventcompetitionid;
+
+                        $roundid   = $ec->roundid            == $entrycompetition->roundid;
+
+                        if ($entrycomp && $roundid) {
+                            unset($entrycompetitions[$key]);
+                        }
+                    }
+                }
+            } // foreach
+        }
+
+        // if there is still stuff left in the collection, it means they have been unticked by the user
+        if (!empty($entrycompetitions)) {
+            foreach ($entrycompetitions as $ec) {
+                $ec->delete();
+            }
+        }
+
+
+
+        return back()->with('success', 'Entry Updated!');
     }
 
 }
