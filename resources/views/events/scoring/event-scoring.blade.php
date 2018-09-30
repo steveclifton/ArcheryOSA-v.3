@@ -69,7 +69,7 @@
                                         data-entrycompetitionid="{{$a->entrycompetitionid}}">
 
 
-                                        <th scope="row" width="15%">{{$a->firstname . ' ' . $a->lastname}}</th>
+                                        <th scope="row" width="15%">{{ucwords($a->firstname . ' ' . $a->lastname)}}</th>
                                         <td width="10%" data-type="distance" data-max="{{$data->dist1max}}" data-value="{{$data->dist1}}" data-sid="{{!empty($a->score1) ? $a->score1->scoreid : '0' }}">
                                             <input type="text" class="form-control distInp"  value="{{!empty($a->score1) ? $a->score1->score : '0' }}" placeholder="">
                                             <i class="md-add-box showMore"></i>
