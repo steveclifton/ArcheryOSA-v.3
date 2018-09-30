@@ -92,7 +92,7 @@ class ScoringController extends Controller
             AND `ec`.`eventcompetitionid` = :eventcompetitionid
             AND `ee`.`entrystatusid` = 2
             
-            ORDER BY `d`.label
+            ORDER BY `d`.label, ee.firstname
         ", ['eventcompetitionid' => $eventcompetition->eventcompetitionid
         ]);
 
@@ -100,11 +100,9 @@ class ScoringController extends Controller
         $evententrys = [];
         foreach ($entrys as $entry) {
 
-
-
-
             $scores = Score::where('entryid', $entry->entryid)
                             ->where('roundid', $entry->roundid)
+                            ->where('divisionid', $entry->divisionid)
                             ->where('eventcompetitionid', $entry->eventcompetitionid)
                             ->where('week', $currentWeek)
                             ->get();
@@ -125,7 +123,11 @@ class ScoringController extends Controller
                 }
             }
 
-            $gender = $entry->gender == 'm' ? 'Men\'s ' : 'Women\'s ';
+            $gender = '';
+            if (empty($eventcompetition->ignoregenders)) {
+                $gender = $entry->gender == 'm' ? 'Men\'s ' : 'Women\'s ';
+            }
+
             $evententrys[$entry->bowtype][$gender . $entry->divisionname][$entry->roundid][] = $entry;
         }
 
@@ -335,4 +337,5 @@ class ScoringController extends Controller
             'message' => 'Scores entered successfully'
         ]);
     }
+
 }
