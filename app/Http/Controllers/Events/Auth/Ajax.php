@@ -14,11 +14,19 @@ class Ajax extends EventController
 {
     public function getUser(Request $request)
     {
+        if (empty($request->search)) {
+            return response()->json([
+                'success' => false,
+                'data'    => []
+            ]);
+        }
+
 
         if (is_numeric($request->search)) {
             $user = User::where('userid', $request->search)->take(3)->get();
         }
         else {
+
             $user = User::where('email', 'like', $request->search . '%')->take(3)->get();
         }
 
