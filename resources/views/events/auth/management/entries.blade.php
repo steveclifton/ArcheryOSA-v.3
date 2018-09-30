@@ -62,7 +62,9 @@
                     <tbody>
                         @foreach($evententries as $entry)
                         <tr>
-                            <td>{{$entry->name}}</td>
+                            <td>
+                                <a href="/events/manage/evententries/{{$event->eventurl}}/update/{{$entry->username}}">{{$entry->name}}</a>
+                            </td>
                             <td>{{$entry->division}}</td>
                             <td id="status">{{$entry->status}}</td>
                             <td id="paid" align="center">{!! $entry->paid ? '<i class="fa fa-check"></i>' : '' !!}</td>
