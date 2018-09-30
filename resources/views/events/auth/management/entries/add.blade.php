@@ -10,7 +10,7 @@
             <i class="ion-arrow-right-c"></i>
             <a href="/events/manage/{{$event->eventurl}}">{{ucwords($event->label)}}</a>
             <i class="ion-arrow-right-c"></i>
-            <a href="javascript:;">Event Entries</a>
+            <a href="/events/manage/evententries/{{$event->eventurl}}">Event Entries</a>
         </h4>
     </div>
 
