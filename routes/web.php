@@ -95,7 +95,9 @@ Route::middleware(['web'])->group(function() {
         // event entries
         Route::get('events/manage/evententries/{eventurl}', 'Events\Auth\EventEntryController@getEventEntriesView');
         Route::get('events/manage/evententries/{eventurl}/add', 'Events\Auth\EventEntryController@getEventEntryAddView');
-
+        Route::get('events/manage/evententries/{eventurl}/update/{username}', 'Events\Auth\EventEntryController@getEventEntryUpdateView');
+        Route::post('/event/registration/create/admin/{eventurl}', 'Events\Auth\EventRegistrationController@createAdminRegistration');
+        Route::post('/event/registration/update/admin/{eventurl}', 'Events\Auth\EventRegistrationController@updateAdminRegistration');
 
         // USERS STUFF
 
@@ -104,7 +106,7 @@ Route::middleware(['web'])->group(function() {
         Route::get('/event/registration/{eventurl}/{username}', 'Events\Auth\EventRegistrationController@getRegistration');
         Route::post('/event/registration/create/{eventurl}', 'Events\Auth\EventRegistrationController@createRegistration');
         Route::post('/event/registration/update/{eventurl}', 'Events\Auth\EventRegistrationController@updateRegistration');
-        Route::post('/event/registration/create/admin/{eventurl}', 'Events\Auth\EventRegistrationController@createAdminRegistration');
+
 
 
         // Logout
