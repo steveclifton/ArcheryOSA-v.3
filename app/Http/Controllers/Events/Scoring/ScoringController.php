@@ -82,7 +82,7 @@ class ScoringController extends Controller
 
         // Event Entries
         $entrys = DB::select("
-            SELECT ee.*, ec.entrycompetitionid, ec.eventcompetitionid, ec.roundid, d.label as divisionname, d.bowtype,
+            SELECT ee.*, ec.divisionid as divisionid, ec.entrycompetitionid, ec.eventcompetitionid, ec.roundid, d.label as divisionname, d.bowtype,
                   r.dist1,r.dist2,r.dist3,r.dist4,r.dist1max,r.dist2max,r.dist3max,r.dist4max,r.unit
             FROM `evententrys` ee
             JOIN `entrycompetitions` ec USING (`entryid`)
@@ -95,6 +95,7 @@ class ScoringController extends Controller
             ORDER BY `d`.label, ee.firstname
         ", ['eventcompetitionid' => $eventcompetition->eventcompetitionid
         ]);
+
 
         $currentWeek = $event->isLeague() ? $eventcompetition->currentweek : 0;
         $evententrys = [];
@@ -186,6 +187,7 @@ class ScoringController extends Controller
                             ->where('entrycompetitionid', $entrycompetition->entrycompetitionid)
                             ->where('week', $week)
                             ->where('roundid', $entrycompetition->roundid)
+                            ->where('divisionid', $entrycompetition->divisionid)
                             ->get()
                             ->first();
 
@@ -205,7 +207,7 @@ class ScoringController extends Controller
                     $score->roundid = $entrycompetition->roundid;
                     $score->eventid = $event->eventid;
                     $score->eventcompetitionid = $entrycompetition->eventcompetitionid;
-                    $score->divisionid = $evententry->divisionid;
+                    $score->divisionid = $entrycompetition->divisionid;
                     $score->key = $data['key'] ?? '';
                     //$score->unit               = 1;
                     $score->score = intval($data['score'] ?? 0);
@@ -224,7 +226,7 @@ class ScoringController extends Controller
                         $flatscore->roundid = $entrycompetition->roundid;
                         $flatscore->eventid = $event->eventid;
                         $flatscore->eventcompetitionid = $entrycompetition->eventcompetitionid;
-                        $flatscore->divisionid = $evententry->divisionid;
+                        $flatscore->divisionid = $entrycompetition->divisionid;
                         // add score
                         $distscore = "dist" . $i . 'score';
                         $flatscore->{$distscore} = intval($data['score'] ?? 0);
@@ -268,6 +270,7 @@ class ScoringController extends Controller
                                     ->where('entryid', $evententry->entryid)
                                     ->where('entrycompetitionid', $entrycompetition->entrycompetitionid)
                                     ->where('userid', $evententry->userid)
+                                    ->where('divisionid', $entrycompetition->divisionid)
                                     ->where('week', $week)
                                     ->get()
                                     ->first();
@@ -281,6 +284,7 @@ class ScoringController extends Controller
                         $flatscore = FlatScore::where('entryid', $evententry->entryid)
                             ->where('entrycompetitionid', $entrycompetition->entrycompetitionid)
                             ->where('userid', $evententry->userid)
+                            ->where('divisionid', $entrycompetition->divisionid)
                             ->where('week', $week)
                             ->get()->first();
 
