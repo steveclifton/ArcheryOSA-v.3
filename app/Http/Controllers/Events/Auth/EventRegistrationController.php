@@ -427,7 +427,7 @@ class EventRegistrationController extends EventController
 
         }
 
-        SendEntryReceived::dispatch($evententry->email, $event->label);
+        //SendEntryReceived::dispatch($evententry->email, $event->label);
 
         return redirect('/events/manage/evententries/' . $event->eventurl)->with('success', 'Entry Added!');
 
