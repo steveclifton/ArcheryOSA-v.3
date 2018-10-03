@@ -153,7 +153,7 @@ Route::middleware(['web'])->group(function() {
          */
         Route::post('ajax/evententries/search', 'Events\Auth\Ajax@getUser');
 
-        Route::post('ajax/events/manage/competition', 'Events\Auth\Ajax@getMarkup');
+        Route::post('ajax/events/manage/competition', 'Events\Auth\AjaxController@getMarkup');
         Route::post('ajax/events/manage/{eventurl}/approveentry', 'Events\Auth\EventEntryController@approveEntry');
         Route::post('ajax/events/manage/{eventurl}/approvepaid', 'Events\Auth\EventEntryController@approvePaid');
         Route::post('ajax/events/manage/{eventurl}/sendconfirmation', 'Events\Auth\EventEntryController@sendApprove');
