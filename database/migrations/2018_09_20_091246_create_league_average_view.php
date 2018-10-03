@@ -29,6 +29,7 @@ class CreateLeagueAverageView extends Migration
             JOIN `users` u USING (`userid`)
             JOIN `events` e ON (s.eventid = e.eventid)
             WHERE `e`.`eventtypeid` = 2
+            AND `s`.`total` <> 0
             GROUP BY u.`userid`, s.`eventid`, s.`roundid`, `s`.`divisionid`
         ");
     }

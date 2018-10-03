@@ -53,15 +53,16 @@ class LeagueController extends Controller
             FROM `scores_flat`
             WHERE `week` = :week
             AND `eventid` = :eventid
+            AND `total` <> 0
+            
             ORDER BY `divisionid`, `total` DESC
         ", ['week' => $eventcompetition->currentweek, 'eventid' => $event->eventid]);
 
-//        dd($scores);
-
         // Get all the score averages for the comp
-        $scoreaverages = DB::select("SELECT *
-                                FROM `leagueaverages`
-                                WHERE `eventid` = :eventid"
+        $scoreaverages = DB::select("
+            SELECT *
+            FROM `leagueaverages`
+            WHERE `eventid` = :eventid"
             ,['eventid' => $event->eventid]);
 
         //dump($scoreaverages);
@@ -98,10 +99,19 @@ class LeagueController extends Controller
 
                 if ($b->handicap_score == $a->handicap_score) {
                     if ($b->avg_total_score == $a->avg_total_score) {
-                        if ($b->total_x > $a->total_x) {
+                        if ($b->avg_total_10 == $a->avg_total_10) {
+                            if ($b->avg_total_x > $a->avg_total_x) {
+                                return 1;
+                            }
+                            return -1;
+                        }
+
+                        if ($b->avg_total_10 > $a->avg_total_10) {
                             return 1;
                         }
+
                         return -1;
+
                     }
 
                     if ($b->avg_total_score > $a->avg_total_score) {
@@ -114,11 +124,11 @@ class LeagueController extends Controller
                 if ($b->handicap_score > $a->handicap_score) {
                     return 1;
                 }
+
                 return -1;
 
             });
 
-//            dd($divisionscores);
 
             // Start at 10 points, loop through awarding points . Stop when at xero
             $points = 10;

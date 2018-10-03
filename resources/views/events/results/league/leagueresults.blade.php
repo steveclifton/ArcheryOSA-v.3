@@ -100,6 +100,7 @@
                                                 <th>{{$data->dist1. $data->unit}}</th>
                                                 <th>10s+X</th>
                                                 <th>X</th>
+                                                <th>Points</th>
                                                 <th>Total</th>
                                             </tr>
 
@@ -108,21 +109,22 @@
                                         <tbody>
                                         @foreach($archers as $archer)
                                             <tr class="results">
-                                                <th scope="row" width="15%">{{$archer->firstname . ' ' . $archer->lastname}}</th>
-                                                    <td width="10%">
-                                                        {{intval($archer->dist1score)}}
-                                                    </td>
-                                                    <td width="10%">
-                                                        {{intval($archer->inners)}}
-                                                    </td>
-                                                    <td width="10%">
-                                                        {{intval($archer->max)}}
-                                                    </td>
-
+                                                <th scope="row" width="15%">{{ucwords($archer->firstname . ' ' . $archer->lastname)}}</th>
+                                                <td width="10%">
+                                                    {{intval($archer->dist1score)}}
+                                                </td>
+                                                <td width="10%">
+                                                    {{intval($archer->inners)}}
+                                                </td>
+                                                <td width="10%">
+                                                    {{intval($archer->max)}}
+                                                </td>
+                                                <td width="10%">
+                                                    {{intval($archer->points ?? 0)}}
+                                                </td>
                                                 <td width="10%">
                                                     {{intval($archer->total ?? '')}}
                                                 </td>
-
                                             </tr>
                                         @endforeach
                                         </tbody>
@@ -167,12 +169,13 @@
         $(document).ready(function () {
             //Buttons examples
             var index = $('#tabltr').find('th:last').index();
+            console.log(index);
             var table = $('.datatable-buttons').DataTable({
                 lengthChange: false,
                 bPaginate: false,
                 bInfo : false,
                 searching : false,
-                "order": [[ index, "desc" ]]
+                "order": [[ index, "desc"], [index - 3, "desc"], [index - 2, "desc" ]]
                 // buttons: ['excel', 'pdf']
             });
             //

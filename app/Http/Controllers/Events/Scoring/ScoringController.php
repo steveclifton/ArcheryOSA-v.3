@@ -208,13 +208,12 @@ class ScoringController extends Controller
                     $score->eventid = $event->eventid;
                     $score->eventcompetitionid = $entrycompetition->eventcompetitionid;
                     $score->divisionid = $entrycompetition->divisionid;
-                    $score->key = $data['key'] ?? '';
-                    //$score->unit               = 1;
-                    $score->score = intval($data['score'] ?? 0);
-                    $score->hits = intval($data['hits'] ?? 0);
-                    $score->max = intval($data['max'] ?? 0);
+                    $score->key    = $data['key'] ?? '';
+                    $score->score  = intval($data['score'] ?? 0);
+                    $score->hits   = intval($data['hits'] ?? 0);
+                    $score->max    = intval($data['max'] ?? 0);
                     $score->inners = intval($data['inners'] ?? 0);
-                    $score->week = $week;
+                    $score->week   = $week;
                     $score->save();
 
                     if (is_numeric($data['key'])) {
@@ -256,6 +255,8 @@ class ScoringController extends Controller
 
 
                 }
+
+
                 $flatscore->week = $week;
                 // Save the flat score
                 $flatscore->save();
@@ -264,6 +265,19 @@ class ScoringController extends Controller
                 // Update Score
                 $i = 1;
                 $flatscore = null;
+                $inners = 0;
+                $max    = 0;
+
+                if (empty($flatscore)) {
+                    $flatscore = FlatScore::where('entryid', $evententry->entryid)
+                        ->where('entrycompetitionid', $entrycompetition->entrycompetitionid)
+                        ->where('userid', $evententry->userid)
+                        ->where('divisionid', $entrycompetition->divisionid)
+                        ->where('week', $week)
+                        ->get()->first();
+
+                }
+
                 foreach ($result['score'] ?? [] as $data) {
 
                     $score = Score::where('scoreid', $data['scoreid'])
@@ -280,22 +294,11 @@ class ScoringController extends Controller
                         continue;
                     }
 
-                    if (empty($flatscore)) {
-                        $flatscore = FlatScore::where('entryid', $evententry->entryid)
-                            ->where('entrycompetitionid', $entrycompetition->entrycompetitionid)
-                            ->where('userid', $evententry->userid)
-                            ->where('divisionid', $entrycompetition->divisionid)
-                            ->where('week', $week)
-                            ->get()->first();
-
-                    }
-
-
-                    $score->key                = $data['key'] ?? '';
-                    $score->score              = intval($data['score'] ?? 0);
-                    $score->hits               = intval($data['hits'] ?? 0);
-                    $score->max                = intval($data['max'] ?? 0);
-                    $score->inners             = intval($data['inners'] ?? 0);
+                    $score->key    = $data['key'] ?? '';
+                    $score->score  = intval($data['score'] ?? 0);
+                    $score->hits   = intval($data['hits'] ?? 0);
+                    $score->max    = intval($data['max'] ?? 0);
+                    $score->inners = intval($data['inners'] ?? 0);
                     $score->save();
 
                     // flatscore update
@@ -314,22 +317,16 @@ class ScoringController extends Controller
                     }
 
                     if ($data['key'] == 'max') {
-                        if (is_null($flatscore->max)) {
-                            $flatscore->max = 0;
-                        }
-
-                        $flatscore->max += intval($data['score'] ?? 0);
+                        $max += intval($data['score'] ?? 0);
                     }
                     if ($data['key'] == 'inners') {
-                        if (is_null($flatscore->inners)) {
-                            $flatscore->inners = 0;
-                        }
-
-                        $flatscore->inners += intval($data['score'] ?? 0);
+                        $inners += intval($data['score'] ?? 0);
                     }
 
                 }
                 if (!empty($flatscore)) {
+                    $flatscore->max    = $max;
+                    $flatscore->inners = $inners;
                     $flatscore->save();
                 }
             }
