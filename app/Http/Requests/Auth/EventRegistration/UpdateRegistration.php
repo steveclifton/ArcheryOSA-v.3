@@ -36,7 +36,7 @@ class UpdateRegistration extends FormRequest
             'userid'         => 'required',
             'firstname'      => 'required',
             'lastname'       => 'required',
-            'email'          => 'required|email',
+            'email'          => 'nullable',
             'membership'     => 'nullable',
             'phone'          => 'nullable',
             'address'        => 'nullable',
