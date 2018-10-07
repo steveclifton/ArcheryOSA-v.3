@@ -171,7 +171,7 @@ class ScoringController extends Controller
                                     ->get()
                                     ->first();
 
-
+            // get users entry competition
             $entrycompetition = EntryCompetition::where('entrycompetitionid', $result['entrycompetitionid'] ?? -1)
                                                 ->where('eventid', $event->eventid)
                                                 ->where('userid', $evententry->userid ?? -1)
@@ -191,6 +191,10 @@ class ScoringController extends Controller
                             ->get()
                             ->first();
 
+
+            // push scores into an array, save only if total is not empty
+            $saveScore      = false;
+            $scoresArray    = [];
 
             if (empty($scores)) {
                 // create
@@ -214,7 +218,12 @@ class ScoringController extends Controller
                     $score->max    = intval($data['max'] ?? 0);
                     $score->inners = intval($data['inners'] ?? 0);
                     $score->week   = $week;
-                    $score->save();
+
+                    if ($data['key'] == 'total' && !empty($data['score'])) {
+                        $saveScore = true;
+                    }
+
+                    $scoresArray[] = $score;
 
                     if (is_numeric($data['key'])) {
 
@@ -256,10 +265,12 @@ class ScoringController extends Controller
 
                 }
 
+                if ($saveScore) {
+                    $flatscore->week = $week;
+                    // Save the flat score
+                    $flatscore->save();
+                }
 
-                $flatscore->week = $week;
-                // Save the flat score
-                $flatscore->save();
             }
             else {
                 // Update Score
@@ -274,8 +285,8 @@ class ScoringController extends Controller
                         ->where('userid', $evententry->userid)
                         ->where('divisionid', $entrycompetition->divisionid)
                         ->where('week', $week)
-                        ->get()->first();
-
+                        ->get()
+                        ->first();
                 }
 
                 foreach ($result['score'] ?? [] as $data) {
@@ -301,20 +312,23 @@ class ScoringController extends Controller
                     $score->inners = intval($data['inners'] ?? 0);
                     $score->save();
 
-                    // flatscore update
-                    if (is_numeric($data['key'])) {
+                    if (!empty($flatscore)) {
+                        // flatscore update
+                        if (is_numeric($data['key'])) {
 
-                        // add score
-                        $distscore = "dist" . $i . 'score';
-                        $flatscore->{$distscore} = intval($data['score'] ?? 0);
-                        // add distance
-                        $distkey = "dist" . $i++;
-                        $flatscore->{$distkey} = $data['key'] ?? '';
+                            // add score
+                            $distscore = "dist" . $i . 'score';
+                            $flatscore->{$distscore} = intval($data['score'] ?? 0);
+                            // add distance
+                            $distkey = "dist" . $i++;
+                            $flatscore->{$distkey} = $data['key'] ?? '';
+                        }
+
+                        if ($data['key'] == 'total') {
+                            $flatscore->total = intval($data['score'] ?? 0);
+                        }
                     }
 
-                    if ($data['key'] == 'total') {
-                        $flatscore->total = intval($data['score'] ?? 0);
-                    }
 
                     if ($data['key'] == 'max') {
                         $max += intval($data['score'] ?? 0);
@@ -324,14 +338,25 @@ class ScoringController extends Controller
                     }
 
                 }
+
                 if (!empty($flatscore)) {
                     $flatscore->max    = $max;
                     $flatscore->inners = $inners;
                     $flatscore->save();
                 }
+
             }
 
-        }
+            // triggered only on created
+            if ($saveScore) {
+                foreach ($scoresArray as $score) {
+                    $score->save();
+                }
+            }
+
+
+
+        } // end of looping over each user
 
         return response()->json([
             'success' => true,
