@@ -14,7 +14,7 @@ class AddRoundIdsToEventCompetition extends Migration
     public function up()
     {
         Schema::table('eventcompetitions', function($table) {
-            $table->string('roundids')->nullable();
+            $table->text('roundids')->nullable();
         });
     }
 
