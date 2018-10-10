@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Events\PublicEvents;
 
+use App\Models\Division;
 use App\Models\Event;
 use App\Models\EventCompetition;
 use App\Models\Score;
@@ -209,7 +210,8 @@ class EventResultsController extends EventController
     private function getLeagueOverallResults(Event $event)
     {
         $entrys = DB::select("
-            SELECT ee.userid, ee.firstname, ee.lastname, ee.gender, ec.roundid, ee.divisionid,  d.label as divisionname, d.bowtype, r.unit, r.label as roundname 
+            SELECT ee.userid, ee.firstname, ee.lastname, ee.gender, ec.roundid, ee.divisionid,  
+                  d.label as divisionname, d.bowtype, r.unit, r.label as roundname, sf.eventcompetitionid
             FROM `evententrys` ee
             JOIN `entrycompetitions` ec USING (`entryid`)
             JOIN `divisions` d ON (`ec`.`divisionid` = `d`.`divisionid`)
@@ -221,25 +223,55 @@ class EventResultsController extends EventController
             ORDER BY d.label, ee.userid, ec.eventcompetitionid
         ");
 
+        $sortedEntrys = [];
+        foreach ($entrys as $entry) {
+            if (strpos($entry->divisionid, ',') !== false) {
+                $divisionids = explode(',', $entry->divisionid);
+
+                foreach ($divisionids as $divisionid) {
+                    // clone the entry
+                    $entryUpdated = clone $entry;
+                    $divison = Division::where('divisionid', $divisionid)->get()->first();
+
+                    $entryUpdated->bowtype = $divison->bowtype;
+                    $entryUpdated->divisionname = $divison->label;
+                    $entryUpdated->divisionid = $divisionid;
+                    $sortedEntrys[] = $entryUpdated;
+                }
+            }
+            else {
+                $sortedEntrys[] = $entry;
+            }
+        }
+
+        $entrys = $sortedEntrys;
+        unset($sortedEntrys);
+
         $eventcompetition = EventCompetition::where('eventid', $event->eventid)->get()->first();
 
 
         $evententrys = [];
         foreach ($entrys as $entry) {
-            $entry->top10   = $this->getUserTop10Scores($entry->userid, $entry->divisionid, $event->eventid);
-            $entry->average = $this->getUserAverage($entry->userid, $entry->divisionid, $event->eventid);
+            $entry->top10 = $this->getUserTop10Scores($entry->userid, $entry->divisionid, $event->eventid);
+
+            if (empty($entry->top10->total)) {
+                continue;
+            }
+
+            $entry->average     = $this->getUserAverage($entry->userid, $entry->divisionid, $event->eventid);
             $entry->top10points = $this->getUserTop10Points($entry->userid, $entry->divisionid, $event->eventid);
 
             $gender = '';
             if (!$eventcompetition->ignoregenders) {
-                $entry->gender == 'm' ? 'Men\'s ' : 'Women\'s ';
+                $entry->gender == 'm' ? 'Mens ' : 'Womens ';
             }
             $evententrys[$entry->bowtype][$gender . $entry->divisionname][] = $entry;
         }
 
-
         return view('events.results.league.leagueresults-overall', compact('event', 'evententrys', 'eventcompetition'));
     }
+
+
 
     private function getLeagueCompetitionResults(Event $event, $week)
     {
@@ -271,7 +303,7 @@ class EventResultsController extends EventController
         foreach ($entrys as $entry) {
             $gender = '';
             if (!$eventcompetition->ignoregenders) {
-                $entry->gender == 'm' ? 'Men\'s ' : 'Women\'s ';
+                $entry->gender == 'm' ? 'Mens ' : 'Womens ';
             }
             $evententrys[$entry->bowtype][$gender . $entry->divisionname][] = $entry;
         }

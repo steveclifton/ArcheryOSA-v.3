@@ -11,12 +11,14 @@ trait UserResults
     {
         $result = DB::select("
             SELECT sum(`total`) as total
-            FROM `scores_flat`
-            WHERE `userid` = :userid
-            AND `divisionid` = :divisionid
-            AND `eventid` = :eventid
-            ORDER BY `total` DESC
-            LIMIT 10
+            FROM (SELECT `total`
+                    FROM `scores_flat`
+                    WHERE `userid` = :userid
+                    AND `divisionid` = :divisionid
+                    AND `eventid` = :eventid
+                    ORDER BY `total` DESC
+                    LIMIT 10
+                ) AS total
             ", ['userid' => $userid, 'divisionid' => $divisionid, 'eventid' => $eventid]);
 
 
@@ -35,7 +37,6 @@ trait UserResults
             ORDER BY `total` DESC
             ", ['userid' => $userid, 'divisionid' => $divisionid, 'eventid' => $eventid]);
 
-
         return !empty($result[0]) ? $result[0] : 0;
     }
 
@@ -43,13 +44,17 @@ trait UserResults
     {
         $result = DB::select("
             SELECT sum(`points`) as points
-            FROM `leaguepoints`
-            WHERE `userid` = :userid
-            AND `divisionid` = :divisionid
-            AND `eventid` = :eventid
-            ORDER BY `points` DESC
-            LIMIT 10
+            FROM (
+              SELECT `points`
+                FROM `leaguepoints`
+                WHERE `userid` = :userid
+                AND `divisionid` = :divisionid
+                AND `eventid` = :eventid
+                ORDER BY `points` DESC
+                LIMIT 10
+            ) as points
             ",['userid'=>$userid, 'divisionid'=>$divisionid, 'eventid' => $eventid]);
+
 
         return !empty($result[0]) ? $result[0] : 0;
     }

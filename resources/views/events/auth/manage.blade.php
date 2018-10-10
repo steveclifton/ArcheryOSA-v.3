@@ -2,14 +2,24 @@
 
 @section ('title')Manage Event @endsection
 
+
+
 @section('content')
+
+
     <div class="page-title-box">
-        <h4 class="page-title" ">
+        <h4 class="page-title">
             <a href="/events/manage">Events</a>
                 <i class="ion-arrow-right-c"></i>
             <a href="javascript:;">{{ucwords($event->label)}}</a>
         </h4>
     </div>
+
+    @if($eventcompetitions->isEmpty())
+        <div class="alert alert-warning">
+            Competition missing, please select 'Add Competitions' to continue
+        </div>
+    @endif
 
     <div class="row">
 

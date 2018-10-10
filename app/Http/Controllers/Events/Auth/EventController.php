@@ -194,11 +194,13 @@ class EventController extends Controller
         $event->bankreference   = !empty($validated['bankreference']) ? $validated['bankreference'] : null;
         $event->schedule        = !empty($validated['schedule'])        ? $validated['schedule']      : null;
         $event->info            = !empty($validated['info'])            ? $validated['info']          : null;
-        $event->eventstatusid   = 6;
+        $event->eventstatusid   = 1;
         $event->createdby       = Auth::id();
         $event->clubid          = !empty($validated['clubid']) ? $validated['clubid'] : null;
         $event->organisationid  = !empty($validated['organisationid']) ? $validated['organisationid'] : null;
-        $event->visible         = 0;
+        $event->visible         = 1;
+        $event->showoverall     = 1;
+        $event->adminnotifications = 1;
         $event->imagedt         = 'event' . rand(1,2) . '.jpg';
         $event->eventtypeid     = intval($validated['eventtypeid']);
         $event->save();

@@ -1,5 +1,5 @@
 
-@if(Auth::check() && Auth::id() == 1)
+@if(Auth::check() && Auth::id() == 1 && false)
     <div class="container">
         <div class="row">
             {{Session::get('time')}}ms
