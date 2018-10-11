@@ -114,7 +114,7 @@
                         </ul>
                     </li>
 
-                    @if(Auth::check() && Auth::user()->roleid <= 3)
+                    @if(Auth::check() && Auth::user()->roleid < 3)
                         <li class="has-submenu">
                             <a href="#"><i class="md md-settings"></i>Admin</a>
                             <ul class="submenu megamenu">
