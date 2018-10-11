@@ -109,7 +109,7 @@
                     <li class="has-submenu">
                         <a href="#"><i class="md-account-child"></i>Events</a>
                         <ul class="submenu">
-                            <li><a href="/events/create">Create an Event</a></li>
+                            {{--<li><a href="/events/create">Create an Event</a></li>--}}
                             <li><a href="/events">Event Registration</a></li>
                         </ul>
                     </li>
