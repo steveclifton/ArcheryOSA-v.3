@@ -21,7 +21,7 @@
                                  alt="Card image cap">
                             <div class="card-body">
                                 <h4 class="card-title font-18 mt-0">{{$event->label}}</h4>
-                                @if(!empty($event->entryclose))
+                                @if(!empty($event->entryclose) && $event->entryclose != '1970-01-01')
                                     <p class="card-text">Entries Close : {!! date('d F Y', strtotime($event->entryclose)) !!}</p>
                                 @endif
                                 <p class="card-text">Start : {!! date('d F Y', strtotime($event->start)) !!}</p>
