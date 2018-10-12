@@ -38,7 +38,7 @@
                         <select name="date" id="eventdate" class="form-control">
                             @foreach($event->daterange as $date)
                                 <option value="{{$date->format('Y-m-d')}}" {!! old('date') == $date->format('Y-m-d') ? 'selected' : ''!!}>
-                                    {{ $date->format('d F') }}
+                                    {{ $date->format('D d F') }}
                                 </option>
                             @endforeach
                         </select>
