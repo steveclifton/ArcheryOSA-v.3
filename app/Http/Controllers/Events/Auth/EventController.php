@@ -75,6 +75,7 @@ class EventController extends Controller
             FROM `events` e
             JOIN `eventadmins` ea USING (`eventid`)
             JOIN `eventstatus` es USING (`eventstatusid`)
+            GROUP BY `e`.`eventid`
             ORDER BY `e`.`start`
         ");
         }
@@ -85,6 +86,7 @@ class EventController extends Controller
             JOIN `eventadmins` ea USING (`eventid`)
             JOIN `eventstatus` es USING (`eventstatusid`)
             WHERE `ea`.`userid` = :userid
+            GROUP BY `e`.`eventid`
             ORDER BY `e`.`start`
         ", ['userid' => Auth::id()]);
         }
