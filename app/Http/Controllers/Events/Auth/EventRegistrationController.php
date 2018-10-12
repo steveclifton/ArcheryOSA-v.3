@@ -137,7 +137,11 @@ class EventRegistrationController extends EventController
     }
 
 
-
+    /**
+     * POST
+     * @param Request $request
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\Http\RedirectResponse|\Illuminate\View\View
+     */
     public function createRegistration(CreateRegistration $request)
     {
         $validated = $request->validated();
@@ -228,6 +232,11 @@ class EventRegistrationController extends EventController
         return redirect('/event/register/' . $event->eventurl)->with('success', 'Entry Received!');
     }
 
+    /**
+     * POST
+     * @param UpdateRegistration $request
+     * @return \Illuminate\Http\RedirectResponse
+     */
     public function updateRegistration(UpdateRegistration $request)
     {
         $validated = $request->validated();

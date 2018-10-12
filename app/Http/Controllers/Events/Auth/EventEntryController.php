@@ -98,7 +98,7 @@ class EventEntryController extends EventController
             $competitionsfinal[$eventcompetition->date] = $eventcompetition;
         }
 
-        $clubs = Club::where('visible', 1)->get();
+        $clubs = Club::where('visible', 1)->orderby('label')->get();
 
 
         return view('events.auth.management.entries.add',
@@ -159,7 +159,7 @@ class EventEntryController extends EventController
             $competitionsfinal[$eventcompetition->date] = $eventcompetition;
         }
 
-        $clubs = Club::where('visible', 1)->get();
+        $clubs = Club::where('visible', 1)->orderby('label')->get();
 
         $entrycompetitions = EntryCompetition::where('entryid', $evententry->entryid)->get();
 
