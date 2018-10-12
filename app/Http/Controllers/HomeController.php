@@ -31,7 +31,7 @@ class HomeController extends Controller
             JOIN `eventstatus` es USING (`eventstatusid`)
             WHERE `e`.`end` > now()
             AND `e`.`visible` = 1
-            ORDER BY `e`.`promoted` DESC, IFNULL(e.entryclose, e.start) 
+            ORDER BY `e`.`start`
         ");
 
         $myevents = [];
@@ -42,7 +42,8 @@ class HomeController extends Controller
                 JOIN `evententrys` ee USING (`eventid`)
                 JOIN `entrystatus` es ON (ee.entrystatusid = es.entrystatusid)
                 WHERE `ee`.`userid` = '".Auth::id()."'
-                ORDER BY `e`.`promoted` DESC, e.start DESC
+                AND `e`.`end` > now()
+                ORDER BY e.start
             ");
 
         }
