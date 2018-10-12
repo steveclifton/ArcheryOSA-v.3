@@ -102,7 +102,7 @@ class EventRegistrationController extends EventController
 
 
 
-        $clubs = Club::where('visible', 1)->get();
+        $clubs = Club::where('visible', 1)->orderby('label')->get();
 
         $evententry = EventEntry::where('eventid', $event->eventid)
             ->where('userid', $user->userid)
