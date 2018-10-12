@@ -144,7 +144,7 @@
                                     </a>
                                 @endforeach
                             </div>
-                            @if (!empty(array_slice($upcomingevents, 3)))
+                            @if (!empty(array_slice($myevents, 3)))
                                 <div class="table-responsive">
                                     <table class="table table-hover">
                                         <thead class="thead-light">
