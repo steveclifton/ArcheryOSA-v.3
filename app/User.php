@@ -14,6 +14,11 @@ class User extends Authenticatable
 {
     use Notifiable;
 
+    /**
+     * The primary key for the model.
+     *
+     * @var string
+     */
     protected $primaryKey = 'userid';
 
     /**
@@ -57,8 +62,6 @@ class User extends Authenticatable
         return ucwords($this->firstname ?? '') . " " . ucwords($this->lastname ?? '');
     }
 
-
-
     public function getEventEntry($eventid)
     {
         return EventEntry::where('userid', $this->userid)
@@ -68,8 +71,6 @@ class User extends Authenticatable
 
 
     }
-
-
 
     public function getEventEntryStatus($eventid)
     {
