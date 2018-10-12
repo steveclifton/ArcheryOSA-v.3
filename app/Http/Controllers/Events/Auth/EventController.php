@@ -39,7 +39,7 @@ class EventController extends Controller
         }
 
         $organisations = Organisation::where('visible', 1)->get();
-        $clubs = Club::where('visible', 1)->get();
+        $clubs = Club::where('visible', 1)->orderby('label')->get();
         $eventtypes = EventType::get();
 
         // Do some auth checking here. Can the user create an event?
