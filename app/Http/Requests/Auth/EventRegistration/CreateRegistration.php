@@ -30,6 +30,7 @@ class CreateRegistration extends FormRequest
             $dobstate = 'required|date';
         }
         return [
+            'userid'         => 'nullable',
             'eventid'        => 'required',
             'firstname'      => 'required',
             'lastname'       => 'required',
