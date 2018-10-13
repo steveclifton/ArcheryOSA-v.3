@@ -55,14 +55,22 @@ class EventResultsController extends EventController
 
         // not a league
         $eventcompetitions = EventCompetition::where('eventid', $event->eventid)->orderBy('date', 'asc')->get();
-
+        $haveScores = false;
         foreach ($eventcompetitions as $eventcompetition) {
 
             $eventcompetition->score = Score::where('eventid', $eventcompetition->eventid)
                                             ->where('eventcompetitionid', $eventcompetition->eventcompetitionid)
                                             ->get()
                                             ->first();
+            if (empty($haveScores) && !empty($eventcompetition->score)) {
+                $haveScores = true;
+            }
 
+        }
+
+        // dont show overall if there are no results
+        if ($overall && !$haveScores) {
+            $overall = false;
         }
         return view('events.results.eventcompetitions', compact('event', 'eventcompetitions', 'overall'));
     }
