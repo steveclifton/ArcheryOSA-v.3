@@ -115,12 +115,16 @@
                         @endif
                     </div>
                 </div>
-
+                @php
+                    $date = (!empty($event->entryclose) && $event->entryclose != '1970-01-01') ? date('d-m-Y', strtotime($event->entryclose)) : old('entryclose');
+                @endphp
                 <div class="form-group row">
                     <label for="label" class="col-sm-12 col-md-3 col-form-label">Entries Close</label>
                     <div class="col-md-9">
                         <input type="text" name="entryclose" class="datepicker-autoclose form-control {{ $errors->has('entryclose') ? 'is-invalid' : '' }}"
-                               placeholder="Choose Date" value="{{ date('d-m-Y', strtotime($event->entryclose)) ?? old('entryclose')}}" id="datepicker-autoclose">
+                               placeholder="Choose Date"
+                               value="{{ $date }}"
+                               id="datepicker-autoclose">
 
                         @if ($errors->has('entryclose'))
                             <span class="invalid-feedback" role="alert">
