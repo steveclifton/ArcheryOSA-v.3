@@ -144,7 +144,7 @@
                     </div>
                 </div>
 
-                @if ($event->isLeague() && $multipledivisions)
+                @if ($event->isLeague() || $multipledivisions)
                     <div class="form-group row">
                         <label class="col-sm-12 col-md-3 col-form-label">Division*</label>
                         <div class="col-md-9">
