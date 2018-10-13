@@ -75,7 +75,7 @@ class EventRegistrationController extends EventController
             $leaguecompround = $leaguecompround->eventcompetitionid . '-' . $leaguecompround->roundids;
         }
 
-        $multipledivisions = false;
+        $multipledivisions = $event->multipledivisions;
         $divisionsfinal    = [];
         $competitionsfinal = [];
         foreach ($eventcompetitions as $eventcompetition) {
@@ -123,7 +123,7 @@ class EventRegistrationController extends EventController
         }
 
         $divisions = [];
-        if ($event->isLeague()) {
+        if ($event->isLeague() || $event->multipledivisions) {
             $divisions = explode(',',$evententry->divisionid);
         }
 
@@ -295,7 +295,6 @@ class EventRegistrationController extends EventController
 
         $divisionids = explode(',', $validated['divisionid']);
 
-
         foreach ($divisionids as $divisionid) {
             // Get the competitionids for the entry
             $eventcompetitionids = !empty($validated['roundids']) ? explode(',', $validated['roundids']) : [];
@@ -360,6 +359,7 @@ class EventRegistrationController extends EventController
 
     public function createAdminRegistration(CreateRegistration $request)
     {
+
         $validated = $request->validated();
 
         $event = Event::where('eventid', $validated['eventid'])->get()->first();

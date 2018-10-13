@@ -74,7 +74,7 @@ class EventEntryController extends EventController
             $leaguecompround = $leaguecompround->eventcompetitionid . '-' . $leaguecompround->roundids;
         }
 
-        $multipledivisions = false;
+        $multipledivisions = $event->multipledivisions;
         $divisionsfinal    = [];
         $competitionsfinal = [];
         foreach ($eventcompetitions as $eventcompetition) {
@@ -135,7 +135,7 @@ class EventEntryController extends EventController
             $leaguecompround = $leaguecompround->eventcompetitionid . '-' . $leaguecompround->roundids;
         }
 
-        $multipledivisions = false;
+        $multipledivisions = $event->multipledivisions;
         $divisionsfinal    = [];
         $competitionsfinal = [];
         foreach ($eventcompetitions as $eventcompetition) {
