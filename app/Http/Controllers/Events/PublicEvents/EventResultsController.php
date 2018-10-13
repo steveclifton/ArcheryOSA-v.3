@@ -186,7 +186,7 @@ class EventResultsController extends EventController
             JOIN `entrycompetitions` ec USING (`entryid`)
             JOIN `divisions` d ON (`ec`.`divisionid` = `d`.`divisionid`)
             JOIN `rounds` r ON (ec.roundid = r.roundid)
-            LEFT JOIN `scores_flat` sf ON (ee.entryid = sf.entryid AND ec.entrycompetitionid = sf.entrycompetitionid AND ec.roundid = sf.roundid)
+            JOIN `scores_flat` sf ON (ee.entryid = sf.entryid AND ec.entrycompetitionid = sf.entrycompetitionid AND ec.roundid = sf.roundid)
             WHERE `ee`.`eventid` = '".$event->eventid."'
             AND `ec`.`eventcompetitionid` = :eventcompetitionid
             AND `ee`.`entrystatusid` = 2
