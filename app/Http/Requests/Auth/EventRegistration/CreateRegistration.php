@@ -31,10 +31,9 @@ class CreateRegistration extends FormRequest
         }
         return [
             'eventid'        => 'required',
-            'userid'         => 'required',
             'firstname'      => 'required',
             'lastname'       => 'required',
-            'email'          => 'nullable',
+            'email'          => 'required',
             'membership'     => 'nullable',
             'phone'          => 'nullable',
             'address'        => 'nullable',

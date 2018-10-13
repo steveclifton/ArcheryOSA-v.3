@@ -11,9 +11,9 @@ class Controller extends BaseController
 {
     use AuthorizesRequests, DispatchesJobs, ValidatesRequests;
 
-    public function createHash()
+    public function createHash($length = 5)
     {
-        return substr(md5(time() . rand(0, 999)), 0, 5);
+        return substr(md5(time() . rand(0, 999)), 0, $length);
     }
 
 

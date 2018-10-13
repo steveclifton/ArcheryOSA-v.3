@@ -364,14 +364,35 @@ class EventRegistrationController extends EventController
 
         $event = Event::where('eventid', $validated['eventid'])->get()->first();
 
-        $user = User::where('userid', $validated['userid'])->get()->first();
+        $user = User::where('userid', $validated['userid'] ?? -1)->get()->first();
 
-        if (empty($event) || empty($user)) {
+        if (empty($event)) {
             return back()->with('failure', 'Please try again later');
         }
-        else if (!empty($user->email != $validated['email'])) {
+        else if (!empty($user) && !empty($user->email != $validated['email'])) {
             return back()->with('failure', 'Email does not match that on record');
         }
+
+        // could be a manual entry, try lookup by email
+        if (empty($user)) {
+            $user = User::where('email', $validated['email'])->get()->first();
+
+            // if still empty, create a new user
+            if (empty($user)) {
+                $user = new User();
+                $user->firstname = $validated['firstname'];
+                $user->lastname  = $validated['lastname'];
+                $user->email     = !empty($validated['email']) ? $validated['email'] : $this->createHash(12);
+                $user->roleid    = 4;
+                $user->username  = strtolower(preg_replace("/[^a-zA-Z0-9]/", "", $validated['firstname'].$validated['lastname'])) . rand(1,1440);
+                $user->password  = $this->createHash(12);
+                $user->save();
+
+                $validated['userid'] = $user->userid;
+            }
+        }
+
+
 
         $evententry = EventEntry::where('userid', $user->userid)
             ->where('eventid', $event->eventid)
