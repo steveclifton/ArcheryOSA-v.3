@@ -128,8 +128,8 @@
                 <div class="form-group row justify-content-end">
                     <div class=" col-md-9">
                         <div class="checkbox checkbox-primary">
-                            <input name="showoverall" id="emailshow" type="checkbox" {{$event->showoverall ? 'checked' : ''}}>
-                            <label for="emailshow">
+                            <input name="showoverall" id="showover" type="checkbox" {{$event->showoverall ? 'checked' : ''}}>
+                            <label for="showover">
                                 Show Overall
                             </label>
 
@@ -140,7 +140,20 @@
                 </div>
                 <br>
 
+                <div class="form-group row justify-content-end">
+                    <div class=" col-md-9">
+                        <div class="checkbox checkbox-primary">
+                            <input name="multipledivisions" id="allowmulti" type="checkbox" {{$event->multipledivisions ? 'checked' : ''}}>
+                            <label for="allowmulti">
+                                Allow multiple division entries
+                            </label>
 
+                        </div>
+                        <span class="help-block"><small>This will allow users to enter into multiple divisions for the event</small></span>
+
+                    </div>
+                </div>
+                <br>
 
 
 
