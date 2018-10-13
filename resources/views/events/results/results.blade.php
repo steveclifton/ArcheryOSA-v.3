@@ -116,7 +116,7 @@
                                         <tbody>
                                         @foreach($archers as $archer)
                                             <tr class="results">
-                                                <th scope="row" width="15%">{{$archer->firstname . ' ' . $archer->lastname}}</th>
+                                                <th scope="row" width="15%">{{ucwords($archer->firstname . ' ' . $archer->lastname)}}</th>
                                                     <td width="10%">
                                                         {{$archer->dist1score}}
                                                     </td>
