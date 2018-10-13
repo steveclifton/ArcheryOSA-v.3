@@ -3994,7 +3994,7 @@ ul.ColVis_collection li {
   width: 24px;
   height: 24px;
   border-radius: 50%;
-  background-image: url(/images/download.png?e645dc0a3baddb094fbaeb2c9d27a452);
+  background-image: url(/images/download.png?45372716b3507e62121e0c0cabd22c2d);
   background-color: #eee;
 }
 
@@ -4593,7 +4593,7 @@ ul.ColVis_collection li {
   border-top-right-radius: 4px !important;
   padding: 70px 0;
   background-size: cover;
-  background: url(/images/bg.jpg?ab0ca921649820ba583451a01c3e9676) center right no-repeat;
+  background: url(/images/bg.jpg?676da203e4a9299ba3e7d8aac56492f6) center right no-repeat;
 }
 
 /* Blog styles */
@@ -5095,7 +5095,7 @@ a.editable-click:hover {
 /* Multiple */
 
 .ms-container {
-  background: transparent url(/images/multiple-arrow.png?f2151d4a5055f12e526407a44e7e77cf) no-repeat 50% 50%;
+  background: transparent url(/images/multiple-arrow.png?c77d520f50b9b136c20a59b12fae69e8) no-repeat 50% 50%;
 }
 
 .ms-container .ms-list {

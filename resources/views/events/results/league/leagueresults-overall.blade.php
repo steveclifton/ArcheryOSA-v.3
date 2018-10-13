@@ -48,7 +48,11 @@
         </div>
 
         <div class="panel panel-default text-center desktopOnlyImg d-none d-lg-block text-white slider-bg m-b-0"
-             style="background-position:center !important; background-size:contain !important; background-size: cover !important; background-repeat: no-repeat;  width: 100%; background: url({{asset('images/events/' . $event->imagebanner)}});">
+             style="background-position:center !important;
+                     background-size:contain !important;
+                     background-size: cover !important;
+                     background-repeat: no-repeat;
+                     width: 100%; background: url({{asset('images/events/' . $event->imagedt)}});">
             <div class="slider-overlay br-radius"></div>
             <div class="panel-body p-0">
                 <div class="">
