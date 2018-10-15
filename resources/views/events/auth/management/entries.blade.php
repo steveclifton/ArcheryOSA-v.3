@@ -63,7 +63,7 @@
                         @foreach($evententries as $entry)
                         <tr>
                             <td>
-                                <a href="/events/manage/evententries/{{$event->eventurl}}/update/{{$entry->username}}">{{$entry->name}}</a>
+                                <a href="/events/manage/evententries/{{$event->eventurl}}/update/{{$entry->username}}">{{ucwords($entry->name)}}</a>
                             </td>
                             <td>{{$entry->division}}</td>
                             <td id="status">{{$entry->status}}</td>
