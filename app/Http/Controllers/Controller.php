@@ -16,6 +16,11 @@ class Controller extends BaseController
         return substr(md5(time() . rand(0, 999)), 0, $length);
     }
 
+    public function isLive()
+    {
+        return getenv('APP_LIVE');
+    }
+
 
 
 }
