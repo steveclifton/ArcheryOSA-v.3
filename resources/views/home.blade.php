@@ -58,6 +58,63 @@
         </div>
     </div>
 
+
+    @if(Auth::check())
+        {{--My Events--}}
+        <div class="row">
+            <div class="col-lg-12">
+                <ul class="nav nav-tabs tabs">
+                    <li class="nav-item tab">
+                        <a href="#myevents" data-toggle="tab" aria-expanded="true" class="nav-link">
+                            My Events
+                        </a>
+                    </li>
+                </ul>
+
+                <div class="tab-content">
+                    <div class="tab-pane active" id="myevents">
+                        <div class="card-columns">
+                            @foreach(array_slice($myevents, 0, 3) as $event)
+                                <a href="/event/details/{{$event->eventurl}}">
+                                    <div class="card m-b-20">
+                                        <img class="card-img-top img-fluid" src="{{URL::asset('/images/events/' . $event->imagedt)}}"
+                                             alt="Card image cap">
+                                        <div class="card-body">
+                                            <h4 class="card-title font-18 mt-0">{{$event->label}}</h4>
+                                            <p class="card-text">Start : {!! date('d F Y', strtotime($event->start)) !!}</p>
+                                        </div>
+                                    </div>
+                                </a>
+                            @endforeach
+                        </div>
+                        @if (!empty(array_slice($myevents, 3)))
+                            <div class="table-responsive">
+                                <table class="table table-hover">
+                                    <thead class="thead-light">
+                                    <tr>
+                                        <th>Name</th>
+                                        <th>Start</th>
+                                        <th>Entry Status</th>
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+                                    @foreach(array_slice($myevents, 3) as $event)
+                                        <tr>
+                                            <th scope="row"><a href="{{route('event', ['eventurl'=>$event->eventurl])}}">{{$event->label}}</a></th>
+                                            <td>{{date('d F Y', strtotime($event->start))}}</td>
+                                            <td>{{$event->status}}</td>
+                                        </tr>
+                                    @endforeach
+                                    </tbody>
+                                </table>
+                            </div>
+                        @endif
+                    </div>
+                </div>
+            </div>
+        </div>
+    @endif
+
     {{--Upcoming--}}
     <div class="row">
         <div class="col-lg-12">
@@ -116,61 +173,6 @@
     </div>
 
 
-    @if(Auth::check())
-        {{--My Events--}}
-        <div class="row">
-            <div class="col-lg-12">
-                <ul class="nav nav-tabs tabs">
-                    <li class="nav-item tab">
-                        <a href="#myevents" data-toggle="tab" aria-expanded="true" class="nav-link">
-                            My Events
-                        </a>
-                    </li>
-                </ul>
-
-                <div class="tab-content">
-                    <div class="tab-pane active" id="myevents">
-                            <div class="card-columns">
-                                @foreach(array_slice($myevents, 0, 3) as $event)
-                                    <a href="/event/details/{{$event->eventurl}}">
-                                        <div class="card m-b-20">
-                                            <img class="card-img-top img-fluid" src="{{URL::asset('/images/events/' . $event->imagedt)}}"
-                                                 alt="Card image cap">
-                                            <div class="card-body">
-                                                <h4 class="card-title font-18 mt-0">{{$event->label}}</h4>
-                                                <p class="card-text">Start : {!! date('d F Y', strtotime($event->start)) !!}</p>
-                                            </div>
-                                        </div>
-                                    </a>
-                                @endforeach
-                            </div>
-                            @if (!empty(array_slice($myevents, 3)))
-                                <div class="table-responsive">
-                                    <table class="table table-hover">
-                                        <thead class="thead-light">
-                                            <tr>
-                                                <th>Name</th>
-                                                <th>Start</th>
-                                                <th>Entry Status</th>
-                                            </tr>
-                                        </thead>
-                                        <tbody>
-                                        @foreach(array_slice($myevents, 3) as $event)
-                                            <tr>
-                                                <th scope="row"><a href="{{route('event', ['eventurl'=>$event->eventurl])}}">{{$event->label}}</a></th>
-                                                <td>{{date('d F Y', strtotime($event->start))}}</td>
-                                                <td>{{$event->status}}</td>
-                                            </tr>
-                                        @endforeach
-                                        </tbody>
-                                    </table>
-                                </div>
-                            @endif
-                        </div>
-                </div>
-            </div>
-        </div>
-    @endif
 
 
     {{--Results--}}
