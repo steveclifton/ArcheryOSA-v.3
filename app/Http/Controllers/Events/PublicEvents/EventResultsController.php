@@ -8,6 +8,7 @@ use App\Models\EventCompetition;
 use App\Models\FlatScore;
 use App\Models\Score;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Traits\UserResults;
 
@@ -305,7 +306,10 @@ class EventResultsController extends EventController
 
     private function getEventEntrySorted($eventid)
     {
-        $entrys = DB::select("
+        $entrys = $this->getcacheditem('evententrys-' . $eventid);
+
+        if (empty($entrys)) {
+            $entrys = DB::select("
             SELECT ee.userid, ee.firstname, ee.lastname, ee.gender, ec.roundid, ee.divisionid,  
                   d.label as divisionname, d.bowtype, r.unit, r.label as roundname, r.code
             FROM `evententrys` ee
@@ -319,29 +323,32 @@ class EventResultsController extends EventController
             ORDER BY d.label, ee.userid, ec.eventcompetitionid
         ");
 
-        $sortedEntrys = [];
-        foreach ($entrys as $entry) {
-            if (strpos($entry->divisionid, ',') !== false) {
-                $divisionids = explode(',', $entry->divisionid);
+            $sortedEntrys = [];
+            foreach ($entrys as $entry) {
+                if (strpos($entry->divisionid, ',') !== false) {
+                    $divisionids = explode(',', $entry->divisionid);
 
-                foreach ($divisionids as $divisionid) {
-                    // clone the entry
-                    $entryUpdated = clone $entry;
-                    $divison = Division::where('divisionid', $divisionid)->get()->first();
+                    foreach ($divisionids as $divisionid) {
+                        // clone the entry
+                        $entryUpdated = clone $entry;
+                        $divison = Division::where('divisionid', $divisionid)->get()->first();
 
-                    $entryUpdated->bowtype = $divison->bowtype;
-                    $entryUpdated->divisionname = $divison->label;
-                    $entryUpdated->divisionid = $divisionid;
-                    $sortedEntrys[] = $entryUpdated;
+                        $entryUpdated->bowtype = $divison->bowtype;
+                        $entryUpdated->divisionname = $divison->label;
+                        $entryUpdated->divisionid = $divisionid;
+                        $sortedEntrys[] = $entryUpdated;
+                    }
+                }
+                else {
+                    $sortedEntrys[] = $entry;
                 }
             }
-            else {
-                $sortedEntrys[] = $entry;
-            }
+
+            $entrys = $sortedEntrys;
+
+            Cache::put('evententrys-' . $eventid, $entrys, 100);
         }
 
-        $entrys = $sortedEntrys;
-        unset($sortedEntrys);
 
         return $entrys;
     }

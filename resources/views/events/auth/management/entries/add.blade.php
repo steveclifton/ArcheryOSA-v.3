@@ -57,7 +57,7 @@
                 @csrf
                 <meta name="csrf-token" content="{{ csrf_token() }}">
                 <input name="eventid" type="hidden" value="{{$event->eventid}}">
-                <input name="userid" type="hidden" value="">
+                <input name="userid" type="hidden" value="{{old('userid')}}">
 
 
 
