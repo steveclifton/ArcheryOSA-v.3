@@ -59,7 +59,7 @@
     </div>
 
 
-    @if(Auth::check())
+    @if(Auth::check() && !empty($myevents))
         {{--My Events--}}
         <div class="row">
             <div class="col-lg-12">
