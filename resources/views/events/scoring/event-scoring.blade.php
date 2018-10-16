@@ -150,6 +150,17 @@
 
         <script>
             $(function () {
+                var outstanding = false;
+
+                window.onbeforeunload = function() {
+
+                    if (outstanding) {
+                        return "You have unsaved changes";
+                    }
+                    return;
+                };
+
+
                 // store the url
                 var eventurl = $('#event').val();
 
@@ -159,6 +170,8 @@
                 });
 
                 $(document).on('keyup', '.distInp', function () {
+                    outstanding = true;
+
                     var parent = $(this).closest('tr').children('td');
                     var total = 0;
 
@@ -318,6 +331,8 @@
                     }).done(function( json ) {
 
                         if (json.success) {
+                            outstanding = false;
+
                             $('.alert').addClass('alert-success').html('Scores Entered Succesfully').removeClass('hidden');
                             setTimeout(function (e) {
                                 location.reload();
