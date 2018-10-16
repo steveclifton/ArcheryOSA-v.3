@@ -293,7 +293,7 @@ class EventEntryController extends EventController
             ]);
         }
 
-        SendEntryConfirmation::dispatch($entry->email, $entry->firstname, $this->event->label, makeEventDetailsUrl($this->event->eventurl));
+        SendEntryConfirmation::dispatch($entry->email, $entry->firstname, $this->event->label, route('event', $this->event->eventurl));
 
         // Set it to pending if not entered
         $entry->confirmationemail = 1;

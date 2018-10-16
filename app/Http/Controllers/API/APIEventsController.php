@@ -27,7 +27,7 @@ class APIEventsController extends Controller
         ");
 
         foreach ($events as $event) {
-            $event->eventurl = makeEventDetailsUrl($event->eventurl);
+            $event->eventurl = route('event', $event->eventurl);
         }
 
         return response()->json([
@@ -58,7 +58,7 @@ class APIEventsController extends Controller
 
 
         foreach ($events as $event) {
-            $event->eventurl = makeEventDetailsUrl($event->eventurl);
+            $event->eventurl = route('event', $event->eventurl);
         }
         
         return response()->json([
