@@ -45,9 +45,3 @@ function getEntryStatusText($entrystatusid)
             return 'danger';
     }
 }
-
-
-function makeEventDetailsUrl($eventurl)
-{
-    return env('APP_URL') . '/event/details/' . $eventurl;
-}
