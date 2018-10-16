@@ -27,10 +27,7 @@ function debugx(...$data)
     if (Auth::id() != 1) {
         return;
     }
-    echo '<pre>';
-    print_r($data);
-    echo '</pre>';
-    die();
+    dd($data);
 }
 
 
