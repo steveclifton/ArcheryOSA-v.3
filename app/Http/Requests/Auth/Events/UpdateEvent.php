@@ -16,16 +16,21 @@ class UpdateEvent extends FormRequest
     public function authorize()
     {
         if (Auth::check()) {
+
+            if (Auth::user()->isSuperAdmin()) {
+                return true;
+            }
+
             $eventadmin = EventAdmin::where('userid', Auth::id())
-                                    ->where('eventid', $this->eventid)
-                                    ->where('canedit', 1)
-                                    ->get()->first();
+                ->where('eventid', $this->eventid)
+                ->where('canedit', 1)
+                ->get()->first();
 
             if (!empty($eventadmin)) {
                 return true;
             }
-
         }
+
         return false;
     }
 
