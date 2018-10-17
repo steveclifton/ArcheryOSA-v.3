@@ -50,6 +50,11 @@ class User extends Authenticatable
 
     public function canEditEvent($eventid)
     {
+
+        if ($this->isSuperAdmin()) {
+            return true;
+        }
+
         return EventAdmin::where('userid', Auth::id())
                     ->where('eventid', $eventid)
                     ->where('canedit', 1)
@@ -92,6 +97,11 @@ class User extends Authenticatable
         }
 
         return EntryStatus::where('entrystatusid', $evententry->entrystatusid)->pluck('label')->first();
+    }
+
+    public function isSuperAdmin()
+    {
+        return $this->roleid === 1;
     }
 
 }
