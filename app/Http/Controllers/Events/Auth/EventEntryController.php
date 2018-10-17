@@ -12,6 +12,7 @@ use App\Models\EventEntry;
 use App\Models\Round;
 use App\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 
 class EventEntryController extends EventController
@@ -24,21 +25,43 @@ class EventEntryController extends EventController
         $this->event = Event::where('eventurl', $request->eventurl)->get()->first();
 
         if (empty($this->event)) {
-            return back()->with('failure', 'Invalid');
+            return back()->with('failure', 'Invalid Event');
         }
 
-        $eventadmin = EventAdmin::where('eventid', $this->event->eventid)->get()->first();
-
-        if (empty($eventadmin)) {
-            return back()->with('failure', 'Invalid');
-        }
     }
 
 
 
-    public function getEventEntriesView()
+    public function getEventEntriesView(Request $request)
     {
-        $event = $this->event;
+
+        // Get Event
+        if (Auth::user()->isSuperAdmin()) {
+            $event = DB::select("
+            SELECT e.*, es.label as status
+            FROM `events` e
+            JOIN `eventstatus` es USING (`eventstatusid`)
+            WHERE `e`.`eventurl` = :eventurl
+            LIMIT 1
+        ",['eventurl' => $request->eventurl]);
+        }
+        else {
+            $event = DB::select("
+            SELECT e.*, es.label as status
+            FROM `events` e
+            JOIN `eventadmins` ea USING (`eventid`)
+            JOIN `eventstatus` es USING (`eventstatusid`)
+            WHERE `ea`.`userid` = :userid
+            AND `e`.`eventurl` = :eventurl
+            LIMIT 1
+        ", ['userid' => Auth::id(), 'eventurl' => $request->eventurl]);
+        }
+
+        $event = !empty($event) ? reset($event) : null;
+
+        if (empty($event)) {
+            return redirect()->back()->with('failure', 'Event not found');
+        }
 
         $evententries = DB::select("
             SELECT ee.entryid, u.username, CONCAT_WS(' ', ee.firstname, ee.lastname ) as name, ee.confirmationemail, ee.paid, d.label as division, ee.created_at as created, es.label as status  

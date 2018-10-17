@@ -57,6 +57,7 @@ class EventController extends Controller
         $organisations = Organisation::where('visible', 1)->get();
         $clubs         = Club::where('visible', 1)->get();
         $eventtypes    = EventType::get();
+
         return view('events.auth.management.update', compact('event', 'organisations', 'clubs', 'eventtypes'));
     }
 
@@ -69,7 +70,7 @@ class EventController extends Controller
     {
         // get all the events the user can manage
 
-        if (Auth::user()->roleid == 1) {
+        if (Auth::user()->isSuperAdmin()) {
             $events = DB::select("
             SELECT e.*, es.label as status
             FROM `events` e
@@ -97,8 +98,17 @@ class EventController extends Controller
 
     public function getEventManageView(Request $request)
     {
-
-        $event = DB::select("
+        if (Auth::user()->isSuperAdmin()) {
+            $event = DB::select("
+            SELECT e.*, es.label as status
+            FROM `events` e
+            JOIN `eventstatus` es USING (`eventstatusid`)
+            WHERE `e`.`eventurl` = :eventurl
+            LIMIT 1
+        ", ['eventurl' => $request->eventurl]);
+        }
+        else {
+            $event = DB::select("
             SELECT e.*, es.label as status
             FROM `events` e
             JOIN `eventadmins` ea USING (`eventid`)
@@ -107,6 +117,7 @@ class EventController extends Controller
             AND `e`.`eventurl` = :eventurl
             LIMIT 1
         ", ['userid' => Auth::id(), 'eventurl' => $request->eventurl]);
+        }
 
         $event = !empty($event) ? reset($event) : null;
 
@@ -148,7 +159,7 @@ class EventController extends Controller
             return redirect('/');
         }
 
-        if ($event->eventtypeid == 2) {
+        if ($event->isLeague()) {
             $leagueController = new LeagueController();
             return $leagueController->getUserLeagueScoringView($event);
         }

@@ -41,14 +41,17 @@ class EventSettingsController extends EventController
             return back()->with('failure', 'Invalid');
         }
 
-        $eventadmin = EventAdmin::where('userid', Auth::id())
-            ->where('eventid', $event->eventid)
-            ->where('canedit', 1)
-            ->get()->first();
+        if (empty(Auth::user()->isSuperAdmin())) {
+            $eventadmin = EventAdmin::where('userid', Auth::id())
+                ->where('eventid', $event->eventid)
+                ->where('canedit', 1)
+                ->get()->first();
 
-        if (empty($eventadmin)) {
-            return back()->with('failure', 'Cannot edit event');
+            if (empty($eventadmin)) {
+                return back()->with('failure', 'Cannot edit event');
+            }
         }
+
 
         if (!empty($request->input('visible'))) {
             $eventcompetitions = EventCompetition::where('eventid', $event->eventid)->get()->first();

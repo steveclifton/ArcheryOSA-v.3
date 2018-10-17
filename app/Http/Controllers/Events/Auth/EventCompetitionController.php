@@ -26,15 +26,6 @@ class EventCompetitionController extends EventController
         parent::__construct();
         $this->event = Event::where('eventurl', $request->eventurl)->get()->first();
 
-        if (empty($this->event)) {
-            return back()->with('failure', 'Invalid');
-        }
-
-        $eventadmin = EventAdmin::where('eventid', $this->event->eventid)->get()->first();
-
-        if (empty($eventadmin)) {
-            return back()->with('failure', 'Invalid');
-        }
     }
 
 
@@ -47,7 +38,17 @@ class EventCompetitionController extends EventController
     public function getEventCompetitionsView(Request $request)
     {
         // Get Event
-        $event = DB::select("
+        if (Auth::user()->isSuperAdmin()) {
+            $event = DB::select("
+            SELECT e.*, es.label as status
+            FROM `events` e
+            JOIN `eventstatus` es USING (`eventstatusid`)
+            WHERE `e`.`eventurl` = :eventurl
+            LIMIT 1
+        ",['eventurl' => $request->eventurl]);
+        }
+        else {
+            $event = DB::select("
             SELECT e.*, es.label as status
             FROM `events` e
             JOIN `eventadmins` ea USING (`eventid`)
@@ -56,6 +57,7 @@ class EventCompetitionController extends EventController
             AND `e`.`eventurl` = :eventurl
             LIMIT 1
         ", ['userid' => Auth::id(), 'eventurl' => $request->eventurl]);
+        }
 
         $event = !empty($event) ? reset($event) : null;
 
@@ -250,7 +252,6 @@ class EventCompetitionController extends EventController
 
 
     // League
-
     public function createLeagueCompetition(CreateLeagueCompetition $request)
     {
         $validated = $request->validated();
