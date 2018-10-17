@@ -77,7 +77,7 @@
                             @foreach(array_slice($myevents, 0, 3) as $event)
                                 <a href="/event/details/{{$event->eventurl}}">
                                     <div class="card m-b-20">
-                                        <img class="card-img-top img-fluid" src="{{URL::asset('/images/events/' . $event->imagedt)}}"
+                                        <img class="card-img-top card-image-resize img-fluid" src="{{URL::asset('/images/events/' . $event->imagedt)}}"
                                              alt="Card image cap">
                                         <div class="card-body">
                                             <h4 class="card-title font-18 mt-0">{{$event->label}}</h4>
@@ -121,7 +121,7 @@
             <ul class="nav nav-tabs tabs">
 
                 <li class="nav-item tab">
-                    <a href="#upcoming" data-toggle="tab" aria-expanded="true" class="nav-link active show">
+                    <a href="#upcoming" data-toggle="tab" aria-expanded="true" class="nav-link show">
                         Upcoming
                     </a>
                 </li>
@@ -131,7 +131,7 @@
             <div class="tab-content">
                 <div class="tab-pane active" id="upcoming">
                     <div class="card-columns">
-                        @foreach(array_slice($upcomingevents, 0, 3) as $event)
+                        @foreach(array_slice($upcomingevents, 0, 6) as $event)
                             <a href="/event/details/{{$event->eventurl}}">
                                 <div class="card m-b-20">
                                     <img class="card-img-top img-fluid" src="{{URL::asset('/images/events/' . $event->imagedt)}}"
@@ -155,7 +155,7 @@
                                 </tr>
                                 </thead>
                                 <tbody>
-                                @foreach(array_slice($upcomingevents, 3) as $event)
+                                @foreach(array_slice($upcomingevents, 3, 10) as $event)
                                     <tr>
                                         <th scope="row"><a href="/event/details/{{$event->eventurl}}">{{$event->label}}</a></th>
                                         <td>{{date('d F Y', strtotime($event->start))}}</td>
@@ -165,7 +165,7 @@
                                 </tbody>
                             </table>
                         </div>
-                        <h4 class="page-title"><a href="/events">See all events</a></h4>
+                        <h4 class="page-title"><a href="/events">See all upcoming events!</a></h4>
                     @endif
                 </div>
             </div>
@@ -176,58 +176,45 @@
 
 
     {{--Results--}}
-    <div class="row">
-        <div class="col-lg-12">
-            <ul class="nav nav-tabs tabs">
-                <li class="nav-item tab">
-                    <a href="#results" data-toggle="tab" aria-expanded="true" class="nav-link">
-                        Results
-                    </a>
-                </li>
-            </ul>
+    {{--<div class="row">--}}
+        {{--<div class="col-lg-12">--}}
+            {{--<ul class="nav nav-tabs tabs">--}}
+                {{--<li class="nav-item tab">--}}
+                    {{--<a href="#results" data-toggle="tab" aria-expanded="true" class="nav-link">--}}
+                        {{--Results--}}
+                    {{--</a>--}}
+                {{--</li>--}}
+            {{--</ul>--}}
 
-            <div class="tab-content">
-                <div class="tab-pane active" id="results">
-                    <div class="card-columns">
-                        @foreach(array_slice($resultevents, 0, 3) as $event)
-                            <a href="/event/details/{{$event->eventurl}}">
-                                <div class="card m-b-20">
-                                    <img class="card-img-top img-fluid" src="{{URL::asset('/images/events/' . $event->imagedt)}}"
-                                         alt="Card image cap">
-                                    <div class="card-body">
-                                        <h4 class="card-title font-18 mt-0">{{$event->label}}</h4>
-                                        <p class="card-text">Start : {!! date('d F Y', strtotime($event->start)) !!}</p>
-                                    </div>
-                                </div>
-                            </a>
-                        @endforeach
-                    </div>
-                    @if (!empty(array_slice($resultevents, 3)))
-                        <div class="table-responsive">
-                            <table class="table table-hover">
-                                <thead class="thead-light">
-                                <tr>
-                                    <th>Name</th>
-                                    <th>Start</th>
-                                    <th>Status</th>
-                                </tr>
-                                </thead>
-                                <tbody>
-                                @foreach(array_slice($resultevents, 3) as $event)
-                                    <tr>
-                                        <th scope="row"><a href="/event/details/{{$event->eventurl}}">{{$event->label}}</a></th>
-                                        <td>{{date('d F Y', strtotime($event->start))}}</td>
-                                        <td class="text-success">{{$event->eventstatus}}</td>
-                                    </tr>
-                                @endforeach
-                                </tbody>
-                            </table>
-                        </div>
-                        <h4 class="page-title"><a href="/events">See all events</a></h4>
-                    @endif
-                </div>
-            </div>
-        </div>
-    </div>
+            {{--<div class="tab-content">--}}
+                {{--<div class="tab-pane active" id="results">--}}
+
+                    {{--@if (!empty($resultevents))--}}
+                        {{--<div class="table-responsive">--}}
+                            {{--<table class="table table-hover">--}}
+                                {{--<thead class="thead-light">--}}
+                                {{--<tr>--}}
+                                    {{--<th>Name</th>--}}
+                                    {{--<th>Start</th>--}}
+                                    {{--<th>Status</th>--}}
+                                {{--</tr>--}}
+                                {{--</thead>--}}
+                                {{--<tbody>--}}
+                                {{--@foreach($resultevents as $event)--}}
+                                    {{--<tr>--}}
+                                        {{--<th scope="row"><a href="/event/details/{{$event->eventurl}}">{{$event->label}}</a></th>--}}
+                                        {{--<td>{{date('d F Y', strtotime($event->start))}}</td>--}}
+                                        {{--<td class="text-success">{{$event->eventstatus}}</td>--}}
+                                    {{--</tr>--}}
+                                {{--@endforeach--}}
+                                {{--</tbody>--}}
+                            {{--</table>--}}
+                        {{--</div>--}}
+                        {{--<h4 class="page-title"><a href="/events">See all events</a></h4>--}}
+                    {{--@endif--}}
+                {{--</div>--}}
+            {{--</div>--}}
+        {{--</div>--}}
+    {{--</div>--}}
 
 @endsection
