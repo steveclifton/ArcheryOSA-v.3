@@ -12,6 +12,11 @@ class UpdateLeagueCompetition extends FormRequest
     public function authorize()
     {
         if (Auth::check()) {
+
+            if (Auth::user()->isSuperAdmin()) {
+                return true;
+            }
+
             $eventadmin = EventAdmin::where('userid', Auth::id())
                 ->where('eventid', $this->eventid)
                 ->where('canedit', 1)
@@ -20,9 +25,12 @@ class UpdateLeagueCompetition extends FormRequest
             if (!empty($eventadmin)) {
                 return true;
             }
-
         }
+
+        return false;
     }
+
+
     /**
      * Determine if the user is authorized to make this request.
      *
