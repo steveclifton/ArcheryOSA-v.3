@@ -7,12 +7,9 @@ use App\Http\Requests\Auth\EventRegistration\UpdateRegistration;
 use App\Jobs\SendEntryReceived;
 use App\Jobs\SendEventAdminEntryReceived;
 use App\Models\Club;
-use App\Models\Competition;
-use App\Models\CompetitionRound;
 use App\Models\Division;
 use App\Models\EntryCompetition;
 use App\Models\Event;
-use App\Models\EventCompetition;
 use App\Models\EventEntry;
 use App\Models\Round;
 use App\Models\UserRelation;
@@ -166,10 +163,6 @@ class EventRegistrationController extends EventController
         if (empty($event) || empty($user)) {
             return back()->with('failure', 'Please try again later');
         }
-
-
-
-
 
 
         // Store the single event entry
