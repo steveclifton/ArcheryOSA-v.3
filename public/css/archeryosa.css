@@ -38,6 +38,14 @@
   padding: 0 20px 0 20px;
 }
 
+.tab-content a {
+  color: #343a40;
+}
+
+.tab-content a:hover {
+  color: #5fbeaa;
+}
+
 /*profile landing*/
 
 .db-social-box {
@@ -144,5 +152,21 @@
 
 .tableTitle {
   margin-bottom: 10px;
+}
+
+.row a {
+  color: #343a40;
+}
+
+.row a:hover {
+  color: #5fbeaa;
+}
+
+.card-columns a {
+  color: #343a40;
+}
+
+.archeryHeadText {
+  text-shadow: 2px 2px 3px #36404a;
 }
 
