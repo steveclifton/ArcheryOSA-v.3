@@ -122,10 +122,13 @@ class EventAdminController extends EventController
         $event = Event::where('eventurl', $request->eventurl)->get()->first();
 
         if (empty($user) || empty($event)) {
-            dd($user, $event);
+            $message = 'Can not be processed, please refresh and try again';
+            if (empty($user)) {
+                $message = 'User email can not be found';
+            }
             return response()->json([
                 'success' => false,
-                'data'    => 'Can not be processed'
+                'data'    => $message
             ]);
         }
 
