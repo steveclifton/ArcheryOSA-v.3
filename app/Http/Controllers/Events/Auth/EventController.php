@@ -68,7 +68,10 @@ class EventController extends Controller
 
     public function getAllEvents()
     {
-        // get all the events the user can manage
+        // check to see they are auth level first
+        if (Auth::user()->roleid == 4) {
+            return back()->with('failure', 'Unavailable to access');
+        }
 
         if (Auth::user()->isSuperAdmin()) {
             $events = DB::select("
@@ -91,6 +94,8 @@ class EventController extends Controller
             ORDER BY `e`.`start`
         ", ['userid' => Auth::id()]);
         }
+
+
 
 
         return view('events.auth.events', compact('events'));
