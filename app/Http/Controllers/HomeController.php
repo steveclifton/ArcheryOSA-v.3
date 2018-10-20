@@ -52,4 +52,13 @@ class HomeController extends Controller
 
         return view('home', compact('upcomingevents', 'myevents', 'resultevents'));
     }
+
+    public function debug()
+    {
+        if (Auth::id() == 1) {
+            phpinfo();
+            die;
+        }
+        die;
+    }
 }

@@ -15,7 +15,7 @@
 
 //Auth::routes();
 
-Route::get('/', 'HomeController@index');
+Route::get('/', 'HomeController@index')->name('home');
 
 
 Route::get('/events', 'Events\PublicEvents\EventController@getAllEvents');
@@ -176,6 +176,7 @@ Route::middleware(['web'])->group(function() {
 
     Route::middleware(['superadmin'])->group(function () {
         Route::get('logs', '\Rap2hpoutre\LaravelLogViewer\LogViewerController@index');
+        Route::get('phpinfo', 'HomeController@debug');
 
         // Clubs
         Route::get('admin/clubs', 'Admin\ClubController@get');
