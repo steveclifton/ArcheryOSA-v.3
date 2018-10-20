@@ -56,7 +56,7 @@ class HomeController extends Controller
     public function debug()
     {
         if (Auth::id() == 1) {
-            phpinfo();
+            phpinfo(INFO_MODULES);
             die;
         }
         die;
