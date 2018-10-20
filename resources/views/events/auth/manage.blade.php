@@ -79,6 +79,12 @@
             </a>
         </div>
 
+
+
+
+    </div>
+
+    <div class="row">
         <div class="col-lg-4 col-md-4 col-sm-4">
             <a href="#">
                 <div class="db-social-box bottomLine">
@@ -88,7 +94,14 @@
             </a>
         </div>
 
-
+        <div class="col-lg-4 col-md-4 col-sm-4">
+            <a href="/events/manage/eventadmins/{{$event->eventurl}}">
+                <div class="db-social-box bottomLine">
+                    <span class="md-account-child"></span>
+                    <h5>Event Admins</h5>
+                </div>
+            </a>
+        </div>
 
     </div>
 @endsection
