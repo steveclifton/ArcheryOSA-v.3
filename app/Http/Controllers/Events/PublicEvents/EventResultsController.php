@@ -156,7 +156,12 @@ class EventResultsController extends EventController
         }
 
         $evententrys = [];
-        foreach ($entrys as $entry) {
+        foreach ($entrys as $key => $entry) {
+            if (empty($entry->score)) {
+                unset($entrys[$key]);
+                continue;
+            }
+
             $gender = $entry->gender == 'm' ? 'Men\'s ' : 'Women\'s ';
             $evententrys[$entry->bowtype][$gender . $entry->divisionname][$entry->userid] = $entry;
         }
@@ -173,21 +178,23 @@ class EventResultsController extends EventController
                     $data->name     = $archer->firstname . ' ' . $archer->lastname;
 
                     $i = 1;
-                    foreach ($archer->score as $score) {
+                    if (!empty($archer->score)) {
+                        foreach ($archer->score as $score) {
 
-                        $dist           = 'dist' . $i;
-                        $data->{$dist}  = $score->roundname;
-                        $dist           = 'dist' . $i++ . 'score';
-                        $data->{$dist}  = $score->total;
-                        if (empty($data->total)) {
-                            $data->total = $score->total;
+                            $dist           = 'dist' . $i;
+                            $data->{$dist}  = $score->roundname;
+                            $dist           = 'dist' . $i++ . 'score';
+                            $data->{$dist}  = $score->total;
+                            if (empty($data->total)) {
+                                $data->total = $score->total;
+                            }
+                            else {
+                                $data->total += $score->total;
+                            }
                         }
-                        else {
-                            $data->total += $score->total;
-                        }
+
+                        $finalResults[$bowtype][$divname][] = $data;
                     }
-
-                    $finalResults[$bowtype][$divname][] = $data;
                 }
             }
         }
