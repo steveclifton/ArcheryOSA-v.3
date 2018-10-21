@@ -61,6 +61,12 @@ $(function () {
     $(document).on('submit', '.treeForm', function(e) {
         e.preventDefault();
 
+        var confirmed = confirm('Warning - changing divisons/rounds will result in some scores being lost. Ok?');
+
+        if (!confirmed) {
+            return;
+        }
+
         // Competitions and rounds
         var selectedElmsIds = $('#checkTree').jstree("get_selected", true);
         var checkedRounds = [];
@@ -86,6 +92,8 @@ $(function () {
         if ($('#jsfields').val() == '') {
             $('#jsfields').attr('value', checkedRounds.join(","));
         }
+
+
 
 
         this.submit();
