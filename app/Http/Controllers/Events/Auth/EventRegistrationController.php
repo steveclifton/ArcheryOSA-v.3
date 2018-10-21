@@ -60,6 +60,10 @@ class EventRegistrationController extends EventController
             return back();
         }
 
+        if (time() > strtotime($event->start)) {
+            return back()->with('failure', 'Please contact the admin to change registration details');
+        }
+
         $eventcompetitions = DB::select("
             SELECT *
             FROM `eventcompetitions`

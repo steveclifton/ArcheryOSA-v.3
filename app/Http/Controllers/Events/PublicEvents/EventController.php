@@ -67,6 +67,10 @@ class EventController extends Controller
 
         $evententryopen = $event->eventstatusid == 1 ? true : false;
 
+        if (time() > strtotime($event->start)) {
+            $evententryopen = false;
+        }
+
         $roundlabels    = $this->helper->getCompetitionRoundLabels($event);
 
         $competitiontype = EventType::where('eventtypeid', $event->eventtypeid)->pluck('label')->first();
