@@ -217,6 +217,9 @@
                         <label class="col-sm-12 col-md-3 col-form-label">Competitions*</label>
                         <div class="col-md-9">
                             <div class="">
+                                <div class="alert-danger">WARNING - changing a users rounds or divisions will result it scores being lost for effected <br>
+                                changes, if scores already exist, please check scores after any changes.</div>
+                                <br>
                                 <div class="card-box">
                                     <h4 class="text-dark header-title m-t-0 m-b-30">Select the competitions you wish to enter</h4>
                                     @php $i = 1 @endphp
