@@ -127,17 +127,17 @@
                                             </td>
                                             @if(!empty($data->dist2))
                                                 <td width="10%">
-                                                    {{$archer->dist2score}}
+                                                    {{$archer->dist2score ?? 0}}
                                                 </td>
                                             @endif
                                             @if(!empty($data->dist3))
                                                 <td width="10%">
-                                                    {{$archer->dist3score}}
+                                                    {{$archer->dist3score ?? 0}}
                                                 </td>
                                             @endif
                                             @if(!empty($data->dist4))
                                                 <td width="10%">
-                                                    {{$archer->dist4score}}
+                                                    {{$archer->dist4score ?? 0}}
                                                 </td>
                                             @endif
 
@@ -179,7 +179,6 @@
         $(document).ready(function () {
             //Buttons examples
             var index = $('#tabltr').find('th:last').index();
-
             var table = $('.datatable-buttons').DataTable({
                 lengthChange: false,
                 bPaginate: false,

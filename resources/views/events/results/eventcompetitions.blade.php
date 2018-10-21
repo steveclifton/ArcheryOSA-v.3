@@ -39,7 +39,7 @@
                             </tr>
                         </thead>
                         <tbody>
-                            @if (!empty($overall))
+                            @if (!empty($overall) && false)
                                 <tr>
                                     <td scope="row" >
                                         <a href="/event/results/{{$event->eventurl}}/overall">Overall</a>
