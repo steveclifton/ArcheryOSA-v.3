@@ -29,7 +29,7 @@ class HomeController extends Controller
             SELECT e.*, es.label as eventstatus
             FROM `events` e
             JOIN `eventstatus` es USING (`eventstatusid`)
-            WHERE `e`.`end` > now()
+            WHERE `e`.`end` + interval 1 day > now() 
             AND `e`.`visible` = 1
             ORDER BY `e`.`start`
         ");
