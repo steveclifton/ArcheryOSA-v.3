@@ -363,6 +363,8 @@ class EventRegistrationController extends EventController
 
         $user = User::where('userid', $validated['userid'] ?? -1)->get()->first();
 
+
+
         if (empty($event)) {
             return back()->with('failure', 'Please try again later');
         }
@@ -372,7 +374,7 @@ class EventRegistrationController extends EventController
 
         // could be a manual entry, try lookup by email
         if (empty($user)) {
-            $user = User::where('email', $validated['email'])->get()->first();
+            $user = User::where('email', $validated['email'] ?? -1)->get()->first();
 
             // if still empty, create a new user
             if (empty($user)) {
@@ -384,11 +386,14 @@ class EventRegistrationController extends EventController
                 $user->username  = strtolower(preg_replace("/[^a-zA-Z0-9]/", "", $validated['firstname'].$validated['lastname'])) . rand(1,1440);
                 $user->password  = $this->createHash(12);
                 $user->save();
-
-                $validated['userid'] = $user->userid;
             }
         }
 
+        $validated['userid'] = $user->userid;
+
+        if (empty($validated['email']) && !empty($user->email)) {
+            $validated['email'] = $user->email;
+        }
 
 
         $evententry = EventEntry::where('userid', $user->userid)

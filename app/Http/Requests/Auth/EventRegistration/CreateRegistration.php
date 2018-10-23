@@ -34,7 +34,7 @@ class CreateRegistration extends FormRequest
             'eventid'        => 'required',
             'firstname'      => 'required',
             'lastname'       => 'required',
-            'email'          => 'required',
+            'email'          => 'nullable',
             'membership'     => 'nullable',
             'phone'          => 'nullable',
             'address'        => 'nullable',

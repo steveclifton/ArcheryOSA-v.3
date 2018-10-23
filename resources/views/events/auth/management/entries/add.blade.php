@@ -89,10 +89,11 @@
 
 
                 <div class="form-group row">
-                    <label for="label" class="col-sm-12 col-md-3 col-form-label">Email*</label>
+                    <label for="label" class="col-sm-12 col-md-3 col-form-label">Email</label>
                     <div class="col-md-9">
                         <input name="email" type="text" class="form-control{{ $errors->has('email') ? ' is-invalid' : '' }}"
-                               value="{{old('email')}}" required >
+                               value="{{old('email')}}"
+                                placeholder="Leave blank if unknown">
                         @if ($errors->has('email'))
                             <span class="invalid-feedback" role="alert">
                                 <strong>{{ $errors->first('email') }}</strong>
