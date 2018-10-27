@@ -4,8 +4,8 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge" />
 <meta property="og:image" content="{{URL::asset('/images/archeryosablack.jpg')}}">
 
-<link rel="icon" href="{{URL::asset('/images/favicon.ico')}}" type="image/x-icon" />
-<link rel="shortcut icon" href="{{URL::asset('/images/favicon.ico')}}" type="image/x-icon" />
+<link rel="icon" href="{{URL::asset('/images/favion.ico')}}" type="image/x-icon" />
+<link rel="shortcut icon" href="{{URL::asset('/images/favion.ico')}}" type="image/x-icon" />
 
 
 <script src='https://www.google.com/recaptcha/api.js'></script>
