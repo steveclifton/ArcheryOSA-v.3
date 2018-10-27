@@ -96,16 +96,18 @@ Route::middleware(['web'])->group(function() {
         Route::get('events/manage/evententries/{eventurl}', 'Events\Auth\EventEntryController@getEventEntriesView');
         Route::get('events/manage/evententries/{eventurl}/add', 'Events\Auth\EventEntryController@getEventEntryAddView');
         Route::get('events/manage/evententries/{eventurl}/update/{username}', 'Events\Auth\EventEntryController@getEventEntryUpdateView');
-        Route::post('/event/registration/create/admin/{eventurl}', 'Events\Auth\EventRegistrationController@createAdminRegistration');
-        Route::post('/event/registration/update/admin/{eventurl}', 'Events\Auth\EventRegistrationController@updateAdminRegistration');
+        Route::get('events/manage/evententries/{eventurl}/email/{username}', 'Events\Auth\EventEntryController@getEventEntryEmailView');
+        Route::post('event/registration/create/admin/{eventurl}', 'Events\Auth\EventRegistrationController@createAdminRegistration');
+        Route::post('event/registration/update/admin/{eventurl}', 'Events\Auth\EventRegistrationController@updateAdminRegistration');
+        Route::post('event/registration/email/admin/{eventurl}', 'Events\Auth\EventEntryController@sendEventEntryEmail');
 
         // USERS STUFF
 
         // Register for an event
-        Route::get('/event/register/{eventurl}', 'Events\Auth\EventRegistrationController@getRegistrationList');
-        Route::get('/event/registration/{eventurl}/{username}', 'Events\Auth\EventRegistrationController@getRegistration');
-        Route::post('/event/registration/create/{eventurl}', 'Events\Auth\EventRegistrationController@createRegistration');
-        Route::post('/event/registration/update/{eventurl}', 'Events\Auth\EventRegistrationController@updateRegistration');
+        Route::get('event/register/{eventurl}', 'Events\Auth\EventRegistrationController@getRegistrationList');
+        Route::get('event/registration/{eventurl}/{username}', 'Events\Auth\EventRegistrationController@getRegistration');
+        Route::post('event/registration/create/{eventurl}', 'Events\Auth\EventRegistrationController@createRegistration');
+        Route::post('event/registration/update/{eventurl}', 'Events\Auth\EventRegistrationController@updateRegistration');
 
         // event admins
         Route::get('events/manage/eventadmins/{eventurl}', 'Events\Auth\EventAdminController@getEventAdminView');

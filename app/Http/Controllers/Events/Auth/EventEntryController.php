@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Events\Auth;
 
 use App\Jobs\SendEntryConfirmation;
+use App\Jobs\SendEventUpdate;
 use App\Models\Club;
 use App\Models\Division;
 use App\Models\EntryCompetition;
@@ -199,6 +200,53 @@ class EventEntryController extends EventController
                         )
                     );
     }
+
+
+
+    public function getEventEntryEmailView(Request $request)
+    {
+
+        $event = Event::where('eventurl', $request->eventurl ?? -1)->get()->first();
+
+        $user = User::where('username', $request->username)->get()->first();
+
+        $evententry = EventEntry::where('eventid', $event->eventid ?? -1)
+            ->where('userid', $user->userid)
+            ->get()
+            ->first();
+
+        if (empty($event) || empty($user) || empty($evententry)) {
+            return back()->with('failure', 'Cannot perform request');
+        }
+
+        return view('events.auth.management.entries.email',
+            compact('user', 'event'));
+    }
+
+
+    /**
+     * POST
+     */
+
+    public function sendEventEntryEmail(Request $request)
+    {
+        $event = Event::where('eventurl', $request->eventurl)->get()->first();
+
+        $evententry = EventEntry::where('eventid', $event->eventid ?? -1)
+            ->where('userid', $request->input('userid'))
+            ->get()
+            ->first();
+
+        if (empty($evententry)) {
+            return redirect()->route('home');
+        }
+
+        SendEventUpdate::dispatch($evententry->email, $event->label, $request->input('message'));
+
+        return redirect('events/manage/evententries/' . $event->eventurl)->with('success', 'Email Sent');
+
+    }
+
 
 
     /**********************

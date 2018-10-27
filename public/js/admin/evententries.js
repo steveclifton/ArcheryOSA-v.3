@@ -41,7 +41,7 @@ $(function () {
         }).done(function( json ) {
 
             if (json.success) {
-                $(_this).parent().siblings('#paid').empty().html(json.message);
+                // $(_this).parent().siblings('#paid').empty().html(json.message);
             }
 
         });

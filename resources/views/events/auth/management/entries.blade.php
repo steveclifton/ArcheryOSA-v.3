@@ -51,7 +51,7 @@
                             <th>Name</th>
                             <th>Division</th>
                             <th>Status</th>
-                            <th>Paid</th>
+                            <th>Send Mail</th>
                             <th>Entry date</th>
                             <th>Approve Entry</th>
                             <th>Mark Paid</th>
@@ -67,7 +67,11 @@
                             </td>
                             <td>{{$entry->division}}</td>
                             <td id="status">{{$entry->status}}</td>
-                            <td id="paid" align="center">{!! $entry->paid ? '<i class="fa fa-check"></i>' : '' !!}</td>
+                            <td align="center">
+                                <a href="/events/manage/evententries/{{$event->eventurl}}/email/{{$entry->username}}">
+                                    <i class="fa fa-envelope-o"></i>
+                                </a>
+                            </td>
                             <td>{{ date('d F Y', strtotime($entry->created)) }}</td>
                             <td align="center">
                                 <input class="entrycheck" type="checkbox" data-entryid="{{$entry->entryid}}"
