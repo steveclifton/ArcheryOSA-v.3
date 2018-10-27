@@ -1,6 +1,6 @@
 @extends('template.default')
 
-@section ('title') @endsection
+@section ('title') My Events @endsection
 
 @section('content')
     <div class="row">

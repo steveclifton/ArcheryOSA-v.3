@@ -110,32 +110,33 @@
                                     <tr id="tabltr">
                                         <th>Archer</th>
                                         <th>{{$data->dist1}}</th>
-                                        @if(!empty($data->dist2))<th>{{$data->dist2}}</th>@endif
-                                        @if(!empty($data->dist3))<th>{{$data->dist3}}</th>@endif
-                                        @if(!empty($data->dist4))<th>{{$data->dist4}}</th>@endif
+                                        @if(isset($data->dist2))<th>{{$data->dist2}}</th>@endif
+                                        @if(isset($data->dist3))<th>{{$data->dist3}}</th>@endif
+                                        @if(isset($data->dist4))<th>{{$data->dist4}}</th>@endif
                                         <th>Total</th>
                                     </tr>
                                 </thead>
                                 <tbody>
 
                                 @foreach($archers as $archer)
+
                                     <tr class="results">
                                         <th scope="row" width="15%">{{ucwords($archer->name)}}</th>
 
                                             <td width="10%">
-                                               {{$archer->dist1score}}
+                                               {{$archer->dist1score ?? 0}}
                                             </td>
-                                            @if(!empty($data->dist2))
+                                            @if(isset($data->dist2))
                                                 <td width="10%">
                                                     {{$archer->dist2score ?? 0}}
                                                 </td>
                                             @endif
-                                            @if(!empty($data->dist3))
+                                            @if(isset($data->dist3))
                                                 <td width="10%">
                                                     {{$archer->dist3score ?? 0}}
                                                 </td>
                                             @endif
-                                            @if(!empty($data->dist4))
+                                            @if(isset($data->dist4))
                                                 <td width="10%">
                                                     {{$archer->dist4score ?? 0}}
                                                 </td>

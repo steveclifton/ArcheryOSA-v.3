@@ -134,9 +134,14 @@ class EventResultsController extends EventController
             WHERE sf.`eventid` = :eventid
         ", ['eventid' => $event->eventid]);
 
+        $eventcomp = [];
+
         $flatscoressorted = [];
         foreach ($flatscores as $flatscore) {
             $flatscoressorted[$flatscore->userid][] = $flatscore;
+            if (empty($eventcomp[$flatscore->eventcompetitionid])) {
+                $eventcomp[$flatscore->eventcompetitionid] = $flatscore->eventcompetitionid;
+            }
         }
 
         // loop over the scores and find the one that matches the div and round
@@ -193,7 +198,29 @@ class EventResultsController extends EventController
                             }
                         }
 
+                        if (count($archer->score) < count($eventcomp)) {
+                            $difference = count($eventcomp) - count($archer->score);
+
+                            foreach (range($i--, $i + $difference) as $j) {
+                                $dist           = 'dist' . $j;
+                                $data->{$dist}  = '';
+                                $dist           = 'dist' . $j++ . 'score';
+                                $data->{$dist}  = 0;
+                            }
+                        }
                         $finalResults[$bowtype][$divname][] = $data;
+                    }
+                }
+
+                $j = 1;
+                // now go over and make sure the first item has the correct titles
+                foreach ($finalResults[$bowtype][$divname] as $key => $archer) {
+                    $dist = 'dist' . count($eventcomp);
+
+                    if (empty($archer->{$dist}) && (count($finalResults[$bowtype][$divname]) > $j++)) {
+                        $a = $finalResults[$bowtype][$divname][$key];
+                        unset($finalResults[$bowtype][$divname][$key]);
+                        $finalResults[$bowtype][$divname][] = $a;
                     }
                 }
             }
