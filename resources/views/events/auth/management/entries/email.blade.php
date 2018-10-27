@@ -32,7 +32,7 @@
                 <div class="form-group row">
                     <label class="col-sm-12 col-md-3 col-form-label">Message</label>
                     <div class="col-md-9">
-                        <textarea name="message" class="form-control" rows="2">{{old('message')}}</textarea>
+                        <textarea name="message" class="form-control" rows="4" required>{{old('message')}}</textarea>
                     </div>
                 </div>
 

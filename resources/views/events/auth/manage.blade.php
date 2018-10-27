@@ -21,6 +21,8 @@
         </div>
     @endif
 
+    @include('template.alerts')
+
     <div class="row">
 
         <div class="col-lg-4 col-md-4 col-sm-4">
@@ -62,7 +64,7 @@
         </div>
 
         <div class="col-lg-4 col-md-4 col-sm-4">
-            <a href="#">
+            <a href="/events/manage/communication/{{$event->eventurl}}">
                 <div class="db-social-box bottomLine">
                     <span class="fa fa-envelope-open"></span>
                     <h5>Event Communications</h5>

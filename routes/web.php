@@ -88,6 +88,9 @@ Route::middleware(['web'])->group(function() {
         Route::post('events/manage/competitions/league/update/{eventurl}', 'Events\Auth\EventCompetitionController@updateLeagueCompetition');
 
 
+        Route::get('events/manage/communication/{eventurl}', 'Events\Auth\EventCommunicationController@getEventCommView');
+        Route::post('events/manage/communication/{eventurl}', 'Events\Auth\EventCommunicationController@sendEventEmail');
+
         // event settings
         Route::get('events/manage/settings/{eventurl}', 'Events\Auth\EventSettingsController@getEventSettingsView');
         Route::post('events/manage/settings/{eventurl}', 'Events\Auth\EventSettingsController@updateEventSettings');
