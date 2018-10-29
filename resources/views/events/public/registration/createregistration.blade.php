@@ -129,10 +129,11 @@
                 </div>
 
                 <div class="form-group row">
-                    <label class="col-sm-12 col-md-3 col-form-label">Club</label>
+                    <label class="col-sm-12 col-md-3 col-form-label">Club{{$event->clubrequired ? '*' : ''}}</label>
                     <div class="col-md-9">
-                        <select name="clubid" class="form-control">
-                            <option value="0">None</option>
+                        <select name="clubid" class="form-control {{ $errors->has('clubid') ? 'is-invalid' : '' }}"
+                                {{$event->clubrequired ? 'required' : ''}}>
+                            <option value="{{ empty($event->clubrequired) ? '0' : ''}}">None</option>
                             @foreach($clubs as $club)
                                 <option value="{{$club->clubid}}"
                                         {!! old('clubid') == $club->clubid ? 'selected' : '' !!}>
@@ -140,7 +141,11 @@
                                 </option>
                             @endforeach
                         </select>
-                        {{--<span class="help-block"><small>Select an organisation the division belongs to</small></span>--}}
+                        @if ($errors->has('clubid'))
+                            <span class="invalid-feedback" role="alert">
+                                <strong>{{ $errors->first('clubid') }}</strong>
+                            </span>
+                        @endif
                     </div>
                 </div>
 
@@ -154,15 +159,14 @@
                                             {!! old('divisionid') == $division->divisionid ? 'selected' : '' !!}>
                                     <label for="divids-{{$division->divisionid}}">
                                         {{$division->label}}
-
                                     </label>
                                 </div>
 
                             @endforeach
                             @if ($errors->has('divisionid'))
                                 <span class="invalid-feedback" role="alert">
-                                <strong>{{ $errors->first('divisionid') }}</strong>
-                            </span>
+                                    <strong>{{ $errors->first('divisionid') }}</strong>
+                                </span>
                             @endif
                             {{--<span class="help-block"><small>Select an organisation the division belongs to</small></span>--}}
                         </div>

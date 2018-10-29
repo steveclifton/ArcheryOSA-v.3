@@ -133,8 +133,8 @@
                 <div class="form-group row">
                     <label class="col-sm-12 col-md-3 col-form-label">Club</label>
                     <div class="col-md-9">
-                        <select name="clubid" class="form-control">
-                            <option value="0">None</option>
+                        <select name="clubid" class="form-control  {{ $errors->has('clubid') ? 'is-invalid' : '' }}">
+                            @if(empty($event->clubrequired)) <option value="0">None</option> @endif
                             @foreach($clubs as $club)
                                 <option value="{{$club->clubid}}"
                                         {!!  (old('clubid') ?? $evententry->clubid) == $club->clubid ? 'selected' : '' !!}>
@@ -142,7 +142,11 @@
                                 </option>
                             @endforeach
                         </select>
-                        {{--<span class="help-block"><small>Select an organisation the division belongs to</small></span>--}}
+                        @if ($errors->has('clubid'))
+                            <span class="invalid-feedback" role="alert">
+                                <strong>{{ $errors->first('clubid') }}</strong>
+                            </span>
+                        @endif
                     </div>
                 </div>
 

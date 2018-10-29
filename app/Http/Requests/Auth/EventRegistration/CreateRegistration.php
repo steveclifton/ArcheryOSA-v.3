@@ -21,14 +21,24 @@ class CreateRegistration extends FormRequest
     /**
      * Determine if the user is authorized to make this request.
      *
-     * @return bool
+     * @return
      */
     public function rules()
     {
+        $event = Event::where('eventurl', $this->eventurl)->get()->first();
+
+        if (empty($event)) {
+            return false;
+        }
         $dobstate = 'nullable|date';
         if ($event->dateofbirth ?? false) {
             $dobstate = 'required|date';
         }
+        $clubrequired = 'nullable';
+        if (!empty($event->clubrequired)) {
+            $clubrequired = 'required';
+        }
+
         return [
             'userid'         => 'nullable',
             'eventid'        => 'required',
@@ -39,7 +49,7 @@ class CreateRegistration extends FormRequest
             'phone'          => 'nullable',
             'address'        => 'nullable',
             'notes'          => 'nullable',
-            'clubid'         => 'nullable',
+            'clubid'         => $clubrequired,
             'gender'         => 'nullable',
             'roundids'       => 'required',
             'divisionid'     => 'required',
@@ -57,7 +67,8 @@ class CreateRegistration extends FormRequest
             'lastname.required'    => 'Lastname is required',
             'email.required'       => 'Email address is required',
             'dateofbirth.required' => 'Date of Birth is required',
-            'divisionid.required'  => 'Division is required'
+            'divisionid.required'  => 'Division is required',
+            'clubid.required'      => 'Club is required',
         ];
     }
 }

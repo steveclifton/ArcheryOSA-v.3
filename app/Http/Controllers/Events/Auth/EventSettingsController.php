@@ -108,6 +108,7 @@ class EventSettingsController extends EventController
         $event->showoverall        = !empty($request->input('showoverall'))        ? 1 : 0;
         $event->multipledivisions  = !empty($request->input('multipledivisions'))  ? 1 : 0;
         $event->dateofbirth        = !empty($request->input('dateofbirth'))        ? 1 : 0;
+        $event->clubrequired       = !empty($request->input('clubrequired'))       ? 1 : 0;
         $event->save();
 
 
