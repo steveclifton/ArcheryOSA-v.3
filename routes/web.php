@@ -122,8 +122,9 @@ Route::middleware(['web'])->group(function() {
 
 
         // User scoring - Only Leagues are supported now
-        Route::get('/scoring', 'Events\Auth\EventController@getUserEventScoringList');
-        Route::get('/scoring/{eventurl}', 'Events\Auth\EventController@getUserEventScoringView');
+        Route::get('scoring', 'Events\Auth\EventController@getUserEventScoringList');
+        Route::get('scoring/{eventurl}', 'Events\Auth\EventController@getUserEventScoringView');
+        Route::post('events/scoring/league/{eventurl}', 'Events\Scoring\ScoringController@postLeagueScore');
 
 
         // Event Scoring
