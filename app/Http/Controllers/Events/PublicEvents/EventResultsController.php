@@ -331,8 +331,6 @@ class EventResultsController extends EventController
             $evententrys[$entry->bowtype][$gender . $entry->divisionname][] = $entry;
         }
 
-        $eventcompetition = EventCompetition::where('eventcompetitionid', $entrys[0]->eventcompetitionid)->get()->first();
-
         return view('events.results.league.leagueresults', compact('event', 'evententrys', 'eventcompetition'));
     }
 

@@ -19,7 +19,7 @@
                     <i class="ion-arrow-right-c"></i>
                     <a href="/event/results/{{$event->eventurl}}">{{ucwords($event->label)}}</a>
                     <i class="ion-arrow-right-c"></i>
-                    <a href="javascript:;">{{ucwords($eventcompetition->label)}}</a>
+                    <a href="javascript:;">Week {{$eventcompetition->currentweek}} Results</a>
                 </h4>
 	    	</div>
 		</div>
