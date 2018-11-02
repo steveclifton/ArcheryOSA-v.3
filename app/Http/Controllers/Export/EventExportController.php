@@ -127,7 +127,7 @@ class EventExportController extends Controller
 
             case 'pdf':
 
-                $mpdf = new Mpdf(['orientation' => 'L']);
+                $mpdf = new Mpdf(['orientation' => 'L', 'tempDir' => __DIR__ . '/tmp']);
                 $mpdf->WriteHTML($this->makeentrypdfmarkup($event->label, $entrys));
                 $mpdf->Output($filename . '.pdf', \Mpdf\Output\Destination::DOWNLOAD);
                 die;

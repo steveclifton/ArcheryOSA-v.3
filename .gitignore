@@ -14,3 +14,4 @@ yarn-error.log
 .env
 .envold
 .editorconfig
+/app/Http/Controllers/Export/tmp/
