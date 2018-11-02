@@ -331,7 +331,7 @@ class EventResultsController extends EventController
             $evententrys[$entry->bowtype][$gender . $entry->divisionname][] = $entry;
         }
 
-        return view('events.results.league.leagueresults', compact('event', 'evententrys', 'eventcompetition'));
+        return view('events.results.league.leagueresults', compact('event', 'evententrys', 'eventcompetition', 'week'));
     }
 
 
