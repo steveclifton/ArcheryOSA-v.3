@@ -88,7 +88,7 @@
 
     <div class="row">
         <div class="col-lg-4 col-md-4 col-sm-4">
-            <a href="#">
+            <a href="/events/manage/exports/{{$event->eventurl}}">
                 <div class="db-social-box bottomLine">
                     <span class="fa fa-print"></span>
                     <h5>Exports</h5>

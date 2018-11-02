@@ -82,6 +82,8 @@ Route::middleware(['web'])->group(function() {
         Route::post('events/manage/competitions/create/{eventurl}', 'Events\Auth\EventCompetitionController@createEventCompetition');
         Route::post('events/manage/competitions/update/{eventurl}', 'Events\Auth\EventCompetitionController@updateEventCompetition');
 
+        // Exports
+        Route::get('events/manage/exports/{eventurl}', 'Export\EventExportController@getExportView');
 
         // League event competitions
         Route::post('events/manage/competitions/league/create/{eventurl}', 'Events\Auth\EventCompetitionController@createLeagueCompetition');
@@ -133,6 +135,9 @@ Route::middleware(['web'])->group(function() {
         Route::get('/event/manage/scoring/{eventurl}/{eventcompetitionid}', 'Events\Scoring\ScoringController@getEventScoringView');
         Route::post('/events/scoring/{eventurl}', 'Events\Scoring\ScoringController@postScores');
 
+
+
+
         /*****************
          *  User profile
          ****************/
@@ -170,6 +175,16 @@ Route::middleware(['web'])->group(function() {
         Route::post('ajax/events/manage/{eventurl}/updateadmin', 'Events\Auth\EventAdminController@updateUser');
         Route::post('ajax/events/manage/{eventurl}/deleteadmin', 'Events\Auth\EventAdminController@deleteUser');
         Route::post('ajax/events/manage/{eventurl}/addadmin', 'Events\Auth\EventAdminController@addUser');
+
+
+
+
+
+        /**
+         * EXPORT
+         */
+
+        Route::get('event/export/entries/{eventurl}/{type}', 'Export\EventExportController@exportevententries');
 
     });
 
