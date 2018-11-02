@@ -218,7 +218,7 @@
                        var jsonData = {
                            entryhash:entryhash,
                            entrycompetitionid:entrycompetitionid
-                       }
+                       };
 
                        // get the rows td
                        var children = $(this).children('td');
