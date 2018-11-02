@@ -5,8 +5,11 @@ namespace App\Http\Controllers\League;
 use App\LeaguePoint;
 use App\Models\Event;
 use App\Models\EventCompetition;
+use App\Models\FlatScore;
+use App\Models\Score;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 
 class LeagueController extends Controller
@@ -14,17 +17,57 @@ class LeagueController extends Controller
 
 
 
-    public function getUserLeagueScoringView(Request $request)
+    public function getUserLeagueScoringView(Event $event)
     {
-        $event = Event::where('eventurl', $request->eventurl ?? -1)->get()->first();
 
         if (empty($event)) {
             return redirect('/');
         }
 
+        $eventcompetition = EventCompetition::where('eventid', $event->eventid)
+                                            ->get()
+                                            ->first();
 
+        // Event Entries
+        $entrys = DB::select("
+            SELECT ee.*, ec.divisionid as divisionid, ec.entrycompetitionid, ec.eventcompetitionid, ec.roundid, d.label as divisionname, d.bowtype,
+                  r.dist1,r.dist2,r.dist3,r.dist4,r.dist1max,r.dist2max,r.dist3max,r.dist4max,r.unit, ecomp.currentweek
+            FROM `evententrys` ee
+            JOIN `eventcompetitions` ecomp ON (ecomp.eventid = ee.eventid)
+            JOIN `entrycompetitions` ec USING (`entryid`)
+            JOIN `divisions` d ON (`ec`.`divisionid` = `d`.`divisionid`)
+            JOIN `rounds` r ON (ec.roundid = r.roundid)
+            WHERE `ee`.`eventid` = :eventid
+            AND `ec`.`eventcompetitionid` = :eventcompetitionid
+            AND `ee`.`entrystatusid` = 2
+            AND (ee.`userid` IN (
+                  SELECT `relationid`
+                  FROM `userrelations`
+                  WHERE `userid` = '".Auth::id()."'
+                )
+                OR 
+                ee.`userid` = '".Auth::id()."'
+            )
+            ORDER BY `d`.label, ee.firstname
+        ", ['eventid'=> $event->eventid,
+            'eventcompetitionid' => $eventcompetition->eventcompetitionid]
+        );
 
-        dd($request);
+        foreach ($entrys as $entry) {
+
+            $entry->score = FlatScore::where('entryid', $entry->entryid)
+                ->where('entrycompetitionid', $entry->entrycompetitionid)
+                ->where('week', $entry->currentweek)
+                ->where('roundid', $entry->roundid)
+                ->where('divisionid', $entry->divisionid)
+                ->get()
+                ->first();
+
+        }
+//        dd($entrys);
+
+        return view('events.scoring.public.league', compact('event', 'entrys'));
+
     }
 
 
@@ -158,6 +201,5 @@ class LeagueController extends Controller
         ]);
 
     }
-
 
 }
