@@ -28,6 +28,8 @@
         <div class="col-12">
             <div class="card-box table-responsive">
 
+
+
                     <div class="form-group row">
                         <div class="col-3">
                             <input type="email" id="example-email"
@@ -36,7 +38,9 @@
                         </div>
                         <a href="javascript:;" role="button" class="btn btn-inverse waves-effect waves-light addAdmin">Add</a>
                     </div>
-
+                <p>
+                    Click the user to add clubs they can score for (if required)
+                </p>
 
                 <meta name="csrf-token" content="{{ csrf_token() }}">
 
@@ -48,6 +52,7 @@
                             <th style="text-align:center">Can Edit</th>
                             <th style="text-align:center">Can Score</th>
                             <th style="text-align:center">Status</th>
+
                         </tr>
                     </thead>
 
@@ -55,7 +60,9 @@
                         @foreach($eventadmins as $admin)
                         <tr>
                             <td>
-                                {{ucwords($admin->user->firstname . ' ' . $admin->user->lastname)}}
+                                <a href="/events/manage/eventadmins/clubs/{{$event->eventurl}}/{{$admin->eventadminid}}">
+                                    {{ucwords($admin->user->firstname . ' ' . $admin->user->lastname)}}
+                                </a>
                             </td>
                             <td align="center">
                                 <input class="canedit" type="checkbox" data-userid="{{$admin->userid}}"
@@ -76,6 +83,7 @@
                                     </a>
                                 @endif
                             </td>
+
                         </tr>
                         @endforeach
                     </tbody>
@@ -189,7 +197,17 @@
 
         });
 
+        $(document).ready(function () {
+            //Buttons examples
+            var table = $('#datatable-buttons').DataTable({
+                lengthChange: false,
+                pageLength:30,
+                bFilter:false
+            });
 
+            table.buttons().container()
+                .appendTo('#datatable-buttons_wrapper .col-md-6:eq(0)');
+        });
     </script>
 
     <script src="{{URL::asset('/plugins/datatables/jquery.dataTables.min.js')}}"></script>
@@ -207,17 +225,4 @@
     <script src="{{URL::asset('/plugins/datatables/buttons.html5.min.js')}}"></script>
     <script src="{{URL::asset('/plugins/datatables/buttons.print.min.js')}}"></script>
 
-    <script type="text/javascript">
-        $(document).ready(function () {
-            //Buttons examples
-            var table = $('#datatable-buttons').DataTable({
-                lengthChange: false,
-                pageLength:30,
-                bFilter:false
-            });
-
-            table.buttons().container()
-                .appendTo('#datatable-buttons_wrapper .col-md-6:eq(0)');
-        });
-    </script>
 @endsection

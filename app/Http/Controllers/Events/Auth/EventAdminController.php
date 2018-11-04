@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Events\Auth;
 
+use App\Models\Club;
 use App\Models\Event;
 use App\Models\EventAdmin;
 use App\User;
@@ -18,22 +19,10 @@ class EventAdminController extends EventController
     public function getEventAdminView(Request $request)
     {
         // Get Event
-        $event = Event::where('eventurl', $request->eventurl)->get()->first();
+        $event = $this->userOk($request->eventurl);
 
         if (empty($event)) {
             return back()->with('failure', 'Unable to access this section');
-        }
-
-        // check user can edit event
-        if (!Auth::user()->isSuperAdmin()) {
-            $eventadmin = EventAdmin::where('eventid', $event->eventid)
-                                    ->where('userid', Auth::id())
-                                    ->where('canedit', 1)
-                                    ->get()->first();
-
-            if (empty($eventadmin)) {
-                return back()->with('failure', 'Unable to access this page');
-            }
         }
 
         $eventadmins = EventAdmin::where('eventid', $event->eventid)->get();
@@ -41,9 +30,67 @@ class EventAdminController extends EventController
             $admin->user = User::where('userid', $admin->userid)->get()->first();
         }
 
-        return view('events.auth.management.admins', compact('event', 'eventadmins'));
+
+
+        return view('events.auth.management.admins', compact('event', 'eventadmins', 'clubs'));
     }
 
+    public function getEventAdminClubView(Request $request)
+    {
+        $event = $this->userOk($request->eventurl);
+
+        if (empty($event)) {
+            return back()->with('failure', 'Unable to access this section');
+        }
+
+        $eventadmin = EventAdmin::where('eventadminid', $request->eventadminid)->get()->first();
+
+        if (empty($eventadmin)) {
+            return back()->with('failure', 'Event Admin not found');
+        }
+
+        $clubids = json_decode($eventadmin->clubid);
+
+        $clubs = Club::where('visible', 1)->orderby('label')->get();
+
+        return view('events.auth.management.admins.clubs',compact('event', 'eventadmin', 'clubids', 'clubs'));
+
+    }
+
+
+    /**
+     * POST
+     */
+
+    public function addClubsToUser(Request $request)
+    {
+        // Get Event
+        $event = $this->userOk($request->eventurl);
+        $eventadmin = EventAdmin::where('eventid', $event->eventid ?? -1)
+                                ->where('eventadminid', $request->input('eventadminid'))
+                                ->get()
+                                ->first();
+
+
+        if (empty($event) || empty($eventadmin)) {
+            return response()->json([
+                'success' => false,
+                'data'    => 'Please check users email address and try again'
+            ]);
+        }
+
+        $clubids = explode(',', $request->input('clubids'));
+        $eaclubids = [];
+        foreach ($clubids as $clubid) {
+            $eaclubids[] = intval($clubid);
+        }
+
+        $eventadmin->clubid = json_encode($eaclubids);
+        $eventadmin->save();
+
+        return redirect('events/manage/eventadmins/' . $event->eventurl)->with('success', 'Clubs Added');
+
+    }
 
     /**
      * AJAX
@@ -60,28 +107,13 @@ class EventAdminController extends EventController
         }
 
         // Get Event
-        $event = Event::where('eventurl', $request->eventurl)->get()->first();
+        $event = $this->userOk($request->eventurl);
+
         if (empty($event)) {
             return response()->json([
                 'success' => false,
                 'data'    => ''
             ]);
-        }
-
-        // if not a super user
-        if (!Auth::user()->isSuperAdmin()) {
-            // check this user is allowed to make changes
-            $eventadmin = EventAdmin::where('eventid', $event->eventid)
-                ->where('userid', Auth::id())
-                ->where('canedit', 1)
-                ->get()->first();
-
-            if (empty($eventadmin)) {
-                return response()->json([
-                    'success' => false,
-                    'data'    => ''
-                ]);
-            }
         }
 
         // get the event admin that matches the event and userid
@@ -114,41 +146,17 @@ class EventAdminController extends EventController
         ]);
     }
 
-
-
     public function addUser(Request $request)
     {
+        // Get Event
+        $event = $this->userOk($request->eventurl);
         $user = User::where('email', 'like', '%' .$request->email. '%')->get()->first();
-        $event = Event::where('eventurl', $request->eventurl)->get()->first();
 
-        if (empty($user) || empty($event)) {
-            $message = 'Can not be processed, please refresh and try again';
-            if (empty($user)) {
-                $message = 'User email can not be found';
-            }
+        if (empty($event) || empty($user)) {
             return response()->json([
                 'success' => false,
-                'data'    => $message
+                'data'    => 'Please check users email address and try again'
             ]);
-        }
-
-
-        // if not a super user
-        if (!Auth::user()->isSuperAdmin()) {
-            // check this user is allowed to make changes
-            $eventadmin = EventAdmin::where('eventid', $event->eventid)
-                ->where('userid', Auth::id())
-                ->where('canedit', 1)
-                ->get()->first();
-
-
-            if (empty($eventadmin)) {
-                return response()->json([
-                    'success' => false,
-                    'data'    => 'Can not be processed'
-                ]);
-            }
-
         }
 
         // if the new user doesnt have a admin level access, upgrade them for now
@@ -184,45 +192,20 @@ class EventAdminController extends EventController
         ]);
     }
 
-
-
-
     public function deleteUser(Request $request)
     {
-        $user = User::where('userid', $request->userid)->get()->first();
-        if (empty($request->userid) || empty($user)) {
 
-            return response()->json([
-                'success' => false,
-                'data'    => ''
-            ]);
-        }
+        $user = User::where('userid', $request->userid)->get()->first();
 
         // Get Event
-        $event = Event::where('eventurl', $request->eventurl)->get()->first();
-        if (empty($event)) {
+        $event = $this->userOk($request->eventurl);
+
+        if (empty($event) || empty($user)) {
             return response()->json([
                 'success' => false,
                 'data'    => ''
             ]);
         }
-
-        // if not a super user
-        if (!Auth::user()->isSuperAdmin()) {
-            // check this user is allowed to make changes
-            $eventadmin = EventAdmin::where('eventid', $event->eventid)
-                ->where('userid', Auth::id())
-                ->where('canedit', 1)
-                ->get()->first();
-
-            if (empty($eventadmin)) {
-                return response()->json([
-                    'success' => false,
-                    'data'    => ''
-                ]);
-            }
-        }
-
 
         $eventadmin = EventAdmin::where('eventid', $event->eventid)
             ->where('userid', $request->userid)

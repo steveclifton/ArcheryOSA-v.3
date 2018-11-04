@@ -116,7 +116,8 @@ Route::middleware(['web'])->group(function() {
 
         // event admins
         Route::get('events/manage/eventadmins/{eventurl}', 'Events\Auth\EventAdminController@getEventAdminView');
-
+        Route::get('events/manage/eventadmins/clubs/{eventurl}/{eventadminid}', 'Events\Auth\EventAdminController@getEventAdminClubView');
+        Route::post('events/manage/eventadmins/clubs/add/{eventurl}', 'Events\Auth\EventAdminController@addClubsToUser');
 
         // Logout
         Route::post('logout', 'Auth\LoginController@logout')->name('logout');
@@ -176,10 +177,6 @@ Route::middleware(['web'])->group(function() {
         Route::post('ajax/events/manage/{eventurl}/updateadmin', 'Events\Auth\EventAdminController@updateUser');
         Route::post('ajax/events/manage/{eventurl}/deleteadmin', 'Events\Auth\EventAdminController@deleteUser');
         Route::post('ajax/events/manage/{eventurl}/addadmin', 'Events\Auth\EventAdminController@addUser');
-
-
-
-
 
         /**
          * EXPORT
