@@ -116,8 +116,14 @@ Route::middleware(['web'])->group(function() {
 
         // event admins
         Route::get('events/manage/eventadmins/{eventurl}', 'Events\Auth\EventAdminController@getEventAdminView');
+
         Route::get('events/manage/eventadmins/clubs/{eventurl}/{eventadminid}', 'Events\Auth\EventAdminController@getEventAdminClubView');
         Route::post('events/manage/eventadmins/clubs/add/{eventurl}', 'Events\Auth\EventAdminController@addClubsToUser');
+
+        Route::get('events/manage/eventadmins/schools/{eventurl}/{eventadminid}', 'Events\Auth\EventAdminController@getEventAdminSchoolView');
+        Route::post('events/manage/eventadmins/schools/add/{eventurl}', 'Events\Auth\EventAdminController@addSchoolsToUser');
+
+
 
         // Logout
         Route::post('logout', 'Auth\LoginController@logout')->name('logout');

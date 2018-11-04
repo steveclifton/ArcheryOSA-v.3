@@ -28,8 +28,6 @@
         <div class="col-12">
             <div class="card-box table-responsive">
 
-
-
                     <div class="form-group row">
                         <div class="col-3">
                             <input type="email" id="example-email"
@@ -39,7 +37,8 @@
                         <a href="javascript:;" role="button" class="btn btn-inverse waves-effect waves-light addAdmin">Add</a>
                     </div>
                 <p>
-                    Click the user to add clubs they can score for (if required)
+                    For events that require scoring on behalf of a school/club<br>
+                    - Click the icon on the users row to select those they can score for
                 </p>
 
                 <meta name="csrf-token" content="{{ csrf_token() }}">
@@ -52,6 +51,10 @@
                             <th style="text-align:center">Can Edit</th>
                             <th style="text-align:center">Can Score</th>
                             <th style="text-align:center">Status</th>
+                            <th style="text-align:center">Clubs</th>
+                            <th style="text-align:center">Schools</th>
+
+
 
                         </tr>
                     </thead>
@@ -60,9 +63,7 @@
                         @foreach($eventadmins as $admin)
                         <tr>
                             <td>
-                                <a href="/events/manage/eventadmins/clubs/{{$event->eventurl}}/{{$admin->eventadminid}}">
-                                    {{ucwords($admin->user->firstname . ' ' . $admin->user->lastname)}}
-                                </a>
+                                {{ucwords($admin->user->firstname . ' ' . $admin->user->lastname)}}
                             </td>
                             <td align="center">
                                 <input class="canedit" type="checkbox" data-userid="{{$admin->userid}}"
@@ -82,6 +83,17 @@
                                         <i class="md md-delete deleteadmin" data-userid="{{$admin->userid}}"></i>
                                     </a>
                                 @endif
+                            </td>
+
+                            <td align="center">
+                                <a href="/events/manage/eventadmins/clubs/{{$event->eventurl}}/{{$admin->eventadminid}}">
+                                    <i class="md md-school"></i>
+                                </a>
+                            </td>
+                            <td align="center">
+                                <a href="/events/manage/eventadmins/schools/{{$event->eventurl}}/{{$admin->eventadminid}}">
+                                    <i class="md md-home" data-userid="{{$admin->userid}}"></i>
+                                </a>
                             </td>
 
                         </tr>

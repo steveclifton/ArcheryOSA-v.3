@@ -5,9 +5,10 @@ namespace App\Http\Controllers\Events\Auth;
 use App\Models\Club;
 use App\Models\Event;
 use App\Models\EventAdmin;
+use App\Models\School;
 use App\User;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
+
 
 class EventAdminController extends EventController
 {
@@ -32,7 +33,7 @@ class EventAdminController extends EventController
 
 
 
-        return view('events.auth.management.admins', compact('event', 'eventadmins', 'clubs'));
+        return view('events.auth.management.admins', compact('event', 'eventadmins'));
     }
 
     public function getEventAdminClubView(Request $request)
@@ -58,6 +59,32 @@ class EventAdminController extends EventController
         $clubs = Club::where('visible', 1)->orderby('label')->get();
 
         return view('events.auth.management.admins.clubs',compact('event', 'eventadmin', 'clubids', 'clubs'));
+
+    }
+
+    public function getEventAdminSchoolView(Request $request)
+    {
+        $event = $this->userOk($request->eventurl);
+
+        if (empty($event)) {
+            return back()->with('failure', 'Unable to access this section');
+        }
+
+        $eventadmin = EventAdmin::where('eventadminid', $request->eventadminid)->get()->first();
+
+        if (empty($eventadmin)) {
+            return back()->with('failure', 'Event Admin not found');
+        }
+
+        $schoolids = json_decode($eventadmin->schoolid);
+
+        if (empty($schoolids)) {
+            $schoolids = [];
+        }
+
+        $schools = School::where('visible', 1)->orderby('label')->get();
+
+        return view('events.auth.management.admins.schools',compact('event', 'eventadmin', 'schoolids', 'schools'));
 
     }
 
@@ -93,6 +120,36 @@ class EventAdminController extends EventController
         $eventadmin->save();
 
         return redirect('events/manage/eventadmins/' . $event->eventurl)->with('success', 'Clubs Added');
+
+    }
+
+    public function addSchoolsToUser(Request $request)
+    {
+        // Get Event
+        $event = $this->userOk($request->eventurl);
+        $eventadmin = EventAdmin::where('eventid', $event->eventid ?? -1)
+                                ->where('eventadminid', $request->input('eventadminid'))
+                                ->get()
+                                ->first();
+
+
+        if (empty($event) || empty($eventadmin)) {
+            return response()->json([
+                'success' => false,
+                'data'    => 'Please check users email address and try again'
+            ]);
+        }
+
+        $schoolids = explode(',', $request->input('schoolids'));
+        $eaclubids = [];
+        foreach ($schoolids as $schoolid) {
+            $eaclubids[] = intval($schoolid);
+        }
+
+        $eventadmin->schoolid = json_encode($eaclubids);
+        $eventadmin->save();
+
+        return redirect('events/manage/eventadmins/' . $event->eventurl)->with('success', 'Schools Added');
 
     }
 

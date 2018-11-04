@@ -1,6 +1,6 @@
 @extends('template.default')
 
-@section ('title')Admin Clubs @endsection
+@section ('title')Admin Schools @endsection
 
 @section('content')
 
@@ -14,6 +14,7 @@
         </h4>
     </div>
 
+
     <div class="col-md-8 offset-md-2">
         <div class="card-box">
 
@@ -21,7 +22,7 @@
 
             <form class="form-horizontal myForms treeForm"
                   method="POST"
-                  action="/events/manage/eventadmins/clubs/add/{{$event->eventurl}}"
+                  action="/events/manage/eventadmins/schools/add/{{$event->eventurl}}"
                   role="form">
                 @csrf
                 <meta name="csrf-token" content="{{ csrf_token() }}">
@@ -30,17 +31,17 @@
 
 
                 <div class="form-group row">
-                    <label class="col-sm-12 col-md-3 col-form-label">Clubs*</label>
+                    <label class="col-sm-12 col-md-3 col-form-label">Schools</label>
                     <div class="col-md-9">
                         <div class="">
                             <div class="card-box">
-                                <h4 class="text-dark header-title m-t-0 m-b-30">Select the clubs this user can score for.</h4>
-                                <div id="treeClubs">
-                                    @foreach($clubs as $club)
+                                <h4 class="text-dark header-title m-t-0 m-b-30">Select the schools this user can score for.</h4>
+                                <div id="treeSchools">
+                                    @foreach($schools as $school)
                                         <ul>
                                             <li data-jstree='{"icon": "ti-angle-right",
-                                            "selected":"{{ in_array($club->clubid, $clubids)}}"}'
-                                                data-clubid="{{$club->clubid}}">{{ucwords($club->label)}} </li>
+                                            "selected":"{{ in_array($school->schoolid, $schoolids)}}"}'
+                                                data-schoolid="{{$school->schoolid}}">{{ucwords($school->label)}} </li>
                                         </ul>
                                     @endforeach
                                 </div>
@@ -48,7 +49,7 @@
                         </div><!-- end col -->
                     </div>
                 </div>
-                <input name="clubids" type="hidden" id="clubids" value="" />
+                <input name="schoolids" type="hidden" id="schoolids" value="" />
 
 
                 <div class="form-group mb-0 justify-content-start row">
@@ -87,23 +88,22 @@
                 'plugins': ['types', 'checkbox']
             };
 
-            $('#treeClubs').jstree(jsTreeObj);
+            $('#treeSchools').jstree(jsTreeObj);
 
             $(document).on('submit', '.treeForm', function(e) {
                 e.preventDefault();
 
                 // Competitions and rounds
-                var selectedElmsIds = $('#treeClubs').jstree("get_selected", true);
-                console.log(selectedElmsIds);
-                var checkedClubs = [];
+                var selectedElmsIds = $('#treeSchools').jstree("get_selected", true);
+                var checkedSchools = [];
 
                 $.each(selectedElmsIds, function() {
-                    if (this.data.clubid != '') {
-                        checkedClubs.push(this.data.clubid);
+                    if (this.data.schoolid != '') {
+                        checkedSchools.push(this.data.schoolid);
                     }
                 });
 
-                $('#clubids').val(checkedClubs.join(","));
+                $('#schoolids').val(checkedSchools.join(","));
 
                 this.submit();
             });
