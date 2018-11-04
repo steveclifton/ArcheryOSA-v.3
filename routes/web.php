@@ -204,6 +204,13 @@ Route::middleware(['web'])->group(function() {
         Route::get('admin/clubs/update/{clubid}', 'Admin\ClubController@getUpdateView');
         Route::post('admin/clubs/update/{clubid}', 'Admin\ClubController@updateClub');
 
+        // Schools
+        Route::get('admin/schools', 'Admin\SchoolController@get');
+        Route::get('admin/schools/create', 'Admin\SchoolController@getCreateView');
+        Route::post('admin/schools/create', 'Admin\SchoolController@createSchool');
+        Route::get('admin/schools/update/{schoolid}', 'Admin\SchoolController@getUpdateView');
+        Route::post('admin/schools/update/{schoolid}', 'Admin\SchoolController@updateSchool');
+
         // Divisions
         Route::get('admin/divisions', 'Admin\DivisionController@get');
         Route::get('admin/divisions/create', 'Admin\DivisionController@getCreateView');
