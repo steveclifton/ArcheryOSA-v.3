@@ -6,6 +6,7 @@ namespace App\Http\Controllers\Events\PublicEvents;
 use App\Http\Classes\EventsHelper;
 use App\Models\Club;
 use App\Models\Event;
+use App\Models\EventCompetition;
 use App\Models\EventType;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
@@ -65,10 +66,18 @@ class EventController extends Controller
                         ->where('eventid', $event->eventid)
                         ->count();
 
-        $evententryopen = $event->eventstatusid == 1 ? true : false;
 
-        if (time() > strtotime($event->start)) {
+        $evententryopen = $event->eventstatusid == 1 ? true : false;
+        if ( $evententryopen && (time() > strtotime($event->start)) ) {
             $evententryopen = false;
+        }
+
+        if ($evententryopen) {
+            // get the eventcomps, if empty, false
+            $eventcompetitions = EventCompetition::where('eventid', $event->eventid)->get()->first();
+            if (empty($eventcompetitions)) {
+                $evententryopen = false;
+            }
         }
 
         $roundlabels    = $this->helper->getCompetitionRoundLabels($event);

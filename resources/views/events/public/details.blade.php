@@ -65,7 +65,7 @@
                                    class="btn btn-inverse waves-effect waves-light">Enter Now</a>
                                 @else
                                     <a href="javascript:;"
-                                       class="btn btn-inverse waves-effect waves-light">Entries Closed</a>
+                                       class="btn btn-inverse waves-effect waves-light">Closed</a>
                                 @endif
                             </div>
 
