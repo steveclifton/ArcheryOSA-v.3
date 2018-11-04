@@ -51,6 +51,10 @@ class EventAdminController extends EventController
 
         $clubids = json_decode($eventadmin->clubid);
 
+        if (empty($clubids)) {
+            $clubids = [];
+        }
+
         $clubs = Club::where('visible', 1)->orderby('label')->get();
 
         return view('events.auth.management.admins.clubs',compact('event', 'eventadmin', 'clubids', 'clubs'));
