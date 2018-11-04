@@ -421,8 +421,6 @@ class ScoringController extends Controller
             ]);
         }
 
-
-
         // check if any scores exist, if none, create, else update
         $flatscore = FlatScore::where('entryid', $entry->entryid)
             ->where('entrycompetitionid', $entry->entrycompetitionid)
@@ -518,6 +516,75 @@ class ScoringController extends Controller
         }
         else {
             // update
+            $flatscore->total = 0;
+            foreach(range(1,4) as $i) {
+
+                $dist = "dist" . $i;
+                $distscore = "dist" . $i++ . 'score';
+
+                // Flat Scores
+                $flatscore->{$dist} = $entry->{$dist}; // distance from the entry
+                $flatscore->{$distscore} = intval($request->{$dist});
+                $flatscore->total += intval($request->{$dist});
+
+                if (empty($request->{$dist})) {
+                    continue;
+                }
+
+                $score = Score::where('entryid', $entry->entryid)
+                                ->where('entrycompetitionid',$entry->entrycompetitionid)
+                                ->where('userid', $entry->userid)
+                                ->where('roundid', $entry->roundid)
+                                ->where('divisionid', $entry->divisionid)
+                                ->where('week', $entry->currentweek)
+                                ->get()
+                                ->first();
+
+                if (empty($score)) {
+                    // raise error
+                    continue;
+                }
+
+
+                $score->score  = intval($request->{$dist});
+                $score->hits   = intval($request->totalhits);
+                $score->max    = intval($request->totalx);
+                $score->inners = intval($request->total10);
+                $score->save();
+
+            }
+
+            $flatscore->totalhits = intval($request->totalhit);
+            $flatscore->inners    = intval($request->total10);
+            $flatscore->max       = intval($request->totalx);
+            $flatscore->save();
+
+            foreach(['total', 'max', 'inners'] as $key) {
+                // Scores
+                $score = Score::where('entryid', $entry->entryid)
+                                ->where('entrycompetitionid',$entry->entrycompetitionid)
+                                ->where('userid', $entry->userid)
+                                ->where('roundid', $entry->roundid)
+                                ->where('divisionid', $entry->divisionid)
+                                ->where('week', $entry->currentweek)
+                                ->where('key', $key)
+                                ->get()
+                                ->first();
+                switch ($key) {
+                    case 'total' :
+                        $score->score  = intval($flatscore->total);
+                        break;
+
+                    case 'max' :
+                        $score->score  = intval($request->totalx);
+                        break;
+
+                    case 'inners' :
+                        $score->score  = intval($request->total10);
+                        break;
+                }
+                $score->save();
+            }
 
         }
 
