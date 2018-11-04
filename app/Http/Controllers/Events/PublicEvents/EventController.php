@@ -68,7 +68,7 @@ class EventController extends Controller
 
 
         $evententryopen = $event->eventstatusid == 1 ? true : false;
-        if ( $evententryopen && (time() > strtotime($event->start)) ) {
+        if ( $evententryopen && (time() > strtotime($event->start) && !$event->isleague()) ) {
             $evententryopen = false;
         }
 
@@ -79,6 +79,8 @@ class EventController extends Controller
                 $evententryopen = false;
             }
         }
+
+
 
         $roundlabels    = $this->helper->getCompetitionRoundLabels($event);
 
