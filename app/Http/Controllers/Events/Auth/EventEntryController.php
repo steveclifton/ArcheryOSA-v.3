@@ -10,7 +10,9 @@ use App\Models\EntryCompetition;
 use App\Models\Event;
 use App\Models\EventAdmin;
 use App\Models\EventEntry;
+use App\Models\FlatScore;
 use App\Models\Round;
+use App\Models\Score;
 use App\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -31,11 +33,8 @@ class EventEntryController extends EventController
 
     }
 
-
-
     public function getEventEntriesView(Request $request)
     {
-
         // Get Event
         if (Auth::user()->isSuperAdmin()) {
             $event = DB::select("
@@ -65,7 +64,8 @@ class EventEntryController extends EventController
         }
 
         $evententries = DB::select("
-            SELECT ee.entryid, u.username, CONCAT_WS(' ', ee.firstname, ee.lastname ) as name, ee.confirmationemail, ee.paid, d.label as division, ee.created_at as created, es.label as status  
+            SELECT ee.entryid, u.username, CONCAT_WS(' ', ee.firstname, ee.lastname ) as name, ee.confirmationemail, 
+                  ee.paid, ee.notes, d.label as division, ee.created_at as created, es.label as status  
             FROM `evententrys` ee
             JOIN `users` u USING (`userid`)
             JOIN `divisions` d USING (`divisionid`)
@@ -73,13 +73,16 @@ class EventEntryController extends EventController
             WHERE `eventid` = '".$event->eventid."'
         ");
 
-        return view('events.auth.management.entries', compact('event', 'evententries'));
-    }
+        $canremoveentry = false;
+        if (time() < strtotime($event->start)){
+            $canremoveentry = true;
+        }
 
+        return view('events.auth.management.entries', compact('event', 'evententries', 'canremoveentry'));
+    }
 
     public function getEventEntryAddView(Request $request)
     {
-
         $event = Event::where('eventurl', $request->eventurl ?? -1)->get()->first();
 
         if (empty($event)) {
@@ -131,7 +134,6 @@ class EventEntryController extends EventController
 
     public function getEventEntryUpdateView(Request $request)
     {
-
         $event = Event::where('eventurl', $request->eventurl ?? -1)->get()->first();
 
         $user = User::where('username', $request->username)->get()->first();
@@ -201,11 +203,8 @@ class EventEntryController extends EventController
                     );
     }
 
-
-
     public function getEventEntryEmailView(Request $request)
     {
-
         $event = Event::where('eventurl', $request->eventurl ?? -1)->get()->first();
 
         $user = User::where('username', $request->username)->get()->first();
@@ -224,18 +223,25 @@ class EventEntryController extends EventController
     }
 
 
-    /**
+    /**********************
      * POST
-     */
-
+     **********************/
     public function sendEventEntryEmail(Request $request)
     {
-        $event = Event::where('eventurl', $request->eventurl)->get()->first();
+        $event = $this->userOk($request->eventurl);
+
+        if (empty($event)) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Invalid Request, please try again later'
+            ]);
+        }
+
 
         $evententry = EventEntry::where('eventid', $event->eventid ?? -1)
-            ->where('userid', $request->input('userid'))
-            ->get()
-            ->first();
+                                ->where('userid', $request->input('userid'))
+                                ->get()
+                                ->first();
 
         if (empty($evententry)) {
             return redirect()->route('home');
@@ -251,12 +257,12 @@ class EventEntryController extends EventController
 
     /**********************
      * AJAX
-     */
-
-
+     **********************/
     public function approveEntry(Request $request)
     {
-        if (empty($request->eventurl)) {
+        $event = $this->userOk($request->eventurl);
+
+        if (empty($event)) {
             return response()->json([
                 'success' => false,
                 'message' => 'Invalid Request, please try again later'
@@ -299,7 +305,9 @@ class EventEntryController extends EventController
 
     public function approvePaid(Request $request)
     {
-        if (empty($request->eventurl)) {
+        $event = $this->userOk($request->eventurl);
+
+        if (empty($event)) {
             return response()->json([
                 'success' => false,
                 'message' => 'Invalid Request, please try again later'
@@ -340,9 +348,12 @@ class EventEntryController extends EventController
 
     }
 
+
     public function sendApprove(Request $request)
     {
-        if (empty($request->eventurl)) {
+        $event = $this->userOk($request->eventurl);
+
+        if (empty($event)) {
             return response()->json([
                 'success' => false,
                 'message' => 'Invalid Request, please try again later'
@@ -372,10 +383,52 @@ class EventEntryController extends EventController
 
         return response()->json([
             'success' => true
-
         ]);
 
 
     }
+
+
+
+    public function removeEntry(Request $request)
+    {
+        $event = $this->userOk($request->eventurl);
+
+        if (empty($event)) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Invalid Request, please try again later'
+            ]);
+        }
+
+        $entryid = $request->entryid;
+
+        $entry = EventEntry::where('eventid', $this->event->eventid)
+                            ->where('entryid', $entryid)
+                            ->get()
+                            ->first();
+
+        if (empty($entry)) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Invalid Request, please try again later'
+            ]);
+        }
+
+        EntryCompetition::where('entryid', $entry->entryid)->delete();
+        Score::where('entryid', $entry->entryid)->delete();
+        FlatScore::where('entryid', $entry->entryid)->delete();
+
+        $entry->delete();
+
+        return response()->json([
+            'success' => true,
+            'message' => 'Entry Removed'
+        ]);
+
+    }
+
+
+
 
 }

@@ -120,7 +120,7 @@
                 <div class="form-group row">
                     <label class="col-sm-12 col-md-3 col-form-label">Notes</label>
                     <div class="col-md-9">
-                        <textarea name="notes" class="form-control" rows="2">{{old('notes')}}</textarea>
+                        <textarea name="notes" class="form-control" rows="2">{{old('notes') ?? $evententry->notes}}</textarea>
                     </div>
                 </div>
 
@@ -256,7 +256,7 @@
                 <div class="form-group mb-0 justify-content-start row">
                     <div class="col-sm-12 col-md-3 col-form-label"></div>
                     <div class="col-3">
-                        <button type="submit" class="myButton btn btn-inverse btn-info waves-effect waves-light">Enter</button>
+                        <button type="submit" class="myButton btn btn-inverse btn-info waves-effect waves-light">Update</button>
                     </div>
 
                 </div>

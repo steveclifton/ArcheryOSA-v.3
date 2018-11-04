@@ -51,11 +51,15 @@
                             <th>Name</th>
                             <th>Division</th>
                             <th>Status</th>
+                            <th>Note</th>
                             <th>Send Mail</th>
-                            <th>Entry date</th>
-                            <th>Approve Entry</th>
-                            <th>Mark Paid</th>
+                            <th>Date</th>
+                            <th>Approve</th>
+                            <th>Paid</th>
                             <th>Confirmation Email</th>
+                            @if($canremoveentry)
+                                <th>Remove</th>
+                            @endif
                         </tr>
                     </thead>
 
@@ -67,6 +71,13 @@
                             </td>
                             <td>{{$entry->division}}</td>
                             <td id="status">{{$entry->status}}</td>
+                            <td align="center">
+                                @if(!empty($entry->notes))
+                                    <a href="/events/manage/evententries/{{$event->eventurl}}/update/{{$entry->username}}">
+                                        <i class="fa fa-sticky-note-o"></i>
+                                    </a>
+                                @endif
+                            </td>
                             <td align="center">
                                 <a href="/events/manage/evententries/{{$event->eventurl}}/email/{{$entry->username}}">
                                     <i class="fa fa-envelope-o"></i>
@@ -86,6 +97,13 @@
                                 <input class="confirmemail" type="checkbox" data-entryid="{{$entry->entryid}}"
                                         {!! $entry->confirmationemail ? 'Checked' : '' !!} {!! $entry->confirmationemail ? 'disabled' : '' !!}>
                             </td>
+                            @if($canremoveentry)
+                                <td align="center">
+                                    <a href="javascript:;">
+                                        <i class="fa fa-trash removeentry" data-entryid="{{$entry->entryid}}"></i>
+                                    </a>
+                                </td>
+                            @endif
                         </tr>
                         @endforeach
                     </tbody>
