@@ -60,7 +60,7 @@ class EventRegistrationController extends EventController
             return back();
         }
 
-        if (time() > strtotime($event->start)) {
+        if (time() > strtotime($event->start) && !$event->isleague()) {
             return back()->with('failure', 'Please contact the admin to change registration details');
         }
 
