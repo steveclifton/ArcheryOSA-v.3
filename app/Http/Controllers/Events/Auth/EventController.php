@@ -143,14 +143,14 @@ class EventController extends Controller
         $events = DB::select("
             SELECT e.*, es.label as eventstatus
             FROM `events` e
-            LEFT JOIN `eventadmins` ea USING (`eventid`)
-            JOIN `eventcompetitions` ec USING (`eventid`)
-            JOIN `eventstatus` es USING (`eventstatusid`)
-            WHERE `ea`.`userid` = :userid
+            LEFT JOIN `eventadmins` ea ON (e.`eventid` = ea.`eventid`)
+            JOIN `eventcompetitions` ec on (e.`eventid` = ec.eventid)
+            JOIN `eventstatus` es ON (e.`eventstatusid` = es.eventstatusid)
+            JOIN `evententrys` ee ON (e.eventid = ee.eventid)
+            WHERE `ee`.`userid` = :userid
             AND `ec`.`scoringlevel` = 2
             AND `ec`.`scoringenabled` = 1
         ", ['userid' => Auth::id()]);
-
 
         return view('events.auth.scoringlist', compact('events'));
     }
