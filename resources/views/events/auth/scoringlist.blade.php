@@ -17,10 +17,10 @@
         <div class="col-12">
 
             <div class="card-columns">
-                @foreach(array_slice($events, 0, 3) as $event)
+                @foreach($events as $event)
                     <a href="/scoring/{{$event->eventurl}}">
                         <div class="card m-b-20">
-                            <img class="card-img-top img-fluid" src="{{URL::asset('/images/archery.jpg')}}"
+                            <img class="card-img-top img-fluid" src="{{URL::asset('/images/events/' . $event->imagedt)}}"
                                  alt="Card image cap">
                             <div class="card-body">
                                 <h4 class="card-title font-18 mt-0">{{$event->label}}</h4>

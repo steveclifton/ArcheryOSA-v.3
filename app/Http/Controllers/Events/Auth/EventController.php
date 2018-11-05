@@ -140,17 +140,21 @@ class EventController extends Controller
     public function getUserEventScoringList()
     {
         // get all the events the user can manage
+        // - just a league at this stage
         $events = DB::select("
             SELECT e.*, es.label as eventstatus
             FROM `events` e
-            LEFT JOIN `eventadmins` ea ON (e.`eventid` = ea.`eventid`)
+            JOIN `evententrys` ee ON (e.eventid = ee.eventid)
             JOIN `eventcompetitions` ec on (e.`eventid` = ec.eventid)
             JOIN `eventstatus` es ON (e.`eventstatusid` = es.eventstatusid)
-            JOIN `evententrys` ee ON (e.eventid = ee.eventid)
             WHERE `ee`.`userid` = :userid
+            AND `e`.`eventstatusid` = 1
             AND `ec`.`scoringlevel` = 2
             AND `ec`.`scoringenabled` = 1
+            AND `e`.`eventtypeid` = 2
+            ORDER BY `e`.`start`
         ", ['userid' => Auth::id()]);
+
 
         return view('events.auth.scoringlist', compact('events'));
     }
