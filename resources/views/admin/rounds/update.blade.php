@@ -78,8 +78,8 @@
 	                <label class="col-sm-12 col-md-3 col-form-label">Round Units</label>
 	                <div class="col-md-9">
 	                    <select name="unit" class="form-control">
-	                        <option value="m" {{$round->unit ?? old('unit') == 'm' ? 'selected' : ''}}>Meters</option>
-	                        <option value="y" {{$round->unit ?? old('unit') == 'y' ? 'selected' : ''}}>Yards</option>
+	                        <option value="m" {{ ($round->unit ?? old('unit')) == 'm' ? 'selected' : ''}}>Meters</option>
+	                        <option value="y" {{ ($round->unit ?? old('unit')) == 'y' ? 'selected' : ''}}>Yards</option>
 	                    </select>
 	                </div>
 	            </div>
