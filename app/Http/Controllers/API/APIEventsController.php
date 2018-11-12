@@ -13,6 +13,17 @@ use Illuminate\Support\Facades\DB;
 class APIEventsController extends Controller
 {
 
+    private $eventFields = [
+        'eventid', 'label', 'eventtypeid', 'organisationid',
+        'clubid', 'entryclose', 'start', 'end', 'daycount', 'contactname',
+        'phone' , 'email' , 'location' , 'cost' , 'bankaccount',
+        'bankreference' , 'schedule' , 'info','eventurl', 'entrylimit'
+    ];
+
+    private $eventRenameFields = [
+        'label' => 'eventname'
+    ];
+
     /**
      * Gets all upcoming events
      * @return \Illuminate\Http\JsonResponse
@@ -142,7 +153,7 @@ class APIEventsController extends Controller
 
     public function getEventResults(Request $request)
     {
-        $event = Event::where('eventurl', $request->eventurl ?? -1)->get()->first();
+        $event = Event::where('eventurl', $request->eventurl ?? -1)->get($this->eventFields)->first();
 
         if (empty($event)) {
             return response()->json([
@@ -153,11 +164,19 @@ class APIEventsController extends Controller
             ]);
         }
 
+        foreach ($this->eventRenameFields as $oldname => $newname) {
+            if (isset($event->{$oldname})) {
+                $event->{$newname} = $event->{$oldname};
+                unset($event->{$oldname});
+            }
+        }
+
         $eventresultscontroller = new EventResultsController();
 
         $return = [];
         $return['success'] = true;
         $return['data'] = [];
+        $return['data']['event'] = $event;
         // find out what the event type is
         switch ($event->eventtypeid) {
 
@@ -170,7 +189,15 @@ class APIEventsController extends Controller
                     $return['data']['results'] = !empty($data['finalResults']) ? $data['finalResults'] : [];
                 }
                 else {
+
                     // particular competition
+                    $id = intval($request->competitionid);
+
+                    if (!empty($id)) {
+                        $data = $eventresultscontroller->getEventCompResults($event, $id, true);
+                        $return['data']['results'] = !empty($data['evententrys']) ? $data['evententrys'] : [];
+                    }
+
                 }
 
                 break;
