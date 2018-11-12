@@ -18,3 +18,5 @@ Route::get('upcomingevents', 'API\APIEventsController@getUpcomingEvents');
 
 Route::get('previousevents', 'API\APIEventsController@getPreviousEvents');
 
+Route::get('event/{eventurl}/{competitionid?}', 'API\APIEventsController@getEventResults');
+
