@@ -242,7 +242,13 @@ class EventResultsController extends EventController
 
     }
 
-    private function getEventCompResults(Event $event, $eventcompetitionid)
+    /**
+     * Returns an events individual competitions results
+     * @param Event $event
+     * @param $eventcompetitionid
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     */
+    public function getEventCompResults(Event $event, $eventcompetitionid)
     {
         $entrys = DB::select("
             SELECT ee.firstname, ee.lastname, ee.gender, ec.entrycompetitionid, 
@@ -273,7 +279,12 @@ class EventResultsController extends EventController
     }
 
 
-    private function getLeagueOverallResults(Event $event)
+    /**
+     * Returns a league events overall results
+     * @param Event $event
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     */
+    public function getLeagueOverallResults(Event $event)
     {
 
         $entrys = $this->getEventEntrySorted($event->eventid);
@@ -303,8 +314,13 @@ class EventResultsController extends EventController
     }
 
 
-
-    private function getLeagueCompetitionResults(Event $event, $week)
+    /**
+     * Returns a particular weeks results for a league event
+     * @param Event $event
+     * @param $week
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\Http\RedirectResponse|\Illuminate\View\View
+     */
+    public function getLeagueCompetitionResults(Event $event, $week)
     {
         $entrys = DB::select("
             SELECT ee.firstname, ee.lastname, ee.gender, ec.entrycompetitionid, 
@@ -343,7 +359,11 @@ class EventResultsController extends EventController
     }
 
 
-
+    /**
+     * Returns the event's entrys sorted
+     * @param $eventid
+     * @return array|bool|mixed
+     */
     private function getEventEntrySorted($eventid)
     {
         $entrys = $this->getcacheditem('evententrys-' . $eventid);
