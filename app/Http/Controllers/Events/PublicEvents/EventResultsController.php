@@ -30,8 +30,6 @@ class EventResultsController extends EventController
             return redirect('/');
         }
 
-
-
         $overall = $event->showoverall;
 
         // league event
@@ -118,10 +116,12 @@ class EventResultsController extends EventController
 
 
     /**
+     * Returns the overall results for an event - consolidated
      * @param Event $event
-     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     * @param bool $apicall
+     * @return array|\Illuminate\Contracts\View\Factory|\Illuminate\View\View|\stdClass
      */
-    private function getEventOverallResults(Event $event)
+    public function getEventOverallResults(Event $event, $apicall = false)
     {
         $entrys = $this->getEventEntrySorted($event->eventid);
 
@@ -223,16 +223,24 @@ class EventResultsController extends EventController
                         $finalResults[$bowtype][$divname][] = $a;
                     }
                 }
+
+                // sort based on total
+                usort($finalResults[$bowtype][$divname], function($a, $b) {
+                   return $a->total < $b->total;
+                });
             }
+
         }
 
-        return view('events.results.results-overall', compact('event', 'finalResults', 'eventcompetition'));
+        $data = compact('event', 'finalResults', 'eventcompetition');
+
+        if ($apicall) {
+            return $data;
+        }
+
+        return view('events.results.results-overall', $data);
 
     }
-
-
-
-
 
     private function getEventCompResults(Event $event, $eventcompetitionid)
     {
