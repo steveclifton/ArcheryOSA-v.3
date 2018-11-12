@@ -9,7 +9,7 @@ Details
 
 #### Events
 
-- **[<code>GET</code> upcoming events](https://github.com/steveclifton/ArcheryOSA-v.3/api-documentation/GET_upcomingevents.md)**
+- **[<code>GET</code> upcoming events](https://github.com/steveclifton/ArcheryOSA-v.3/blob/master/api-documentation/GET_upcomingevents.md)**
 
 
 ## Changes
