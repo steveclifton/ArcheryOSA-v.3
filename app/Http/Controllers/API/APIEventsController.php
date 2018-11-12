@@ -2,7 +2,9 @@
 
 namespace App\Http\Controllers\API;
 
+use App\Http\Controllers\Events\PublicEvents\EventResultsController;
 use App\Models\Division;
+use App\Models\Event;
 use App\Models\EventCompetition;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
@@ -135,5 +137,65 @@ class APIEventsController extends Controller
                 'events' => $events
             ]
         ]);
+    }
+
+
+    public function getEventResults(Request $request)
+    {
+        $event = Event::where('eventurl', $request->eventurl ?? -1)->get()->first();
+
+        if (empty($event)) {
+            return response()->json([
+                'success' => false,
+                'data' => [
+                    'message' => 'Event not found'
+                ]
+            ]);
+        }
+
+        $eventresultscontroller = new EventResultsController();
+
+        $return = [];
+        $return['success'] = true;
+        $return['data'] = [];
+        // find out what the event type is
+        switch ($event->eventtypeid) {
+
+            // Event
+            case 1:
+
+                if (empty($request->competitionid)) {
+                    // overall
+                    $data = $eventresultscontroller->getEventOverallResults($event, true);
+                    $return['data']['results'] = !empty($data['finalResults']) ? $data['finalResults'] : [];
+                }
+                else {
+                    // particular competition
+                }
+
+                break;
+
+
+            // League
+            case 2:
+
+                if (empty($request->competitionid)) {
+                    // overall
+                }
+                else {
+                    // particular week
+                }
+
+                break;
+
+            // Shouldnt get here, yet..
+            default:
+
+                return null;
+
+        }
+
+        return response()->json($return);
+
     }
 }
