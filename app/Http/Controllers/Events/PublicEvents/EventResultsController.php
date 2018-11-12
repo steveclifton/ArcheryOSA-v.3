@@ -244,11 +244,13 @@ class EventResultsController extends EventController
 
     /**
      * Returns an events individual competitions results
+     *
      * @param Event $event
      * @param $eventcompetitionid
+     * @param bool $apicall
      * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
      */
-    public function getEventCompResults(Event $event, $eventcompetitionid)
+    public function getEventCompResults(Event $event, $eventcompetitionid, $apicall = false)
     {
         $entrys = DB::select("
             SELECT ee.firstname, ee.lastname, ee.gender, ec.entrycompetitionid, 
@@ -274,7 +276,14 @@ class EventResultsController extends EventController
 
         $eventcompetition = EventCompetition::where('eventcompetitionid', $eventcompetitionid)->get()->first();
 
-        return view('events.results.results', compact('event', 'evententrys', 'eventcompetition'));
+        $data = compact('event', 'evententrys', 'eventcompetition');
+
+        if (!empty($apicall)) {
+            return $data;
+        }
+
+
+        return view('events.results.results', $data);
 
     }
 
