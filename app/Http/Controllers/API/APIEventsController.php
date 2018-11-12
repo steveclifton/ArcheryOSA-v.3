@@ -6,6 +6,7 @@ use App\Http\Controllers\Events\PublicEvents\EventResultsController;
 use App\Models\Division;
 use App\Models\Event;
 use App\Models\EventCompetition;
+use App\Models\EventType;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\DB;
@@ -151,6 +152,18 @@ class APIEventsController extends Controller
     }
 
 
+    public function getEventTypes()
+    {
+        return response()->json([
+            'success' => true,
+            'data' => [
+                'types' => EventType::get()
+            ]
+        ]);
+    }
+
+
+
     public function getEventResults(Request $request)
     {
         $event = Event::where('eventurl', $request->eventurl ?? -1)->get($this->eventFields)->first();
@@ -177,9 +190,10 @@ class APIEventsController extends Controller
         $return['success'] = true;
         $return['data'] = [];
         $return['data']['event'] = $event;
+        $return['data']['eventtype'] = EventType::where('eventtypeid', $event->eventtypeid)->pluck('label')->first();
+
         // find out what the event type is
         switch ($event->eventtypeid) {
-
             // Event
             case 1:
 
@@ -208,9 +222,17 @@ class APIEventsController extends Controller
 
                 if (empty($request->competitionid)) {
                     // overall
+                    $data = $eventresultscontroller->getLeagueOverallResults($event, true);
+                    $return['data']['results'] = !empty($data['evententrys']) ? $data['evententrys'] : [];
                 }
                 else {
                     // particular week
+                    $week = intval($request->competitionid);
+
+                    if (!empty($week)) {
+                        $data = $eventresultscontroller->getLeagueCompetitionResults($event, $week, true);
+                        $return['data']['results'] = !empty($data['evententrys']) ? $data['evententrys'] : [];
+                    }
                 }
 
                 break;
