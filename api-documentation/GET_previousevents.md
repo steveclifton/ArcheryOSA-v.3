@@ -1,13 +1,13 @@
-# Upcoming Events
+# Previous Events
 
 ## Method
 `GET` <br>
-/api/upcomingevents`
+`/api/previousevents`
 
 ***
 
 ## Description
-Returns all the upcoming events
+Returns all the previously created events
 ***
 
 ## Parameters
@@ -26,7 +26,7 @@ An array with the following keys and values:
 ## Example
 **Request**
 
-    https://www.archeryosa.com/api/upcomingevents
+    https://www.archeryosa.com/api/eventtypes
 
 **Return** __shortened for example purpose__
 ``` json
