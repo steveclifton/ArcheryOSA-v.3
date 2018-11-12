@@ -67,7 +67,7 @@ class APIEventsController extends Controller
 
         return response()->json([
             'success' => true,
-            'date' => [
+            'data' => [
                 'events' => $events
             ]
         ]);
@@ -95,7 +95,6 @@ class APIEventsController extends Controller
 
         foreach ($events as $event) {
             $event->eventurl = route('event', $event->eventurl);
-
 
             $event->competitions = DB::select("
                 SELECT `eventcompetitionid`,`date`,`label` as eventcompetitionname,`eventid`,`roundids`,
@@ -132,7 +131,7 @@ class APIEventsController extends Controller
         
         return response()->json([
             'success' => true,
-            'date' => [
+            'data' => [
                 'events' => $events
             ]
         ]);
