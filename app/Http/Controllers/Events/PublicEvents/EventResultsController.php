@@ -272,6 +272,10 @@ class EventResultsController extends EventController
         foreach ($entrys as $entry) {
             $gender = $entry->gender == 'm' ? 'Men\'s ' : 'Women\'s ';
             $evententrys[$entry->bowtype][$gender . $entry->divisionname][] = $entry;
+
+            if (!empty($apicall)) {
+                unset($entry->userid);
+            }
         }
 
         $eventcompetition = EventCompetition::where('eventcompetitionid', $eventcompetitionid)->get()->first();
@@ -291,9 +295,10 @@ class EventResultsController extends EventController
     /**
      * Returns a league events overall results
      * @param Event $event
+     * @param bool $apicall
      * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
      */
-    public function getLeagueOverallResults(Event $event)
+    public function getLeagueOverallResults(Event $event, $apicall = false)
     {
 
         $entrys = $this->getEventEntrySorted($event->eventid);
@@ -316,10 +321,22 @@ class EventResultsController extends EventController
             if (!$eventcompetition->ignoregenders) {
                 $entry->gender == 'm' ? 'Mens ' : 'Womens ';
             }
+
+            // Remove Userid For now
+            if (!empty($apicall)) {
+                unset($entry->userid);
+            }
+
             $evententrys[$entry->bowtype][$gender . $entry->divisionname][] = $entry;
         }
 
-        return view('events.results.league.leagueresults-overall', compact('event', 'evententrys', 'eventcompetition'));
+        $data = compact('event', 'evententrys', 'eventcompetition');
+
+        if (!empty($apicall)) {
+            return $data;
+        }
+
+        return view('events.results.league.leagueresults-overall', $data);
     }
 
 
@@ -327,9 +344,10 @@ class EventResultsController extends EventController
      * Returns a particular weeks results for a league event
      * @param Event $event
      * @param $week
+     * @param bool $apicall
      * @return \Illuminate\Contracts\View\Factory|\Illuminate\Http\RedirectResponse|\Illuminate\View\View
      */
-    public function getLeagueCompetitionResults(Event $event, $week)
+    public function getLeagueCompetitionResults(Event $event, $week, $apicall = false)
     {
         $entrys = DB::select("
             SELECT ee.firstname, ee.lastname, ee.gender, ec.entrycompetitionid, 
@@ -361,10 +379,21 @@ class EventResultsController extends EventController
             if (!$eventcompetition->ignoregenders) {
                 $entry->gender == 'm' ? 'Mens ' : 'Womens ';
             }
+
+            // Remove Userid For now
+            if (!empty($apicall)) {
+                unset($entry->userid);
+            }
+
             $evententrys[$entry->bowtype][$gender . $entry->divisionname][] = $entry;
         }
 
-        return view('events.results.league.leagueresults', compact('event', 'evententrys', 'eventcompetition', 'week'));
+        $data = compact('event', 'evententrys', 'eventcompetition', 'week');
+
+        if (!empty($apicall)) {
+            return $data;
+        }
+        return view('events.results.league.leagueresults', $data);
     }
 
 
