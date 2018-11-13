@@ -24,7 +24,15 @@
             @include('template.alerts')
 
             <h4 class="m-t-0 m-b-30 text-center addFormHeader header-title">Competitions</h4>
-            <p style="text-align: center">Add or update the competitions for your event. <br>You <strong>must</strong> save the changes before changing the date</p>
+            <p style="text-align: center">
+                Add or update the competitions for your event. <br>You <strong>must</strong> save the changes before changing the date
+                <br><br>
+                <strong>Creating a new Competition</strong><br>
+                ArcheryOSA allows events to have mutliple competitions per day<br><br>
+                Step 1: Under 'Competitions' select 'Create New'<br>
+                Step 2: Under 'Competition Date' choose the date for the comp<br>
+                Step 3: Fillout all other required information and <strong>save</strong>
+            </p>
 
             <form class="form-horizontal myForms treeFormCompetitions" method="POST"
                   action="/events/manage/competitions/{{$formaction}}/{{$event->eventurl}}" role="form">
