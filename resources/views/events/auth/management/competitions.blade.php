@@ -33,25 +33,23 @@
                 <input name="eventid" type="hidden" value="{{$event->eventid}}">
 
                 <div class="form-group row">
-                    <label class="col-sm-12 col-md-3 col-form-label">Competition Date</label>
+                    <label class="col-sm-12 col-md-3 col-form-label">Competitions</label>
                     <div class="col-md-9">
-                        <select name="date" id="eventdate" class="form-control">
-                            @foreach($event->daterange as $date)
-                                <option value="{{$date->format('Y-m-d')}}" {!! old('date') == $date->format('Y-m-d') ? 'selected' : ''!!}>
-                                    {{ $date->format('D d F') }}
-                                </option>
+                        <select id="eventcompetitions" class="form-control">
+                            <option value="createnew">Create New</option>
+                            @foreach($eventcompetitions as $eventcompetition)
+                                <option value="{{$eventcompetition->date}}"
+                                        data-cid="{{$eventcompetition->eventcompetitionid}}"
+                                    {!! $eventcompetition->eventcompetitionid == $competition['eventcompetitionid'] ? 'selected' : '' !!}
+                                    >{{ucwords($eventcompetition->label)}}</option>
                             @endforeach
                         </select>
                     </div>
                 </div>
 
-
-
-
-
-
-
                 <div id="ajaxFormReplace">
+                    @include('events.auth.management.includes.dateselect')
+
                     @include('events.auth.management.includes.competitiontext')
 
                     @include('events.auth.management.includes.competitiontree')
@@ -66,7 +64,6 @@
                     <div class="col-3">
                         <button type="submit" class="myButton btn btn-inverse btn-info waves-effect waves-light">Save</button>
                     </div>
-
                 </div>
 
             </form>
@@ -74,4 +71,5 @@
     </div>
 
     <script src="{{URL::asset('/js/admin/divisions.js')}}"></script>
+
 @endsection
