@@ -226,15 +226,21 @@
                                         @foreach($competitionsfinal as $date => $eventcompetition)
                                             <ul>
                                                 <li data-jstree='{"opened":{{$i++ == 1 ? 'true' : 'false'}}, "icon": "ion-calendar"}'>{{date('D d F', strtotime($date))}}
-                                                <ul>
-                                                    @foreach($eventcompetition->rounds as $round)
-                                                        <li data-eventcompetitionid="{{$eventcompetition->eventcompetitionid}}"
-                                                            data-roundid="{{$round->roundid}}"
-                                                            data-jstree='{"opened":true, "icon": "ion-star",
-                                                            "selected":"{{ !empty($entrycompetitionids[$eventcompetition->eventcompetitionid][$round->roundid]) ? 'true' : '' }}"
-                                                            }'>{{$round->label}}
+                                                    @foreach($eventcompetition as $label => $ec)
+                                                    <ul>
+                                                        <li data-jstree='{"opened":{{$i++ == 1 ? 'true' : 'false'}}, "icon": "ion-calendar"}'>{{$label}}
+                                                        <ul>
+                                                            @foreach($ec->rounds as $round)
+                                                                <li data-eventcompetitionid="{{$ec->eventcompetitionid}}"
+                                                                    data-roundid="{{$round->roundid}}"
+                                                                    data-jstree='{"opened":true, "icon": "ion-star",
+                                                    "selected":"{{ !empty($entrycompetitionids[$ec->eventcompetitionid][$round->roundid]) ? 'true' : '' }}"
+                                                    }'>{{$round->label}}
+                                                            @endforeach
+                                                        </ul>
+                                                        </li>
+                                                    </ul>
                                                     @endforeach
-                                                </ul>
                                                 </li>
                                             </ul>
                                         @endforeach
@@ -244,6 +250,11 @@
                                 </div><!-- end col -->
                             <div id="comperror" class="alert alert-danger hidden">Please select at least 1 competition</div>
                         </div>
+
+
+
+
+
                     </div>
                     <input name="roundids" type="hidden" id="jsfields" value="" />
                 @endif
