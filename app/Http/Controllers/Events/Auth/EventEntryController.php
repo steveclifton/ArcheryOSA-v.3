@@ -122,7 +122,7 @@ class EventEntryController extends EventController
                 $eventcompetition->rounds = Round::wherein('roundid', json_decode($eventcompetition->roundids))->get();
             }
 
-            $competitionsfinal[$eventcompetition->date] = $eventcompetition;
+            $competitionsfinal[$eventcompetition->date][$eventcompetition->label] = $eventcompetition;
         }
 
         $clubs = Club::where('visible', 1)->orderby('label')->get();
@@ -182,7 +182,7 @@ class EventEntryController extends EventController
                 $eventcompetition->rounds = Round::wherein('roundid', json_decode($eventcompetition->roundids))->get();
             }
 
-            $competitionsfinal[$eventcompetition->date] = $eventcompetition;
+            $competitionsfinal[$eventcompetition->date][$eventcompetition->label] = $eventcompetition;
         }
 
         $clubs = Club::where('visible', 1)->orderby('label')->get();

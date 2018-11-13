@@ -72,10 +72,14 @@ $(function () {
     $('#checkTree').jstree(jsTreeObj);
     $('#checkTreeDivisions').jstree(jsTreeObj);
 
-    // Ajax method - Event Comptition view
-    $('#eventdate').on('change', function (e) {
+
+
+    $(document).on('change', '#eventcompetitions', function (e) {
+
         var date = $("option:selected", this).val();
         var eventid = $('input[name="eventid"]').val();
+        var eventcompetitionid = $("option:selected", this).attr('data-cid');
+
 
         $.ajax({
             method: "POST",
@@ -84,8 +88,9 @@ $(function () {
             },
             url: "/ajax/events/manage/competition",
             data: {
-                date: date,
-                eventid: eventid
+                date:date,
+                eventid: eventid,
+                eventcompetitionid:eventcompetitionid
             }
         }).done(function( json ) {
 
@@ -101,7 +106,9 @@ $(function () {
 
         });
 
+
     });
+
 
 
 

@@ -118,9 +118,12 @@ class EventCompetitionController extends EventController
             ->where('eventcompetitionid',  $competition['eventcompetitionid'])
             ->get()->first();
 
+        $eventcompetitions = EventCompetition::where('eventid', $event->eventid)->get();
+
 
         return view('events.auth.management.competitions',
-                compact('event', 'entries', 'mappedrounds', 'competition', 'scoringlevels', 'leagueweeks', 'formaction', 'mappeddivisions')
+                compact('event', 'entries', 'mappedrounds', 'competition', 'eventcompetitions',
+                    'scoringlevels', 'leagueweeks', 'formaction', 'mappeddivisions')
         );
     }
 

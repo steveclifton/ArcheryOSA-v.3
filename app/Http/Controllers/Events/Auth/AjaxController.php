@@ -51,7 +51,7 @@ class AjaxController extends EventController
          * Get the competition
          */
         $competition = EventCompetition::where('eventid', $request->eventid)
-            ->where('date', $request->date)
+            ->where('eventcompetitionid', $request->eventcompetitionid)
             ->get()
             ->first();
 
@@ -60,15 +60,23 @@ class AjaxController extends EventController
         }
 
         $entries = EntryCompetition::where('eventid', $event->eventid)
-            ->where('eventcompetitionid',  $competition['eventcompetitionid'])
-            ->get()->first();
+                                    ->where('eventcompetitionid',  $competition['eventcompetitionid'])
+                                    ->get()
+                                    ->first();
+
+
+        // Get the events daterange
+        $event->daterange = $this->helper->getEventsDateRange($event);
+
+        $view = View::make('events.auth.management.includes.dateselect', compact('event', 'competition'));
+        $html = $view->render();
 
         /**
          * Get the text box view data
          */
         // Make the view
         $view = View::make('events.auth.management.includes.competitiontext', compact('competition'));
-        $html = $view->render();
+        $html .= $view->render();
 
         /*
          * Get the compeititon tree info
@@ -103,6 +111,8 @@ class AjaxController extends EventController
         if (empty($competition)) {
             $formaction = '/events/manage/competitions/create/'.$event->eventurl;
         }
+
+
 
 
 
