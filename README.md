@@ -4,6 +4,9 @@
 
 Our goal is to create a platform that can be used by anyone to enable efficient and effective management of their events.
 
+## API Documentation
+https://github.com/steveclifton/ArcheryOSA-v.3/blob/master/API.md
+
 ### Server requirements
 
 * PHP >= 7.2
