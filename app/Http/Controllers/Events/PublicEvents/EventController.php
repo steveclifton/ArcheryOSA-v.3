@@ -37,9 +37,9 @@ class EventController extends Controller
     {
         $events = DB::select("
             SELECT e.*, es.label as eventstatus
-            FROM `events` e 
+            FROM `events` e
             JOIN `eventstatus` es USING (`eventstatusid`)
-            WHERE `e`.`end` > NOW()
+            WHERE `e`.`end` + interval 1 day > now() 
             AND `e`.`visible` = 1
             ORDER BY `e`.`start`
         ");
