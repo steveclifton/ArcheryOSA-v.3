@@ -75,7 +75,6 @@ class EventCompetitionController extends EventController
         $scoringlevels = ScoringLevel::get();
 
         // Means the event is a league event
-        $leagueweeks = null;
         if ($event->eventtypeid == 2) {
 
             // Add the first competition day to the event
@@ -88,9 +87,41 @@ class EventCompetitionController extends EventController
             $formaction = empty($competition) ? 'create' : 'update';
 
             return view('events.auth.management.league.competition',
-                compact('event', 'entries', 'mappedrounds', 'competition', 'scoringlevels', 'leagueweeks', 'formaction', 'mappeddivisions')
+                compact('event', 'entries', 'mappedrounds', 'competition', 'scoringlevels', 'formaction', 'mappeddivisions')
             );
 
+        }
+
+        // Means the event is a postal event
+        if ($event->eventtypeid == 3) {
+            // Get the events daterange
+            $event->daterange = $this->helper->getPostalEventDateRange($event);
+
+            // Get the first day
+            $firstdate = reset($event->daterange);
+
+            // Add the first competition day to the event
+            $competition = EventCompetition::where('eventid', $event->eventid)
+                ->where('date', $firstdate)
+                ->get()
+                ->first();
+
+            if (!empty($competition)) {
+                $competition = $competition->toArray();
+            }
+
+            $formaction = empty($competition) ? 'create' : 'update';
+
+            $entries = EntryCompetition::where('eventid', $event->eventid)
+                ->where('eventcompetitionid',  $competition['eventcompetitionid'])
+                ->get()->first();
+
+            $eventcompetitions = EventCompetition::where('eventid', $event->eventid)->get();
+
+            return view('events.auth.management.postal.competitions',
+                compact('event', 'entries', 'mappedrounds', 'competition', 'eventcompetitions',
+                    'scoringlevels', 'formaction', 'mappeddivisions')
+            );
         }
 
 
@@ -123,7 +154,7 @@ class EventCompetitionController extends EventController
 
         return view('events.auth.management.competitions',
                 compact('event', 'entries', 'mappedrounds', 'competition', 'eventcompetitions',
-                    'scoringlevels', 'leagueweeks', 'formaction', 'mappeddivisions')
+                    'scoringlevels', 'formaction', 'mappeddivisions')
         );
     }
 
@@ -182,7 +213,6 @@ class EventCompetitionController extends EventController
         $eventcompetition->roundids         = !empty($roundidsfinal)              ? json_encode($roundidsfinal) : json_encode('');
         $eventcompetition->divisionids      = !empty($divisionidsfinal)           ? json_encode($divisionidsfinal) : json_encode('');
         $eventcompetition->scoringlevel     = !empty($validated['scoringlevel'])  ? intval($validated['scoringlevel']) : 0;
-      //$eventcompetition->ignoregenders    = empty($validated['ignoregenders'])  ? 0 : 1;
         $eventcompetition->scoringenabled   = empty($validated['scoringenabled']) ? 0 : 1;
         $eventcompetition->visible          = 1;
         $eventcompetition->save();
