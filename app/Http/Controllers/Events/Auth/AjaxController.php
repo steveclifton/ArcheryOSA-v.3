@@ -65,11 +65,23 @@ class AjaxController extends EventController
                                     ->first();
 
 
-        // Get the events daterange
-        $event->daterange = $this->helper->getEventsDateRange($event);
+        if ($event->isPostal()) {
+            // Get the events daterange
+            $event->daterange = $this->helper->getPostalEventDateRange($event);
 
-        $view = View::make('events.auth.management.includes.dateselect', compact('event', 'competition'));
-        $html = $view->render();
+            $view = View::make('events.auth.management.includes.postal.dateselect', compact('event', 'competition'));
+            $html = $view->render();
+        }
+        else {
+            // regular event
+
+            // Get the events daterange
+            $event->daterange = $this->helper->getEventsDateRange($event);
+
+            $view = View::make('events.auth.management.includes.dateselect', compact('event', 'competition'));
+            $html = $view->render();
+        }
+
 
         /**
          * Get the text box view data
