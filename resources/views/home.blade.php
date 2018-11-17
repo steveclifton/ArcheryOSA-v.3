@@ -144,7 +144,7 @@
                             </a>
                         @endforeach
                     </div>
-                    @if (!empty(array_slice($upcomingevents, 3)))
+                    @if (!empty(array_slice($upcomingevents, 6)))
                         <div class="table-responsive">
                             <table class="table table-hover">
                                 <thead class="thead-light">
@@ -155,7 +155,7 @@
                                 </tr>
                                 </thead>
                                 <tbody>
-                                @foreach(array_slice($upcomingevents, 3, 10) as $event)
+                                @foreach(array_slice($upcomingevents, 6, 10) as $event)
                                     <tr>
                                         <th scope="row"><a href="/event/details/{{$event->eventurl}}">{{$event->label}}</a></th>
                                         <td>{{date('d F Y', strtotime($event->start))}}</td>
