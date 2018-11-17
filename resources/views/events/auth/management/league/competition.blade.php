@@ -24,7 +24,7 @@
             @include('template.alerts')
 
             <h4 class="m-t-0 m-b-30 text-center addFormHeader header-title">Competitions</h4>
-            <p style="text-align: center">Add or update the competitions for your event. <br>You <strong>must</strong> save the changes before changing the date</p>
+            <p style="text-align: center">Create or update the competition for this league. </p>
 
             <form class="form-horizontal myForms treeFormCompetitions" method="POST"
                   action="/events/manage/competitions/league/{{$formaction}}/{{$event->eventurl}}" role="form">
