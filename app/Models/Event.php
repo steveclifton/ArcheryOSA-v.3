@@ -13,4 +13,10 @@ class Event extends Model
     {
         return $this->eventtypeid == 2;
     }
+
+    public function isPostal()
+    {
+        return $this->eventtypeid == 3;
+    }
+
 }
