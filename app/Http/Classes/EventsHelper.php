@@ -34,6 +34,23 @@ class EventsHelper
 
     }
 
+    public function getPostalEventDateRange($event)
+    {
+        if (!is_object($event)) {
+            return false;
+        }
+
+        $start    = new \DateTime( $event->start );
+        $end      = new \DateTime( $event->end );
+        $interval = \DateInterval::createFromDateString('1 month');
+        $period   = new \DatePeriod($start, $interval, $end);
+
+        $months = [];
+        foreach($period as $date) {
+            $months[$date->format('F')] = $date->format('Y-m-d');
+        }
+        return $months;
+    }
 
     public function getEventsDateRange($event)
     {
