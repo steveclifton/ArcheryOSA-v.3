@@ -39,6 +39,12 @@ class UpdateRegistration extends FormRequest
         if (!empty($event->clubrequired)) {
             $clubrequired = 'required';
         }
+
+        $schoolrequired = 'nullable';
+        if (!empty($event->schoolrequired)) {
+            $schoolrequired = 'required';
+        }
+
         return [
             'eventid'        => 'required',
             'userid'         => 'required',
@@ -50,6 +56,7 @@ class UpdateRegistration extends FormRequest
             'address'        => 'nullable',
             'notes'          => 'nullable',
             'clubid'         => $clubrequired,
+            'schoolid'       => $schoolrequired,
             'gender'         => 'nullable',
             'roundids'       => 'required',
             'divisionid'     => 'required',
