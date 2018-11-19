@@ -68,7 +68,7 @@ class EventController extends Controller
 
 
         $evententryopen = $event->eventstatusid == 1 ? true : false;
-        if ( $evententryopen && (time() > strtotime($event->start) && !$event->isleague()) ) {
+        if ( $evententryopen && (time() > strtotime($event->start) && $event->isEvent()) ) {
             $evententryopen = false;
         }
 

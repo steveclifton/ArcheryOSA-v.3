@@ -12,6 +12,7 @@ use App\Models\EntryCompetition;
 use App\Models\Event;
 use App\Models\EventEntry;
 use App\Models\Round;
+use App\Models\School;
 use App\Models\UserRelation;
 use App\User;
 use Illuminate\Http\Request;
@@ -60,7 +61,7 @@ class EventRegistrationController extends EventController
             return back();
         }
 
-        if (time() > strtotime($event->start) && !$event->isleague()) {
+        if (time() > strtotime($event->start) && $event->isEvent()) {
             return back()->with('failure', 'Please contact the admin to change registration details');
         }
 
@@ -104,6 +105,11 @@ class EventRegistrationController extends EventController
 
         $clubs = Club::where('visible', 1)->orderby('label')->get();
 
+        $schools = null;
+        if ($event->schoolrequired) {
+            $schools = School::where('visible', 1)->orderby('label')->get();
+        }
+
         $evententry = EventEntry::where('eventid', $event->eventid)
             ->where('userid', $user->userid)
             ->get()
@@ -112,7 +118,8 @@ class EventRegistrationController extends EventController
         // Means they need to create an event
         if (empty($evententry)) {
             return view('events.public.registration.createregistration',
-                    compact('user', 'event', 'clubs', 'divisionsfinal', 'competitionsfinal', 'leaguecompround', 'multipledivisions'));
+                    compact('user', 'event', 'clubs', 'divisionsfinal', 'competitionsfinal',
+                        'leaguecompround', 'multipledivisions', 'schools'));
         }
 
         $entrycompetitions = EntryCompetition::where('entryid', $evententry->entryid)->get();
@@ -132,7 +139,8 @@ class EventRegistrationController extends EventController
         // Not empty, means they have entered the event already,
         return view('events.public.registration.updateregistration',
                 compact('user', 'event', 'evententry', 'clubs', 'divisionsfinal', 'competitionsfinal',
-                    'entrycompetitions', 'entrycompetitionids', 'leaguecompround', 'multipledivisions', 'divisions'));
+                    'entrycompetitions', 'entrycompetitionids', 'leaguecompround', 'multipledivisions',
+                    'divisions', 'schools'));
     }
 
 
