@@ -133,48 +133,52 @@
                                         {{$event->email}}
                                     </td>
                                 </tr>
-                                <tr>
-                                    <th scope="row">Host Club</th>
-                                    <td>
-                                        {{ucwords($clublabel)}}
-                                    </td>
-                                </tr>
+                                @if(!empty($clublabel))
+                                    <tr>
+                                        <th scope="row">Host Club</th>
+                                        <td>
+                                            {{ucwords($clublabel)}}
+                                        </td>
+                                    </tr>
+                                @endif
                                 <tr>
                                     <th scope="row">Location</th>
                                     <td>
                                         {!! nl2br($event->location)!!}
                                     </td>
                                 </tr>
-                            <tr>
-                                <th scope="row">Cost</th>
-                                <td>
-                                    {!! strpos($event->cost, '$') === 0 ? $event->cost : '$' . $event->cost !!}
-                                </td>
-                            </tr>
-                            <tr>
-                                <th scope="row">Bank Details</th>
-                                <td>
-                                    {{$event->bankaccount}}
-                                </td>
-                            </tr>
-                            <tr>
-                                <th scope="row">Bank Reference</th>
-                                <td>
-                                    {{$event->bankreference}}
-                                </td>
-                            </tr>
-                            <tr>
-                                <th scope="row">Event Info</th>
-                                <td>
-                                    {!! nl2br($event->info) !!}
-                                </td>
-                            </tr>
-                            <tr>
-                                <th scope="row">Schedule</th>
-                                <td>
-                                    {!! nl2br($event->schedule) !!}
-                                </td>
-                            </tr>
+                                @if(!empty($event->cost))
+                                    <tr>
+                                        <th scope="row">Cost</th>
+                                        <td>
+                                            {!! (strpos($event->cost, '$') === 0) ? $event->cost : '$' . $event->cost !!}
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <th scope="row">Bank Details</th>
+                                        <td>
+                                            {{$event->bankaccount}}
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <th scope="row">Bank Reference</th>
+                                        <td>
+                                            {{$event->bankreference}}
+                                        </td>
+                                    </tr>
+                                @endif
+                                <tr>
+                                    <th scope="row">Event Info</th>
+                                    <td>
+                                        {!! nl2br($event->info) !!}
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <th scope="row">Schedule</th>
+                                    <td>
+                                        {!! nl2br($event->schedule) !!}
+                                    </td>
+                                </tr>
                             </tbody>
                         </table>
                     </div>
