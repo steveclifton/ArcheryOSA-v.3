@@ -149,6 +149,31 @@
                     </div>
                 </div>
 
+                @if(!empty($event->schoolrequired))
+                    <div class="form-group row">
+                        <label class="col-sm-12 col-md-3 col-form-label">School*</label>
+                        <div class="col-md-9">
+                            <select name="schoolid"
+                                    class="form-control {{ $errors->has('schoolid') ? 'is-invalid' : '' }}" required>
+
+                                @foreach($schools as $school)
+                                    <option value="{{$school->schoolid}}"
+                                            {!! old('schoolid') == $school->schoolid ? 'selected' : '' !!}>
+                                        {{$school->label}}
+                                    </option>
+                                @endforeach
+                            </select>
+                            @if ($errors->has('schoolid'))
+                                <span class="invalid-feedback" role="alert">
+                                <strong>{{ $errors->first('schoolid') }}</strong>
+                            </span>
+                            @endif
+                        </div>
+                    </div>
+
+                @endif
+
+
                 @if ($event->isLeague() || $multipledivisions)
                     <div class="form-group row">
                         <label class="col-sm-12 col-md-3 col-form-label">Division*</label>
