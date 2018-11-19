@@ -37,7 +37,7 @@
                     <label for="label" class="col-sm-12 col-md-3 col-form-label">Firstname*</label>
                     <div class="col-md-9">
                         <input name="firstname" type="text" class="form-control{{ $errors->has('firstname') ? ' is-invalid' : '' }}"
-                               value="{{old('firstname') ?? $evententry->firstname}}" required >
+                               value="{{old('firstname') ?? ucwords($evententry->firstname)}}" required >
                         @if ($errors->has('firstname'))
                             <span class="invalid-feedback" role="alert">
                                 <strong>{{ $errors->first('firstname') }}</strong>
@@ -50,7 +50,7 @@
                     <label for="label" class="col-sm-12 col-md-3 col-form-label">Lastname*</label>
                     <div class="col-md-9">
                         <input name="lastname" type="text" class="form-control{{ $errors->has('lastname') ? ' is-invalid' : '' }}"
-                               value="{{old('lastname') ?? $evententry->lastname}}" required >
+                               value="{{old('lastname') ?? ucwords($evententry->lastname)}}" required >
                         @if ($errors->has('lastname'))
                             <span class="invalid-feedback" role="alert">
                                 <strong>{{ $errors->first('lastname') }}</strong>
