@@ -188,6 +188,20 @@
                 <div class="form-group row justify-content-end">
                     <div class=" col-md-9">
                         <div class="checkbox checkbox-primary">
+                            <input name="schoolrequired" id="schoolrequired" type="checkbox" {{$event->schoolrequired ? 'checked' : ''}}>
+                            <label for="schoolrequired">
+                                School Required
+                            </label>
+
+                        </div>
+
+                    </div>
+                </div>
+                <br>
+
+                <div class="form-group row justify-content-end">
+                    <div class=" col-md-9">
+                        <div class="checkbox checkbox-primary">
                             <input name="visible" id="checkbox2" type="checkbox" {{$event->visible ? 'checked' : ''}}>
                             <label for="checkbox2">
                                 Active
