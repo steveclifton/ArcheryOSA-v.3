@@ -9,6 +9,11 @@ class Event extends Model
     protected $table = 'events';
     protected $primaryKey = 'eventid';
 
+    public function isEvent()
+    {
+        return $this->eventtypeid == 1;
+    }
+
     public function isLeague()
     {
         return $this->eventtypeid == 2;
@@ -18,5 +23,7 @@ class Event extends Model
     {
         return $this->eventtypeid == 3;
     }
+
+
 
 }
