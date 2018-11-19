@@ -226,10 +226,10 @@
                                     <div id="checkTree">
                                         @foreach($competitionsfinal as $date => $eventcompetition)
                                             <ul>
-                                                <li data-jstree='{"opened":{{$i++ == 1 ? 'true' : 'false'}}, "icon": "ion-calendar"}'>{{date('D d F', strtotime($date))}}
+                                                <li data-jstree='{"opened":true, "icon": "ion-calendar"}'>{{date('D d F', strtotime($date))}}
                                                     @foreach($eventcompetition as $label => $ec)
                                                     <ul>
-                                                        <li data-jstree='{"opened":{{$i++ == 1 ? 'true' : 'false'}}, "icon": "ion-calendar"}'>{{$label}}
+                                                        <li data-jstree='{"opened":true, "icon": "ion-calendar"}'>{{$label}}
                                                             <ul>
                                                             @foreach($ec->rounds as $round)
                                                                 <li data-eventcompetitionid="{{$ec->eventcompetitionid}}"
