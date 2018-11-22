@@ -35,7 +35,7 @@
             </div>
 
             <div class="col-lg-4 col-md-4 col-sm-4">
-                <a href="#">
+                <a href="/profile/children">
                     <div class="db-social-box">
                         <span class="fa fa-child"></span>
                         <h5>Childrens Accounts</h5>
