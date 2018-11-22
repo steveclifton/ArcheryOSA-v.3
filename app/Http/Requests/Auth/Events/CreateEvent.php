@@ -17,11 +17,7 @@ class CreateEvent extends FormRequest
     {
         if (Auth::check()) {
 
-            if (Auth::user()->isSuperAdmin()) {
-                return true;
-            }
-
-            if (Auth::user()->roleid < 4) {
+            if (Auth::user()->isSuperAdmin() || Auth::user()->roleid < 4) {
                 return true;
             }
 
