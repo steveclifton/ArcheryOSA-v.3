@@ -21,14 +21,10 @@ class CreateEvent extends FormRequest
                 return true;
             }
 
-            $eventadmin = EventAdmin::where('userid', Auth::id())
-                ->where('eventid', $this->eventid)
-                ->where('canedit', 1)
-                ->get()->first();
-
-            if (!empty($eventadmin)) {
+            if (Auth::user()->roleid < 4) {
                 return true;
             }
+
         }
 
         return false;
