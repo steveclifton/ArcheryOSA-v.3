@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\User;
 use Illuminate\Foundation\Bus\DispatchesJobs;
 use Illuminate\Routing\Controller as BaseController;
 use Illuminate\Foundation\Validation\ValidatesRequests;
@@ -63,6 +64,24 @@ class Controller extends BaseController
         return $event;
     }
 
+    public function createBasicUser($validated, $parentuserid = null)
+    {
+        if (empty($validated)) {
+            return false;
+        }
+
+        $user = new User();
+        $user->firstname = strtolower($validated['firstname']);
+        $user->lastname  = strtolower($validated['lastname']);
+        $user->email     = !empty($validated['email']) ? $validated['email'] : $this->createHash(12);
+        $user->roleid    = 4;
+        $user->username  = strtolower(preg_replace("/[^a-zA-Z0-9]/", "", $validated['firstname'].$validated['lastname'])) . rand(1,1440);
+        $user->password  = $this->createHash(12);
+        $user->parentuserid = $parentuserid;
+        $user->save();
+
+        return $user->userid;
+    }
 
 }
 
