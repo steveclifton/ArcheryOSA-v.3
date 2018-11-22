@@ -160,6 +160,16 @@ Route::middleware(['web'])->group(function() {
         Route::post('profile/relationships/request', 'Auth\ProfileController@requestRelationship');
         Route::post('profile/relationships/remove', 'Auth\ProfileController@removeRelationship');
 
+        //Children
+        Route::get('profile/children', 'Auth\ProfileController@getChildrenList');
+        Route::get('profile/children/create', 'Auth\ProfileController@getChildCreate');
+        Route::get('profile/children/update/{username}', 'Auth\ProfileController@getChild');
+
+        Route::post('profile/children/create', 'Auth\ProfileController@createChild');
+        Route::post('profile/children/update', 'Auth\ProfileController@updateChild');
+
+
+
         // Show my events
         Route::get('profile/myevents', 'Auth\ProfileController@getMyEvents');
 
