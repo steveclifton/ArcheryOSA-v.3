@@ -38,7 +38,7 @@ class EventRegistrationController extends EventController
         $evententry = EventEntry::where('eventid', $event->eventid)->get()->first();
 
         $relations = UserRelation::where('userid', Auth::id())->where('authorised', 1)->pluck('relationid')->toarray();
-        
+
         if (!empty($relations)) {
             $relations = User::wherein('userid', $relations)->get();
         }

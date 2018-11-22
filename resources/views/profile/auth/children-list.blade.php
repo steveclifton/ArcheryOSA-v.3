@@ -10,7 +10,10 @@
             <div class="page-title-box">
                 <h4 class="page-title">
                     <a href="/profile">Profile</a> <i class="ion-arrow-right-c"></i>
-                    <a href="javascript:;">Children</a></h4>
+                    <a href="javascript:;">Children</a>
+                </h4>
+
+
             </div>
         </div>
     </div>
@@ -18,6 +21,7 @@
     <!-- Section-Title -->
     <div class="row">
         <div class="col-sm-12">
+
 
             <div class="container" style="margin-left: 0; padding-left: 0;">
                 <div class="row">
@@ -41,10 +45,11 @@
         <div class="col-lg-12">
             <div class="card-box">
                 @include('template.alerts')
+                <p class="text-muted font-14 m-b-30">
+                    Children accounts can be created for those archers who might not be able to
+                    sign up or score for themselves. <br>
 
-                <div class="alert ajaxAlert hidden">
-
-                </div>
+                </p>
 
                 <div class="table-responsive">
                     <table class="table table-hover">

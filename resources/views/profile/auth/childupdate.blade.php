@@ -21,7 +21,7 @@
     <div class="col-md-8 offset-md-2">
         <div class="card-box">
             @include('template.alerts')
-            <h4 class="m-t-0 m-b-30 text-center addFormHeader header-title">Create new Child account</h4>
+            <h4 class="m-t-0 m-b-30 text-center addFormHeader header-title">Update Child account</h4>
 
             <form class="form-horizontal myForms" action="/profile/children/update/" method="POST" role="form">
                 @csrf
