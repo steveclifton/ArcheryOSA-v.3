@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers\Auth;
 
+use App\Http\Requests\User\CreateChild;
+use App\Http\Requests\User\UpdateChild;
 use App\Http\Requests\User\UserUpdateProfile;
 use App\Http\Controllers\Controller;
 use App\Jobs\SendArcherRelationRequest;
@@ -68,6 +70,99 @@ class ProfileController extends Controller
 
 
 
+
+    /******************************************************************************
+     * CHILDREN
+     ******************************************************************************/
+    public function getChildrenList()
+    {
+        $children = User::where('parentuserid', Auth::id())->get();
+
+        return view('profile.auth.children-list', compact('children'));
+    }
+
+    public function getChildCreate()
+    {
+        return view('profile.auth.childcreate');
+    }
+
+
+
+    public function getChild(Request $request)
+    {
+        $child = User::where('username', $request->username)
+                        ->where('parentuserid', Auth::id())
+                        ->get()
+                        ->first();
+
+        if (empty($child)) {
+            return back()->with('failure', 'Invalid Request');
+        }
+
+        return view('profile.auth.childupdate', compact('child'));
+    }
+
+
+    public function createChild(CreateChild $request)
+    {
+        $validated = $request->validated();
+
+        $existing = User::where('email', $validated['email'] ?? -1)->get()->first();
+
+        if (!empty($existing)) {
+            return back()->with('failure', 'Email Address already has an account, please try send a relationship request');
+        }
+
+        $userid = $this->createBasicUser($validated, Auth::id());
+
+        if (empty($userid)) {
+            return back()->with('failure', 'Please try again later');
+        }
+
+        $userrelation = new UserRelation();
+        $userrelation->userid = Auth::id();
+        $userrelation->relationid = $userid;
+        $userrelation->authorised = 1;
+        $userrelation->hash = $this->createHash();
+        $userrelation->save();
+
+
+        return redirect('profile/children')->with('success', 'Child Created');
+
+    }
+
+    public function updateChild(UpdateChild $request)
+    {
+        $validated = $request->validated();
+
+        $existing = User::where('email', $validated['email'] ?? -1)
+                        ->where('username', '<>', $validated['username'])
+                        ->get()->first();
+
+        if (!empty($existing)) {
+            return back()->with('failure', 'Email Address already has an account, please try send a relationship request');
+        }
+
+        $user = User::where('username', $validated['username'])
+                    ->where('parentuserid', Auth::id())
+                    ->get()
+                    ->first();
+
+        if (empty($user)) {
+            return back()->with('failure', 'Please try again later');
+        }
+
+        $user->firstname = strtolower($validated['firstname']);
+        $user->lastname  = strtolower($validated['lastname']);
+        $user->email     = !empty($validated['email']) ? $validated['email'] : $user->email;
+        $user->save();
+
+
+        return redirect('profile/children')->with('success', 'Child Updated');
+
+    }
+
+
     /******************************************************************************
      * RELATIONSHIPS
      ******************************************************************************/
@@ -90,7 +185,7 @@ class ProfileController extends Controller
 
     public function getRelationshipsRequest()
     {
-        return view('profile.auth.relation', compact('relation'));
+        return view('profile.auth.relation');
     }
 
     public function requestRelationship(Request $request)
