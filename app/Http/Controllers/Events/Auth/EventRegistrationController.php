@@ -38,7 +38,7 @@ class EventRegistrationController extends EventController
         $evententry = EventEntry::where('eventid', $event->eventid)->get()->first();
 
         $relations = UserRelation::where('userid', Auth::id())->where('authorised', 1)->pluck('relationid')->toarray();
-
+        
         if (!empty($relations)) {
             $relations = User::wherein('userid', $relations)->get();
         }
@@ -385,8 +385,8 @@ class EventRegistrationController extends EventController
             // if still empty, create a new user
             if (empty($user)) {
                 $user = new User();
-                $user->firstname = $validated['firstname'];
-                $user->lastname  = $validated['lastname'];
+                $user->firstname = strtolower($validated['firstname']);
+                $user->lastname  = strtolower($validated['lastname']);
                 $user->email     = !empty($validated['email']) ? $validated['email'] : $this->createHash(12);
                 $user->roleid    = 4;
                 $user->username  = strtolower(preg_replace("/[^a-zA-Z0-9]/", "", $validated['firstname'].$validated['lastname'])) . rand(1,1440);
