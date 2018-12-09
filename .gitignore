@@ -15,3 +15,4 @@ yarn-error.log
 .envold
 .editorconfig
 /app/Http/Controllers/Export/tmp/
+public/content/files/
