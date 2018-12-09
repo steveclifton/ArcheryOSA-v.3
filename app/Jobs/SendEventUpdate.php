@@ -17,17 +17,23 @@ class SendEventUpdate extends ArcheryOSASender implements ShouldQueue
     private $email;
     private $eventname;
     private $emailmessage;
+    private $fromname;
+    private $fromemail;
+    private $filesArr;
 
     /**
      * Create a new job instance.
      *
      * @return void
      */
-    public function __construct($email, $eventname, $emailmessage)
+    public function __construct($email, $eventname, $emailmessage, $fromname, $fromemail, $filesArr)
     {
         $this->email = $email;
         $this->eventname = $eventname;
         $this->emailmessage = $emailmessage;
+        $this->fromname = $fromname;
+        $this->fromemail = $fromemail;
+        $this->filesArr = $filesArr;
 
     }
 
@@ -40,7 +46,7 @@ class SendEventUpdate extends ArcheryOSASender implements ShouldQueue
     {
         if ($this->checkEmailAddress($this->email)) {
             Mail::to($this->email)
-                ->send(new EventUpdate(ucwords($this->eventname), $this->emailmessage));
+                ->send(new EventUpdate(ucwords($this->eventname), $this->emailmessage, $this->fromname, $this->fromemail, $this->filesArr));
         }
     }
 }

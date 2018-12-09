@@ -22,7 +22,8 @@
             <form class="form-horizontal myForms"
                   method="POST"
                   action="/events/manage/communication/{{$event->eventurl}}"
-                  role="form">
+                  role="form"
+                  enctype="multipart/form-data">
                 @csrf
                 <meta name="csrf-token" content="{{ csrf_token() }}">
                 <input name="eventid" type="hidden" value="{{$event->eventid}}">
@@ -33,6 +34,27 @@
                     <label class="col-sm-12 col-md-3 col-form-label">Message</label>
                     <div class="col-md-9">
                         <textarea name="message" class="form-control" rows="4" required>{{old('message')}}</textarea>
+                    </div>
+                </div>
+
+                <div class="form-group row">
+                    <label class="col-sm-12 col-md-3 col-form-label">File</label>
+                    <div class="col-md-9">
+                        <input type="file" class="form-control" name="upload1">
+                    </div>
+                </div>
+
+                <div class="form-group row">
+                    <label class="col-sm-12 col-md-3 col-form-label">File</label>
+                    <div class="col-md-9">
+                        <input type="file" class="form-control" name="upload2">
+                    </div>
+                </div>
+
+                <div class="form-group row">
+                    <label class="col-sm-12 col-md-3 col-form-label">File</label>
+                    <div class="col-md-9">
+                        <input type="file" class="form-control" name="upload3">
                     </div>
                 </div>
 

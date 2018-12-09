@@ -19,10 +19,13 @@ class EventUpdate extends Mailable
      *
      * @return void
      */
-    public function __construct($eventname, $emailmessage)
+    public function __construct($eventname, $emailmessage, $fromname, $fromemail, $filesArr)
     {
         $this->eventname = $eventname;
         $this->emailmessage = $emailmessage;
+        $this->fromname = $fromname;
+        $this->fromemail = $fromemail;
+        $this->filesArr = $filesArr;
     }
 
     /**
@@ -32,10 +35,17 @@ class EventUpdate extends Mailable
      */
     public function build()
     {
-        return $this->view('emails.eventupdate')
+        $email = $this->view('emails.eventupdate')
+            ->replyTo($this->fromemail, ($this->fromname ?? ''))
             ->with([
                 'eventname' => $this->eventname,
                 'emailmessage' => $this->emailmessage
             ]);
+
+        foreach ($this->filesArr as $file) {
+            $email->attach(public_path() . $file);
+        }
+
+        return $email;
     }
 }

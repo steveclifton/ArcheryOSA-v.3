@@ -80,12 +80,48 @@ class EventCommunicationController extends EventController
             return redirect()->back()->with('failure', 'Event not found');
         }
 
-        $type = $request->input('email');
+        $type    = $request->input('email');
         $message = $request->input('message');
 
         if (empty($type) || empty($message)) {
             return back()->with('failure', 'Please check details and try again');
         }
+
+        $filesArr = [];
+        $file1 = null;
+        if (!empty($request->file('upload1'))) {
+            $file = $request->file('upload1');
+            $name = str_slug(time()).'.'.$file->getClientOriginalExtension();
+            $destinationPath = public_path('/content/files');
+
+            $file->move($destinationPath, $name);
+            $file1 = '/content/files/' . $name;
+            $filesArr[] = $file1;
+        }
+
+        $file2 = null;
+        if (!empty($request->file('upload2'))) {
+            $file = $request->file('upload2');
+            $name = str_slug(time()).'.'.$file->getClientOriginalExtension();
+            $destinationPath = public_path('/content/files');
+
+            $file->move($destinationPath, $name);
+            $file2 = '/content/files/' . $name;
+            $filesArr[] = $file2;
+        }
+
+        $file3 = null;
+        if (!empty($request->file('upload3'))) {
+            $file = $request->file('upload3');
+            $name = str_slug(time()).'.'.$file->getClientOriginalExtension();
+            $destinationPath = public_path('/content/files');
+
+            $file->move($destinationPath, $name);
+            $file3 = '/content/files/' . $name;
+            $filesArr[] = $file3;
+        }
+
+
 
         switch($type) {
 
@@ -93,14 +129,14 @@ class EventCommunicationController extends EventController
                 $evententrys = EventEntry::where('eventid', $event->eventid)->get();
 
                 foreach ($evententrys as $evententry) {
-                    SendEventUpdate::dispatch($evententry->email, $event->label, $request->input('message'));
+                    SendEventUpdate::dispatch($evententry->email, $event->label, $request->input('message'), $event->contactname, $event->email, $filesArr);
                 }
                 break;
 
             case 'approved' :
                 $evententrys = EventEntry::where('eventid', $event->eventid)->where('entrystatusid', 2)->get();
                 foreach ($evententrys as $evententry) {
-                    SendEventUpdate::dispatch($evententry->email, $event->label, $request->input('message'));
+                    SendEventUpdate::dispatch($evententry->email, $event->label, $request->input('message'), $event->contactname, $event->email, $filesArr);
                 }
                 break;
 
@@ -108,7 +144,7 @@ class EventCommunicationController extends EventController
                 $evententrys = EventEntry::where('eventid', $event->eventid)->where('paid', 0)->get();
 
                 foreach ($evententrys as $evententry) {
-                    SendEventUpdate::dispatch($evententry->email, $event->label, $request->input('message'));
+                    SendEventUpdate::dispatch($evententry->email, $event->label, $request->input('message'), $event->contactname, $event->email, $filesArr);
                 }
                 break;
 
