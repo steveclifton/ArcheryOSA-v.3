@@ -247,7 +247,7 @@ class EventEntryController extends EventController
             return redirect()->route('home');
         }
 
-        SendEventUpdate::dispatch($evententry->email, $event->label, $request->input('message'));
+        SendEventUpdate::dispatch($evententry->email, $event->label, $request->input('message'), $event->contactname, $event->email);
 
         return redirect('events/manage/evententries/' . $event->eventurl)->with('success', 'Email Sent');
 

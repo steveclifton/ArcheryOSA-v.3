@@ -26,7 +26,7 @@ class SendEventUpdate extends ArcheryOSASender implements ShouldQueue
      *
      * @return void
      */
-    public function __construct($email, $eventname, $emailmessage, $fromname, $fromemail, $filesArr)
+    public function __construct($email, $eventname, $emailmessage, $fromname, $fromemail, $filesArr = [])
     {
         $this->email = $email;
         $this->eventname = $eventname;
