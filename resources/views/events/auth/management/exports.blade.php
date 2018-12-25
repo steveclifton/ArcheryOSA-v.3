@@ -45,6 +45,17 @@
                                 <a href="/event/export/entries/{{$event->eventurl}}/pdf"><i class="fa fa-file-pdf-o fa-3x"></i></a>
                             </td>
                         </tr>
+                        <tr>
+                            <td><strong>Results</strong></td>
+                            <td>
+                                @foreach ($eventcompetitions as $ec)
+
+                                    <a href="/event/export/results/{{$event->eventurl}}/{{$ec->eventcompetitionid}}"><i class="fa fa-file-excel-o fa-3x"></i>
+                                        <span>{!! $ec->label . ' - ' . date('d F Y', strtotime($ec->date))!!}</span>
+                                    </a><br><br>
+                                @endforeach
+                            </td>
+                        </tr>
                     </tbody>
                 </table>
             </div>

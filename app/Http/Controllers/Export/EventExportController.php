@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Export;
 
+use App\Http\Controllers\Events\PublicEvents\EventResultsController;
 use App\Models\Event;
 use App\Models\EventCompetition;
 use Illuminate\Http\Request;
@@ -17,34 +18,15 @@ class EventExportController extends Controller
     public function getExportView(Request $request)
     {
         // Get Event
-        if (Auth::user()->isSuperAdmin()) {
-            $event = DB::select("
-            SELECT e.*, es.label as status
-            FROM `events` e
-            JOIN `eventstatus` es USING (`eventstatusid`)
-            WHERE `e`.`eventurl` = :eventurl
-            LIMIT 1
-        ",['eventurl' => $request->eventurl]);
-        }
-        else {
-            $event = DB::select("
-            SELECT e.*, es.label as status
-            FROM `events` e
-            JOIN `eventadmins` ea USING (`eventid`)
-            JOIN `eventstatus` es USING (`eventstatusid`)
-            WHERE `ea`.`userid` = :userid
-            AND `e`.`eventurl` = :eventurl
-            LIMIT 1
-        ", ['userid' => Auth::id(), 'eventurl' => $request->eventurl]);
-        }
-
-        $event = !empty($event) ? reset($event) : null;
+        $event = $this->userOk($request->eventurl);
 
         if (empty($event)) {
             return redirect()->back()->with('failure', 'Event not found');
         }
 
-        return view('events.auth.management.exports', compact('event'));
+        $eventcompetitions = EventCompetition::where('eventid', $event->eventid)->get();
+
+        return view('events.auth.management.exports', compact('event', 'eventcompetitions'));
     }
 
     public function exportevententries(Request $request)
@@ -135,8 +117,77 @@ class EventExportController extends Controller
 
     }
 
+    public function exportEventScores(Request $request)
+    {
+        $event = Event::where('eventurl', $request->eventurl)->get()->first();
 
-    private function makeentrypdfmarkup($eventname, $entrys)
+        if (empty($event) || empty($request->eventcompetitionid)) {
+            die();
+        }
+
+        $results = DB::select("
+                SELECT ee.firstname, ee.lastname, ee.gender, ec.entrycompetitionid, 
+                    ec.eventcompetitionid, ec.roundid, d.label as divisionname, d.bowtype, r.unit,
+                    sf.*, c.label as clubname
+                FROM `evententrys` ee
+                JOIN `entrycompetitions` ec USING (`entryid`)
+                JOIN `divisions` d ON (`ec`.`divisionid` = `d`.`divisionid`)
+                JOIN `rounds` r ON (ec.roundid = r.roundid)
+                JOIN `clubs` c ON (ee.clubid = c.clubid)
+                JOIN `scores_flat` sf ON (ee.entryid = sf.entryid AND ec.entrycompetitionid = sf.entrycompetitionid AND ec.roundid = sf.roundid)
+                WHERE `ee`.`eventid` = '".$event->eventid."'
+                AND `ec`.`eventcompetitionid` = :eventcompetitionid
+                AND `ee`.`entrystatusid` = 2
+                ORDER BY `d`.label
+            ", ['eventcompetitionid' => $request->eventcompetitionid]);
+
+
+        $newresults = [];
+        foreach ($results as $entry) {
+            $gender = $entry->gender == 'm' ? 'Men\'s ' : 'Women\'s ';
+            $newresults[$entry->bowtype][$gender . $entry->divisionname][] = $entry;
+
+            if (!empty($apicall)) {
+                unset($entry->userid);
+            }
+        }
+
+        $filename = str_replace(' ', '-', $event->label) .'-' . date('d-m', time());
+        $csv = Writer::createFromFileObject(new \SplTempFileObject());
+
+        $csv->insertOne(['Firstname', 'Lastname', 'Club', 'Division', 'Membership', 'Gender', 'Dist1', 'Dist2', 'Dist3', 'Dist4', 'Total', 'Hits', '10', 'X']);
+
+        foreach ($newresults as $divisions) {
+            foreach ($divisions as $division) {
+                foreach ($division as $d) {
+                    $arr = [
+                        ucwords($d->firstname ?? ''),
+                        ucwords($d->lastname ?? ''),
+                        $d->clubname ?? '',
+                        $d->divisionname ?? '',
+                        $d->membership ?? '',
+                        $d->gender ?? '',
+                        $d->dist1score ?? '',
+                        $d->dist2score ?? '',
+                        $d->dist3score ?? '',
+                        $d->dist4score ?? '',
+                        $d->total ?? '',
+                        $d->totalhits ?? '',
+                        $d->inners ?? '',
+                        $d->max ?? '',
+                    ];
+                    $csv->insertOne($arr);
+                }
+
+            }
+        }
+
+        $csv->output($filename . '.csv');
+        die;
+
+    }
+
+    protected function makeentrypdfmarkup($eventname, $entrys)
     {
         $html = '<h3>' .$eventname. '</h3>';
 
@@ -206,4 +257,6 @@ class EventExportController extends Controller
 
         return $html;
     }
+
+
 }

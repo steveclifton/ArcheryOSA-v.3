@@ -16,6 +16,48 @@ use App\Http\Controllers\Traits\UserResults;
 class EventResultsController extends EventController
 {
     use UserResults;
+
+
+    /**
+     * MAIN entry point into get results.
+     *  - Does filtering between league and events
+     *
+     * @param Request $request
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\Http\RedirectResponse|\Illuminate\View\View
+     */
+    public function getCompetitionResults(Request $request)
+    {
+        if (empty($request->eventcompetitionid) || empty($request->eventurl)) {
+            return back()->with('failure', 'Invalid Request');
+        }
+
+        $event = Event::where('eventurl', $request->eventurl)->get()->first();
+
+        if (strcasecmp($request->eventcompetitionid, 'overall') === 0) {
+            // league processing
+            if ($event->isLeague()) {
+                return $this->getLeagueOverallResults($event);
+            }
+
+            // Normal Event
+            return $this->getEventOverallResults($event);
+        }
+
+
+
+        // league processing
+        if ($event->isLeague()) {
+            return $this->getLeagueCompetitionResults($event, $request->eventcompetitionid);
+        }
+
+        // Get the results for the event and the eventcompetitionid
+        return $this->getEventCompResults($event, $request->eventcompetitionid);
+
+
+    }
+
+
+
     /**
      * Get the Events competitions and their results status
      *
@@ -73,45 +115,6 @@ class EventResultsController extends EventController
             $overall = false;
         }
         return view('events.results.eventcompetitions', compact('event', 'eventcompetitions', 'overall'));
-    }
-
-
-    /**
-     * MAIN entry point into get results.
-     *  - Does filtering between league and events
-     *
-     * @param Request $request
-     * @return \Illuminate\Contracts\View\Factory|\Illuminate\Http\RedirectResponse|\Illuminate\View\View
-     */
-    public function getCompetitionResults(Request $request)
-    {
-        if (empty($request->eventcompetitionid) || empty($request->eventurl)) {
-            return back()->with('failure', 'Invalid Request');
-        }
-
-        $event = Event::where('eventurl', $request->eventurl)->get()->first();
-
-        if (strcasecmp($request->eventcompetitionid, 'overall') === 0) {
-            // league processing
-            if ($event->isLeague()) {
-                return $this->getLeagueOverallResults($event);
-            }
-
-            // Normal Event
-            return $this->getEventOverallResults($event);
-        }
-
-
-
-        // league processing
-        if ($event->isLeague()) {
-            return $this->getLeagueCompetitionResults($event, $request->eventcompetitionid);
-        }
-
-        // Get the results for the event and the eventcompetitionid
-        return $this->getEventCompResults($event, $request->eventcompetitionid);
-
-
     }
 
 
@@ -402,7 +405,7 @@ class EventResultsController extends EventController
      * @param $eventid
      * @return array|bool|mixed
      */
-    private function getEventEntrySorted($eventid)
+    public function getEventEntrySorted($eventid)
     {
         $entrys = $this->getcacheditem('evententrys-' . $eventid);
 
