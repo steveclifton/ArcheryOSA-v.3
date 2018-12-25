@@ -88,8 +88,17 @@ class EventController extends Controller
 
         $clublabel       = Club::where('clubid', $event->clubid)->pluck('label')->first();
 
+        $entries = DB::select("
+            SELECT e.firstname, e.lastname, d.label as divisionname
+            FROM `evententrys` e
+            JOIN `divisions` d USING (`divisionid`)
+            WHERE e.`eventid` = :eventid
+            ORDER BY `d`.`label`, `e`.`firstname`
+        ", ['eventid' => $event->eventid]);
+
         return view('events.public.details',
-            compact('event', 'entrycount', 'scorecount', 'evententryopen', 'roundlabels', 'competitiontype', 'clublabel'));
+            compact('event', 'entries', 'entrycount', 'scorecount', 'evententryopen',
+                    'roundlabels', 'competitiontype', 'clublabel'));
     }
 
 

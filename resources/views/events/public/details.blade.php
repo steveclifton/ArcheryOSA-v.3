@@ -4,6 +4,8 @@
 
 @section('content')
 
+    <link href="{{URL::asset("/plugins/custombox/css/custombox.css")}}" rel="stylesheet">
+
     <div class="row">
         <div class="col-sm-12">
             <div class="page-title-box">
@@ -67,6 +69,14 @@
                                     <a href="javascript:;"
                                        class="btn btn-inverse waves-effect waves-light">Closed</a>
                                 @endif
+
+
+                            </div>
+                            <br>
+                            <div class="widget-inline-box text-center">
+                                <button type="button" class="btn btn-primary waves-effect waves-light"
+                                        data-toggle="modal"
+                                        data-target="#myModal">See Entries</button>
                             </div>
 
                         </div>
@@ -103,7 +113,6 @@
                     <div class="table-responsive">
                         <table class="table table-hover">
                             <tbody>
-
                                 <tr>
                                     <th class="w-25">Start Date</th>
                                     <td>{!! date('d F Y', strtotime($event->start)) !!}</td>
@@ -190,6 +199,46 @@
                 <div class="col-md-6 col-lg-6 ">
 
                 </div>
+
+
+                <div class="button-list">
+
+                </div>
+
+
+                <div id="myModal" class="modal fade"
+                     tabindex="-1" role="dialog"
+                     aria-labelledby="full-width-modalLabel"
+                     aria-hidden="true" style="display: none;">
+
+                    <div class="modal-dialog ">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h4 class="modal-title" id="full-width-modalLabel">{{ucwords($event->label)}}</h4>
+                                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                            </div>
+                            <div class="modal-body">
+                                <h4>Entries</h4>
+                                <div class="table-responsive">
+                                    <table class="table table-hover">
+                                        <tbody>
+                                            @foreach($entries as $entry)
+                                                <tr>
+                                                    <th class="">{{ucwords($entry->firstname ?? '') . ' ' . ucwords($entry->lastname ?? '')}}</th>
+                                                    <td>{{$entry->divisionname}}</td>
+                                                </tr>
+                                            @endforeach
+                                        </tbody>
+                                    </table>
+                                </div>
+
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary waves-effect" data-dismiss="modal">Close</button>
+                            </div>
+                        </div><!-- /.modal-content -->
+                    </div><!-- /.modal-dialog -->
+                </div><!-- /.modal -->
 
 
             </div>
