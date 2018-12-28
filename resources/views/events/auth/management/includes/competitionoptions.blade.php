@@ -22,3 +22,4 @@
     </div>
 </div>
 
+<input type="hidden" name="eid" value="{{$competition['eventcompetitionid'] ?? ''}}">
