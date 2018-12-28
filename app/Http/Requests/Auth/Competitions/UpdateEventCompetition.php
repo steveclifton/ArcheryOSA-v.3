@@ -47,7 +47,8 @@ class UpdateEventCompetition extends FormRequest
             'scoringenabled' => 'nullable',
             'roundids'       => 'required',
             'divisionids'    => 'required',
-            'ignoregenders'  => 'nullable'
+            'ignoregenders'  => 'nullable',
+            'eid'            => 'nullable'
         ];
     }
 
