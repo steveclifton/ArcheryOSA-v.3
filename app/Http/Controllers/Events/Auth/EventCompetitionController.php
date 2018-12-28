@@ -110,6 +110,7 @@ class EventCompetitionController extends EventController
                 $competition = $competition->toArray();
             }
 
+
             $formaction = empty($competition) ? 'create' : 'update';
 
             $entries = EntryCompetition::where('eventid', $event->eventid)
@@ -234,9 +235,10 @@ class EventCompetitionController extends EventController
 
         $event = Event::where('eventid', $validated['eventid'] ?? -1)->get()->first();
         $eventcompetition = EventCompetition::where('eventid', $event->eventid ?? -1)
-                                            ->where('date', $validated['date'] ?? -1)
+                                            ->where('eventcompetitionid', $validated['eid'] ?? -1)
                                             ->get()
                                             ->first();
+
 
         if (empty($event) || empty($eventcompetition)) {
             return redirect()->back()->with('failure', 'Invalid request');
