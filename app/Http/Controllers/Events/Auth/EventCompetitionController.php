@@ -21,13 +21,6 @@ use Illuminate\Support\Facades\DB;
 class EventCompetitionController extends EventController
 {
 
-    public function __construct(Request $request)
-    {
-        parent::__construct();
-        $this->event = Event::where('eventurl', $request->eventurl)->get()->first();
-
-    }
-
 
     /**
      * Gets the event competition view
@@ -37,29 +30,9 @@ class EventCompetitionController extends EventController
      */
     public function getEventCompetitionsView(Request $request)
     {
-        // Get Event
-        if (Auth::user()->isSuperAdmin()) {
-            $event = DB::select("
-            SELECT e.*, es.label as status
-            FROM `events` e
-            JOIN `eventstatus` es USING (`eventstatusid`)
-            WHERE `e`.`eventurl` = :eventurl
-            LIMIT 1
-        ",['eventurl' => $request->eventurl]);
-        }
-        else {
-            $event = DB::select("
-            SELECT e.*, es.label as status
-            FROM `events` e
-            JOIN `eventadmins` ea USING (`eventid`)
-            JOIN `eventstatus` es USING (`eventstatusid`)
-            WHERE `ea`.`userid` = :userid
-            AND `e`.`eventurl` = :eventurl
-            LIMIT 1
-        ", ['userid' => Auth::id(), 'eventurl' => $request->eventurl]);
-        }
 
-        $event = !empty($event) ? reset($event) : null;
+        // Get Event
+        $event = $this->userOk($request->eventurl);
 
         if (empty($event)) {
             return redirect()->back()->with('failure', 'Event not found');
