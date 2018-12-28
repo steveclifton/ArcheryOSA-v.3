@@ -126,7 +126,7 @@ class EventExportController extends Controller
         }
 
         $results = DB::select("
-                SELECT ee.firstname, ee.lastname, ee.gender, ec.entrycompetitionid, 
+                SELECT ee.firstname, ee.lastname, ee.gender, ee.membership, ec.entrycompetitionid, 
                     ec.eventcompetitionid, ec.roundid, d.label as divisionname, d.bowtype, r.unit,
                     sf.*, c.label as clubname
                 FROM `evententrys` ee
@@ -140,7 +140,6 @@ class EventExportController extends Controller
                 AND `ee`.`entrystatusid` = 2
                 ORDER BY `d`.label
             ", ['eventcompetitionid' => $request->eventcompetitionid]);
-
 
         $newresults = [];
         foreach ($results as $entry) {
