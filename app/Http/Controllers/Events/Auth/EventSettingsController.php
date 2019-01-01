@@ -67,7 +67,7 @@ class EventSettingsController extends EventController
         if (!empty($request->hasFile('imagedt'))) {
 
             //clean up old image
-            if (!empty($event->imagedt)) {
+            if (!in_array(($event->imagedt ?? ''), ['event1.jpg', 'event2.jpg'])) {
                 if (is_file(public_path('images/events/' . $event->imagedt))) {
                     unlink(public_path('images/events/' . $event->imagedt));
                 }
@@ -86,7 +86,7 @@ class EventSettingsController extends EventController
         if (!empty($request->hasFile('imagebanner'))) {
 
             //clean up old image
-            if (!empty($event->imagebanner)) {
+            if (!in_array(($event->imagebanner ?? ''), ['event1.jpg', 'event2.jpg'])) {
                 if (is_file(public_path('images/events/' . $event->imagebanner))) {
                     unlink(public_path('images/events/' . $event->imagebanner));
                 }
