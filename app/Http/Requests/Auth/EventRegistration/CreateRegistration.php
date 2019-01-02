@@ -44,13 +44,18 @@ class CreateRegistration extends FormRequest
             $schoolrequired = 'required';
         }
 
+        $membershiprequired = 'nullable';
+        if (!empty($event->membershiprequired)) {
+            $membershiprequired = 'required';
+        }
+
         return [
             'userid'         => 'nullable',
             'eventid'        => 'required',
             'firstname'      => 'required',
             'lastname'       => 'required',
             'email'          => 'nullable',
-            'membership'     => 'nullable',
+            'membership'     => $membershiprequired,
             'phone'          => 'nullable',
             'address'        => 'nullable',
             'notes'          => 'nullable',
@@ -75,6 +80,7 @@ class CreateRegistration extends FormRequest
             'dateofbirth.required' => 'Date of Birth is required',
             'divisionid.required'  => 'Division is required',
             'clubid.required'      => 'Club is required',
+            'membership.required' => 'Membership is required',
         ];
     }
 }

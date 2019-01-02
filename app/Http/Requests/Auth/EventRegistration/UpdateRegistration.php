@@ -45,13 +45,18 @@ class UpdateRegistration extends FormRequest
             $schoolrequired = 'required';
         }
 
+        $membershiprequired = 'nullable';
+        if (!empty($event->membershiprequired)) {
+            $membershiprequired = 'required';
+        }
+
         return [
             'eventid'        => 'required',
             'userid'         => 'required',
             'firstname'      => 'required',
             'lastname'       => 'required',
             'email'          => 'nullable',
-            'membership'     => 'nullable',
+            'membership'     => $membershiprequired,
             'phone'          => 'nullable',
             'address'        => 'nullable',
             'notes'          => 'nullable',
@@ -74,7 +79,8 @@ class UpdateRegistration extends FormRequest
             'lastname.required'    => 'Lastname is required',
             'email.required'       => 'Email address is required',
             'dateofbirth.required' => 'Date of Birth is required',
-            'divisionid.required'  => 'Division is required'
+            'divisionid.required'  => 'Division is required',
+            'membership.required' => 'Membership is required',
         ];
     }
 }
