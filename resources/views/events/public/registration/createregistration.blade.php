@@ -160,6 +160,7 @@
                         <div class="col-md-9">
                             <select name="schoolid"
                                     class="form-control {{ $errors->has('schoolid') ? 'is-invalid' : '' }}" required>
+                                <option disabled selected>Pick a School</option>
 
                                 @foreach($schools as $school)
                                     <option value="{{$school->schoolid}}"

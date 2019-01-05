@@ -12,6 +12,7 @@ use App\Models\EventAdmin;
 use App\Models\EventEntry;
 use App\Models\FlatScore;
 use App\Models\Round;
+use App\Models\School;
 use App\Models\Score;
 use App\User;
 use Illuminate\Http\Request;
@@ -127,9 +128,13 @@ class EventEntryController extends EventController
 
         $clubs = Club::where('visible', 1)->orderby('label')->get();
 
+        $schools = null;
+        if ($event->schoolrequired) {
+            $schools = School::where('visible', 1)->orderby('label')->get();
+        }
 
         return view('events.auth.management.entries.add',
-            compact('user', 'event', 'clubs', 'divisionsfinal', 'competitionsfinal', 'leaguecompround', 'multipledivisions'));
+            compact('user', 'event', 'schools', 'clubs', 'divisionsfinal', 'competitionsfinal', 'leaguecompround', 'multipledivisions'));
     }
 
     public function getEventEntryUpdateView(Request $request)
@@ -187,6 +192,11 @@ class EventEntryController extends EventController
 
         $clubs = Club::where('visible', 1)->orderby('label')->get();
 
+        $schools = null;
+        if ($event->schoolrequired) {
+            $schools = School::where('visible', 1)->orderby('label')->get();
+        }
+
         $entrycompetitions = EntryCompetition::where('entryid', $evententry->entryid)->get();
 
         $entrycompetitionids = [];
@@ -196,7 +206,7 @@ class EventEntryController extends EventController
 
 
         return view('events.auth.management.entries.update',
-                compact('user', 'entrycompetitionids', 'evententry', 'event',
+                compact('user', 'entrycompetitionids', 'evententry', 'event', 'schools',
                         'clubs', 'divisionsfinal', 'competitionsfinal',
                         'leaguecompround', 'multipledivisions'
                         )
@@ -348,7 +358,6 @@ class EventEntryController extends EventController
 
     }
 
-
     public function sendApprove(Request $request)
     {
         $event = $this->userOk($request->eventurl);
@@ -387,8 +396,6 @@ class EventEntryController extends EventController
 
 
     }
-
-
 
     public function removeEntry(Request $request)
     {

@@ -101,7 +101,6 @@ class EventRegistrationController extends EventController
 
             $competitionsfinal[$eventcompetition->date][$eventcompetition->label] = $eventcompetition;
         }
-//        dd($competitionsfinal);
 
         $clubs = Club::where('visible', 1)->orderby('label')->get();
 
@@ -190,6 +189,7 @@ class EventRegistrationController extends EventController
         $evententry->membership    = !empty($validated['membership'])     ? strtolower($validated['membership']) : '';
         $evententry->notes         = !empty($validated['notes'])          ? strtolower($validated['notes'])      : '';
         $evententry->clubid        = !empty($validated['clubid'])         ? intval($validated['clubid'])         : '';
+        $evententry->schoolid        = !empty($validated['schoolid'])         ? intval($validated['schoolid'])         : '';
         $evententry->divisionid    = !empty($validated['divisionid'])     ? $validated['divisionid']             : '';
         $evententry->dateofbirth   = !empty($validated['dateofbirth'])    ? $validated['dateofbirth']            : '';
         $evententry->gender        = !empty($validated['gender'] == 'm')  ? 'm' : 'f';
@@ -286,6 +286,7 @@ class EventRegistrationController extends EventController
         $evententry->notes        = !empty($validated['notes'])          ? strtolower($validated['notes'])       : '';
         $evententry->clubid       = !empty($validated['clubid'])         ? intval($validated['clubid'])          : '';
         $evententry->divisionid   = !empty($validated['divisionid'])     ? $validated['divisionid']              : '';
+        $evententry->schoolid     = !empty($validated['schoolid'])       ? $validated['schoolid']                : '';
         $evententry->gender       = !empty($validated['gender'] == 'm')  ? 'm' : 'f';
         $evententry->dateofbirth  = !empty($validated['dateofbirth'])    ? $validated['dateofbirth'] : '';
 
@@ -369,8 +370,6 @@ class EventRegistrationController extends EventController
 
         $user = User::where('userid', $validated['userid'] ?? -1)->get()->first();
 
-
-
         if (empty($event)) {
             return back()->with('failure', 'Please try again later');
         }
@@ -430,6 +429,7 @@ class EventRegistrationController extends EventController
         $evententry->notes         = !empty($validated['notes'])          ? strtolower($validated['notes'])      : '';
         $evententry->clubid        = !empty($validated['clubid'])         ? intval($validated['clubid'])         : '';
         $evententry->divisionid    = !empty($validated['divisionid'])     ? $validated['divisionid']             : '';
+        $evententry->schoolid      = !empty($validated['schoolid'])       ? $validated['schoolid']               : '';
         $evententry->dateofbirth   = !empty($validated['dateofbirth'])    ? $validated['dateofbirth']            : '';
         $evententry->gender        = !empty($validated['gender'] == 'm')  ? 'm' : 'f';
         $evententry->enteredby     = Auth::id();
@@ -503,6 +503,7 @@ class EventRegistrationController extends EventController
         $evententry->notes        = !empty($validated['notes'])          ? strtolower($validated['notes'])       : '';
         $evententry->clubid       = !empty($validated['clubid'])         ? intval($validated['clubid'])          : '';
         $evententry->divisionid   = !empty($validated['divisionid'])     ? $validated['divisionid']              : '';
+        $evententry->schoolid     = !empty($validated['schoolid'])       ? $validated['schoolid']                : '';
         $evententry->gender       = !empty($validated['gender'] == 'm')  ? 'm' : 'f';
         $evententry->dateofbirth  = !empty($validated['dateofbirth'])    ? $validated['dateofbirth'] : '';
 
