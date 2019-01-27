@@ -157,7 +157,7 @@ class EventsHelper
 
         $mappeddivisions = [];
         foreach ($divisions as $division) {
-            $bowtype = 'other';
+            $bowtype = 'Other';
 
             switch (1) {
                 case (stripos($division->label, 'compound') > 0) :
