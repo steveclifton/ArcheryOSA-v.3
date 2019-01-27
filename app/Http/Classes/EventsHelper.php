@@ -161,19 +161,19 @@ class EventsHelper
 
             switch (1) {
                 case (stripos($division->label, 'compound') > 0) :
-                    $bowtype = 'compound';
+                    $bowtype = 'Compound';
                     break;
                 case (stripos($division->label, 'recurve') > 0) :
-                    $bowtype = 'recurve';
+                    $bowtype = 'Recurve';
                     break;
                 case (stripos($division->label, 'barebow') > 0) :
-                    $bowtype = 'barebow';
+                    $bowtype = 'Barebow';
                     break;
                 case (stripos($division->label, 'longbow') > 0) :
-                    $bowtype = 'longbow';
+                    $bowtype = 'Longbow';
                     break;
                 case (stripos($division->label, 'crossbow') > 0) :
-                    $bowtype = 'crossbow';
+                    $bowtype = 'Crossbow';
                     break;
 
             }
