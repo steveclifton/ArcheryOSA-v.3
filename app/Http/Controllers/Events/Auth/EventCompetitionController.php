@@ -7,16 +7,11 @@ use App\Http\Requests\Auth\Competitions\CreateEventCompetition;
 use App\Http\Requests\Auth\Competitions\CreateLeagueCompetition;
 use App\Http\Requests\Auth\Competitions\UpdateEventCompetition;
 use App\Http\Requests\Auth\Competitions\UpdateLeagueCompetition;
-use App\Models\Competition;
 use App\Models\EntryCompetition;
 use App\Models\Event;
-use App\Models\EventAdmin;
 use App\Models\EventCompetition;
-use App\Models\EventEntry;
 use App\Models\ScoringLevel;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\DB;
 
 class EventCompetitionController extends EventController
 {
