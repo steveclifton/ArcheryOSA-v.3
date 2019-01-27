@@ -109,7 +109,7 @@
                                 <thead>
                                     <tr id="tabltr">
                                         <th>Archer</th>
-                                        <th>{{$data->dist1}}</th>
+                                        <th>{{$data->dist1 ?? ''}}</th>
                                         @if(isset($data->dist2))<th>{{$data->dist2}}</th>@endif
                                         @if(isset($data->dist3))<th>{{$data->dist3}}</th>@endif
                                         @if(isset($data->dist4))<th>{{$data->dist4}}</th>@endif

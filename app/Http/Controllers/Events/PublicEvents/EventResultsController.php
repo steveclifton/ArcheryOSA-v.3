@@ -152,13 +152,19 @@ class EventResultsController extends EventController
             if (!empty($flatscoressorted[$entry->userid])) {
                 // they have scores, find the score that matches the details
                 foreach($flatscoressorted[$entry->userid] as $flatscore) {
+
+                    if ($event->isEvent()) {
+                        $entry->score[] = $flatscore;
+                        continue;
+                    }
+
+                    // league stuff needs to be checked
                     $divMatch = $entry->divisionid == $flatscore->divisionid;
                     $roundMatch = $entry->roundid == $flatscore->roundid;
 
                     if ($divMatch && $roundMatch) {
                         $entry->score[] = $flatscore;
                     }
-
                 }
             }
         }
@@ -169,14 +175,30 @@ class EventResultsController extends EventController
                 unset($entrys[$key]);
                 continue;
             }
-
             $gender = $entry->gender == 'm' ? 'Men\'s ' : 'Women\'s ';
             $evententrys[$entry->bowtype][$gender . $entry->divisionname][$entry->userid] = $entry;
         }
 
+
         $finalResults = [];
         foreach ($evententrys as $bowtype => $div) {
+
             foreach ($div as $divname => $archers) {
+
+                $rounds = [];
+
+                foreach($archers as $a) {
+                    if (count($a->score) > count($rounds)) {
+                        // empty the array, rebuilt
+                        $rounds = [];
+                        $i = 1;
+                        foreach ($a->score as $score) {
+                            $rounds[$score->eventcompetitionid] = $score->roundname;
+                        }
+                    }
+                }
+
+                // $rounds is the list of eventcompetitions shot for this event. They will be in date order
 
                 // here is the list of archers results for this particular bowtype and division
                 // combine the results
@@ -185,9 +207,17 @@ class EventResultsController extends EventController
                     $data = new \stdClass();
                     $data->name     = $archer->firstname . ' ' . $archer->lastname;
 
-                    $i = 1;
                     if (!empty($archer->score)) {
+
                         foreach ($archer->score as $score) {
+
+                            $i = 1;
+                            foreach($rounds as $key => $name) {
+                                if ($key == $score->eventcompetitionid) {
+                                    break;
+                                }
+                                $i++;
+                            }
 
                             $dist           = 'dist' . $i;
                             $data->{$dist}  = $score->roundname;
