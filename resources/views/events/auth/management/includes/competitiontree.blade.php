@@ -62,17 +62,24 @@
             <div class="card-box">
                 <h4 class="text-dark header-title m-t-0 m-b-30">Select the divisions required for this day's competitions</h4>
                 <div id="checkTreeDivisions">
-                    @foreach($mappeddivisions as $bowtype => $division)
-                    <ul>
-                        <li data-jstree='{"opened":{!! $i++ == 1 ? 'true': 'false' !!}, "icon": "ti-angle-right"}'>{{ucwords($bowtype)}}
-                            <ul>
-                                @foreach($division as $d)
-                                <li data-divisionid="{{$d->divisionid}}"
-                                    data-jstree='{"opened":false,"icon":"ti-angle-right","selected":"{{ in_array($d->divisionid, $arr)}}"}'>{{$d->label}}
-                                @endforeach
-                            </ul>
-                        </li>
-                    </ul>
+                    @foreach($mappeddivisions as $orgname => $divisions)
+                        <ul>
+                            <li data-jstree='{"opened":true, "icon": "ti-angle-right"}'>{{$orgname}}
+                                <ul>
+                                    @foreach($divisions as $bowtype => $divs)
+                                        <li data-jstree='{"opened":false, "icon": "ti-angle-right"}'>{{$bowtype}}
+                                            <ul>
+                                                @foreach($divs as $t)
+                                                    <li data-divisionid="{{$t->divisionid}}"
+                                                        data-jstree='{ "icon":"ti-angle-right",
+                                                        "selected":"{!!in_array($t->divisionid, $arr)!!}"}'
+                                                        class="division">{{$t->label}}</li>
+                                                @endforeach
+                                            </ul>
+                                    @endforeach
+                                </ul>
+                            </li>
+                        </ul>
                     @endforeach
                 </div>
             </div>
