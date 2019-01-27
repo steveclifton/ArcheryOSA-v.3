@@ -73,7 +73,7 @@ class EventController extends Controller
         // check only for events, LEAGUE is different
         if ($event->isEvent() && $evententryopen) {
 
-            if ($entrycount >= $event->entrylimit) {
+            if (!empty($event->entrylimit) && $entrycount >= $event->entrylimit) {
                 $evententryopen = false;
             }
             else if (time() > (strtotime($event->start) - 64800)) { // - 18 hours
