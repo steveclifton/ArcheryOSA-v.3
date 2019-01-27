@@ -58,35 +58,42 @@ class EventController extends Controller
             return redirect('/');
         }
 
-        $entrycount     = DB::table('evententrys')
+        $entrycount = DB::table('evententrys')
                         ->where('eventid', $event->eventid)
                         ->count();
 
-        $scorecount     = DB::table('scores')
+        $scorecount = DB::table('scores')
                         ->where('eventid', $event->eventid)
                         ->count();
 
 
-        $evententryopen = $event->eventstatusid == 1 ? true : false;
-        if ( $evententryopen && (time() > strtotime($event->start) && $event->isEvent()) ) {
-            $evententryopen = false;
-        }
 
-        if ($evententryopen) {
-            // get the eventcomps, if empty, false
-            $eventcompetitions = EventCompetition::where('eventid', $event->eventid)->get()->first();
-            if (empty($eventcompetitions)) {
+        $evententryopen = $event->eventstatusid === 1 ? true : false;
+
+        // check only for events, LEAGUE is different
+        if ($event->isEvent() && $evententryopen) {
+
+            if ($entrycount >= $event->entrylimit) {
                 $evententryopen = false;
+            }
+            else if (time() > (strtotime($event->start) - 64800)) { // - 18 hours
+                $evententryopen = false;
+            }
+
+            if ($evententryopen) {
+                // get the eventcomps, if empty, false
+                $eventcompetitions = EventCompetition::where('eventid', $event->eventid)->get()->first();
+                if (empty($eventcompetitions)) {
+                    $evententryopen = false;
+                }
             }
         }
 
-
-
-        $roundlabels    = $this->helper->getCompetitionRoundLabels($event);
+        $roundlabels = $this->helper->getCompetitionRoundLabels($event);
 
         $competitiontype = EventType::where('eventtypeid', $event->eventtypeid)->pluck('label')->first();
 
-        $clublabel       = Club::where('clubid', $event->clubid)->pluck('label')->first();
+        $clublabel = Club::where('clubid', $event->clubid)->pluck('label')->first();
 
         $entries = DB::select("
             SELECT e.firstname, e.lastname, d.label as divisionname
