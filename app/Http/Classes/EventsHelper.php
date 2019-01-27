@@ -149,7 +149,11 @@ class EventsHelper
     public function getMappedDivisionsTree()
     {
         // Get all available competitions
-        $divisions = Division::get();
+        $divisions = DB::select("
+            SELECT d.*, o.label as organisationname
+            FROM `divisions` d
+            LEFT JOIN `organisations` o USING (`organisationid`)
+        ");
 
         $mappeddivisions = [];
         foreach ($divisions as $division) {
@@ -174,9 +178,10 @@ class EventsHelper
 
             }
 
-            $mappeddivisions[$bowtype][] = $division;
-        }
+            $organisation = !empty($division->organisationname) ? $division->organisationname : 'Other';
 
+            $mappeddivisions[$organisation][$bowtype][] = $division;
+        }
         return $mappeddivisions;
     }
 
