@@ -11,7 +11,7 @@ $(function () {
         var selectedElmsIds = $('#checkTree').jstree("get_selected", true);
         var checkedRounds = [];
         $.each(selectedElmsIds, function() {
-            if (this.data.roundid != '') {
+            if (typeof this.data.roundid !== 'undefined' && this.data.roundid != '') {
                 checkedRounds.push(this.data.roundid);
             }
         });
@@ -20,12 +20,15 @@ $(function () {
 
         // Divisions
         var selectedElmsIds = $('#checkTreeDivisions').jstree("get_selected", true);
+
         var checkedDivisions = [];
         $.each(selectedElmsIds, function() {
-            if (this.data.divisionid != '') {
+            if (typeof this.data.divisionid !== 'undefined' && this.data.divisionid != '') {
                 checkedDivisions.push(this.data.divisionid);
             }
         });
+
+
         document.getElementById('divisionfields').value = checkedDivisions.join(",");
 
         var errors = false;
