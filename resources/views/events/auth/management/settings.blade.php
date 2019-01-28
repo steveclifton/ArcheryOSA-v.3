@@ -236,6 +236,12 @@
                     <div class="form-group row justify-content-end">
                         <div class=" col-md-9">
                             <span class="help-block"><small><a href="/eventdownload/{{$event->filename ?? ''}}">File: {{$event->filename ?? ''}}</a></small></span>
+
+                            <br><input name="removefile" id="clubrequired" type="checkbox">
+                            <label for="clubrequired">
+                                Remove
+                            </label>
+
                         </div>
                     </div>
                 @endif

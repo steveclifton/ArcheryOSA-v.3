@@ -129,6 +129,7 @@ class EventSettingsController extends EventController
         $event->clubrequired       = !empty($request->input('clubrequired'))       ? 1 : 0;
         $event->schoolrequired     = !empty($request->input('schoolrequired'))     ? 1 : 0;
         $event->membershiprequired = !empty($request->input('membershiprequired')) ? 1 : 0;
+        $event->filename           = (!empty($event->filename) && !empty($request->input('removefile'))) ? NULL : $event->filename;
         $event->save();
 
 
