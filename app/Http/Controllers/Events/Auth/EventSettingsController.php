@@ -63,6 +63,24 @@ class EventSettingsController extends EventController
             }
         }
 
+        if (!empty($request->hasFile('filename'))) {
+            $file = $request->file('filename');
+
+            // clean up the old one
+            if (!empty($event->filename) && is_file(public_path('files/events/' . $event->filename))) {
+                unlink(public_path('files/events/' . $event->filename));
+            }
+
+            @list($fileName, $fileExt) = explode('.', $file->getClientOriginalName());
+
+            $filename = $fileName .'-' . date('d-h-m') . '.' . $file->getClientOriginalExtension();
+
+            // save the file
+            $file->move('files/events', $filename);
+            $event->filename = $filename;
+
+        }
+
 
         if (!empty($request->hasFile('imagedt'))) {
 

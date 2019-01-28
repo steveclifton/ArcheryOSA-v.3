@@ -211,6 +211,7 @@ class EventResultsController extends EventController
 
                         foreach ($archer->score as $score) {
 
+                            // find the position of the 
                             $i = 1;
                             foreach($rounds as $key => $name) {
                                 if ($key == $score->eventcompetitionid) {

@@ -229,6 +229,24 @@
                     </div>
                 </div>
 
+                <hr>
+                <br>
+
+                @if (!empty($event->filename))
+                    <div class="form-group row justify-content-end">
+                        <div class=" col-md-9">
+                            <span class="help-block"><small><a href="/eventdownload/{{$event->filename ?? ''}}">File: {{$event->filename ?? ''}}</a></small></span>
+                        </div>
+                    </div>
+                @endif
+                <div class="form-group row">
+                    <label class="col-sm-12 col-md-3 col-form-label">Upload File</label>
+                    <div class="col-md-9">
+                        <input name="filename" type="file" class="form-control-file" id="uploadDesktop">
+                        <span class="help-block"><small>Will be shown on the Event Details page for Archers to download</small></span>
+                    </div>
+                </div>
+
                 <hr><br>
 
                 @if (!empty($event->imagedt))
