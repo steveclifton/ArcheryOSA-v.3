@@ -188,6 +188,14 @@
                                         {!! nl2br($event->schedule) !!}
                                     </td>
                                 </tr>
+                                @if(!empty($event->filename))
+                                <tr>
+                                    <th scope="row">Downloads</th>
+                                    <td>
+                                        <a href="/eventdownload/{{$event->filename}}">{{ $event->filename }}</a>
+                                    </td>
+                                </tr>
+                                    @endif
                             </tbody>
                         </table>
                     </div>
