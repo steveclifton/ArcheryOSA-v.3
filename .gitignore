@@ -16,3 +16,5 @@ yarn-error.log
 .editorconfig
 /app/Http/Controllers/Export/tmp/
 public/content/files/
+public/files/
+
