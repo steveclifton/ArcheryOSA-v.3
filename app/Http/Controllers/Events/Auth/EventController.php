@@ -151,7 +151,7 @@ class EventController extends Controller
             AND `e`.`eventstatusid` = 1
             AND `ec`.`scoringlevel` = 2
             AND `ec`.`scoringenabled` = 1
-            AND `e`.`eventtypeid` = 2
+            AND (`e`.`eventtypeid` = 2 OR `e`.`eventtypeid` = 3)
             ORDER BY `e`.`start`
         ", ['userid' => Auth::id()]);
 
