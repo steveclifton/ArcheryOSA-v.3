@@ -168,7 +168,7 @@ class EventController extends Controller
             return redirect('/');
         }
 
-        if ($event->isLeague()) {
+        if (1) {
             $leagueController = new LeagueController();
             return $leagueController->getUserLeagueScoringView($event);
         }
