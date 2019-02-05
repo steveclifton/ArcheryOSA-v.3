@@ -11,6 +11,7 @@ use App\Models\EventType;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 
 /**
  * Event Controller for PUBLIC REQUESTS
@@ -69,6 +70,7 @@ class EventController extends Controller
 
 
         $evententryopen = $event->eventstatusid === 1 ? true : false;
+        date_default_timezone_set('NZ');
 
         // check only for events, LEAGUE is different
         if ($event->isEvent() && $evententryopen) {
@@ -76,9 +78,11 @@ class EventController extends Controller
             if (!empty($event->entrylimit) && $entrycount >= $event->entrylimit) {
                 $evententryopen = false;
             }
-            else if (time() > (strtotime($event->start) - 64800)) { // - 18 hours
+            else if (time() > (strtotime($event->start))) {
                 $evententryopen = false;
             }
+
+            Log::info(date('d F Y h:m:s'));
 
             if ($evententryopen) {
                 // get the eventcomps, if empty, false
