@@ -78,11 +78,18 @@ class EventController extends Controller
             if (!empty($event->entrylimit) && $entrycount >= $event->entrylimit) {
                 $evententryopen = false;
             }
-            else if (time() > (strtotime($event->start))) {
+
+            // if the close date is after the start (allows people to submit results later)
+            $closeafterstart = strtotime($event->entryclose) > strtotime($event->start);
+
+            if ($evententryopen && $closeafterstart) {
+                $evententryopen = true;
+            }
+            // make it based off the end date + 1day, not start date. Allows people to join on the day until the end
+            else if ( time() > (strtotime($event->end) + 60*60*24) ) {
                 $evententryopen = false;
             }
 
-            Log::info(date('d F Y h:m:s'));
 
             if ($evententryopen) {
                 // get the eventcomps, if empty, false
