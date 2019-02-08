@@ -108,6 +108,7 @@
 
                 @php
                     $entryclose = (!empty($event->entryclose) && $event->entryclose != '1970-01-01') ? date('d F Y', strtotime($event->entryclose)) : 'Not Specified';
+
                 @endphp
                     <!-- START Table-->
                     <div class="table-responsive">

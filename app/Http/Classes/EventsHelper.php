@@ -27,6 +27,7 @@ class EventsHelper
             JOIN `eventstatus` es USING (`eventstatusid`)
             $join_scores
             $where
+            AND `e`.`visible` = 1
             GROUP BY IFNULL(`s`.`eventid`, `e`.`eventid`)
             ORDER BY `e`.`promoted` DESC, e.start DESC
             LIMIT $limit
