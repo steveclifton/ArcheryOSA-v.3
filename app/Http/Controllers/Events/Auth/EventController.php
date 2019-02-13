@@ -148,6 +148,7 @@ class EventController extends Controller
             JOIN `eventcompetitions` ec on (e.`eventid` = ec.eventid)
             JOIN `eventstatus` es ON (e.`eventstatusid` = es.eventstatusid)
             WHERE `ee`.`userid` = :userid
+              AND `ee`.`entrystatusid` = 2
             AND `e`.`eventstatusid` = 1
             AND `ec`.`scoringlevel` = 2
             AND `ec`.`scoringenabled` = 1

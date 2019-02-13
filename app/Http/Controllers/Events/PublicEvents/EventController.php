@@ -85,8 +85,13 @@ class EventController extends Controller
             if ($evententryopen && $closeafterstart) {
                 $evententryopen = true;
             }
+            // if its after closing date
+            else if ($evententryopen && time() > (strtotime($event->entryclose))) {
+                $evententryopen = false;
+            }
+
             // make it based off the end date + 1day, not start date. Allows people to join on the day until the end
-            else if ( time() > (strtotime($event->end) + 60*60*24) ) {
+            if ($evententryopen && time() > (strtotime($event->end) + 60*60*24) ) {
                 $evententryopen = false;
             }
 
