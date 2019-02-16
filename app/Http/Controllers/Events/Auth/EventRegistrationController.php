@@ -69,6 +69,7 @@ class EventRegistrationController extends EventController
             SELECT *
             FROM `eventcompetitions`
             WHERE `eventid` = :eventid
+            ORDER BY `date` ASC
         ", ['eventid' => $event->eventid]);
 
         $leaguecompround = null;
