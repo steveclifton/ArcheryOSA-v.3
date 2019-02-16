@@ -8,6 +8,7 @@ use App\Models\EventCompetition;
 use App\Models\ScoringLevel;
 use App\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\View;
 
 class AjaxController extends EventController
@@ -21,17 +22,16 @@ class AjaxController extends EventController
             ]);
         }
 
-
-        if (is_numeric($request->search)) {
-            $user = User::where('userid', $request->search)->take(3)->get();
-        }
-        else {
-            $user = User::where('email', 'like', $request->search . '%')->take(3)->get();
-        }
+        $users = DB::select("
+            SELECT *
+            FROM `users`
+            WHERE CONCAT_WS(' ', `firstname`, `lastname`) LIKE :search
+            LIMIT 3
+        ", ['search'=> '%' . $request->search . '%']);
 
         return response()->json([
             'success' => true,
-            'data'    => $user
+            'data'    => $users
         ]);
     }
 

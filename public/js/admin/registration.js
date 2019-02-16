@@ -4,7 +4,7 @@ $(function () {
 
     $(document).on('keyup', '#searchUser', function() {
         let search = $(this).val();
-
+        $('#searchResults').hide();
         if (isNaN(search) && search.length < 3 || search == '') {
             return;
         }
@@ -20,6 +20,7 @@ $(function () {
                 search: search
             }
         }).done(function( json ) {
+
             if (json.success) {
                 json.data.forEach(function(value) {
 
@@ -34,7 +35,7 @@ $(function () {
                     users[value.userid] = value;
                 });
 
-                $('#searchResults').toggle();
+                $('#searchResults').show();
             }
         });
     });

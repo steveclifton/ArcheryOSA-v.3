@@ -20,7 +20,7 @@
             @include('template.alerts')
 
             <div class="form-group row">
-                <label for="label" class="col-sm-12 col-md-3 col-form-label">Search Email/User ID</label>
+                <label for="label" class="col-sm-12 col-md-3 col-form-label">Search archer by name</label>
                 <div class="col-md-9">
                     <input id="searchUser" name="firstname" type="text" class="form-control" required>
                 </div>
