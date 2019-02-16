@@ -453,7 +453,7 @@ class EventResultsController extends EventController
             AND `ee`.`entrystatusid` = 2
             GROUP BY `ee`.`entryid`
             ORDER BY d.label, ee.userid, ec.eventcompetitionid
-        ");
+            ");
 
             $sortedEntrys = [];
             foreach ($entrys as $entry) {
@@ -478,7 +478,7 @@ class EventResultsController extends EventController
 
             $entrys = $sortedEntrys;
 
-            Cache::put('evententrys-' . $eventid, $entrys, 100);
+            Cache::put('evententrys-' . $eventid, $entrys, 5);
         }
 
 
