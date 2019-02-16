@@ -1,6 +1,6 @@
 @extends('template.default')
 
-@section ('title')Event Results @endsection
+@section ('title') {{ucwords($event->label) }} Results @endsection
 
 @section('content')
 
