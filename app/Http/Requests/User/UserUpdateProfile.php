@@ -32,6 +32,7 @@ class UserUpdateProfile extends FormRequest
             'address'    => 'nullable|string|max:155',
             'city'       => 'nullable|string|max:55',
             'postcode'   => 'nullable|numeric',
+            'membership' => 'nullable'
         ];
     }
 

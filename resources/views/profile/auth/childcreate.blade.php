@@ -67,6 +67,33 @@
                     </div>
                 </div>
 
+                <div class="form-group row">
+                    <label class="col-sm-12 col-md-3 col-form-label">Date of Birth</label>
+                    <div class="col-md-9">
+                        <div class="input-group">
+                            <input type="text" name="dateofbirth"
+                                   class="form-control datepicker-autoclose {{ $errors->has('dateofbirth') ? 'is-invalid' : '' }}"
+                                   placeholder="dd/mm/yyyy" value="{{old('dateofbirth')}}" id="">
+
+                            <div class="input-group-append">
+                                <span class="input-group-text"><i class="md md-event-note"></i></span>
+                            </div>
+                        </div><!-- input-group -->
+                    </div>
+                </div>
+
+
+                <div class="form-group row">
+                    <label for="inputMembership" class="col-sm-12 col-md-3 col-form-label">Membership</label>
+                    <div class="col-md-9">
+                        <input name="membership" type="text"
+                               class="form-control {{ $errors->has('membership') ? ' is-invalid' : '' }}"
+                               id="inputMembership" value="{{old('membership')}}">
+
+                    </div>
+                </div>
+
+
 
                 <div class="form-group mb-0 justify-content-start row">
                     <div class="col-sm-12 col-md-3 col-form-label"></div>

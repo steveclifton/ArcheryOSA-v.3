@@ -28,7 +28,8 @@ class CreateChild extends FormRequest
             'firstname'  => 'required|max:55',
             'lastname'   => 'required|max:55',
             'email'      => 'nullable|email|max:155',
-
+            'dateofbirth'=> 'nullable',
+            'membership' => 'nullable',
         ];
     }
 

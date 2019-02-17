@@ -101,12 +101,12 @@
                     <label for="label" class="col-sm-12 col-md-3 col-form-label">Membership Number</label>
                     <div class="col-md-9">
                         <input name="membership" type="text" class="form-control {{ $errors->has('email') ? ' is-invalid' : '' }}"
-                               value="{{old('membership')}}" {!! !empty($event->membershiprequired) ? 'required' : '' !!}>
-                        @if ($errors->has('membership'))
-                            <span class="invalid-feedback" role="alert">
-                                <strong>{{ $errors->first('membership') }}</strong>
-                            </span>
-                        @endif
+                               value="{{old('membership') ?? $user->membership}}" {!! !empty($event->membershiprequired) ? 'required' : '' !!}>
+                            @if ($errors->has('membership'))
+                                <span class="invalid-feedback" role="alert">
+                                    <strong>{{ $errors->first('membership') }}</strong>
+                                </span>
+                            @endif
                     </div>
                 </div>
 

@@ -78,6 +78,8 @@ class Controller extends BaseController
         $user->username  = strtolower(preg_replace("/[^a-zA-Z0-9]/", "", $validated['firstname'].$validated['lastname'])) . rand(1,1440);
         $user->password  = $this->createHash(12);
         $user->parentuserid = $parentuserid;
+        $user->membership  = strtolower($validated['membership']);
+        $user->dateofbirth  = $validated['dateofbirth'];
         $user->save();
 
         return $user->userid;

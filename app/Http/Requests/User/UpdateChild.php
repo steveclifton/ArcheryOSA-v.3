@@ -28,7 +28,9 @@ class UpdateChild extends FormRequest
             'firstname'  => 'required|max:55',
             'lastname'   => 'required|max:55',
             'email'      => 'nullable|max:155',
-            'username'   => 'required'
+            'username'   => 'required',
+            'dateofbirth'=> 'nullable',
+            'membership' => 'nullable',
         ];
     }
 

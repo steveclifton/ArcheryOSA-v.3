@@ -101,6 +101,18 @@
                                 </div><!-- input-group -->
                             </div>
                         </div>
+
+                        <div class="form-group col-md-4">
+                            <label for="membershipId" class="col-form-label">Membership</label>
+                            <input type="text" name="membership" class="form-control {{ $errors->has('membership') ? 'is-invalid' : '' }}"
+                                   id="membershipId" placeholder="Primary Membership" value="{{old('membership') ?? Auth::user()->membership ?? ''}}">
+                            @if ($errors->has('membership'))
+                                <span class="invalid-feedback" role="alert">
+                                    <strong>{{ $errors->first('membership') }}</strong>
+                                </span>
+                            @endif
+                        </div>
+
                     </div>
 
                     {{--<div class="form-group row">--}}

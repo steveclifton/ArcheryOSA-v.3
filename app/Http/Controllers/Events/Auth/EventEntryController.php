@@ -75,7 +75,7 @@ class EventEntryController extends EventController
         ");
 
         $canremoveentry = true;
-        
+
         return view('events.auth.management.entries', compact('event', 'evententries', 'canremoveentry'));
     }
 

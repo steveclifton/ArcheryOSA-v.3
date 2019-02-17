@@ -124,6 +124,7 @@ class ProfileController extends Controller
         $userrelation->relationid = $userid;
         $userrelation->authorised = 1;
         $userrelation->hash = $this->createHash();
+
         $userrelation->save();
 
 
@@ -155,6 +156,9 @@ class ProfileController extends Controller
         $user->firstname = strtolower($validated['firstname']);
         $user->lastname  = strtolower($validated['lastname']);
         $user->email     = !empty($validated['email']) ? $validated['email'] : $user->email;
+        $user->membership  = strtolower($validated['membership']);
+        $user->dateofbirth  = $validated['dateofbirth'];
+
         $user->save();
 
 
@@ -298,6 +302,7 @@ class ProfileController extends Controller
         $user->postcode    = $validated['postcode'];
         $user->postcode    = $validated['postcode'];
         $user->dateofbirth = $validated['dateofbirth'];
+        $user->membership  = $validated['membership'];
 
         $user->save();
 
