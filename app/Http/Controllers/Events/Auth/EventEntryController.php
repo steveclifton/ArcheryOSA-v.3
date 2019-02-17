@@ -74,11 +74,8 @@ class EventEntryController extends EventController
             WHERE `eventid` = '".$event->eventid."'
         ");
 
-        $canremoveentry = false;
-        if (time() < strtotime($event->start)){
-            $canremoveentry = true;
-        }
-
+        $canremoveentry = true;
+        
         return view('events.auth.management.entries', compact('event', 'evententries', 'canremoveentry'));
     }
 
