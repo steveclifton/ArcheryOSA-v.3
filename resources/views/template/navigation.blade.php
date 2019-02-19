@@ -138,6 +138,7 @@
                                             </li>
                                             <li><a href="/admin/clubs">Clubs</a></li>
                                             <li><a href="/admin/divisions">Divisions</a></li>
+                                            <li><a href="/admin/divisionages">Division Age Groups</a></li>
                                             <li><a href="/admin/organisations">Organisations</a></li>
                                             <li><a href="/admin/rounds">Rounds</a></li>
                                             <li><a href="/admin/schools">Schools</a></li>
