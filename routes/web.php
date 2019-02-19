@@ -228,6 +228,13 @@ Route::middleware(['web'])->group(function() {
         Route::get('admin/divisions/update/{divisionid}', 'Admin\DivisionController@getUpdateView');
         Route::post('admin/divisions/update/{divisionid}', 'Admin\DivisionController@updateDivision');
 
+        // Division Ages
+        Route::get('admin/divisionages', 'Admin\DivisionAgesController@get');
+        Route::get('admin/divisionages/create', 'Admin\DivisionAgesController@getCreateView');
+        Route::post('admin/divisionages/create', 'Admin\DivisionAgesController@createDivision');
+        Route::get('admin/divisionages/update/{divisionagesid}', 'Admin\DivisionAgesController@getUpdateView');
+        Route::post('admin/divisionages/update/{divisionagesid}', 'Admin\DivisionAgesController@updateDivision');
+
         // Organisations
         Route::get('admin/organisations', 'Admin\OrganisationController@get');
         Route::get('admin/organisations/create', 'Admin\OrganisationController@getCreateView');
