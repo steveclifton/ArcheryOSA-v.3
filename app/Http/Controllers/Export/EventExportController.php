@@ -160,8 +160,8 @@ class EventExportController extends Controller
             foreach ($divisions as $division) {
                 foreach ($division as $d) {
                     $arr = [
-                        ucwords($d->firstname ?? ''),
-                        ucwords($d->lastname ?? ''),
+                        $d->firstname ?? '',
+                        $d->lastname ?? '',
                         $d->clubname ?? '',
                         $d->divisionname ?? '',
                         $d->membership ?? '',
