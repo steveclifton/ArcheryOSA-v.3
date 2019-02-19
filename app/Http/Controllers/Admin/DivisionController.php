@@ -36,7 +36,7 @@ class DivisionController extends Controller
     public function getCreateView()
     {
         $organisations = Organisation::get();
-        $divisionages = DivisionAge::get();
+        $divisionages = DivisionAge::orderby('label')->get();
 
         return view('admin.divisions.create', compact('organisations', 'divisionages'));
     }
@@ -52,7 +52,7 @@ class DivisionController extends Controller
 
         $division = Division::where('divisionid', $divisionid)->get()->first();
         $organisations = Organisation::get();
-        $divisionages = DivisionAge::get();
+        $divisionages = DivisionAge::orderby('label')->get();
 
         return view('admin.divisions.update', compact('division', 'organisations', 'divisionages'));
 
