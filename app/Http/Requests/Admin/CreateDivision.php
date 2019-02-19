@@ -32,6 +32,8 @@ class CreateDivision extends FormRequest
             'organisationid' => 'nullable|integer',
             'code'           => 'required|unique:divisions,code',
             'description'    => 'nullable',
+            'bowtype'        => 'nullable',
+            'age'            => 'nullable',
             'visible'        => 'nullable',
 
         ];

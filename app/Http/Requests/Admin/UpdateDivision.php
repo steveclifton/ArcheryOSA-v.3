@@ -32,6 +32,8 @@ class UpdateDivision extends FormRequest
             'organisationid' => 'nullable|integer',
             'code'           => 'required|unique:divisions,code,'.$this->code.',code',
             'description'    => 'nullable',
+            'bowtype'        => 'nullable',
+            'age'            => 'nullable',
             'visible'        => 'nullable',
 
         ];
