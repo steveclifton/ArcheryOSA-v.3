@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Requests\Admin\CreateDivision;
 use App\Http\Requests\Admin\UpdateDivision;
 use App\Models\Division;
+use App\Models\DivisionAge;
 use App\Models\Organisation;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
@@ -24,6 +25,7 @@ class DivisionController extends Controller
     public function get()
     {
         $divisions = Division::orderby('bowtype')->get();
+
         return view('admin.divisions.divisions', compact('divisions'));
     }
 
@@ -34,7 +36,9 @@ class DivisionController extends Controller
     public function getCreateView()
     {
         $organisations = Organisation::get();
-        return view('admin.divisions.create', compact('organisations'));
+        $divisionages = DivisionAge::get();
+
+        return view('admin.divisions.create', compact('organisations', 'divisionages'));
     }
 
 
@@ -48,8 +52,9 @@ class DivisionController extends Controller
 
         $division = Division::where('divisionid', $divisionid)->get()->first();
         $organisations = Organisation::get();
+        $divisionages = DivisionAge::get();
 
-        return view('admin.divisions.update', compact('division', 'organisations'));
+        return view('admin.divisions.update', compact('division', 'organisations', 'divisionages'));
 
     }
 
@@ -69,7 +74,8 @@ class DivisionController extends Controller
         $division->description    = !empty($validated['description'])     ? strtolower($validated['description']) : null;
         $division->visible        = !empty($validated['visible'])         ? 1 : 0;
         $division->createdby      = Auth::id();
-        $division->bowtype           = $this->getBowType($validated['label']);
+        $division->bowtype        = !empty($validated['bowtype'])         ? strtolower($validated['bowtype']) : null;
+        $division->age            = !empty($validated['age'])             ? strtolower($validated['age']) : null;
         $division->save();
 
         return redirect('/admin/divisions')->with('success', 'Division Created!');
@@ -92,7 +98,9 @@ class DivisionController extends Controller
         $division->code           = !empty($validated['code'])            ? strtolower($validated['code']) : null;
         $division->description    = !empty($validated['description'])     ? strtolower($validated['description']) : null;
         $division->visible        = !empty($validated['visible'])         ? 1 : 0;
-        $division->bowtype           = $this->getBowType($validated['label']);
+        $division->bowtype        = !empty($validated['bowtype'])         ? strtolower($validated['bowtype']) : null;
+        $division->age            = !empty($validated['age'])             ? strtolower($validated['age']) : null;
+
 
         $division->save();
 
