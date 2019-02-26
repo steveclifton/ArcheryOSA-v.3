@@ -66,13 +66,13 @@
                     <label class="col-sm-12 col-md-3 col-form-label">Age Group</label>
                     <div class="col-md-9">
                         <select name="age" class="form-control">
-
-                            @foreach($divisionages as $divage)
-                                <option value="{{$divage->label}}"
-                                        {!! old('age') ?? $division->age == $divage->label ? 'selected' : '' !!}>
-                                    {{ucwords($divage->label)}}
-                                </option>
-                            @endforeach
+                            <option value="none">None</option>
+                                @foreach($divisionages as $divage)
+                                    <option value="{{$divage->label}}"
+                                            {!! old('age') ?? $division->age == $divage->label ? 'selected' : '' !!}>
+                                        {{ucwords($divage->label)}}
+                                    </option>
+                                @endforeach
                         </select>
                         <span class="help-block"><small>Select an organisation the division belongs to</small></span>
                     </div>

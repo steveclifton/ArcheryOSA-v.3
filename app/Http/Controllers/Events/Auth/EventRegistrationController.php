@@ -374,9 +374,7 @@ class EventRegistrationController extends EventController
         if (empty($event)) {
             return back()->with('failure', 'Please try again later');
         }
-        else if (!empty($user) && !empty($user->email != $validated['email'])) {
-            return back()->with('failure', 'Email does not match that on record');
-        }
+
 
         // could be a manual entry, try lookup by email
         if (empty($user)) {
@@ -424,6 +422,7 @@ class EventRegistrationController extends EventController
         $evententry->firstname     = !empty($validated['firstname'])      ? strtolower($validated['firstname'])  : '';
         $evententry->lastname      = !empty($validated['lastname'])       ? strtolower($validated['lastname'])   : '';
         $evententry->email         = !empty($validated['email'])          ? $validated['email']                  : '';
+        $evententry->bib           = !empty($validated['bib'])            ? $validated['bib']                  : '';
         $evententry->address       = !empty($validated['address'])        ? strtolower($validated['address'])    : '';
         $evententry->phone         = !empty($validated['phone'])          ? strtolower($validated['phone'])      : '';
         $evententry->membership    = !empty($validated['membership'])     ? strtolower($validated['membership']) : '';
@@ -498,6 +497,7 @@ class EventRegistrationController extends EventController
         $evententry->firstname    = !empty($validated['firstname'])      ? strtolower($validated['firstname'])   : '';
         $evententry->lastname     = !empty($validated['lastname'])       ? strtolower($validated['lastname'])    : '';
         $evententry->email        = !empty($validated['email'])          ? $validated['email']                   : '';
+        $evententry->bib          = !empty($validated['bib'])            ? $validated['bib']                   : '';
         $evententry->address      = !empty($validated['address'])        ? strtolower($validated['address'])     : '';
         $evententry->phone        = !empty($validated['phone'])          ? strtolower($validated['phone'])       : '';
         $evententry->membership   = !empty($validated['membership'])     ? strtolower($validated['membership'])  : '';

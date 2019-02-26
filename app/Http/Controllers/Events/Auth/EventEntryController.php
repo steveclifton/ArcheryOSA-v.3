@@ -131,7 +131,7 @@ class EventEntryController extends EventController
         }
 
         return view('events.auth.management.entries.add',
-            compact('user', 'event', 'schools', 'clubs', 'divisionsfinal', 'competitionsfinal', 'leaguecompround', 'multipledivisions'));
+            compact('event', 'schools', 'clubs', 'divisionsfinal', 'competitionsfinal', 'leaguecompround', 'multipledivisions'));
     }
 
     public function getEventEntryUpdateView(Request $request)

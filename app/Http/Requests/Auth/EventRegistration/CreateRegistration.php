@@ -65,6 +65,7 @@ class CreateRegistration extends FormRequest
             'roundids'       => 'required',
             'divisionid'     => 'required',
             'dateofbirth'    => $dobstate,
+            'bib'            => 'nullable'
         ];
     }
 

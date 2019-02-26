@@ -102,6 +102,20 @@
                     </div>
                 </div>
 
+                <div class="form-group row">
+                    <label for="label" class="col-sm-12 col-md-3 col-form-label">Bib Number</label>
+                    <div class="col-md-9">
+                        <input name="bib" type="text" class="form-control{{ $errors->has('bib') ? ' is-invalid' : '' }}"
+                               value="{{old('bib')}}"
+                               placeholder="Leave blank if unused">
+                        @if ($errors->has('bib'))
+                            <span class="invalid-feedback" role="alert">
+                                <strong>{{ $errors->first('bib') }}</strong>
+                            </span>
+                        @endif
+                    </div>
+                </div>
+
                 @if ($event->dateofbirth)
                     <div class="form-group row">
                         <label for="label" class="col-sm-12 col-md-3 col-form-label">Date of Birth*</label>
