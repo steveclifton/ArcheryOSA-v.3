@@ -183,8 +183,7 @@
 
                     });
                     parent.find('.totalInp').val(total);
-
-
+                    $(this).closest('tr').addClass('hasScored');
                 });
 
 
@@ -197,7 +196,7 @@
                     });
 
                     // get all the results
-                    var results = $('.results');
+                    var results = $('.hasScored');
 
                     // array for data to be sent
                     var sendJson = [];
