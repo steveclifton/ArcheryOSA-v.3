@@ -196,10 +196,12 @@ class APIEventsController extends Controller
         switch ($event->eventtypeid) {
             // Event
             case 1:
+            case 3:
 
                 if (empty($request->competitionid) || $request->competitionid == 'overall') {
                     // overall
                     $data = $eventresultscontroller->getEventOverallResults($event, true);
+               
                     $return['data']['results'] = !empty($data['finalResults']) ? $data['finalResults'] : [];
                 }
                 else {
