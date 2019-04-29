@@ -184,6 +184,7 @@ class EventCompetitionController extends EventController
         $eventcompetition->scoringlevel     = !empty($validated['scoringlevel'])  ? intval($validated['scoringlevel']) : 0;
         $eventcompetition->scoringenabled   = empty($validated['scoringenabled']) ? 0 : 1;
         $eventcompetition->visible          = 1;
+        $eventcompetition->currentweek      = 1;
         $eventcompetition->save();
 
         return redirect()->back()->with('success', 'Competition created!');
