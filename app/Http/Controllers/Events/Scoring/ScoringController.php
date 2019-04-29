@@ -382,7 +382,7 @@ class ScoringController extends Controller
         // Event Entries
         $entrys = DB::select("
             SELECT ee.*, ec.divisionid as divisionid, ec.entrycompetitionid, ec.eventcompetitionid, ec.roundid, d.label as divisionname, d.bowtype,
-                  r.dist1,r.dist2,r.dist3,r.dist4,r.dist1max,r.dist2max,r.dist3max,r.dist4max,r.unit, ecomp.currentweek
+                  r.dist1,r.dist2,r.dist3,r.dist4,r.dist1max,r.dist2max,r.dist3max,r.dist4max,r.unit, IFNULL(ecomp.currentweek, 1) as currentweek
             FROM `evententrys` ee
             JOIN `eventcompetitions` ecomp ON (ecomp.eventid = ee.eventid)
             JOIN `entrycompetitions` ec USING (`entryid`)
@@ -402,8 +402,8 @@ class ScoringController extends Controller
             )
             ORDER BY `d`.label, ee.firstname
         ", ['eventid'=> $event->eventid,
-                'eventcompetitionid' => $eventcompetition->eventcompetitionid,
-                'scoringuserid'=> $request->userid ]
+            'eventcompetitionid' => $eventcompetition->eventcompetitionid,
+            'scoringuserid'=> $request->userid ]
         );
 
         $entry = null;
