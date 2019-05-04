@@ -42,7 +42,9 @@
     else if (!empty($competition['divisionids'])) {
         $arr = json_decode($competition['divisionids']);
     }
-    $i=1
+    $i=1;
+
+    $mappeddivisions = !empty($mappeddivisions['Other']) ? $mappeddivisions['Other'] : $mappeddivisions;
 @endphp
 <div class="form-group row">
     <label class="col-sm-12 col-md-3 col-form-label">Divisions*</label>
