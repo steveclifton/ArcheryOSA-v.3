@@ -53,19 +53,19 @@ class LeagueController extends Controller
             'eventcompetitionid' => $eventcompetition->eventcompetitionid]
         );
 
-
         foreach ($entrys as $entry) {
+
+            $week = !is_null($entry->currentweek) ? $entry->currentweek : 1;
 
             $entry->score = FlatScore::where('entryid', $entry->entryid)
                 ->where('entrycompetitionid', $entry->entrycompetitionid)
-                ->where('week', $entry->currentweek)
+                ->where('week', $week)
                 ->where('roundid', $entry->roundid)
                 ->where('divisionid', $entry->divisionid)
                 ->get()
                 ->first();
 
         }
-//        dd($entrys);
 
         return view('events.scoring.public.league', compact('event', 'entrys'));
 
