@@ -147,14 +147,21 @@ class EventController extends Controller
             JOIN `evententrys` ee ON (e.eventid = ee.eventid)
             JOIN `eventcompetitions` ec on (e.`eventid` = ec.eventid)
             JOIN `eventstatus` es ON (e.`eventstatusid` = es.eventstatusid)
-            WHERE `ee`.`userid` = :userid
-              AND `ee`.`entrystatusid` = 2
+            WHERE 
+                  `ee`.`userid` = :userid 
+                        OR `ee`.`userid` IN (
+                    SELECT `userid`
+                    FROM `users`
+                    WHERE `parentuserid` = :parentuserid
+                ) 
+            AND `ee`.`entrystatusid` = 2
             AND `e`.`eventstatusid` = 1
             AND `ec`.`scoringlevel` = 2
             AND `ec`.`scoringenabled` = 1
             AND (`e`.`eventtypeid` = 2 OR `e`.`eventtypeid` = 3)
+            GROUP BY `e`.`eventid`
             ORDER BY `e`.`start`
-        ", ['userid' => Auth::id()]);
+        ", ['userid' => Auth::id(), 'parentuserid' => Auth::id()]);
 
 
         return view('events.auth.scoringlist', compact('events'));

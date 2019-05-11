@@ -8,7 +8,7 @@
         <div class="offset-md-2 col-md-8 col-sm-12">
             <div class="page-title-box">
                 <h4 class="page-title">
-                <a href="/events/{{$event->eventurl}}">{{ucwords($event->label)}}</a>
+                <a href="/event/details/{{$event->eventurl}}">{{ucwords($event->label)}}</a>
                 </h4>
             </div>
         </div>
@@ -18,8 +18,10 @@
         <div class="offset-md-2 col-md-8 col-sm-12">
 
             @foreach($entrys as $entry)
+
             <div class="card-box">
                 <h4 class="m-t-0 m-b-30 header-title">{{$entry->firstname . ' ' . $entry->lastname . ' - ' . $entry->divisionname}}</h4>
+                <h5>{{$entry->roundname ?? ''}}</h5>
 
                 <form role="form" action="javascript:;">
                     <input type="hidden" id="userid" value="{{$entry->userid}}">

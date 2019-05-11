@@ -31,10 +31,10 @@ class LeagueController extends Controller
         // Event Entries
         $entrys = DB::select("
             SELECT ee.*, ec.divisionid as divisionid, ec.entrycompetitionid, ec.eventcompetitionid, ec.roundid, d.label as divisionname, d.bowtype,
-                  r.dist1,r.dist2,r.dist3,r.dist4,r.dist1max,r.dist2max,r.dist3max,r.dist4max,r.unit, ecomp.currentweek
+                  r.dist1,r.dist2,r.dist3,r.dist4,r.dist1max,r.dist2max,r.dist3max,r.dist4max,r.unit, ecomp.currentweek, r.label as roundname
             FROM `evententrys` ee
             JOIN `eventcompetitions` ecomp ON (ecomp.eventid = ee.eventid)
-            JOIN `entrycompetitions` ec USING (`entryid`)
+            JOIN `entrycompetitions` ec ON (ee.`entryid` = ec.`entryid`)
             JOIN `divisions` d ON (`ec`.`divisionid` = `d`.`divisionid`)
             JOIN `rounds` r ON (ec.roundid = r.roundid)
             WHERE `ee`.`eventid` = :eventid
@@ -52,6 +52,7 @@ class LeagueController extends Controller
         ", ['eventid'=> $event->eventid,
             'eventcompetitionid' => $eventcompetition->eventcompetitionid]
         );
+
 
         foreach ($entrys as $entry) {
 
