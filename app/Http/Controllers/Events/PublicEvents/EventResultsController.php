@@ -133,7 +133,7 @@ class EventResultsController extends EventController
             SELECT sf.*, r.label as roundname, r.unit, ec.date as compdate
             FROM `scores_flat` sf
             JOIN `rounds` r USING (`roundid`)
-            JOIN `eventcompetitions` ec USING (`eventcompetitionid`)
+            JOIN `eventcompetitions` ec ON (sf.`eventcompetitionid` = ec.`eventcompetitionid`)
             WHERE sf.`eventid` = :eventid
         ", ['eventid' => $event->eventid]);
 
