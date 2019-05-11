@@ -400,7 +400,11 @@ class EventResultsController extends EventController
             ORDER BY `d`.label
         ", ['week' => $week]);
 
-        if (empty($entrys)) {
+        if ($apicall && empty($entrys)) {
+            return [];
+        }
+
+        else if (empty($entrys)) {
             return back()->with('failure', 'Unable to get results');
         }
 
