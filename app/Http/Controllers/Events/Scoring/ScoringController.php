@@ -379,6 +379,7 @@ class ScoringController extends Controller
             ->get()
             ->first();
 
+
         // Event Entries
         $entrys = DB::select("
             SELECT ee.*, ec.divisionid as divisionid, ec.entrycompetitionid, ec.eventcompetitionid, ec.roundid, d.label as divisionname, d.bowtype,
@@ -443,6 +444,7 @@ class ScoringController extends Controller
             $flatscore->divisionid = $entry->divisionid;
             $flatscore->unit = $entry->unit;
             $flatscore->week = $entry->currentweek;
+            $flatscore->eventcompetitionid = $eventcompetition->eventcompetitionid;
 
             $flatscore->totalhits = intval($request->totalhit);
             $flatscore->inners    = intval($request->total10);
@@ -533,6 +535,7 @@ class ScoringController extends Controller
 
                 $score = Score::where('entryid', $entry->entryid)
                                 ->where('entrycompetitionid',$entry->entrycompetitionid)
+                                ->where('eventcompetitionid',$eventcompetition->eventcompetitionid)
                                 ->where('userid', $entry->userid)
                                 ->where('roundid', $entry->roundid)
                                 ->where('divisionid', $entry->divisionid)
