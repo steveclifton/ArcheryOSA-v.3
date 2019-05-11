@@ -266,7 +266,7 @@ class EventResultsController extends EventController
 
         }
 
-        $data = compact('event', 'finalResults', 'eventcompetition');
+        $data = compact('event', 'finalResults');
 
         if ($apicall) {
             return $data;
@@ -478,7 +478,7 @@ class EventResultsController extends EventController
 
             $entrys = $sortedEntrys;
 
-            Cache::put('evententrys-' . $eventid, $entrys, 5);
+            Cache::put('evententrys-' . $eventid, $entrys, 60);
         }
 
 
