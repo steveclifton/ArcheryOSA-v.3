@@ -97,6 +97,9 @@ Route::middleware(['web'])->group(function() {
         Route::post('event/registration/update/admin/{eventurl}', 'Events\Auth\EventRegistrationController@updateAdminRegistration');
         Route::post('event/registration/email/admin/{eventurl}', 'Events\Auth\EventEntryController@sendEventEntryEmail');
 
+        // Target Allocation
+        Route::get('events/manage/targetallocation/{eventurl}', 'Events\Auth\EventEntryController@getEventEntriesView');
+
         // USERS STUFF
 
         // Register for an event
