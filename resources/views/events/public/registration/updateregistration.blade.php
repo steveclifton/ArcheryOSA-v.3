@@ -242,6 +242,21 @@
                     </div>
                 </div>
 
+                @if (!empty($event->pickup))
+                    <div class="form-group row">
+                        <label class="col-sm-12 col-md-3 col-form-label">Airport Pickup</label>
+                        <div class="col-md-9">
+                            <div id="checkb" class="checkbox checkbox-primary">
+                                <input name="pickup" type="checkbox" id="pickupc" {!! ($evententry->pickup ?? old('pickup'))  ? 'checked' : '' !!}>
+                                <label for="pickupc">
+                                    Required
+                                </label>
+                            </div>
+                            <span class="help-block"><small>Please let us know if you need airport transport</small></span>
+                        </div>
+                    </div>
+                @endif
+
                 @if ($event->eventtypeid == 2)
                     <input name="roundids" type="hidden" id="jsfields" value="{{$leaguecompround}}"/>
                 @else

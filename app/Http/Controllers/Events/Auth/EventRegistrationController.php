@@ -200,8 +200,9 @@ class EventRegistrationController extends EventController
         $evententry->membership    = !empty($validated['membership'])     ? strtolower($validated['membership']) : '';
         $evententry->notes         = !empty($validated['notes'])          ? strtolower($validated['notes'])      : '';
         $evententry->clubid        = !empty($validated['clubid'])         ? intval($validated['clubid'])         : '';
-        $evententry->schoolid        = !empty($validated['schoolid'])         ? intval($validated['schoolid'])         : '';
+        $evententry->schoolid      = !empty($validated['schoolid'])       ? intval($validated['schoolid'])       : '';
         $evententry->divisionid    = !empty($validated['divisionid'])     ? $validated['divisionid']             : '';
+        $evententry->pickup        = !empty($validated['pickup']);
         $evententry->dateofbirth   = !empty($validated['dateofbirth'])    ? $validated['dateofbirth']            : '';
         $evententry->gender        = !empty($validated['gender'] == 'm')  ? 'm' : 'f';
         $evententry->enteredby     = Auth::id();
@@ -300,10 +301,10 @@ class EventRegistrationController extends EventController
         $evententry->notes        = !empty($validated['notes'])          ? strtolower($validated['notes'])       : '';
         $evententry->clubid       = !empty($validated['clubid'])         ? intval($validated['clubid'])          : '';
         $evententry->divisionid   = !empty($validated['divisionid'])     ? $validated['divisionid']              : '';
+        $evententry->pickup       = !empty($validated['pickup']);
         $evententry->schoolid     = !empty($validated['schoolid'])       ? $validated['schoolid']                : '';
         $evententry->gender       = !empty($validated['gender'] == 'm')  ? 'm' : 'f';
         $evententry->dateofbirth  = !empty($validated['dateofbirth'])    ? $validated['dateofbirth'] : '';
-
         $evententry->save();
 
         $entrycompetitions = EntryCompetition::where('userid', $user->userid)

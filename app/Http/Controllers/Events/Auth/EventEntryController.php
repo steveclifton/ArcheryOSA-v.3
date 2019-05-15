@@ -43,7 +43,7 @@ class EventEntryController extends EventController
 
         $evententries = DB::select("
             SELECT ee.entryid, u.username, CONCAT_WS(' ', ee.firstname, ee.lastname ) as name, ee.confirmationemail, 
-                  ee.paid, ee.notes, d.label as division, ee.created_at as created, es.label as status  
+                  ee.paid, ee.notes, d.label as division, ee.created_at as created, es.label as status, ee.pickup 
             FROM `evententrys` ee
             JOIN `users` u USING (`userid`)
             JOIN `divisions` d USING (`divisionid`)

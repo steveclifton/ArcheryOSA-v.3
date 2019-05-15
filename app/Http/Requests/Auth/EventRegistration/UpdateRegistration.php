@@ -63,6 +63,7 @@ class UpdateRegistration extends FormRequest
             'clubid'         => $clubrequired,
             'schoolid'       => $schoolrequired,
             'gender'         => 'nullable',
+            'pickup'         => 'nullable',
             'roundids'       => 'required',
             'divisionid'     => 'required',
             'dateofbirth'    => $dobstate,

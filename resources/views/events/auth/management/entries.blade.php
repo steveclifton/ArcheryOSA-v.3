@@ -57,6 +57,9 @@
                             <th>Approve</th>
                             <th>Paid</th>
                             <th>Confirmation Email</th>
+                            @if (!empty($event->pickup))
+                                <th>Airport Pickup</th>
+                            @endif
                             @if($canremoveentry)
                                 <th>Remove</th>
                             @endif
@@ -97,6 +100,11 @@
                                 <input class="confirmemail" type="checkbox" data-entryid="{{$entry->entryid}}"
                                         {!! $entry->confirmationemail ? 'Checked' : '' !!} {!! $entry->confirmationemail ? 'disabled' : '' !!}>
                             </td>
+                            @if(!empty($event->pickup))
+                                <td align="center">
+                                    @if (!empty($entry->pickup)) <i class="fa fa-check"></i> @endif
+                                </td>
+                            @endif
                             @if($canremoveentry)
                                 <td align="center">
                                     <a href="javascript:;">
