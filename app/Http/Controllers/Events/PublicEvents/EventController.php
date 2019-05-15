@@ -68,42 +68,13 @@ class EventController extends Controller
                         ->count();
 
 
+        $evententryopen = $event->isEvent() ? $event->canEnterEvent() : true;
 
-        $evententryopen = $event->eventstatusid === 1 ? true : false;
-        date_default_timezone_set('NZ');
-
-        // check only for events, LEAGUE is different
-        if ($event->isEvent() && $evententryopen) {
-
-            if (!empty($event->entrylimit) && $entrycount >= $event->entrylimit) {
-                $evententryopen = false;
-            }
-
-            // if the close date is after the start (allows people to submit results later)
-            $closeafterstart = strtotime($event->entryclose) > strtotime($event->start);
-
-            if ($evententryopen && $closeafterstart) {
-                $evententryopen = true;
-            }
-            // if its after closing date
-            else if ($evententryopen && time() > (strtotime($event->entryclose))) {
-                $evententryopen = false;
-            }
-
-            // make it based off the end date + 1day, not start date. Allows people to join on the day until the end
-            if ($evententryopen && time() > (strtotime($event->end) + 60*60*24) ) {
-                $evententryopen = false;
-            }
-
-
-            if ($evententryopen) {
-                // get the eventcomps, if empty, false
-                $eventcompetitions = EventCompetition::where('eventid', $event->eventid)->get()->first();
-                if (empty($eventcompetitions)) {
-                    $evententryopen = false;
-                }
-            }
+        // if its a league then check it see its open
+        if ($evententryopen && $event->isLeague()) {
+            $evententryopen = $event->canEnterLeague();
         }
+
 
         $roundlabels = $this->helper->getCompetitionRoundLabels($event);
 
