@@ -24,7 +24,7 @@ class EventSettingsController extends EventController
 
         $eventstatuses = EventStatus::get();
 
-        $leagueweeks = null;
+        $leagueweeks = $eventcompetition = null;
         if ($event->isleague()) {
             $leagueweeks = ceil($event->daycount / 7);
             $eventcompetition = EventCompetition::where('eventid', $event->eventid)->get()->first();
