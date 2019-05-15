@@ -69,7 +69,7 @@ class EventRegistrationController extends EventController
         if ($event->isEvent() && !$event->canEnterEvent()) {
             return redirect('/event/details/' . $event->eventurl)->with('failure', 'Event entrys are closed');
         }
-        
+
 
         $eventcompetitions = DB::select("
             SELECT *
@@ -161,6 +161,10 @@ class EventRegistrationController extends EventController
 
         $event = Event::where('eventid', $validated['eventid'])->get()->first();
 
+        if ($event->isEvent() && !$event->canEnterEvent()) {
+            return redirect('/event/details/' . $event->eventurl)->with('failure', 'Event entrys are closed');
+        }
+
         $user = Auth::user();
 
         if ($validated['userid'] != $user->userid) {
@@ -251,8 +255,11 @@ class EventRegistrationController extends EventController
     {
         $validated = $request->validated();
 
-
         $event = Event::where('eventid', $validated['eventid'])->get()->first();
+
+        if ($event->isEvent() && !$event->canEnterEvent()) {
+            return redirect('/event/details/' . $event->eventurl)->with('failure', 'Event entrys are closed');
+        }
 
         $user = Auth::user();
 
