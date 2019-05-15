@@ -16,7 +16,6 @@ use App\Models\School;
 use App\Models\Score;
 use App\User;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 
 class EventEntryController extends EventController
@@ -36,29 +35,7 @@ class EventEntryController extends EventController
 
     public function getEventEntriesView(Request $request)
     {
-        // Get Event
-        if (Auth::user()->isSuperAdmin()) {
-            $event = DB::select("
-            SELECT e.*, es.label as status
-            FROM `events` e
-            JOIN `eventstatus` es USING (`eventstatusid`)
-            WHERE `e`.`eventurl` = :eventurl
-            LIMIT 1
-        ",['eventurl' => $request->eventurl]);
-        }
-        else {
-            $event = DB::select("
-            SELECT e.*, es.label as status
-            FROM `events` e
-            JOIN `eventadmins` ea USING (`eventid`)
-            JOIN `eventstatus` es USING (`eventstatusid`)
-            WHERE `ea`.`userid` = :userid
-            AND `e`.`eventurl` = :eventurl
-            LIMIT 1
-        ", ['userid' => Auth::id(), 'eventurl' => $request->eventurl]);
-        }
-
-        $event = !empty($event) ? reset($event) : null;
+        $event = $this->userOk($request->eventurl);
 
         if (empty($event)) {
             return redirect()->back()->with('failure', 'Event not found');
@@ -71,7 +48,7 @@ class EventEntryController extends EventController
             JOIN `users` u USING (`userid`)
             JOIN `divisions` d USING (`divisionid`)
             JOIN `entrystatus` es USING (`entrystatusid`)
-            WHERE `eventid` = '".$event->eventid."'
+            WHERE `eventid` = '".(int)$event->eventid."'
         ");
 
         $canremoveentry = true;
