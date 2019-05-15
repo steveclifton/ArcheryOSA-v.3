@@ -30,8 +30,13 @@ class EventRegistrationController extends EventController
         // Get the event
         $event = Event::where('eventurl', $request->eventurl)->get()->first();
 
+
         if (empty($event)) {
             return redirect('/');
+        }
+
+        if ($event->isEvent() && !$event->canEnterEvent()) {
+            return redirect('/event/details/' . $event->eventurl)->with('failure', 'Event entrys are closed');
         }
 
         // Try get an existing entry | redirect if exists
@@ -61,9 +66,10 @@ class EventRegistrationController extends EventController
             return back();
         }
 
-        if (time() > strtotime($event->start) && $event->isEvent()) {
-            return back()->with('failure', 'Please contact the admin to change registration details');
+        if ($event->isEvent() && !$event->canEnterEvent()) {
+            return redirect('/event/details/' . $event->eventurl)->with('failure', 'Event entrys are closed');
         }
+        
 
         $eventcompetitions = DB::select("
             SELECT *
