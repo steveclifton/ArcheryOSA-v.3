@@ -98,6 +98,8 @@
                     </div>
                 </div>
 
+
+
                 <div class="form-group row">
                     <label class="col-sm-12 col-md-3 col-form-label">Entries Limit</label>
                     <div class="col-md-9">
@@ -109,6 +111,27 @@
 
                 </div>
                 <br>
+
+
+                <div class="form-group row justify-content-end">
+                    <div class=" col-md-9">
+                        <div class="checkbox checkbox-primary">
+                            <input name="visible" id="checkbox2" type="checkbox" {{$event->visible ? 'checked' : ''}}>
+                            <label for="checkbox2">
+                                Show on site
+                            </label>
+                            @if (session('visible'))
+                                <div class="alert alert-danger">
+                                    Cannot be active at this stage
+                                </div>
+                            @endif
+                        </div>
+                    </div>
+                </div>
+                <br>
+                <hr>
+                <br>
+                <h4 class="m-t-0 m-b-30 text-center addFormHeader header-title">Event Options</h4>
 
                 <div class="form-group row justify-content-end">
                     <div class=" col-md-9">
@@ -139,6 +162,7 @@
                     </div>
                 </div>
                 <br>
+
 
                 <div class="form-group row justify-content-end">
                     <div class=" col-md-9">
@@ -213,21 +237,22 @@
                 </div>
                 <br>
 
+
                 <div class="form-group row justify-content-end">
                     <div class=" col-md-9">
                         <div class="checkbox checkbox-primary">
-                            <input name="visible" id="checkbox2" type="checkbox" {{$event->visible ? 'checked' : ''}}>
-                            <label for="checkbox2">
-                                Active
+                            <input name="pickup" id="pickup" type="checkbox" {{$event->pickup ? 'checked' : ''}}>
+                            <label for="pickup">
+                                Show Arrival Pickup
                             </label>
-                            @if (session('visible'))
-                                <div class="alert alert-danger">
-                                    Cannot be active at this stage
-                                </div>
-                            @endif
+
                         </div>
+                        <span class="help-block"><small>This allows event organisers to allow entries to require airport/transportion pickup</small></span>
+
                     </div>
                 </div>
+                <br>
+
 
                 <hr>
                 <br>
