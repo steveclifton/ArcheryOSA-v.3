@@ -67,6 +67,8 @@
                                         data-target="#myModal">See Entries
                                 </button>
                             </div>
+
+                            @if(!empty($targetallocations))
                             <br>
                             <div class="widget-inline-box text-center">
                                 <button type="button" class="btn btn-danger"
@@ -74,7 +76,7 @@
                                         data-target="#targetAllo">Target Allocations
                                 </button>
                             </div>
-
+                            @endif
                         </div>
                         <div class="widget-bg-color-icon card-box col-lg-5 " id="myUserWidget">
                             <div class="widget-inline-box text-center">
@@ -247,6 +249,7 @@
                     </div><!-- /.modal-dialog -->
                 </div><!-- /.modal -->
 
+                @if(!empty($targetallocations))
                 <div id="targetAllo" class="modal fade"
                      tabindex="-1" role="dialog"
                      aria-labelledby="full-width-modalLabel"
@@ -313,7 +316,7 @@
                         </div><!-- /.modal-content -->
                     </div><!-- /.modal-dialog -->
                 </div><!-- /.modal -->
-
+                @endif
 
             </div>
             {{-- </div> --}}
