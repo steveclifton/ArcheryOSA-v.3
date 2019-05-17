@@ -295,7 +295,7 @@
                                                                 <tbody>
                                                                 @foreach($day as $archer)
                                                                     <tr>
-                                                                        <th>{{$archer->fullname}}</th>
+                                                                        <th>{{ucwords($archer->fullname)}}</th>
                                                                         <td>{{$archer->target ?? 'TBD'}}</td>
                                                                     </tr>
                                                                 @endforeach()
