@@ -104,6 +104,13 @@
                 </div>
             </a>
         </div>
-
+        <div class="col-lg-4 col-md-4 col-sm-4">
+            <a href="/events/manage/targetallocations/{{$event->eventurl}}">
+                <div class="db-social-box bottomLine">
+                    <span class="md-account-child"></span>
+                    <h5>Target Allocations</h5>
+                </div>
+            </a>
+        </div>
     </div>
 @endsection

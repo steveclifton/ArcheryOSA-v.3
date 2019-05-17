@@ -42,15 +42,17 @@
                     <div class="d-flex justify-content-around row" id="myWidgetRow">
                         <div class="widget-bg-color-icon card-box col-lg-5 " id="myUserWidget">
                             <div class="widget-inline-box text-center">
-                                <h3><i class="text-inverse md md-account-child"></i> <b data-plugin="counterup">{!! $entrycount !!}</b>
+                                <h3><i class="text-inverse md md-account-child"></i> <b
+                                            data-plugin="counterup">{!! $entrycount !!}</b>
                                 </h3>
                                 <h4 class="text-muted font-17">Total Entries</h4>
                                 @if(!empty($event->entrylimit) && $evententryopen)
-                                    <p class="text-muted font-14">{!! $event->entrylimit - $entrycount !!} Spots Left</p>
+                                    <p class="text-muted font-14">{!! $event->entrylimit - $entrycount !!} Spots
+                                        Left</p>
                                 @endif
                                 @if($evententryopen)
                                     <a href="/event/register/{{$event->eventurl}}"
-                                   class="btn btn-inverse waves-effect waves-light">Enter Now</a>
+                                       class="btn btn-inverse waves-effect waves-light">Enter Now</a>
                                 @else
                                     <a href="javascript:;"
                                        class="btn btn-inverse waves-effect waves-light">Closed</a>
@@ -62,7 +64,15 @@
                             <div class="widget-inline-box text-center">
                                 <button type="button" class="btn btn-primary waves-effect waves-light"
                                         data-toggle="modal"
-                                        data-target="#myModal">See Entries</button>
+                                        data-target="#myModal">See Entries
+                                </button>
+                            </div>
+                            <br>
+                            <div class="widget-inline-box text-center">
+                                <button type="button" class="btn btn-danger"
+                                        data-toggle="modal"
+                                        data-target="#targetAllo">Target Allocations
+                                </button>
                             </div>
 
                         </div>
@@ -96,93 +106,93 @@
                     $entryclose = (!empty($event->entryclose) && $event->entryclose != '1970-01-01') ? date('d F Y', strtotime($event->entryclose)) : 'Not Specified';
 
                 @endphp
-                    <!-- START Table-->
+                <!-- START Table-->
                     <div class="table-responsive">
                         <table class="table table-hover">
                             <tbody>
+                            <tr>
+                                <th class="w-25">Start Date</th>
+                                <td>{!! date('d F Y', strtotime($event->start)) !!}</td>
+                            </tr>
+                            <tr>
+                                <th scope="row">End Date</th>
+                                <td>{!! date('d F Y', strtotime($event->end)) !!}</td>
+                            </tr>
+                            <tr>
+                                <th class="w-25">Entries Close</th>
+                                <td>{!! $entryclose !!}</td>
+                            </tr>
+                            <tr>
+                                <th scope="row">Rounds</th>
+                                <td>{!! is_array($roundlabels) ? implode('<br>', $roundlabels) : $roundlabels !!}</br>
+                                </td>
+                            </tr>
+                            <tr>
+                                <th scope="row">Event Type</th>
+                                <td>
+                                    {!! ucwords($competitiontype) !!}
+                                </td>
+                            </tr>
+                            <tr>
+                                <th scope="row">Email</th>
+                                <td>
+                                    {{$event->email}}
+                                </td>
+                            </tr>
+                            @if(!empty($clublabel))
                                 <tr>
-                                    <th class="w-25">Start Date</th>
-                                    <td>{!! date('d F Y', strtotime($event->start)) !!}</td>
-                                </tr>
-                                <tr>
-                                    <th scope="row">End Date</th>
-                                    <td>{!! date('d F Y', strtotime($event->end)) !!}</td>
-                                </tr>
-                                <tr>
-                                    <th class="w-25">Entries Close</th>
-                                    <td>{!! $entryclose !!}</td>
-                                </tr>
-                                <tr>
-                                    <th scope="row">Rounds</th>
-                                    <td>{!! is_array($roundlabels) ? implode('<br>', $roundlabels) : $roundlabels !!}</br>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <th scope="row">Event Type</th>
+                                    <th scope="row">Host Club</th>
                                     <td>
-                                        {!! ucwords($competitiontype) !!}
+                                        {{ucwords($clublabel)}}
+                                    </td>
+                                </tr>
+                            @endif
+                            <tr>
+                                <th scope="row">Location</th>
+                                <td>
+                                    {!! nl2br($event->location)!!}
+                                </td>
+                            </tr>
+                            @if(!empty($event->cost))
+                                <tr>
+                                    <th scope="row">Cost</th>
+                                    <td>
+                                        {!! (strpos($event->cost, '$') === 0) ? $event->cost : '$' . $event->cost !!}
                                     </td>
                                 </tr>
                                 <tr>
-                                    <th scope="row">Email</th>
+                                    <th scope="row">Bank Details</th>
                                     <td>
-                                        {{$event->email}}
-                                    </td>
-                                </tr>
-                                @if(!empty($clublabel))
-                                    <tr>
-                                        <th scope="row">Host Club</th>
-                                        <td>
-                                            {{ucwords($clublabel)}}
-                                        </td>
-                                    </tr>
-                                @endif
-                                <tr>
-                                    <th scope="row">Location</th>
-                                    <td>
-                                        {!! nl2br($event->location)!!}
-                                    </td>
-                                </tr>
-                                @if(!empty($event->cost))
-                                    <tr>
-                                        <th scope="row">Cost</th>
-                                        <td>
-                                            {!! (strpos($event->cost, '$') === 0) ? $event->cost : '$' . $event->cost !!}
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <th scope="row">Bank Details</th>
-                                        <td>
-                                            {{$event->bankaccount}}
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <th scope="row">Bank Reference</th>
-                                        <td>
-                                            {{$event->bankreference}}
-                                        </td>
-                                    </tr>
-                                @endif
-                                <tr>
-                                    <th scope="row">Event Info</th>
-                                    <td>
-                                        {!! nl2br($event->info) !!}
+                                        {{$event->bankaccount}}
                                     </td>
                                 </tr>
                                 <tr>
-                                    <th scope="row">Schedule</th>
+                                    <th scope="row">Bank Reference</th>
                                     <td>
-                                        {!! nl2br($event->schedule) !!}
+                                        {{$event->bankreference}}
                                     </td>
                                 </tr>
-                                @if(!empty($event->filename))
+                            @endif
+                            <tr>
+                                <th scope="row">Event Info</th>
+                                <td>
+                                    {!! nl2br($event->info) !!}
+                                </td>
+                            </tr>
+                            <tr>
+                                <th scope="row">Schedule</th>
+                                <td>
+                                    {!! nl2br($event->schedule) !!}
+                                </td>
+                            </tr>
+                            @if(!empty($event->filename))
                                 <tr>
                                     <th scope="row">Downloads</th>
                                     <td>
                                         <a href="/eventdownload/{{$event->filename}}">{{ $event->filename }}</a>
                                     </td>
                                 </tr>
-                                    @endif
+                            @endif
                             </tbody>
                         </table>
                     </div>
@@ -217,19 +227,88 @@
                                 <div class="table-responsive">
                                     <table class="table table-hover">
                                         <tbody>
-                                            @foreach($entries as $entry)
-                                                <tr>
-                                                    <th class="">{{ucwords($entry->firstname ?? '') . ' ' . ucwords($entry->lastname ?? '')}}</th>
-                                                    <td>{{$entry->divisionname}}</td>
-                                                </tr>
-                                            @endforeach
+                                        @foreach($entries as $entry)
+                                            <tr>
+                                                <th class="">{{ucwords($entry->firstname ?? '') . ' ' . ucwords($entry->lastname ?? '')}}</th>
+                                                <td>{{$entry->divisionname}}</td>
+                                            </tr>
+                                        @endforeach
                                         </tbody>
                                     </table>
                                 </div>
 
                             </div>
                             <div class="modal-footer">
-                                <button type="button" class="btn btn-secondary waves-effect" data-dismiss="modal">Close</button>
+                                <button type="button" class="btn btn-secondary waves-effect" data-dismiss="modal">
+                                    Close
+                                </button>
+                            </div>
+                        </div><!-- /.modal-content -->
+                    </div><!-- /.modal-dialog -->
+                </div><!-- /.modal -->
+
+                <div id="targetAllo" class="modal fade"
+                     tabindex="-1" role="dialog"
+                     aria-labelledby="full-width-modalLabel"
+                     aria-hidden="true" style="display: none;">
+
+                    <div class="modal-dialog ">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h4 class="modal-title" id="full-width-modalLabel">{{ucwords($event->label)}}</h4>
+                                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                            </div>
+                            <div class="modal-body">
+                                <div class="col-lg-12">
+                                    <ul class="nav nav-tabs tabs">
+                                        @php $i = 1; @endphp
+
+                                        @foreach(array_keys($targetallocations) as $key)
+                                            <li class="nav-item tab">
+                                                <a href="#{{ str_replace(' ', '', $key) }}" data-toggle="tab" aria-expanded="false"
+                                                   class="nav-link {{$i++ == 1 ? 'active  show' : ''}}">
+                                                    {{$key}}
+                                                </a>
+                                            </li>
+                                        @endforeach
+                                    </ul>
+
+                                    <div class="tab-content">
+                                        @php $i = 1; @endphp
+                                        @foreach ($targetallocations as $key => $day)
+                                            <div class="tab-pane {{$i++ == 1 ? 'active' : ''}}" id="{{str_replace(' ', '', $key)}}">
+
+                                                <div class="table-responsive">
+
+                                                        <div class="col-sm-12">
+                                                            <table class="table table-striped table-bordered" cellspacing="0" width="100%">
+                                                                <thead>
+                                                                    <tr>
+                                                                        <th>Archer</th>
+                                                                        <th>Target</th>
+                                                                    </tr>
+                                                                </thead>
+
+                                                                <tbody>
+                                                                @foreach($day as $archer)
+                                                                    <tr>
+                                                                        <th>{{$archer->fullname}}</th>
+                                                                        <td>{{$archer->target ?? 'TBD'}}</td>
+                                                                    </tr>
+                                                                @endforeach()
+                                                                </tbody>
+                                                            </table>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        @endforeach
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary waves-effect" data-dismiss="modal">
+                                    Close
+                                </button>
                             </div>
                         </div><!-- /.modal-content -->
                     </div><!-- /.modal-dialog -->

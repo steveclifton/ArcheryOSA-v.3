@@ -98,7 +98,12 @@ Route::middleware(['web'])->group(function() {
         Route::post('event/registration/email/admin/{eventurl}', 'Events\Auth\EventEntryController@sendEventEntryEmail');
 
         // Target Allocation
-        Route::get('events/manage/targetallocation/{eventurl}', 'Events\Auth\EventEntryController@getEventEntriesView');
+        Route::get('events/manage/targetallocations/{eventurl}', 'Events\Auth\EventTargetAllocationController@getTargetAllocationsList');
+        Route::post('ajax/events/manage/targetallocation/getcomp/{eventurl}', 'Events\Auth\EventTargetAllocationController@getTargetAllocationsTable');
+        Route::post('ajax/events/manage/targetallocation/update/{eventurl}', 'Events\Auth\EventTargetAllocationController@UpdateTargetAllocation');
+
+
+
 
         // USERS STUFF
 

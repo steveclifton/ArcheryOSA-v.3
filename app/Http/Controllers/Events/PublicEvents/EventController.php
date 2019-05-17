@@ -8,6 +8,7 @@ use App\Models\Club;
 use App\Models\Event;
 use App\Models\EventCompetition;
 use App\Models\EventType;
+use App\Models\TargetAllocation;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\DB;
@@ -90,19 +91,30 @@ class EventController extends Controller
             ORDER BY `d`.`label`, `e`.`firstname`
         ", ['eventid' => $event->eventid]);
 
+
+
+
+        $eventtargetallocations = DB::select("
+            SELECT ta.target, ec.`label` as `eventcompname`, CONCAT(ee.firstname, ' ', ee.lastname) as `fullname`
+            FROM `targetallocations` ta
+            JOIN `evententrys` ee ON (ta.eventid = ee.eventid AND ta.userid = ee.userid) 
+            JOIN `eventcompetitions` ec ON (ta.`eventcompetitionid` = ec.`eventcompetitionid`)
+            WHERE ta.`eventid` = :eventid
+            ORDER BY `ee`.firstname
+        ", ['eventid' => $event->eventid]);
+
+
+        $targetallocations = [];
+        foreach ($eventtargetallocations as $targetallocation) {
+            $targetallocations[$targetallocation->eventcompname][] = $targetallocation;
+        }
+
         return view('events.public.details',
             compact('event', 'entries', 'entrycount', 'scorecount', 'evententryopen',
-                    'roundlabels', 'competitiontype', 'clublabel'));
+                    'roundlabels', 'competitiontype', 'clublabel', 'targetallocations'));
+
+
     }
-
-
-
-
-
-
-
-
-
 
 
 
