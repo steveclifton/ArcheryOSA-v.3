@@ -110,7 +110,7 @@
                 @endphp
                 <!-- START Table-->
                     <div class="table-responsive">
-                        <table class="table table-hover">
+                        <table class="table table-hover" style="table-layout:fixed;">
                             <tbody>
                             <tr>
                                 <th class="w-25">Start Date</th>
@@ -177,7 +177,7 @@
                             @endif
                             <tr>
                                 <th scope="row">Event Info</th>
-                                <td>
+                                <td style="word-wrap: break-word;">
                                     {!! nl2br($event->info) !!}
                                 </td>
                             </tr>
