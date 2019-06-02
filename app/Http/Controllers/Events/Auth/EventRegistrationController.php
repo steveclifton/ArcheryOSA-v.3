@@ -184,6 +184,15 @@ class EventRegistrationController extends EventController
             return back()->with('failure', 'Please try again later');
         }
 
+        // check to see if an entry exists for this user
+        $existingevententry = EventEntry::where('eventid', $event->eventid)
+                                        ->where('userid', $user->userid)
+                                        ->get()->first();
+
+        if (!empty($existingevententry) ) {
+            return back()->with('failure', 'An entry already exists, please check back in a few minutes');
+        }
+
 
         // Store the single event entry
         $evententry = new EventEntry();
