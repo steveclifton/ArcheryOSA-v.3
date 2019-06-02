@@ -10,5 +10,6 @@
             </div>
         </div>
     </div>
-    @php Session::forget(['queries', 'time']) @endphp
 @endif
+
+@php Session::forget(['queries', 'time']) @endphp
