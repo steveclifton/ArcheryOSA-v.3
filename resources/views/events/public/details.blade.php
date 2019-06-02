@@ -24,14 +24,20 @@
         <div class="card-box ">
             @include('template.alerts')
             <div class="row ">
-                <div class="col-lg-6 col-sm-4">
+                <div class="col-lg-6">
+
                     <div id="carouselExampleCaptions" class="carousel slide" data-ride="carousel">
+
                         <div class="carousel-inner" role="listbox">
                             <div class="carousel-item active">
                                 <img class="d-block img-fluid" src="{{URL::asset('/images/events/' . $event->imagedt)}}"
                                      alt="First slide"/>
+
                             </div>
+
+
                         </div>
+
                     </div>
                     <div class="d-flex justify-content-around row" id="myWidgetRow">
                         <div class="widget-bg-color-icon card-box col-lg-5 " id="myUserWidget">
@@ -85,7 +91,9 @@
                                     <a href="/event/results/{{$event->eventurl}}"
                                        class="btn btn-inverse waves-effect waves-light">Results</a>
                                 @endif
+
                             </div>
+
                         </div>
                     </div>
                 </div>
