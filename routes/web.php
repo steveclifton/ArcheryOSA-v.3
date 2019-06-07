@@ -63,7 +63,7 @@ Route::middleware(['web'])->group(function() {
          *   - defined in this route as not all users will have admin access
          ****************/
         Route::get('/events/manage', 'Events\Auth\EventController@getAllEvents');
-        Route::get('/events/manage/{eventurl}', 'Events\Auth\EventController@getEventManageView');
+        Route::get('/events/manage/{eventurl}', 'Events\Auth\EventController@getEventManageView')->name('manageevent');
         Route::get('/events/manage/update/{eventurl}', 'Events\Auth\EventController@getUpdateEventView');
         Route::post('/events/manage/create', 'Events\Auth\EventController@createEvent');
         Route::post('/events/manage/update/{eventurl}', 'Events\Auth\EventController@updateEvent');

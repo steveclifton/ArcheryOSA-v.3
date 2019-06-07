@@ -250,7 +250,12 @@ class EventRegistrationController extends EventController
         SendEntryReceived::dispatch($evententry->email, $event->label);
 
         if ($event->adminnotifications) {
-            SendEventAdminEntryReceived::dispatch($event->email, $event->label, $validated['email']);
+            SendEventAdminEntryReceived::dispatch($event->email,
+                                                    $event->label,
+                                                    $validated['email'],
+                                                    $evententry->firstname . ' ' . $evententry->lastname,
+                                                    $event->eventurl
+                                        );
         }
 
         return redirect('/event/register/' . $event->eventurl)->with('success', 'Entry Received!');

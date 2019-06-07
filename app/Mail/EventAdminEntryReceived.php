@@ -13,16 +13,22 @@ class EventAdminEntryReceived extends Mailable
 
     public $entryname;
     public $eventname;
+    public $fullname;
+    public $eventurl;
 
     /**
-     * Create a new message instance.
-     *
-     * @return void
+     * EventAdminEntryReceived constructor.
+     * @param $eventname
+     * @param $entryname
+     * @param string $fullname
+     * @param string $eventurl
      */
-    public function __construct($eventname, $entryname)
+    public function __construct($eventname, $entryname, $fullname = '', $eventurl = '')
     {
         $this->eventname = $eventname;
         $this->entryname = $entryname;
+        $this->fullname = $fullname;
+        $this->eventurl = route('manageevent', ['eventurl' => $eventurl]);
     }
 
     /**
@@ -36,7 +42,9 @@ class EventAdminEntryReceived extends Mailable
             ->subject($this->eventname . " - Entry Received!")
             ->with([
                 'eventname' => $this->eventname,
-                'entryname' => $this->entryname
+                'entryname' => $this->entryname,
+                'fullname'  => $this->fullname,
+                'eventurl'  => $this->eventurl
             ]);
     }
 }

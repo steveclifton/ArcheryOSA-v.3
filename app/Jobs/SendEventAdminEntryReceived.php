@@ -17,17 +17,24 @@ class SendEventAdminEntryReceived extends ArcheryOSASender implements ShouldQueu
     private $email;
     private $eventname;
     private $entryname;
+    private $fullname;
+    private $eventurl;
 
     /**
-     * Create a new job instance.
-     *
-     * @return void
+     * SendEventAdminEntryReceived constructor.
+     * @param $email
+     * @param $eventname
+     * @param $entryname
+     * @param string $fullname
+     * @param string $eventurl
      */
-    public function __construct($email, $eventname, $entryname)
+    public function __construct($email, $eventname, $entryname, $fullname = '', $eventurl = '')
     {
         $this->email     = $email;
         $this->eventname = $eventname;
         $this->entryname = $entryname;
+        $this->fullname  = $fullname;
+        $this->eventurl  = $eventurl;
     }
 
     /**
@@ -39,7 +46,7 @@ class SendEventAdminEntryReceived extends ArcheryOSASender implements ShouldQueu
     {
         if ($this->checkEmailAddress($this->email)) {
             Mail::to($this->email)
-                ->send(new EventAdminEntryReceived(ucwords($this->eventname), $this->entryname));
+                ->send(new EventAdminEntryReceived(ucwords($this->eventname), $this->entryname, $this->fullname, $this->eventurl));
         }
     }
 }

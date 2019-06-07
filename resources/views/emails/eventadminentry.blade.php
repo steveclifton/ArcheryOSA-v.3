@@ -244,7 +244,7 @@
                                             </p>
                                             <p style="margin: 0;font-size: 14px;line-height: 25px;text-align: center">
                                                 <span style="font-size: 16px; line-height: 28px;">
-                                                    <span style="line-height: 28px; font-size: 16px;">You have received an entry from {{$entryname}}</span>
+                                                    <span style="line-height: 28px; font-size: 16px;">You have received an entry from {{$fullname}}</span>
                                                 </span>
                                             </p>
                                             <p style="margin: 0;font-size: 14px;line-height: 25px;text-align: center">
@@ -261,9 +261,20 @@
 
                                     <div align="center" class="button-container center" style="padding-right: 10px; padding-left: 10px; padding-top:0px; padding-bottom:30px;">
                                         <!--[if mso]><table width="100%" cellpadding="0" cellspacing="0" border="0" style="border-spacing: 0; border-collapse: collapse; mso-table-lspace:0pt; mso-table-rspace:0pt;"><tr><td style="padding-right: 10px; padding-left: 10px; padding-top:0px; padding-bottom:30px;" align="center"><v:roundrect xmlns:v="urn:schemas-microsoft-com:vml" xmlns:w="urn:schemas-microsoft-com:office:word" href="" style="height:50px; v-text-anchor:middle; width:146px;" arcsize="6%" strokecolor="#222a2a" fillcolor="#222a2a"><w:anchorlock/><center style="color:#ffffff; font-family:'Lato', Tahoma, Verdana, Segoe, sans-serif; font-size:18px;"><![endif]-->
-                                        <div style="color: #ffffff; background-color: #222a2a; border-radius: 3px; -webkit-border-radius: 3px; -moz-border-radius: 3px; max-width: 146px; width: 106px;width: auto; border-top: 0px solid transparent; border-right: 0px solid transparent; border-bottom: 4px solid #59B7E0; border-left: 0px solid transparent; padding-top: 5px; padding-right: 20px; padding-bottom: 5px; padding-left: 20px; font-family: 'Lato', Tahoma, Verdana, Segoe, sans-serif; text-align: center; mso-border-alt: none;">
-                                            <span style="font-size:12px;line-height:24px;"><span style="font-size: 18px; line-height: 36px;" data-mce-style="font-size: 18px; line-height: 28px;"><strong><span style="line-height: 36px; font-size: 18px;" data-mce-style="line-height: 28px;">ArcheryOSA</span></strong></span></span>
-                                        </div>
+                                        <a href="{{$eventurl}}" style="text-decoration:none !important;"><div style="color: #ffffff; background-color: #222a2a; border-radius: 3px; -webkit-border-radius: 3px; -moz-border-radius: 3px; max-width: 146px; width: 106px;width: auto; border-top: 0px solid transparent; border-right: 0px solid transparent; border-bottom: 4px solid #59B7E0; border-left: 0px solid transparent; padding-top: 5px; padding-right: 20px; padding-bottom: 5px; padding-left: 20px; font-family: 'Lato', Tahoma, Verdana, Segoe, sans-serif; text-align: center; mso-border-alt: none;">
+                                                <strong><span style="font-size:12px;line-height:24px;">
+
+                                                <span style="font-size: 18px; line-height: 36px;" data-mce-style="font-size: 18px; line-height: 28px;">
+                                                        <span style="line-height: 36px; font-size: 18px;" data-mce-style="line-height: 28px;">ArcheryOSA</span>
+                                                </strong>
+                                                </span>
+                                                </span>
+                                            </div></a>
+                                        <p style="margin: 0;font-size:12px;line-height:22px;color:#555555;font-family:'Lato', Tahoma, Verdana, Segoe, sans-serif;text-align:left;text-align: center">
+                                            <span style="font-size: 16px; line-height: 28px;">
+                                                <span style="line-height: 28px; font-size: 11px;">Click here to go to the event manager</span>
+                                            </span>
+                                        </p>
                                         <!--[if mso]></center></v:roundrect></td></tr></table><![endif]-->
                                     </div>
 
