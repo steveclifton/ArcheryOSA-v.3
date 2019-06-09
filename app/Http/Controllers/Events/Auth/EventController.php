@@ -95,9 +95,6 @@ class EventController extends Controller
         ", ['userid' => Auth::id()]);
         }
 
-
-
-
         return view('events.auth.events', compact('events'));
     }
 
