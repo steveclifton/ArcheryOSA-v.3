@@ -304,7 +304,7 @@ function($) {
         this.initSwitchery(),
         this.initMultiSelect(),
         this.initPeityCharts(),
-        this.initCounterUp(),
+        //this.initCounterUp(),
         //creating portles
         $.Portlet.init();
     },
