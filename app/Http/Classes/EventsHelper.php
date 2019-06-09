@@ -29,7 +29,7 @@ class EventsHelper
             $where
             AND `e`.`visible` = 1
             GROUP BY IFNULL(`s`.`eventid`, `e`.`eventid`)
-            ORDER BY `e`.`promoted` DESC, e.start DESC
+            ORDER BY e.start DESC
             LIMIT $limit
         ");
 
