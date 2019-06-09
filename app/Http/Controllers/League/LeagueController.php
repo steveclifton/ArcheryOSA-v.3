@@ -25,7 +25,6 @@ class LeagueController extends Controller
         }
 
         $eventcompetition = EventCompetition::where('eventid', $event->eventid)
-                                            ->get()
                                             ->first();
 
         // Event Entries
@@ -62,7 +61,6 @@ class LeagueController extends Controller
                 ->where('week', $week)
                 ->where('roundid', $entry->roundid)
                 ->where('divisionid', $entry->divisionid)
-                ->get()
                 ->first();
 
         }
@@ -76,7 +74,6 @@ class LeagueController extends Controller
     {
 
         // Get the event
-        $event = Event::where('eventurl', $request->eventurl ?? -1)->get()->first();
 
         $eventcompetition = EventCompetition::where('eventid', $event->eventid ?? -1)->get()->first();
 
