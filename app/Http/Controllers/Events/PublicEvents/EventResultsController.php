@@ -374,10 +374,11 @@ class EventResultsController extends EventController
 
     /**
      * Returns a particular weeks results for a league event
+     *
      * @param Event $event
      * @param $week
      * @param bool $apicall
-     * @return \Illuminate\Contracts\View\Factory|\Illuminate\Http\RedirectResponse|\Illuminate\View\View
+     * @return array|\Illuminate\Contracts\View\Factory|\Illuminate\Http\RedirectResponse|\Illuminate\View\View
      */
     public function getLeagueCompetitionResults(Event $event, $week, $apicall = false)
     {
@@ -482,7 +483,6 @@ class EventResultsController extends EventController
 
             Cache::put('evententrys-' . $eventid, $entrys, 60);
         }
-
 
         return $entrys;
     }
