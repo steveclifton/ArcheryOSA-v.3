@@ -38,7 +38,7 @@ class AjaxController extends EventController
     public function getMarkup(Request $request)
     {
 
-        $event = Event::where('eventid', $request->eventid ?? -1)->get()->first();
+        $event = Event::where('eventid', $request->eventid ?? -1)->first();
 
         if (empty($event) || empty($request->date)) {
             return response()->json([
@@ -52,7 +52,6 @@ class AjaxController extends EventController
          */
         $competition = EventCompetition::where('eventid', $request->eventid)
             ->where('eventcompetitionid', $request->eventcompetitionid)
-            ->get()
             ->first();
 
         if (!empty($competition)) {
@@ -61,7 +60,6 @@ class AjaxController extends EventController
 
         $entries = EntryCompetition::where('eventid', $event->eventid)
                                     ->where('eventcompetitionid',  $competition['eventcompetitionid'])
-                                    ->get()
                                     ->first();
 
 
