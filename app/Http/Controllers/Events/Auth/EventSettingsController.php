@@ -27,7 +27,7 @@ class EventSettingsController extends EventController
         $leagueweeks = $eventcompetition = null;
         if ($event->isleague()) {
             $leagueweeks = ceil($event->daycount / 7);
-            $eventcompetition = EventCompetition::where('eventid', $event->eventid)->get()->first();
+            $eventcompetition = EventCompetition::where('eventid', $event->eventid)->first();
         }
 
         return view('events.auth.management.settings', compact('event', 'eventstatuses', 'leagueweeks', 'eventcompetition'));
@@ -45,7 +45,7 @@ class EventSettingsController extends EventController
             $eventadmin = EventAdmin::where('userid', Auth::id())
                 ->where('eventid', $event->eventid)
                 ->where('canedit', 1)
-                ->get()->first();
+                ->first();
 
             if (empty($eventadmin)) {
                 return back()->with('failure', 'Cannot edit event');
@@ -134,7 +134,7 @@ class EventSettingsController extends EventController
         $event->save();
 
 
-        $eventcompetition = EventCompetition::where('eventid', $event->eventid)->get()->first();
+        $eventcompetition = EventCompetition::where('eventid', $event->eventid)->first();
 
         if (!empty($eventcompetition)) {
             $eventcompetition->currentweek   = !empty($request->input('currentweek')) ? intval($request->input('currentweek')) : 1;
