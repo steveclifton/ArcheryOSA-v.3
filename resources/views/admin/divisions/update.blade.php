@@ -68,13 +68,12 @@
                         <select name="age" class="form-control">
                             <option value="none">None</option>
                                 @foreach($divisionages as $divage)
-                                    <option value="{{$divage->label}}"
-                                            {!! old('age') ?? $division->age == $divage->label ? 'selected' : '' !!}>
+                                    <option value="{{$divage->class}}"
+                                            {!! old('age') ?? $division->age == $divage->class ? 'selected' : '' !!}>
                                         {{ucwords($divage->label)}}
                                     </option>
                                 @endforeach
                         </select>
-                        <span class="help-block"><small>Select an organisation the division belongs to</small></span>
                     </div>
                 </div>
 
@@ -83,11 +82,11 @@
                     <div class="col-md-9">
                         <select name="bowtype" class="form-control">
                             @php $bowtypes = [
-                                    'compound',
-                                    'recurve',
-                                    'longbow',
-                                    'barebow',
-                                    'crossbow'
+                                    'C' => 'Compound',
+                                    'R' => 'Recurve',
+                                    'L' => 'Longbow',
+                                    'B' => 'Barebow',
+                                    'X' => 'Crossbow'
                                     ]; @endphp
                             @foreach($bowtypes as $bowtype)
                                 <option value="{{$bowtype}}"
@@ -96,7 +95,27 @@
                                 </option>
                             @endforeach
                         </select>
-                        <span class="help-block"><small>Select an organisation the division belongs to</small></span>
+                    </div>
+                </div>
+
+                <div class="form-group row">
+                    <label class="col-sm-12 col-md-3 col-form-label">Class</label>
+                    <div class="col-md-9">
+                        <select name="class" class="form-control">
+                            @php $bowtypes = [
+                                    'C' => 'Compound',
+                                    'R' => 'Recurve',
+                                    'L' => 'Longbow',
+                                    'BB' => 'Barebow',
+                                    'XB' => 'Crossbow'
+                                    ]; @endphp
+                            @foreach($bowtypes as $key => $bowtype)
+                                <option value="{{$key}}"
+                                        {!! (old('class') ?? $division->class) == $key ? 'selected' : '' !!}>
+                                    {{ucwords($bowtype)}}
+                                </option>
+                            @endforeach
+                        </select>
                     </div>
                 </div>
 

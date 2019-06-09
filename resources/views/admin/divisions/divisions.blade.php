@@ -41,7 +41,8 @@
                     <table class="table table-hover">
                         <thead class="thead-light">
                         <tr>
-                            <th>Name</th>
+                            <th width="20%">Name</th>
+                            <th>Organisation</th>
                             <th>Code</th>
                             <th>Visible</th>
                         </tr>
@@ -49,9 +50,16 @@
                         <tbody>
                             @foreach($divisions as $division)
                                 <tr>
-                                    <th scope="row"><a href="/admin/divisions/update/{{$division->divisionid}}">{{$division->label}}</a></th>
-                                    <td>{{$division->code}}</td>
-                                    <td>@if($division->visible)<i class="fa fa-check"></i>@endif</td>
+                                    <th scope="row">
+                                        <a href="/admin/divisions/update/{{$division->divisionid}}">{{$division->label}}</a>
+                                    </th>
+                                    <td>{{ $division->organisationname }}</td>
+                                    <td>{{ strtoupper($division->code) }}</td>
+                                    <td>
+                                        @if($division->visible)
+                                            <i class="fa fa-check"></i>
+                                        @endif
+                                    </td>
                                 </tr>
                             @endforeach
                         </tbody>
