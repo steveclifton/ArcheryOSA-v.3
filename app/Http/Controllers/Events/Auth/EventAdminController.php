@@ -28,7 +28,7 @@ class EventAdminController extends EventController
 
         $eventadmins = EventAdmin::where('eventid', $event->eventid)->get();
         foreach ($eventadmins as $admin) {
-            $admin->user = User::where('userid', $admin->userid)->get()->first();
+            $admin->user = User::where('userid', $admin->userid)->first();
         }
 
 
@@ -44,7 +44,7 @@ class EventAdminController extends EventController
             return back()->with('failure', 'Unable to access this section');
         }
 
-        $eventadmin = EventAdmin::where('eventadminid', $request->eventadminid)->get()->first();
+        $eventadmin = EventAdmin::where('eventadminid', $request->eventadminid)->first();
 
         if (empty($eventadmin)) {
             return back()->with('failure', 'Event Admin not found');
@@ -70,7 +70,7 @@ class EventAdminController extends EventController
             return back()->with('failure', 'Unable to access this section');
         }
 
-        $eventadmin = EventAdmin::where('eventadminid', $request->eventadminid)->get()->first();
+        $eventadmin = EventAdmin::where('eventadminid', $request->eventadminid)->first();
 
         if (empty($eventadmin)) {
             return back()->with('failure', 'Event Admin not found');
@@ -99,7 +99,6 @@ class EventAdminController extends EventController
         $event = $this->userOk($request->eventurl);
         $eventadmin = EventAdmin::where('eventid', $event->eventid ?? -1)
                                 ->where('eventadminid', $request->input('eventadminid'))
-                                ->get()
                                 ->first();
 
 
@@ -129,7 +128,6 @@ class EventAdminController extends EventController
         $event = $this->userOk($request->eventurl);
         $eventadmin = EventAdmin::where('eventid', $event->eventid ?? -1)
                                 ->where('eventadminid', $request->input('eventadminid'))
-                                ->get()
                                 ->first();
 
 
@@ -180,7 +178,7 @@ class EventAdminController extends EventController
         // get the event admin that matches the event and userid
         $eventadmin = EventAdmin::where('eventid', $event->eventid)
             ->where('userid', $request->userid)
-            ->get()->first();
+            ->first();
 
         if (empty($eventadmin)) {
             return response()->json([
@@ -211,7 +209,7 @@ class EventAdminController extends EventController
     {
         // Get Event
         $event = $this->userOk($request->eventurl);
-        $user = User::where('email', 'like', '%' .$request->email. '%')->get()->first();
+        $user = User::where('email', 'like', '%' .$request->email. '%')->first();
 
         if (empty($event) || empty($user)) {
             return response()->json([
@@ -229,7 +227,7 @@ class EventAdminController extends EventController
         // make sure they arent already an admin
         $eventadmin = EventAdmin::where('userid', $user->userid)
                                 ->where('eventid', $event->eventid)
-                                ->get()->first();
+                                ->first();
 
         if (!empty($eventadmin)) {
             return response()->json([
@@ -256,7 +254,7 @@ class EventAdminController extends EventController
     public function deleteUser(Request $request)
     {
 
-        $user = User::where('userid', $request->userid)->get()->first();
+        $user = User::where('userid', $request->userid)->first();
 
         // Get Event
         $event = $this->userOk($request->eventurl);
@@ -270,7 +268,7 @@ class EventAdminController extends EventController
 
         $eventadmin = EventAdmin::where('eventid', $event->eventid)
             ->where('userid', $request->userid)
-            ->get()->first();
+            ->first();
 
         if (empty($eventadmin)) {
             return response()->json([
@@ -281,7 +279,7 @@ class EventAdminController extends EventController
 
         $eventadmin->delete();
 
-        $eventadmin = EventAdmin::where('userid', $request->userid)->get()->first();
+        $eventadmin = EventAdmin::where('userid', $request->userid)->first();
 
         if (empty($eventadmin)) {
             $user->roleid = 4;
