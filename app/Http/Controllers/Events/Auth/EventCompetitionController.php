@@ -47,10 +47,9 @@ class EventCompetitionController extends EventController
 
             // Add the first competition day to the event
             $competition = EventCompetition::where('eventid', $event->eventid)
-                ->get()
                 ->first();
 
-            $entries = EntryCompetition::where('eventid', $event->eventid)->get()->first();
+            $entries = EntryCompetition::where('eventid', $event->eventid)->first();
 
             $formaction = empty($competition) ? 'create' : 'update';
 
@@ -71,7 +70,6 @@ class EventCompetitionController extends EventController
             // Add the first competition day to the event
             $competition = EventCompetition::where('eventid', $event->eventid)
                 ->where('date', $firstdate)
-                ->get()
                 ->first();
 
             if (!empty($competition)) {
@@ -83,7 +81,7 @@ class EventCompetitionController extends EventController
 
             $entries = EntryCompetition::where('eventid', $event->eventid)
                 ->where('eventcompetitionid',  $competition['eventcompetitionid'])
-                ->get()->first();
+                ->first();
 
             $eventcompetitions = EventCompetition::where('eventid', $event->eventid)->get();
 
@@ -105,7 +103,6 @@ class EventCompetitionController extends EventController
         // Add the first competition day to the event
         $competition = EventCompetition::where('eventid', $event->eventid)
             ->where('date', $firstdate)
-            ->get()
             ->first();
 
         if (!empty($competition)) {
@@ -116,7 +113,7 @@ class EventCompetitionController extends EventController
 
         $entries = EntryCompetition::where('eventid', $event->eventid)
             ->where('eventcompetitionid',  $competition['eventcompetitionid'])
-            ->get()->first();
+            ->first();
 
         $eventcompetitions = EventCompetition::where('eventid', $event->eventid)->get();
 
@@ -145,7 +142,7 @@ class EventCompetitionController extends EventController
     {
         $validated = $request->validated();
 
-        $event = Event::where('eventid', $validated['eventid'] ?? -1)->get()->first();
+        $event = Event::where('eventid', $validated['eventid'] ?? -1)->first();
 
         if (empty($event)) {
             return redirect()->back()->with('failure', 'Invalid request');
@@ -202,10 +199,9 @@ class EventCompetitionController extends EventController
 
         $validated = $request->validated();
 
-        $event = Event::where('eventid', $validated['eventid'] ?? -1)->get()->first();
+        $event = Event::where('eventid', $validated['eventid'] ?? -1)->first();
         $eventcompetition = EventCompetition::where('eventid', $event->eventid ?? -1)
                                             ->where('eventcompetitionid', $validated['eid'] ?? -1)
-                                            ->get()
                                             ->first();
 
 
@@ -260,7 +256,7 @@ class EventCompetitionController extends EventController
     {
         $validated = $request->validated();
 
-        $event = Event::where('eventid', $validated['eventid'] ?? -1)->get()->first();
+        $event = Event::where('eventid', $validated['eventid'] ?? -1)->first();
 
         if (empty($event)) {
             return redirect()->back()->with('failure', 'Invalid request');
@@ -313,10 +309,9 @@ class EventCompetitionController extends EventController
 
         $validated = $request->validated();
 
-        $event = Event::where('eventid', $validated['eventid'] ?? -1)->get()->first();
+        $event = Event::where('eventid', $validated['eventid'] ?? -1)->first();
 
         $eventcompetition = EventCompetition::where('eventid', $event->eventid ?? -1)
-                                            ->get()
                                             ->first();
 
         if (empty($event) || empty($eventcompetition)) {
