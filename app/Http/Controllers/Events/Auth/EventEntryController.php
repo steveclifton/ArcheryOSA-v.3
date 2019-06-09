@@ -8,7 +8,6 @@ use App\Models\Club;
 use App\Models\Division;
 use App\Models\EntryCompetition;
 use App\Models\Event;
-use App\Models\EventAdmin;
 use App\Models\EventEntry;
 use App\Models\FlatScore;
 use App\Models\Round;
@@ -26,7 +25,7 @@ class EventEntryController extends EventController
     {
         parent::__construct();
 
-        $this->event = Event::where('eventurl', $request->eventurl)->get()->first();
+        $this->event = Event::where('eventurl', $request->eventurl)->first();
 
         if (empty($this->event)) {
             return back()->with('failure', 'Invalid Event');
@@ -59,7 +58,7 @@ class EventEntryController extends EventController
 
     public function getEventEntryAddView(Request $request)
     {
-        $event = Event::where('eventurl', $request->eventurl ?? -1)->get()->first();
+        $event = Event::where('eventurl', $request->eventurl ?? -1)->first();
 
         if (empty($event)) {
             return back()->with('failure', 'Cannot add at this stage');
@@ -117,9 +116,9 @@ class EventEntryController extends EventController
 
     public function getEventEntryUpdateView(Request $request)
     {
-        $event = Event::where('eventurl', $request->eventurl ?? -1)->get()->first();
+        $event = Event::where('eventurl', $request->eventurl ?? -1)->first();
 
-        $user = User::where('username', $request->username)->get()->first();
+        $user = User::where('username', $request->username)->first();
 
         if (empty($event) || empty($user)) {
             return back()->with('failure', 'Cannot find user');
@@ -128,7 +127,6 @@ class EventEntryController extends EventController
 
         $evententry = EventEntry::where('eventid', $event->eventid ?? -1)
                         ->where('userid', $user->userid)
-                        ->get()
                         ->first();
 
 
@@ -193,13 +191,12 @@ class EventEntryController extends EventController
 
     public function getEventEntryEmailView(Request $request)
     {
-        $event = Event::where('eventurl', $request->eventurl ?? -1)->get()->first();
+        $event = Event::where('eventurl', $request->eventurl ?? -1)->first();
 
-        $user = User::where('username', $request->username)->get()->first();
+        $user = User::where('username', $request->username)->first();
 
         $evententry = EventEntry::where('eventid', $event->eventid ?? -1)
             ->where('userid', $user->userid)
-            ->get()
             ->first();
 
         if (empty($event) || empty($user) || empty($evententry)) {
@@ -228,7 +225,6 @@ class EventEntryController extends EventController
 
         $evententry = EventEntry::where('eventid', $event->eventid ?? -1)
                                 ->where('userid', $request->input('userid'))
-                                ->get()
                                 ->first();
 
         if (empty($evententry)) {
@@ -261,7 +257,6 @@ class EventEntryController extends EventController
 
         $entry = EventEntry::where('eventid', $this->event->eventid)
                             ->where('entryid', $entryid)
-                            ->get()
                             ->first();
 
         if (empty($entry)) {
@@ -305,9 +300,8 @@ class EventEntryController extends EventController
         $entryid = $request->entryid;
 
         $entry = EventEntry::where('eventid', $this->event->eventid)
-            ->where('entryid', $entryid)
-            ->get()
-            ->first();
+                            ->where('entryid', $entryid)
+                            ->first();
 
         if (empty($entry)) {
             return response()->json([
@@ -352,7 +346,6 @@ class EventEntryController extends EventController
         $entry = EventEntry::where('eventid', $this->event->eventid)
             ->where('entryid', $entryid)
             ->where('confirmationemail', 0)
-            ->get()
             ->first();
 
         if (empty($entry)) {
@@ -390,7 +383,6 @@ class EventEntryController extends EventController
 
         $entry = EventEntry::where('eventid', $this->event->eventid)
                             ->where('entryid', $entryid)
-                            ->get()
                             ->first();
 
         if (empty($entry)) {
