@@ -58,7 +58,6 @@ class User extends Authenticatable
         return EventAdmin::where('userid', Auth::id())
                     ->where('eventid', $eventid)
                     ->where('canedit', 1)
-                    ->get()
                     ->first();
     }
 
@@ -71,7 +70,6 @@ class User extends Authenticatable
     {
         return EventEntry::where('userid', $this->userid)
                         ->where('eventid', $eventid)
-                        ->get()
                         ->first();
 
 
