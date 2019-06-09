@@ -74,6 +74,7 @@ class LeagueController extends Controller
     {
 
         // Get the event
+        $event = Event::where('eventurl', $request->eventurl ?? -1)->first();
 
         $eventcompetition = EventCompetition::where('eventid', $event->eventid ?? -1)->get()->first();
 
