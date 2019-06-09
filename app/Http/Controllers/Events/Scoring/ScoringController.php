@@ -25,7 +25,7 @@ class ScoringController extends Controller
 
         // check to see if they are an event admin and can score
         $this->helper = new EventsHelper();
-        $this->event  = Event::where('eventurl', $request->eventurl)->get()->first();
+        $this->event  = Event::where('eventurl', $request->eventurl)->first();
 
         if (empty($this->event)) {
             return redirect('/');
@@ -33,7 +33,6 @@ class ScoringController extends Controller
         $eventAdmin = EventAdmin::where('eventid', $this->event->eventid)
                                 ->where('userid', Auth::id())
                                 ->where('canscore', 1)
-                                ->get()
                                 ->first();
 
         if (empty($eventAdmin)) {
@@ -68,7 +67,6 @@ class ScoringController extends Controller
 
         $eventcompetition = EventCompetition::where('eventid', $event->eventid)
                                             ->where('eventcompetitionid', $request->eventcompetitionid ?? -1)
-                                            ->get()
                                             ->first();
 
         if (empty($eventcompetition)) {
@@ -163,14 +161,12 @@ class ScoringController extends Controller
             // get the entry
             $evententry = EventEntry::where('hash', $result['entryhash']??-1)
                                     ->where('eventid', $event->eventid)
-                                    ->get()
                                     ->first();
 
             // get users entry competition
             $entrycompetition = EntryCompetition::where('entrycompetitionid', $result['entrycompetitionid'] ?? -1)
                                                 ->where('eventid', $event->eventid)
                                                 ->where('userid', $evententry->userid ?? -1)
-                                                ->get()
                                                 ->first();
 
             if (empty($evententry) || empty($entrycompetition)) {
@@ -183,7 +179,6 @@ class ScoringController extends Controller
                             ->where('week', $week)
                             ->where('roundid', $entrycompetition->roundid)
                             ->where('divisionid', $entrycompetition->divisionid)
-                            ->get()
                             ->first();
 
 
@@ -280,7 +275,6 @@ class ScoringController extends Controller
                         ->where('userid', $evententry->userid)
                         ->where('divisionid', $entrycompetition->divisionid)
                         ->where('week', $week)
-                        ->get()
                         ->first();
                 }
 
@@ -292,7 +286,6 @@ class ScoringController extends Controller
                                     ->where('userid', $evententry->userid)
                                     ->where('divisionid', $entrycompetition->divisionid)
                                     ->where('week', $week)
-                                    ->get()
                                     ->first();
 
                     // shouldnt ever be null
@@ -366,7 +359,7 @@ class ScoringController extends Controller
      *******************/
     public function postLeagueScore(Request $request)
     {
-        $event = Event::where('eventurl', $request->eventurl)->get()->first();
+        $event = Event::where('eventurl', $request->eventurl)->first();
 
         if (empty($event)) {
             return response()->json([
@@ -376,8 +369,7 @@ class ScoringController extends Controller
         }
 
         $eventcompetition = EventCompetition::where('eventid', $event->eventid)
-            ->get()
-            ->first();
+                                            ->first();
 
 
         // Event Entries
@@ -408,7 +400,7 @@ class ScoringController extends Controller
         );
 
         $entry = null;
-        foreach($entrys as $e) {
+        foreach ($entrys as $e) {
             if ($e->divisionid == $request->divisionid) {
                 $entry = $e;
                 break;
@@ -424,12 +416,11 @@ class ScoringController extends Controller
 
         // check if any scores exist, if none, create, else update
         $flatscore = FlatScore::where('entryid', $entry->entryid)
-            ->where('entrycompetitionid', $entry->entrycompetitionid)
-            ->where('week', $entry->currentweek)
-            ->where('roundid', $entry->roundid)
-            ->where('divisionid', $entry->divisionid)
-            ->get()
-            ->first();
+                                ->where('entrycompetitionid', $entry->entrycompetitionid)
+                                ->where('week', $entry->currentweek)
+                                ->where('roundid', $entry->roundid)
+                                ->where('divisionid', $entry->divisionid)
+                                ->first();
 
 
         if (empty($flatscore)) {
@@ -540,7 +531,6 @@ class ScoringController extends Controller
                                 ->where('roundid', $entry->roundid)
                                 ->where('divisionid', $entry->divisionid)
                                 ->where('week', $entry->currentweek)
-                                ->get()
                                 ->first();
 
                 if (empty($score)) {
@@ -571,7 +561,6 @@ class ScoringController extends Controller
                                 ->where('divisionid', $entry->divisionid)
                                 ->where('week', $entry->currentweek)
                                 ->where('key', $key)
-                                ->get()
                                 ->first();
                 switch ($key) {
                     case 'total' :

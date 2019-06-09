@@ -54,7 +54,7 @@ class EventController extends Controller
     public function getEventDetails(Request $request)
     {
 
-        $event = Event::where('eventurl', $request->eventurl)->get()->first();
+        $event = Event::where('eventurl', $request->eventurl)->first();
 
         if (empty($event)) {
             return redirect('/');

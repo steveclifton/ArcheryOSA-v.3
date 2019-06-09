@@ -31,7 +31,7 @@ class EventResultsController extends EventController
             return back()->with('failure', 'Invalid Request');
         }
 
-        $event = Event::where('eventurl', $request->eventurl)->get()->first();
+        $event = Event::where('eventurl', $request->eventurl)->first();
 
         if (strcasecmp($request->eventcompetitionid, 'overall') === 0) {
             // league processing
@@ -66,7 +66,7 @@ class EventResultsController extends EventController
      */
     public function getEventResultsList(Request $request)
     {
-        $event = Event::where('eventurl', $request->eventurl)->get()->first();
+        $event = Event::where('eventurl', $request->eventurl)->first();
 
         if (empty($event)) {
             return redirect('/');
@@ -76,14 +76,13 @@ class EventResultsController extends EventController
 
         // league event
         if ($event->isLeague()) {
-            $eventcompetition = EventCompetition::where('eventid', $event->eventid)->get()->first();
+            $eventcompetition = EventCompetition::where('eventid', $event->eventid)->first();
 
             $rangeArr = [];
             foreach (range(1, $eventcompetition->currentweek) as $week) {
                 $score = Score::where('eventid', $eventcompetition->eventid)
                     ->where('eventcompetitionid', $eventcompetition->eventcompetitionid)
                     ->where('week', $week)
-                    ->get()
                     ->first();
 
                 if (!empty($score)) {
@@ -102,7 +101,6 @@ class EventResultsController extends EventController
 
             $eventcompetition->score = Score::where('eventid', $eventcompetition->eventid)
                                             ->where('eventcompetitionid', $eventcompetition->eventcompetitionid)
-                                            ->get()
                                             ->first();
             if (empty($haveScores) && !empty($eventcompetition->score)) {
                 $haveScores = true;
@@ -312,7 +310,7 @@ class EventResultsController extends EventController
             }
         }
 
-        $eventcompetition = EventCompetition::where('eventcompetitionid', $eventcompetitionid)->get()->first();
+        $eventcompetition = EventCompetition::where('eventcompetitionid', $eventcompetitionid)->first();
 
         $data = compact('event', 'evententrys', 'eventcompetition');
 
@@ -337,7 +335,7 @@ class EventResultsController extends EventController
 
         $entrys = $this->getEventEntrySorted($event->eventid);
 
-        $eventcompetition = EventCompetition::where('eventid', $event->eventid)->get()->first();
+        $eventcompetition = EventCompetition::where('eventid', $event->eventid)->first();
 
 
         $evententrys = [];
@@ -408,7 +406,7 @@ class EventResultsController extends EventController
             return back()->with('failure', 'Unable to get results');
         }
 
-        $eventcompetition = EventCompetition::where('eventid', $event->eventid)->get()->first();
+        $eventcompetition = EventCompetition::where('eventid', $event->eventid)->first();
 
 
         $evententrys = [];
@@ -467,7 +465,7 @@ class EventResultsController extends EventController
                     foreach ($divisionids as $divisionid) {
                         // clone the entry
                         $entryUpdated = clone $entry;
-                        $divison = Division::where('divisionid', $divisionid)->get()->first();
+                        $divison = Division::where('divisionid', $divisionid)->first();
 
                         $entryUpdated->bowtype = $divison->bowtype;
                         $entryUpdated->divisionname = $divison->label;
