@@ -10,6 +10,7 @@ use App\Models\Organisation;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class DivisionController extends Controller
 {
@@ -24,7 +25,11 @@ class DivisionController extends Controller
      */
     public function get()
     {
-        $divisions = Division::orderby('bowtype')->get();
+        $divisions = DB::select("
+            SELECT d.*, o.label as organisationname
+            FROM `divisions` d
+            LEFT JOIN `organisations` o USING (`organisationid`)
+        ");
 
         return view('admin.divisions.divisions', compact('divisions'));
     }
@@ -75,7 +80,7 @@ class DivisionController extends Controller
         $division->visible        = !empty($validated['visible'])         ? 1 : 0;
         $division->createdby      = Auth::id();
         $division->bowtype        = !empty($validated['bowtype'])         ? strtolower($validated['bowtype']) : null;
-        $division->age            = !empty($validated['age'])             ? strtolower($validated['age']) : null;
+        $division->age            = !empty($validated['age'])             ? ($validated['age']) : null;
         $division->save();
 
         return redirect('/admin/divisions')->with('success', 'Division Created!');
@@ -99,7 +104,7 @@ class DivisionController extends Controller
         $division->description    = !empty($validated['description'])     ? strtolower($validated['description']) : null;
         $division->visible        = !empty($validated['visible'])         ? 1 : 0;
         $division->bowtype        = !empty($validated['bowtype'])         ? strtolower($validated['bowtype']) : null;
-        $division->age            = !empty($validated['age'])             ? strtolower($validated['age']) : null;
+        $division->age            = !empty($validated['age'])             ? ($validated['age']) : null;
 
 
         $division->save();
