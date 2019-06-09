@@ -65,6 +65,7 @@ class UpdateRegistration extends FormRequest
             'gender'         => 'nullable',
             'pickup'         => 'nullable',
             'roundids'       => 'required',
+            'country'        => 'required',
             'divisionid'     => 'required',
             'dateofbirth'    => $dobstate,
             'bib'            => 'nullable'

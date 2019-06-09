@@ -18,6 +18,7 @@ use App\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use Webpatser\Countries\Countries;
 
 
 class EventRegistrationController extends EventController
@@ -121,11 +122,13 @@ class EventRegistrationController extends EventController
             ->get()
             ->first();
 
+        $countrys = Countries::all();
+
         // Means they need to create an event
         if (empty($evententry)) {
             return view('events.public.registration.createregistration',
                     compact('user', 'event', 'clubs', 'divisionsfinal', 'competitionsfinal',
-                        'leaguecompround', 'multipledivisions', 'schools'));
+                        'leaguecompround', 'multipledivisions', 'schools','countrys'));
         }
 
         $entrycompetitions = EntryCompetition::where('entryid', $evententry->entryid)->get();
@@ -146,7 +149,7 @@ class EventRegistrationController extends EventController
         return view('events.public.registration.updateregistration',
                 compact('user', 'event', 'evententry', 'clubs', 'divisionsfinal', 'competitionsfinal',
                     'entrycompetitions', 'entrycompetitionids', 'leaguecompround', 'multipledivisions',
-                    'divisions', 'schools'));
+                    'divisions', 'schools','countrys'));
     }
 
 
@@ -210,6 +213,7 @@ class EventRegistrationController extends EventController
         $evententry->notes         = !empty($validated['notes'])          ? strtolower($validated['notes'])      : '';
         $evententry->clubid        = !empty($validated['clubid'])         ? intval($validated['clubid'])         : '';
         $evententry->schoolid      = !empty($validated['schoolid'])       ? intval($validated['schoolid'])       : '';
+        $evententry->country       = !empty($validated['country'])        ? ($validated['country'])              : '';
         $evententry->divisionid    = !empty($validated['divisionid'])     ? $validated['divisionid']             : '';
         $evententry->pickup        = !empty($validated['pickup']);
         $evententry->dateofbirth   = !empty($validated['dateofbirth'])    ? $validated['dateofbirth']            : '';
@@ -318,7 +322,9 @@ class EventRegistrationController extends EventController
         $evententry->pickup       = !empty($validated['pickup']);
         $evententry->schoolid     = !empty($validated['schoolid'])       ? $validated['schoolid']                : '';
         $evententry->gender       = !empty($validated['gender'] == 'm')  ? 'm' : 'f';
-        $evententry->dateofbirth  = !empty($validated['dateofbirth'])    ? $validated['dateofbirth'] : '';
+        $evententry->dateofbirth  = !empty($validated['dateofbirth'])    ? $validated['dateofbirth']             : '';
+        $evententry->country      = !empty($validated['country'])        ? ($validated['country'])               : '';
+
         $evententry->save();
 
         $entrycompetitions = EntryCompetition::where('userid', $user->userid)
@@ -460,6 +466,7 @@ class EventRegistrationController extends EventController
         $evententry->schoolid      = !empty($validated['schoolid'])       ? $validated['schoolid']               : '';
         $evententry->dateofbirth   = !empty($validated['dateofbirth'])    ? $validated['dateofbirth']            : '';
         $evententry->gender        = !empty($validated['gender'] == 'm')  ? 'm' : 'f';
+        $evententry->country       = !empty($validated['country'])        ? ($validated['country'])              : '';
         $evententry->enteredby     = Auth::id();
         $evententry->hash          = $this->createHash();
         $evententry->save();
@@ -535,6 +542,7 @@ class EventRegistrationController extends EventController
         $evententry->schoolid     = !empty($validated['schoolid'])       ? $validated['schoolid']                : '';
         $evententry->gender       = !empty($validated['gender'] == 'm')  ? 'm' : 'f';
         $evententry->dateofbirth  = !empty($validated['dateofbirth'])    ? $validated['dateofbirth'] : '';
+        $evententry->country       = !empty($validated['country'])        ? ($validated['country'])              : '';
 
         $evententry->save();
 

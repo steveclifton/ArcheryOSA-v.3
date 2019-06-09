@@ -63,6 +63,7 @@ class CreateRegistration extends FormRequest
             'schoolid'       => $schoolrequired,
             'gender'         => 'nullable',
             'pickup'         => 'nullable',
+            'country'        => 'required',
             'roundids'       => 'required',
             'divisionid'     => 'required',
             'dateofbirth'    => $dobstate,

@@ -131,6 +131,29 @@
                         <textarea name="address" class="form-control" rows="2">{{old('address')  ?? $evententry->address ?? ''}}</textarea>
                     </div>
                 </div>
+                <div class="form-group row">
+                    <label class="col-sm-12 col-md-3 col-form-label">Country*</label>
+                    <div class="col-md-9">
+                        <select name="country"
+                                class="form-control {{ $errors->has('country') ? 'is-invalid' : '' }}" required>
+
+                            <option value="NZL">New Zealand</option>
+                            <option value="AUS">Australia</option>
+                            <option disabled>__________________</option>
+                            @foreach($countrys as $country)
+                                <option value="{{$country->iso_3166_3}}"
+                                        {!! (old('country') ?? $evententry->country ) == $country->iso_3166_3 ? 'selected' : '' !!}>
+                                    {{$country->name}}
+                                </option>
+                            @endforeach
+                        </select>
+                        @if ($errors->has('country'))
+                            <span class="invalid-feedback" role="alert">
+                                <strong>{{ $errors->first('country') }}</strong>
+                            </span>
+                        @endif
+                    </div>
+                </div>
 
                 <div class="form-group row">
                     <label class="col-sm-12 col-md-3 col-form-label">Notes</label>

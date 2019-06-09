@@ -48,7 +48,7 @@ class EventExportController extends Controller
             SELECT ee.bib, 1 as session, d.class as division, d.age as class, ta.target as target, 
                    1 as individualqualround, 0 as teamqualround, 1 as individualfinal, 0 as teamfinal,
                     ee.lastname,ee.firstname, ee.gender,
-                   'NZL' as countrycode, 'New Zealand' as country,
+                   ee.country as countrycode, 
                    DATE_FORMAT(str_to_date(ee.dateofbirth, '%d-%m-%Y'),'%Y-%m-%d') as dateofbirth,
                    'NZ' as subclass,
                    c.description as clubcode,
@@ -67,9 +67,13 @@ class EventExportController extends Controller
 
 
         foreach ($entrys as $entry) {
+
             if ($entry->gender == 'f') {
                 $entry->gender = 'w';
             }
+            
+            $country = DB::select("SELECT * FROM `countries` WHERE `iso_3166_3` = :country", ['country' => $entry->countrycode]);
+            $entry->country = $country['name'] ?? 'New Zealand';
         }
 
         $filename = str_replace(' ', '-', $event->label) .'-' . date('d-m', time());

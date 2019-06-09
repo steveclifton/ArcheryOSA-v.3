@@ -17,6 +17,7 @@ use App\Models\Score;
 use App\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Webpatser\Countries\Countries;
 
 class EventEntryController extends EventController
 {
@@ -107,8 +108,11 @@ class EventEntryController extends EventController
             $schools = School::where('visible', 1)->orderby('label')->get();
         }
 
+        $countrys = Countries::all();
+
         return view('events.auth.management.entries.add',
-            compact('event', 'schools', 'clubs', 'divisionsfinal', 'competitionsfinal', 'leaguecompround', 'multipledivisions'));
+            compact('event', 'schools', 'clubs', 'divisionsfinal', 'competitionsfinal',
+                'leaguecompround', 'multipledivisions', 'countrys'));
     }
 
     public function getEventEntryUpdateView(Request $request)
@@ -177,12 +181,12 @@ class EventEntryController extends EventController
         foreach ($entrycompetitions as $entrycompetition) {
             $entrycompetitionids[$entrycompetition->eventcompetitionid][$entrycompetition->roundid] = $entrycompetition->roundid;
         }
-
+        $countrys = Countries::all();
 
         return view('events.auth.management.entries.update',
                 compact('user', 'entrycompetitionids', 'evententry', 'event', 'schools',
                         'clubs', 'divisionsfinal', 'competitionsfinal',
-                        'leaguecompround', 'multipledivisions'
+                        'leaguecompround', 'multipledivisions', 'countrys'
                         )
                     );
     }
