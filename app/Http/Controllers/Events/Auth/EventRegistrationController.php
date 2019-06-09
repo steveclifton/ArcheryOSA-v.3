@@ -29,7 +29,7 @@ class EventRegistrationController extends EventController
     public function getRegistrationList(Request $request)
     {
         // Get the event
-        $event = Event::where('eventurl', $request->eventurl)->get()->first();
+        $event = Event::where('eventurl', $request->eventurl)->first();
 
 
         if (empty($event)) {
@@ -41,7 +41,7 @@ class EventRegistrationController extends EventController
         }
 
         // Try get an existing entry | redirect if exists
-        $evententry = EventEntry::where('eventid', $event->eventid)->get()->first();
+        $evententry = EventEntry::where('eventid', $event->eventid)->first();
 
         $relations = UserRelation::where('userid', Auth::id())->where('authorised', 1)->pluck('relationid')->toarray();
 
@@ -59,9 +59,9 @@ class EventRegistrationController extends EventController
     public function getRegistration(Request $request)
     {
 
-        $event = Event::where('eventurl', $request->eventurl ?? -1)->get()->first();
+        $event = Event::where('eventurl', $request->eventurl ?? -1)->first();
 
-        $user  = User::where('username', $request->username ?? -1)->get()->first();
+        $user  = User::where('username', $request->username ?? -1)->first();
 
         if (empty($event) || empty($user)) {
             return back();
@@ -119,7 +119,6 @@ class EventRegistrationController extends EventController
 
         $evententry = EventEntry::where('eventid', $event->eventid)
             ->where('userid', $user->userid)
-            ->get()
             ->first();
 
         $countrys = Countries::all();
@@ -162,7 +161,7 @@ class EventRegistrationController extends EventController
     {
         $validated = $request->validated();
 
-        $event = Event::where('eventid', $validated['eventid'])->get()->first();
+        $event = Event::where('eventid', $validated['eventid'])->first();
 
         if ($event->isEvent() && !$event->canEnterEvent()) {
             return redirect('/event/details/' . $event->eventurl)->with('failure', 'Event entrys are closed');
@@ -175,11 +174,10 @@ class EventRegistrationController extends EventController
             $user = UserRelation::where('userid', Auth::id())
                 ->where('relationid', $validated['userid'])
                 ->where('authorised', 1)
-                ->get()
                 ->first();
 
             if (!empty($user)) {
-                $user = User::where('userid', $validated['userid'])->get()->first();
+                $user = User::where('userid', $validated['userid'])->first();
             }
         }
 
@@ -190,7 +188,7 @@ class EventRegistrationController extends EventController
         // check to see if an entry exists for this user
         $existingevententry = EventEntry::where('eventid', $event->eventid)
                                         ->where('userid', $user->userid)
-                                        ->get()->first();
+                                        ->first();
 
         if (!empty($existingevententry) ) {
             return back()->with('failure', 'An entry already exists, please check back in a few minutes');
@@ -274,7 +272,7 @@ class EventRegistrationController extends EventController
     {
         $validated = $request->validated();
 
-        $event = Event::where('eventid', $validated['eventid'])->get()->first();
+        $event = Event::where('eventid', $validated['eventid'])->first();
 
         if ($event->isEvent() && !$event->canEnterEvent()) {
             return redirect('/event/details/' . $event->eventurl)->with('failure', 'Event entrys are closed');
@@ -287,11 +285,10 @@ class EventRegistrationController extends EventController
             $user = UserRelation::where('userid', Auth::id())
                 ->where('relationid', $validated['userid'])
                 ->where('authorised', 1)
-                ->get()
                 ->first();
 
             if (!empty($user)) {
-                $user = User::where('userid', $validated['userid'])->get()->first();
+                $user = User::where('userid', $validated['userid'])->first();
             }
         }
 
@@ -304,7 +301,6 @@ class EventRegistrationController extends EventController
         // Store the single event entry
         $evententry = EventEntry::where('userid', $user->userid)
                                 ->where('eventid', $event->eventid)
-                                ->get()
                                 ->first();
 
 
@@ -351,7 +347,6 @@ class EventRegistrationController extends EventController
                     ->where('roundid', $roundid)
                     ->where('divisionid', $divisionid)
                     ->where('userid', $user->userid)
-                    ->get()
                     ->first();
 
                 // doesnt exist, create it
@@ -401,9 +396,9 @@ class EventRegistrationController extends EventController
 
         $validated = $request->validated();
 
-        $event = Event::where('eventid', $validated['eventid'])->get()->first();
+        $event = Event::where('eventid', $validated['eventid'])->first();
 
-        $user = User::where('userid', $validated['userid'] ?? -1)->get()->first();
+        $user = User::where('userid', $validated['userid'] ?? -1)->first();
 
         if (empty($event)) {
             return back()->with('failure', 'Please try again later');
@@ -412,7 +407,7 @@ class EventRegistrationController extends EventController
 
         // could be a manual entry, try lookup by email
         if (empty($user)) {
-            $user = User::where('email', $validated['email'] ?? -1)->get()->first();
+            $user = User::where('email', $validated['email'] ?? -1)->first();
 
             // if still empty, create a new user
             if (empty($user)) {
@@ -436,7 +431,6 @@ class EventRegistrationController extends EventController
 
         $evententry = EventEntry::where('userid', $user->userid)
             ->where('eventid', $event->eventid)
-            ->get()
             ->first();
 
         if (!empty($evententry)) {
@@ -511,9 +505,9 @@ class EventRegistrationController extends EventController
         $validated = $request->validated();
 
 
-        $event = Event::where('eventid', $validated['eventid'])->get()->first();
+        $event = Event::where('eventid', $validated['eventid'])->first();
 
-        $user = User::where('userid', $validated['userid'])->get()->first();
+        $user = User::where('userid', $validated['userid'])->first();
 
 
         if (empty($event) || empty($user)) {
@@ -523,7 +517,6 @@ class EventRegistrationController extends EventController
         // Store the single event entry
         $evententry = EventEntry::where('userid', $user->userid)
             ->where('eventid', $event->eventid)
-            ->get()
             ->first();
 
 
@@ -547,8 +540,8 @@ class EventRegistrationController extends EventController
         $evententry->save();
 
         $entrycompetitions = EntryCompetition::where('userid', $user->userid)
-            ->where('entryid', $evententry->entryid)
-            ->get();
+                                                ->where('entryid', $evententry->entryid)
+                                                ->get();
 
 
         $divisionids = explode(',', $validated['divisionid']);
@@ -571,7 +564,6 @@ class EventRegistrationController extends EventController
                     ->where('roundid', $roundid)
                     ->where('divisionid', $divisionid)
                     ->where('userid', $user->userid)
-                    ->get()
                     ->first();
 
                 // doesnt exist, create it
