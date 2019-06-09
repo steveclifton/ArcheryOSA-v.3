@@ -98,34 +98,31 @@
                     var distmax4 = $(this).find('#dist4').attr('data-max') || 0;
 
                     var scores = {
-                        'dist1': score1,
-                        'dist2': score2,
-                        'dist3': score3,
-                        'dist4': score4,
-                        'totalhit': totalhit,
-                        'total10': total10,
-                        'totalx': totalx,
+                        'dist1': parseInt(score1),
+                        'dist2': parseInt(score2),
+                        'dist3': parseInt(score3),
+                        'dist4': parseInt(score4),
+                        'totalhit': parseInt(totalhit),
+                        'total10': parseInt(total10),
+                        'totalx': parseInt(totalx),
                         'userid': userid,
                         'divisionid':divisionid
                     };
 
                     var errors = [];
-                    var hasscore = false;
                     var i = 1;
                     for (var s in scores) {
+                        var max = $(this).find('#dist' + i++).attr('data-max');
+                        max = parseInt(max);
 
-                        var max = $(this).find('#dist' + i++).attr('data-max') || 0;
-
-                        if (scores[s] > 0 ) {
-                            if ((scores[s] <= max)) {
-                                hasscore = true;
-                                break;
-                            }
-                            else {
-                                errors.push('Score ' + (i - 1) + ' above round max of ' + max);
-                            }
+                        if (!isNaN(max)
+                            && scores[s] >= 0
+                            && scores[s] > max
+                        ) {
+                            errors.push('Score ' + (i - 1) + ' above round max of ' + max);
                         }
                     }
+
 
                     if (errors.length > 0) {
                         errorDiv.html(errors.join('<br>')).show();
