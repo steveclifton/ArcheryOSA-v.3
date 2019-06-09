@@ -198,6 +198,7 @@ Route::middleware(['web'])->group(function() {
          */
 
         Route::get('event/export/entries/{eventurl}/{type}', 'Export\EventExportController@exportevententries');
+        Route::get('event/export/entries/ianseo/{eventurl}/{type}', 'Export\EventExportController@exportevententries_ianseo');
 
         Route::get('event/export/results/{eventurl}/{eventcompetitionid}', 'Export\EventExportController@exportEventScores');
 

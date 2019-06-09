@@ -38,6 +38,12 @@
 
                     <tbody>
                         <tr>
+                            <td><strong>Ianseo Entries</strong></td>
+                            <td>
+                                <a href="/event/export/entries/ianseo/{{$event->eventurl}}/csv"><i class="fa fa-file-excel-o fa-3x"></i></a>
+                            </td>
+                        </tr>
+                        <tr>
                             <td><strong>Entries</strong></td>
                             <td>
                                 <a href="/event/export/entries/{{$event->eventurl}}/csv"><i class="fa fa-file-excel-o fa-3x"></i></a>

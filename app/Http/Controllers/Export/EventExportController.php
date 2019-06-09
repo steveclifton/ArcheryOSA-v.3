@@ -29,6 +29,74 @@ class EventExportController extends Controller
         return view('events.auth.management.exports', compact('event', 'eventcompetitions'));
     }
 
+    public function exportevententries_ianseo(Request $request)
+    {
+        $event = Event::where('eventurl', $request->eventurl)->get()->first();
+
+        if (empty($event)) {
+            die();
+        }
+
+        // Get Event
+        if (!Auth::user()->canEditEvent($event->eventid)) {
+            die;
+        }
+
+        $eventcompetitionids = EventCompetition::where('eventid', $event->eventid)->pluck('eventcompetitionid')->toArray();
+
+        $entrys = DB::select("
+            SELECT ee.bib, 1 as session, d.class as division, d.age as class, ta.target as target, 
+                   1 as individualqualround, 0 as teamqualround, 1 as individualfinal, 0 as teamfinal,
+                    ee.lastname,ee.firstname, ee.gender,
+                   'NZL' as countrycode, 'New Zealand' as country,
+                   DATE_FORMAT(str_to_date(ee.dateofbirth, '%d-%m-%Y'),'%Y-%m-%d') as dateofbirth,
+                   'NZ' as subclass,
+                   c.description as clubcode,
+                    c.label as clubname
+            FROM `evententrys` ee
+            JOIN `entrycompetitions` ec USING (`entryid`)
+            JOIN `divisions` d ON (`ec`.`divisionid` = `d`.`divisionid`)
+            JOIN `rounds` r ON (ec.roundid = r.roundid)
+            LEFT JOIN `targetallocations` ta ON (ee.userid = ta.userid AND ec.eventcompetitionid = ta.eventcompetitionid AND ec.divisionid = ta.divisionid)
+            LEFT JOIN `clubs` c ON (ee.clubid = c.clubid)
+            WHERE `ee`.`eventid` = :eventid
+            AND `ec`.`eventcompetitionid` IN (".implode(',', (array) $eventcompetitionids).")
+            GROUP BY ee.userid, ec.eventcompetitionid, ec.divisionid
+            ORDER BY `d`.label, ee.firstname
+        ", ['eventid' => $event->eventid]);
+
+
+        foreach ($entrys as $entry) {
+            if ($entry->gender == 'f') {
+                $entry->gender = 'w';
+            }
+        }
+
+        $filename = str_replace(' ', '-', $event->label) .'-' . date('d-m', time());
+        switch($request->type) {
+            case 'csv':
+                $csv = Writer::createFromFileObject(new \SplTempFileObject());
+
+                $csv->insertOne(['Bib', 'Session', 'Division', 'Class', 'Target', 'Individualqualround', 'Teamqualround',
+                    'Individualfinal', 'Teamfinal', 'Lastname', 'Firstname', 'Gender', 'Country Code', 'Country', 'DOB', 'Subclass', 'Clubcode', 'Clubname' ]);
+
+                foreach ($entrys as $entry) {
+                    $csv->insertOne((array) $entry);
+                }
+
+                $csv->output( $filename . '.csv');
+                die;
+
+            case 'pdf':
+
+                $mpdf = new Mpdf(['orientation' => 'L', 'tempDir' => __DIR__ . '/tmp']);
+                $mpdf->WriteHTML($this->makeentrypdfmarkup($event->label, $entrys));
+                $mpdf->Output($filename . '.pdf', \Mpdf\Output\Destination::DOWNLOAD);
+                die;
+        }
+
+    }
+
     public function exportevententries(Request $request)
     {
         $event = Event::where('eventurl', $request->eventurl)->get()->first();
