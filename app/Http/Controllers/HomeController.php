@@ -42,6 +42,7 @@ class HomeController extends Controller
                 JOIN `evententrys` ee USING (`eventid`)
                 JOIN `entrystatus` es ON (ee.entrystatusid = es.entrystatusid)
                 WHERE `ee`.`userid` = '".Auth::id()."'
+                AND `e`.`visible` = 1
                 AND `e`.`end` > now()
                 ORDER BY e.start
             ");
