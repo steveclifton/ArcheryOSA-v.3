@@ -7,6 +7,12 @@
 <link rel="icon" href="{{URL::asset('/images/favion.ico')}}" type="image/x-icon" />
 <link rel="shortcut icon" href="{{URL::asset('/images/favion.ico')}}" type="image/x-icon" />
 
+<link rel="apple-touch-icon" href="touch-icon-iphone.png">
+<link rel="apple-touch-icon" sizes="144x144" href="/icon-144x144.png">
+<link rel="apple-touch-icon" sizes="152x152" href="/icon-152x152.png">
+<link rel="apple-touch-icon" sizes="192x192" href="/icon-192x192.png">
+<link rel="apple-touch-icon" sizes="512x512" href="/icon-512x512.png">
+
 
 <script src='https://www.google.com/recaptcha/api.js'></script>
 
