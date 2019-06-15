@@ -13,7 +13,7 @@
 <link rel="apple-touch-icon" sizes="192x192" href="/icon-192x192.png">
 <link rel="apple-touch-icon" sizes="512x512" href="/icon-512x512.png">
 
-
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <script src='https://www.google.com/recaptcha/api.js'></script>
 
 <link rel="manifest" href="/manifest.json">
