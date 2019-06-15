@@ -1,6 +1,6 @@
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
-<meta content="Archery Online Scoring Application" name="description" />
+<meta name="description" content="Archery Online Scoring Application"/>
 <meta http-equiv="X-UA-Compatible" content="IE=edge" />
 <meta property="og:image" content="{{URL::asset('/images/archeryosablack.jpg')}}">
 
@@ -14,6 +14,8 @@
 <link rel="apple-touch-icon" sizes="512x512" href="/icon-512x512.png">
 
 <meta name="apple-mobile-web-app-status-bar-style" content="black">
+
+
 <script src='https://www.google.com/recaptcha/api.js'></script>
 
 <link rel="manifest" href="/manifest.json">

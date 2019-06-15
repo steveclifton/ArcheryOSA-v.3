@@ -1,5 +1,4 @@
 const staticAssets = [
-    './',
     './css/archeryosa.css',
     './plugins/bootstrap-datepicker/css/bootstrap-datepicker.min.css',
     './plugins/jstree/style.css',
@@ -30,6 +29,7 @@ self.addEventListener('install', async event => {
 self.addEventListener('fetch', event => {
     const {request} = event;
     const url = new URL(request.url);
+
     if (url.origin === location.origin) {
         event.respondWith(cacheData(request));
     }
@@ -52,7 +52,7 @@ async function networkFirst(request) {
         cache.put(request, response.clone());
         return response;
     }
-    catch (error){
+    catch (error) {
         return await cache.match(request);
 
     }
