@@ -18,7 +18,7 @@
 
 <script src='https://www.google.com/recaptcha/api.js'></script>
 
-<link rel="manifest" href="/manifest.json">
+{{--<link rel="manifest" href="/manifest.json">--}}
 
 <!-- Global site tag (gtag.js) - Google Analytics -->
 <script async src="https://www.googletagmanager.com/gtag/js?id=UA-109735416-1"></script>

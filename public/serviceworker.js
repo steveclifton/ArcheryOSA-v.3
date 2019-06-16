@@ -1,4 +1,5 @@
 const staticAssets = [
+    './',
     './css/archeryosa.css',
     './plugins/bootstrap-datepicker/css/bootstrap-datepicker.min.css',
     './plugins/jstree/style.css',
