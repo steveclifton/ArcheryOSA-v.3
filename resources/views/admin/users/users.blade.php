@@ -19,46 +19,23 @@
                     <table class="table table-hover">
                         <thead class="thead-light">
                         <tr>
-                            <th>Image</th>
                             <th>User ID</th>
                             <th>User Type</th>
                             <th>First Name</th>
                             <th>Last Name</th>
                             <th>Email</th>
-                            <th>Event Enteries</th>
                         </tr>
                         </thead>
                         <tbody>
-                        <tr>
-                            <th scope="row"><img src="assets/images/users/avatar-3.jpg" alt="image" class="img-fluid thumb-md rounded"></th>
-                            <td>1</td>
-                            <td>Admin</td>
-                            <td>Steve</td>
-                            <td>Clifton</td>
-                            <td>Steve.clifton@outlook.com</td>
-                            <td>3</td>
-                        </tr>
-                        <tr>
-                            <th scope="row"><img src="assets/images/users/avatar-3.jpg" alt="image" class="img-fluid thumb-md rounded"></th>
-                            <td>2</td>
-                            <td>User</td>
-                            <td>Milo</td>
-                            <td>Clifton</td>
-                            <td>Milo.clifton@outlook.com</td>
-                            <td>0</td>
-
-                        </tr>
-                        <tr>
-                            <th scope="row"><img src="assets/images/users/avatar-3.jpg" alt="image" class="img-fluid thumb-md rounded"></th>
-                            <td>3</td>
-                            <td>User</td>
-                            <td>Milo</td>
-                            <td>Clifton</td>
-                            <td>Milo.clifton@outlook.com</td>
-                            <td>0</td>
-
-                        </tr>
-
+                            @foreach($users as $user)
+                                <tr>
+                                    <td>{{$user->userid}}</td>
+                                    <td>{{$user->getUserType()}}</td>
+                                    <td>{{ucwords($user->firstname)}}</td>
+                                    <td>{{ucwords($user->lastname)}}</td>
+                                    <td>{{$user->email}}</td>
+                                </tr>
+                            @endforeach
                         </tbody>
                     </table>
                 </div>

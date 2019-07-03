@@ -49,8 +49,6 @@ class HomeController extends Controller
 
         }
 
-        //$resultevents = $this->eventhelper->getPreviousEvents(true, 10);
-
         return view('home', compact('upcomingevents', 'myevents'));
     }
 

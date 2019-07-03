@@ -102,4 +102,18 @@ class User extends Authenticatable
         return $this->roleid === 1;
     }
 
+    public function getUserType()
+    {
+        switch ($this->roleid) {
+            case '1':
+                return 'Super Admin';
+            case '2':
+                return 'Admin';
+            case '3':
+                return 'Event Admin';
+
+            default:
+                return 'User';
+        }
+    }
 }
