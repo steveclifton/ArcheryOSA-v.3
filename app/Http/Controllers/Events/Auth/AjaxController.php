@@ -23,11 +23,17 @@ class AjaxController extends EventController
         }
 
         $users = DB::select("
-            SELECT *
+            SELECT `userid`, `firstname`, `lastname`
             FROM `users`
             WHERE CONCAT_WS(' ', `firstname`, `lastname`) LIKE :search
             LIMIT 3
         ", ['search'=> '%' . $request->search . '%']);
+
+        foreach ($users as $user) {
+            $user->userid = htmlentities($user->userid);
+            $user->firstname = htmlentities($user->firstname);
+            $user->lastname = htmlentities($user->lastname);
+        }
 
         return response()->json([
             'success' => true,
