@@ -391,13 +391,13 @@ class EventResultsController extends EventController
             JOIN `divisions` d ON (`ec`.`divisionid` = `d`.`divisionid`)
             JOIN `rounds` r ON (ec.roundid = r.roundid)
             LEFT JOIN `scores_flat` sf ON (ee.entryid = sf.entryid AND ec.entrycompetitionid = sf.entrycompetitionid AND ec.roundid = sf.roundid)
-            LEFT JOIN `leaguepoints` lp ON (ee.userid = lp.userid AND ee.eventid = lp.eventid AND ec.divisionid = lp.divisionid AND lp.week = '{$week}')
+            LEFT JOIN `leaguepoints` lp ON (ee.userid = lp.userid AND ee.eventid = lp.eventid AND ec.divisionid = lp.divisionid AND lp.week = :week2)
             WHERE `ee`.`eventid` = '".$event->eventid."'
             AND `sf`.total <> 0
             AND `sf`.`week` = :week
             AND `ee`.`entrystatusid` = 2
             ORDER BY `d`.label
-        ", ['week' => $week]);
+        ", ['week' => $week, 'week2' => $week]);
 
         if ($apicall && empty($entrys)) {
             return [];
