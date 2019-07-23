@@ -268,7 +268,7 @@
 
                                         @foreach(array_keys($targetallocations) as $key)
                                             <li class="nav-item tab">
-                                                <a href="#{{ str_replace(' ', '', $key) }}" data-toggle="tab" aria-expanded="false"
+                                                <a href="#{{ \Illuminate\Support\Str::slug($key) }}" data-toggle="tab" aria-expanded="false"
                                                    class="nav-link {{$i++ == 1 ? 'active  show' : ''}}">
                                                     {{$key}}
                                                 </a>
@@ -279,7 +279,7 @@
                                     <div class="tab-content">
                                         @php $i = 1; @endphp
                                         @foreach ($targetallocations as $key => $day)
-                                            <div class="tab-pane {{$i++ == 1 ? 'active' : ''}}" id="{{str_replace(' ', '', $key)}}">
+                                            <div class="tab-pane {{$i++ == 1 ? 'active' : ''}}" id="{{\Illuminate\Support\Str::slug($key)}}">
 
                                                 <div class="table-responsive">
 

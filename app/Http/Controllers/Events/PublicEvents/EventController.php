@@ -100,7 +100,7 @@ class EventController extends Controller
             JOIN `evententrys` ee ON (ta.eventid = ee.eventid AND ta.userid = ee.userid) 
             JOIN `eventcompetitions` ec ON (ta.`eventcompetitionid` = ec.`eventcompetitionid`)
             WHERE ta.`eventid` = :eventid
-            ORDER BY `ee`.firstname
+            ORDER BY ta.target+0
         ", ['eventid' => $event->eventid]);
 
 
