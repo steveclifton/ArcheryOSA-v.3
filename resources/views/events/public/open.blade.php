@@ -22,11 +22,9 @@
                             <div class="card-body">
                                 <h4 class="card-title font-18 mt-0">{{$event->label}}</h4>
                                 <p class="card-text">Start : {!! date('d F Y', strtotime($event->start)) !!}</p>
-
                                 @php $date = (!empty($event->entryclose) && $event->entryclose != '1970-01-01') ? date('d F Y', strtotime($event->entryclose)) : 'Not Specified';  @endphp
                                 <p class="card-text">Entries Close : {!! $date !!}</p>
-
-                                {{--<p class="card-text">Status : {{$event->eventstatus}}</p>--}}
+                                <p class="card-text">Event Level : {!! $event->level !!}</p>
                             </div>
                         </div>
                     </a>
@@ -54,6 +52,7 @@
                                 <thead class="thead-light">
                                 <tr>
                                     <th>Name</th>
+                                    <th>Event Level</th>
                                     <th>Start</th>
                                     <th>Status</th>
                                 </tr>
@@ -62,6 +61,7 @@
                                 @foreach(array_slice($events, 3) as $event)
                                     <tr>
                                         <th scope="row"><a href="/event/details/{{$event->eventurl}}">{{$event->label}}</a></th>
+                                        <td>{!! $event->level !!}</td>
                                         <td>{{date('d F Y', strtotime($event->start))}}</td>
                                         <td class="text-success">{{$event->eventstatus}}</td>
                                     </tr>

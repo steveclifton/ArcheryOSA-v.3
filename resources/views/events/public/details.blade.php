@@ -136,6 +136,12 @@
                                 </td>
                             </tr>
                             <tr>
+                                <th scope="row">Event Level</th>
+                                <td>
+                                    {!! ucwords($event->level) !!}
+                                </td>
+                            </tr>
+                            <tr>
                                 <th scope="row">Email</th>
                                 <td>
                                     {{$event->email}}

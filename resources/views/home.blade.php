@@ -82,6 +82,8 @@
                                         <div class="card-body">
                                             <h4 class="card-title font-18 mt-0">{{$event->label}}</h4>
                                             <p class="card-text">Start : {!! date('d F Y', strtotime($event->start)) !!}</p>
+                                            <p class="card-text">Event Level : {!! $event->level !!}</p>
+
                                         </div>
                                     </div>
                                 </a>
@@ -139,6 +141,7 @@
                                     <div class="card-body">
                                         <h4 class="card-title font-18 mt-0">{{$event->label}}</h4>
                                         <p class="card-text">Start : {!! date('d F Y', strtotime($event->start)) !!}</p>
+                                        <p class="card-text">Event Level : {!! $event->level !!}</p>
                                     </div>
                                 </div>
                             </a>
@@ -150,6 +153,7 @@
                                 <thead class="thead-light">
                                 <tr>
                                     <th>Name</th>
+                                    <th>Event Level</th>
                                     <th>Start</th>
                                     <th>Status</th>
                                 </tr>
@@ -157,7 +161,10 @@
                                 <tbody>
                                 @foreach(array_slice($upcomingevents, 6, 10) as $event)
                                     <tr>
-                                        <th scope="row"><a href="/event/details/{{$event->eventurl}}">{{$event->label}}</a></th>
+                                        <th scope="row">
+                                            <a href="/event/details/{{$event->eventurl}}">{{$event->label}}</a>
+                                        </th>
+                                        <td>{!! $event->level !!}</td>
                                         <td>{{date('d F Y', strtotime($event->start))}}</td>
                                         <td class="text-success">{{$event->eventstatus}}</td>
                                     </tr>
@@ -172,49 +179,5 @@
         </div>
     </div>
 
-
-
-
-    {{--Results--}}
-    {{--<div class="row">--}}
-        {{--<div class="col-lg-12">--}}
-            {{--<ul class="nav nav-tabs tabs">--}}
-                {{--<li class="nav-item tab">--}}
-                    {{--<a href="#results" data-toggle="tab" aria-expanded="true" class="nav-link">--}}
-                        {{--Results--}}
-                    {{--</a>--}}
-                {{--</li>--}}
-            {{--</ul>--}}
-
-            {{--<div class="tab-content">--}}
-                {{--<div class="tab-pane active" id="results">--}}
-
-                    {{--@if (!empty($resultevents))--}}
-                        {{--<div class="table-responsive">--}}
-                            {{--<table class="table table-hover">--}}
-                                {{--<thead class="thead-light">--}}
-                                {{--<tr>--}}
-                                    {{--<th>Name</th>--}}
-                                    {{--<th>Start</th>--}}
-                                    {{--<th>Status</th>--}}
-                                {{--</tr>--}}
-                                {{--</thead>--}}
-                                {{--<tbody>--}}
-                                {{--@foreach($resultevents as $event)--}}
-                                    {{--<tr>--}}
-                                        {{--<th scope="row"><a href="/event/details/{{$event->eventurl}}">{{$event->label}}</a></th>--}}
-                                        {{--<td>{{date('d F Y', strtotime($event->start))}}</td>--}}
-                                        {{--<td class="text-success">{{$event->eventstatus}}</td>--}}
-                                    {{--</tr>--}}
-                                {{--@endforeach--}}
-                                {{--</tbody>--}}
-                            {{--</table>--}}
-                        {{--</div>--}}
-                        {{--<h4 class="page-title"><a href="/events">See all events</a></h4>--}}
-                    {{--@endif--}}
-                {{--</div>--}}
-            {{--</div>--}}
-        {{--</div>--}}
-    {{--</div>--}}
 
 @endsection

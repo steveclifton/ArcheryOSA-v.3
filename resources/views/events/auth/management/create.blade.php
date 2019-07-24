@@ -53,6 +53,19 @@
                     </div>
                 </div>
 
+                <div class="form-group row">
+                    <label class="col-sm-12 col-md-3 col-form-label">Event Level</label>
+                    <div class="col-md-9">
+                        <select name="level" class="form-control">
+                            @foreach($eventlevels as $level)
+                                <option value="{{$level}}"
+                                        {{ old('level') == $level ? 'selected' : ''}}>
+                                    {{ $level }}
+                                </option>
+                            @endforeach
+                        </select>
+                    </div>
+                </div>
 
                 <div class="form-group row">
                     <label class="col-sm-12 col-md-3 col-form-label">Organisation</label>

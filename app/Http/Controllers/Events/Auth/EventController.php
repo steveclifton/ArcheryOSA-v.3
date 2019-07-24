@@ -41,9 +41,10 @@ class EventController extends Controller
         $organisations = Organisation::where('visible', 1)->get();
         $clubs = Club::where('visible', 1)->orderby('label')->get();
         $eventtypes = EventType::get();
+        $eventlevels = $this->helper->getEventLevels();
 
         // Do some auth checking here. Can the user create an event?
-        return view('events.auth.management.create', compact('organisations', 'clubs', 'eventtypes'));
+        return view('events.auth.management.create', compact('organisations', 'clubs', 'eventtypes', 'eventlevels'));
     }
 
     public function getUpdateEventView(Request $request)
@@ -57,8 +58,9 @@ class EventController extends Controller
         $organisations = Organisation::where('visible', 1)->get();
         $clubs         = Club::where('visible', 1)->get();
         $eventtypes    = EventType::get();
+        $eventlevels   = $this->helper->getEventLevels();
 
-        return view('events.auth.management.update', compact('event', 'organisations', 'clubs', 'eventtypes'));
+        return view('events.auth.management.update', compact('event', 'organisations', 'clubs', 'eventtypes', 'eventlevels'));
     }
 
 
@@ -212,6 +214,7 @@ class EventController extends Controller
         $event->daycount        = $difference;
         $event->contactname     = !empty($validated['contactname'])     ? $validated['contactname']   : null;
         $event->phone           = !empty($validated['phone'])           ? $validated['phone']         : null;
+        $event->level           = !empty($validated['level'])           ? $validated['level']         : null;
         $event->email           = !empty($validated['email'])           ? $validated['email']         : null;
         $event->location        = !empty($validated['location'])        ? $validated['location']      : null;
         $event->cost            = !empty($validated['cost'])            ? $validated['cost']          : null;
@@ -250,7 +253,6 @@ class EventController extends Controller
     {
         $validated = $request->validated();
 
-
         $event = Event::where('eventurl', $request->eventurl ?? null)->get()->first();
 
         if (empty($event)) {
@@ -274,6 +276,7 @@ class EventController extends Controller
         $event->daycount       = $difference;
         $event->contactname    = !empty($validated['contactname'])     ? $validated['contactname']   : null;
         $event->phone          = !empty($validated['phone'])           ? $validated['phone']         : null;
+        $event->level          = !empty($validated['level'])           ? $validated['level']         : null;
         $event->email          = !empty($validated['email'])           ? $validated['email']         : null;
         $event->location       = !empty($validated['location'])        ? $validated['location']      : null;
         $event->cost           = !empty($validated['cost'])            ? $validated['cost']          : null;

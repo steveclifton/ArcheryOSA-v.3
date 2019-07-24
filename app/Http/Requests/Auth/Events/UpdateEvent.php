@@ -48,6 +48,7 @@ class UpdateEvent extends FormRequest
             'end'            => 'required|date|after_or_equal:start',
             'contactname'    => 'nullable',
             'phone'          => 'nullable',
+            'level'          => 'nullable',
             'email'          => 'required|email',
             'location'       => 'nullable',
             'cost'           => 'nullable',

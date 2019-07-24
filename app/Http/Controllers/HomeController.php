@@ -37,7 +37,7 @@ class HomeController extends Controller
         $myevents = [];
         if (Auth::check()) {
             $myevents = DB::select("
-                SELECT e.label, e.start, e.eventurl, e.imagedt, es.label as status
+                SELECT e.label, e.start, e.eventurl, e.imagedt, es.label as status,e.level
                 FROM `events` e
                 JOIN `evententrys` ee USING (`eventid`)
                 JOIN `entrystatus` es ON (ee.entrystatusid = es.entrystatusid)

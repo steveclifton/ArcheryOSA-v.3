@@ -12,9 +12,19 @@ use Illuminate\Support\Facades\DB;
 class EventsHelper
 {
 
+    public function getEventLevels()
+    {
+        return [
+            'Other',
+            'RMT',
+            'Major',
+            'Major - National'
+        ];
+    }
+
+
     public function getPreviousEvents($showall = false, $limit = 10)
     {
-
 
         return DB::select("
             SELECT e.*, es.label as eventstatus
