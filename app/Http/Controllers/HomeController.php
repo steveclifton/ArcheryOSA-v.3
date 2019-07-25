@@ -31,6 +31,7 @@ class HomeController extends Controller
             JOIN `eventstatus` es USING (`eventstatusid`)
             WHERE `e`.`end` + interval 1 day > now() 
             AND `e`.`visible` = 1
+            AND `e`.`eventstatusid` NOT IN (3,4)
             ORDER BY `e`.`start`
         ");
 
