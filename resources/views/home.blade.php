@@ -83,6 +83,7 @@
                                             <h4 class="card-title font-18 mt-0">{{$event->label}}</h4>
                                             <p class="card-text">Start : {!! date('d F Y', strtotime($event->start)) !!}</p>
                                             <p class="card-text">Event Level : {!! $event->level !!}</p>
+                                            <p class="card-text">Region : {!! $event->region !!}</p>
 
                                         </div>
                                     </div>
@@ -142,6 +143,7 @@
                                         <h4 class="card-title font-18 mt-0">{{$event->label}}</h4>
                                         <p class="card-text">Start : {!! date('d F Y', strtotime($event->start)) !!}</p>
                                         <p class="card-text">Event Level : {!! $event->level !!}</p>
+                                        <p class="card-text">Region : {!! $event->region !!}</p>
                                     </div>
                                 </div>
                             </a>
@@ -155,7 +157,7 @@
                                     <th>Name</th>
                                     <th>Event Level</th>
                                     <th>Start</th>
-                                    <th>Status</th>
+                                    <th>Region</th>
                                 </tr>
                                 </thead>
                                 <tbody>
@@ -166,7 +168,7 @@
                                         </th>
                                         <td>{!! $event->level !!}</td>
                                         <td>{{date('d F Y', strtotime($event->start))}}</td>
-                                        <td class="text-success">{{$event->eventstatus}}</td>
+                                        <td>{{$event->region}}</td>
                                     </tr>
                                 @endforeach
                                 </tbody>

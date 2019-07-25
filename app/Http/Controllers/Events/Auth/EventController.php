@@ -42,9 +42,10 @@ class EventController extends Controller
         $clubs = Club::where('visible', 1)->orderby('label')->get();
         $eventtypes = EventType::get();
         $eventlevels = $this->helper->getEventLevels();
+        $regions = $this->helper->getNZRegions();
 
         // Do some auth checking here. Can the user create an event?
-        return view('events.auth.management.create', compact('organisations', 'clubs', 'eventtypes', 'eventlevels'));
+        return view('events.auth.management.create', compact('organisations', 'clubs', 'eventtypes', 'eventlevels', 'regions'));
     }
 
     public function getUpdateEventView(Request $request)
@@ -59,8 +60,9 @@ class EventController extends Controller
         $clubs         = Club::where('visible', 1)->get();
         $eventtypes    = EventType::get();
         $eventlevels   = $this->helper->getEventLevels();
+        $regions = $this->helper->getNZRegions();
 
-        return view('events.auth.management.update', compact('event', 'organisations', 'clubs', 'eventtypes', 'eventlevels'));
+        return view('events.auth.management.update', compact('event', 'organisations', 'clubs', 'eventtypes', 'eventlevels', 'regions'));
     }
 
 
@@ -214,6 +216,7 @@ class EventController extends Controller
         $event->daycount        = $difference;
         $event->contactname     = !empty($validated['contactname'])     ? $validated['contactname']   : null;
         $event->phone           = !empty($validated['phone'])           ? $validated['phone']         : null;
+        $event->region           = !empty($validated['region'])           ? $validated['region']         : null;
         $event->level           = !empty($validated['level'])           ? $validated['level']         : null;
         $event->email           = !empty($validated['email'])           ? $validated['email']         : null;
         $event->location        = !empty($validated['location'])        ? $validated['location']      : null;
@@ -275,6 +278,7 @@ class EventController extends Controller
         $event->end            = $enddate->format('Y-m-d H:i:s');
         $event->daycount       = $difference;
         $event->contactname    = !empty($validated['contactname'])     ? $validated['contactname']   : null;
+        $event->region          = !empty($validated['region'])           ? $validated['region']         : null;
         $event->phone          = !empty($validated['phone'])           ? $validated['phone']         : null;
         $event->level          = !empty($validated['level'])           ? $validated['level']         : null;
         $event->email          = !empty($validated['email'])           ? $validated['email']         : null;

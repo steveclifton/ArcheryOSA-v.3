@@ -183,6 +183,20 @@
                 </div>
 
                 <div class="form-group row">
+                    <label class="col-sm-12 col-md-3 col-form-label">Event Region</label>
+                    <div class="col-md-9">
+                        <select name="region" class="form-control">
+                            @foreach($regions as $region)
+                                <option value="{{$region}}"
+                                        {{ (old('level') ?? $event->region ) == $region ? 'selected' : ''}}>
+                                    {{ $region }}
+                                </option>
+                            @endforeach
+                        </select>
+                    </div>
+                </div>
+
+                <div class="form-group row">
                     <label class="col-sm-12 col-md-3 col-form-label">Cost</label>
                     <div class="col-md-9">
                         <input name="cost" class="form-control{{ $errors->has('cost') ? ' is-invalid' : '' }}" type="text" value="{{ $event->cost ?? old('cost')}}">

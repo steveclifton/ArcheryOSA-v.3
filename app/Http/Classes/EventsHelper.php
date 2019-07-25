@@ -12,6 +12,28 @@ use Illuminate\Support\Facades\DB;
 class EventsHelper
 {
 
+    public function getNZRegions()
+    {
+        return [
+            'Other',
+            'Northland',
+            'Auckland',
+            'Waikato',
+            'Bay Of Plenty',
+            'Gisborne',
+            "Hawke's Bay",
+            'Taranaki',
+            'Whanganui - Manawatu',
+            'Wellington',
+            'Marlborough',
+            'Nelson - Tasman',
+            'West Coast',
+            'Canterbury',
+            'Otago',
+            'Southland'
+        ];
+    }
+
     public function getEventLevels()
     {
         return [

@@ -161,6 +161,12 @@
                                     {!! nl2br($event->location)!!}
                                 </td>
                             </tr>
+                            <tr>
+                                <th scope="row">Region</th>
+                                <td>
+                                    {!! $event->region !!}
+                                </td>
+                            </tr>
                             @if(!empty($event->cost))
                                 <tr>
                                     <th scope="row">Cost</th>
