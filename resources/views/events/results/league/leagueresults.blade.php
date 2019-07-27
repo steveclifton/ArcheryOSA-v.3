@@ -15,11 +15,9 @@
 		<div class="col-sm-12">
 	    	<div class="page-title-box">
                 <h4 class="page-title">
-                    <a href="/events">Events</a>
+                    <a href="/event/results/{{$event->eventurl}}">Results</a>
                     <i class="ion-arrow-right-c"></i>
-                    <a href="/event/results/{{$event->eventurl}}">{{ucwords($event->label)}}</a>
-                    <i class="ion-arrow-right-c"></i>
-                    <a href="javascript:;">Week {{$week}} Results</a>
+                    <a href="javascript:;">Week {{$week}}</a>
                 </h4>
 	    	</div>
 		</div>
