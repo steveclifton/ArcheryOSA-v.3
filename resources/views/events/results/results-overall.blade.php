@@ -15,8 +15,6 @@
         <div class="col-sm-12">
             <div class="page-title-box">
                 <h4 class="page-title">
-                    <a href="/events">Events</a>
-                    <i class="ion-arrow-right-c"></i>
                     <a href="/event/results/{{$event->eventurl}}">{{ucwords($event->label)}}</a>
                     <i class="ion-arrow-right-c"></i>
                     <a href="javascript:;">Overall</a>
