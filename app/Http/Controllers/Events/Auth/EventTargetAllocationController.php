@@ -27,7 +27,7 @@ class EventTargetAllocationController extends EventController
 
         }
 
-        $and .= " ORDER BY `ee`.`firstname`";
+        $and .= " ORDER BY `ta`.`target`+0";
 
         return DB::select("
             SELECT CONCAT(ee.firstname, ' ', ee.lastname) as fullname, ec.entrycompetitionid, 
