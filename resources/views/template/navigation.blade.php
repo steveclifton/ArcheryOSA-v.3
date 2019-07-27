@@ -101,8 +101,8 @@
                         <a href="#"><i class="ion-trophy"></i>Results</a>
                         <ul class="submenu">
                             <li><a href="/events/results">Event Results</a></li>
-                            <li><a href="/records/nz">NZ Records</a></li>
-                            <li><a href="/rankings/nz">NZ Rankings</a></li>
+{{--                            <li><a href="/records/nz">NZ Records</a></li>--}}
+{{--                            <li><a href="/rankings/nz">NZ Rankings</a></li>--}}
                         </ul>
                     </li>
 
