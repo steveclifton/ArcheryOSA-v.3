@@ -128,31 +128,35 @@ class EventResultsController extends EventController
 
         // get all the scores once, sort them
         $flatscores = DB::select("
-            SELECT sf.*, r.label as roundname, r.unit, ec.date as compdate
+            SELECT sf.*, CONCAT_WS(' ', r.label, ec.label) as roundname, r.unit, ec.date as compdate, ec.sequence
             FROM `scores_flat` sf
             JOIN `rounds` r USING (`roundid`)
             JOIN `eventcompetitions` ec ON (sf.`eventcompetitionid` = ec.`eventcompetitionid`)
             WHERE sf.`eventid` = :eventid
         ", ['eventid' => $event->eventid]);
 
-        $eventcomp = [];
 
-        $flatscoressorted = [];
+        $eventcompseq = $flatscoressorted = [];
         foreach ($flatscores as $flatscore) {
+            // Add scores to a UserID KEY'd array
             $flatscoressorted[$flatscore->userid][] = $flatscore;
-            if (empty($eventcomp[$flatscore->eventcompetitionid])) {
-                $eventcomp[$flatscore->eventcompetitionid] = $flatscore->eventcompetitionid;
-            }
+
+            $eventcompseq[$flatscore->roundname] = $flatscore->sequence;
+
         }
 
         // loop over the scores and find the one that matches the div and round
-        foreach ($entrys as $entry) {
+        foreach ($entrys as $key => $entry) {
             if (!empty($flatscoressorted[$entry->userid])) {
-                // they have scores, find the score that matches the details
-                foreach($flatscoressorted[$entry->userid] as $flatscore) {
 
-                    if ($event->isEvent()) {
-                        $entry->score[] = $flatscore;
+                // create the array for the entry's scores
+                $entry->score = [];
+
+                // they have scores, find the score that matches the details
+                foreach ($flatscoressorted[$entry->userid] as $flatscore) {
+
+                    if ($event->isEvent() && ($entry->divisionid == $flatscore->divisionid)) {
+                        $entry->score[$flatscore->roundname] = $flatscore->total;
                         continue;
                     }
 
@@ -161,111 +165,99 @@ class EventResultsController extends EventController
                     $roundMatch = $entry->roundid == $flatscore->roundid;
 
                     if ($divMatch && $roundMatch) {
-                        $entry->score[] = $flatscore;
+                        $entry->score[$flatscore->roundname] = $flatscore->total;
                     }
                 }
             }
+            else {
+                // remove the entry
+                unset($entrys[$key]);
+            }
         }
 
-        $evententrys = [];
+
+
+        $finalResults = [];
         foreach ($entrys as $key => $entry) {
+
+            // Make sure they have a score
             if (empty($entry->score)) {
                 unset($entrys[$key]);
                 continue;
             }
+
             $gender = $entry->gender == 'm' ? 'Men\'s ' : 'Women\'s ';
-            $evententrys[$entry->bowtype][$gender . $entry->divisionname][$entry->userid] = $entry;
+
+            $key = $gender . $entry->divisionname . ' - ' . ($entry->roundname);
+
+            $finalResults[$entry->bowtype][$key][] = $entry;
         }
 
 
-        $finalResults = [];
-        foreach ($evententrys as $bowtype => $div) {
+        // Sort by sequence
+        foreach ($finalResults as $bowtype => &$divisions) {
+            foreach ($divisions as $divisionname => &$rounds) {
 
-            foreach ($div as $divname => $archers) {
-
-                $rounds = [];
-
-                foreach($archers as $a) {
-                    if (count($a->score) > count($rounds)) {
-                        // empty the array, rebuilt
-                        $rounds = [];
-                        $i = 1;
-                        foreach ($a->score as $score) {
-                            $rounds[$score->eventcompetitionid] = $score->roundname;
-                        }
+                // Build an array of all the round names
+                $ecomp = [];
+                foreach ($rounds as $round) {
+                    foreach(array_keys($round->score) as $key) {
+                        $ecomp[$key] = $key;
                     }
                 }
 
-                // $rounds is the list of eventcompetitions shot for this event. They will be in date order
-
-                // here is the list of archers results for this particular bowtype and division
-                // combine the results
-                foreach ($archers as $archer) {
-
-                    $data = new \stdClass();
-                    $data->name     = $archer->firstname . ' ' . $archer->lastname;
-
-                    if (!empty($archer->score)) {
-
-                        foreach ($archer->score as $score) {
-
-                            // find the position of the 
-                            $i = 1;
-                            foreach($rounds as $key => $name) {
-                                if ($key == $score->eventcompetitionid) {
-                                    break;
-                                }
-                                $i++;
-                            }
-
-                            $dist           = 'dist' . $i;
-                            $data->{$dist}  = $score->roundname;
-                            $dist           = 'dist' . $i++ . 'score';
-                            $data->{$dist}  = $score->total;
-                            if (empty($data->total)) {
-                                $data->total = $score->total;
-                            }
-                            else {
-                                $data->total += $score->total;
-                            }
-                        }
-
-                        if (count($archer->score) < count($eventcomp)) {
-                            $difference = count($eventcomp) - count($archer->score);
-
-                            foreach (range($i--, $i + $difference) as $j) {
-                                $dist           = 'dist' . $j;
-                                $data->{$dist}  = '';
-                                $dist           = 'dist' . $j++ . 'score';
-                                $data->{$dist}  = 0;
-                            }
-                        }
-                        $finalResults[$bowtype][$divname][] = $data;
+                // Sort them by the sequence
+                uksort($ecomp, function($a, $b) use ($eventcompseq) {
+                    if (!isset($eventcompseq[$a]) || !isset($eventcompseq[$b])) {
+                        return -1;
                     }
-                }
-
-                $j = 1;
-                // now go over and make sure the first item has the correct titles
-                foreach ($finalResults[$bowtype][$divname] as $key => $archer) {
-                    $dist = 'dist' . count($eventcomp);
-
-                    if (empty($archer->{$dist}) && (count($finalResults[$bowtype][$divname]) > $j++)) {
-                        $a = $finalResults[$bowtype][$divname][$key];
-                        unset($finalResults[$bowtype][$divname][$key]);
-                        $finalResults[$bowtype][$divname][] = $a;
+                    if ($eventcompseq[$a] > $eventcompseq[$b]) {
+                        return 1;
                     }
-                }
-
-                // sort based on total
-                usort($finalResults[$bowtype][$divname], function($a, $b) {
-                   return $a->total < $b->total;
+                    if ($eventcompseq[$a] < $eventcompseq[$b]) {
+                        return -1;
+                    }
+                    return 0;
                 });
-            }
 
+
+                // Add users results into the results array
+                foreach ($rounds as $archer) {
+
+                    $result = [];
+                    $result['Archer'] = ucwords($archer->firstname . ' ' . $archer->lastname);
+
+                    foreach($ecomp as $key) {
+                        $result[$key] = '';
+                    }
+
+                    $totalscore = 0;
+                    foreach ($archer->score as $roundname => $score) {
+                        $result[$roundname] = $score;
+                        $totalscore += $score;
+                    }
+                    $result['Total'] = $totalscore;
+                    $divisions[$divisionname]['results'][] = $result;
+                }
+
+                // Sort the results by Total
+                usort($divisions[$divisionname]['results'], function($a, $b) {
+                    if ($a['Total'] == $b['Total']) {
+                        return 0;
+                    }
+                    if ($a['Total'] < $b['Total']) {
+                        return 1;
+                    }
+                    if ($a['Total'] > $b['Total']) {
+                        return -1;
+                    }
+                    return 0;
+                });
+
+            }
         }
 
         $data = compact('event', 'finalResults');
-
         if ($apicall) {
             return $data;
         }
@@ -332,11 +324,9 @@ class EventResultsController extends EventController
      */
     public function getLeagueOverallResults(Event $event, $apicall = false)
     {
-
         $entrys = $this->getEventEntrySorted($event->eventid);
 
         $eventcompetition = EventCompetition::where('eventid', $event->eventid)->first();
-
 
         $evententrys = [];
         foreach ($entrys as $entry) {
@@ -441,49 +431,46 @@ class EventResultsController extends EventController
      */
     public function getEventEntrySorted($eventid)
     {
-        $entrys = $this->getcacheditem('evententrys-' . $eventid);
-
-        if (empty($entrys)) {
-            $entrys = DB::select("
+        $entrys = DB::select("
             SELECT ee.userid, ee.firstname, ee.lastname, ee.gender, ec.roundid, ee.divisionid,  
-                  d.label as divisionname, d.bowtype, r.unit, r.label as roundname, r.code
+                  d.label as divisionname, d.bowtype, r.unit, r.code, r.label as roundname
             FROM `evententrys` ee
             JOIN `entrycompetitions` ec USING (`entryid`)
             JOIN `divisions` d ON (`ec`.`divisionid` = `d`.`divisionid`)
             JOIN `rounds` r ON (ec.roundid = r.roundid)
             JOIN `scores_flat` sf ON (ee.entryid = sf.entryid)
-            WHERE `ee`.`eventid` = '".$eventid."'
+            WHERE `ee`.`eventid` = :eventid
             AND `ee`.`entrystatusid` = 2
             GROUP BY `ee`.`entryid`
             ORDER BY d.label, ee.userid, ec.eventcompetitionid
-            ");
+        ", ['eventid' => $eventid]);
 
-            $sortedEntrys = [];
-            foreach ($entrys as $entry) {
-                if (strpos($entry->divisionid, ',') !== false) {
-                    $divisionids = explode(',', $entry->divisionid);
+        // Get all the divisions
+        $divisions = Division::all()->keyBy('divisionid')->toArray();
 
-                    foreach ($divisionids as $divisionid) {
-                        // clone the entry
-                        $entryUpdated = clone $entry;
-                        $divison = Division::where('divisionid', $divisionid)->first();
+        $sortedEntrys = [];
 
-                        $entryUpdated->bowtype = $divison->bowtype;
-                        $entryUpdated->divisionname = $divison->label;
-                        $entryUpdated->divisionid = $divisionid;
-                        $sortedEntrys[] = $entryUpdated;
-                    }
-                }
-                else {
-                    $sortedEntrys[] = $entry;
+        foreach ($entrys as $entry) {
+            if (strpos($entry->divisionid, ',') !== false) {
+                $divisionids = explode(',', $entry->divisionid);
+
+                foreach ($divisionids as $divisionid) {
+                    // clone the entry
+                    $entryUpdated = clone $entry;
+                    $divison = (object) $divisions[$divisionid];
+
+                    $entryUpdated->bowtype = $divison->bowtype;
+                    $entryUpdated->divisionname = $divison->label;
+                    $entryUpdated->divisionid = $divisionid;
+                    $sortedEntrys[] = $entryUpdated;
                 }
             }
-
-            $entrys = $sortedEntrys;
-
-            Cache::put('evententrys-' . $eventid, $entrys, 60);
+            else {
+                $sortedEntrys[] = $entry;
+            }
         }
 
-        return $entrys;
+        return $sortedEntrys;
+
     }
 }

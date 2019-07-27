@@ -81,12 +81,12 @@ class ScoringController extends Controller
             JOIN `entrycompetitions` ec USING (`entryid`)
             JOIN `divisions` d ON (`ec`.`divisionid` = `d`.`divisionid`)
             JOIN `rounds` r ON (ec.roundid = r.roundid)
-            WHERE `ee`.`eventid` = '".$event->eventid."'
+            WHERE `ee`.`eventid` = :eventid
             AND `ec`.`eventcompetitionid` = :eventcompetitionid
             AND `ee`.`entrystatusid` = 2
-            
             ORDER BY `d`.label, ee.firstname
-        ", ['eventcompetitionid' => $eventcompetition->eventcompetitionid
+        ", ['eventcompetitionid' => $eventcompetition->eventcompetitionid,
+            'eventid' => $event->eventid
         ]);
 
 
