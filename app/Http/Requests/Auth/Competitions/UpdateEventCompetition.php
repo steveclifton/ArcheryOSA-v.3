@@ -40,6 +40,7 @@ class UpdateEventCompetition extends FormRequest
             'label'          => 'required|max:155',
             'eventid'        => 'required',
             'schedule'       => 'nullable',
+            'sequence'       => 'nullable',
             'location'       => 'nullable',
             'date'           => 'required|date',
             'scoringlevel'   => 'nullable',

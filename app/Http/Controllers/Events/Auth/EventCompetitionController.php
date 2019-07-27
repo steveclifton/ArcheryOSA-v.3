@@ -92,7 +92,9 @@ class EventCompetitionController extends EventController
         }
 
 
-
+        /**
+         * Just a regular event here
+         */
 
         // Get the events daterange
         $event->daterange = $this->helper->getEventsDateRange($event);
@@ -176,6 +178,7 @@ class EventCompetitionController extends EventController
         $eventcompetition->date             = !empty($validated['date'])          ? $validated['date'] : '';
         $eventcompetition->location         = !empty($validated['location'])      ? $validated['location'] : '';
         $eventcompetition->schedule         = !empty($validated['schedule'])      ? $validated['schedule'] : '';
+        $eventcompetition->sequence         = !empty($validated['sequence'])      ? $validated['sequence'] : 99;
         $eventcompetition->roundids         = !empty($roundidsfinal)              ? json_encode($roundidsfinal) : json_encode('');
         $eventcompetition->divisionids      = !empty($divisionidsfinal)           ? json_encode($divisionidsfinal) : json_encode('');
         $eventcompetition->scoringlevel     = !empty($validated['scoringlevel'])  ? intval($validated['scoringlevel']) : 0;
@@ -203,7 +206,6 @@ class EventCompetitionController extends EventController
         $eventcompetition = EventCompetition::where('eventid', $event->eventid ?? -1)
                                             ->where('eventcompetitionid', $validated['eid'] ?? -1)
                                             ->first();
-
 
         if (empty($event) || empty($eventcompetition)) {
             return redirect()->back()->with('failure', 'Invalid request');
@@ -235,12 +237,11 @@ class EventCompetitionController extends EventController
         $eventcompetition->date             = !empty($validated['date'])          ? $validated['date'] : '';
         $eventcompetition->location         = !empty($validated['location'])      ? $validated['location'] : '';
         $eventcompetition->schedule         = !empty($validated['schedule'])      ? $validated['schedule'] : '';
+        $eventcompetition->sequence         = !empty($validated['sequence'])      ? $validated['sequence'] : '';
         $eventcompetition->roundids         = !empty($roundidsfinal)              ? json_encode($roundidsfinal) : json_encode('');
         $eventcompetition->divisionids      = !empty($divisionidsfinal)           ? json_encode($divisionidsfinal) : json_encode('');
         $eventcompetition->scoringlevel     = !empty($validated['scoringlevel'])  ? intval($validated['scoringlevel']) : 0;
-        // $eventcompetition->ignoregenders = empty($validated['ignoregenders']) ? 0 : 1;
         $eventcompetition->scoringenabled   = empty($validated['scoringenabled']) ? 0 : 1;
-//        $eventcompetition->visible          = empty($validated['visible'])        ? 0 : 1;
         $eventcompetition->save();
 
         return redirect()->back()->with('success', 'Competition updated!');

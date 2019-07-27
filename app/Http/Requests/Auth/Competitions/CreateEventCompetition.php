@@ -45,6 +45,7 @@ class CreateEventCompetition extends FormRequest
             'location'       => 'nullable',
             'date'           => 'required|date',
             'scoringlevel'   => 'nullable',
+            'sequence'       => 'nullable',
             'visible'        => 'nullable',
             'scoringenabled' => 'nullable',
             'roundids'       => 'required',

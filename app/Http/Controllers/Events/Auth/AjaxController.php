@@ -82,7 +82,9 @@ class AjaxController extends EventController
             // Get the events daterange
             $event->daterange = $this->helper->getEventsDateRange($event);
 
-            $view = View::make('events.auth.management.includes.dateselect', compact('event', 'competition'));
+            $eventcompetitions = EventCompetition::where('eventid', $event->eventid)->get();
+
+            $view = View::make('events.auth.management.includes.dateselect', compact('event', 'competition', 'eventcompetitions'));
             $html = $view->render();
         }
 
