@@ -467,6 +467,8 @@ a:focus {
 
 .container-fluid {
   max-width: 95%;
+  padding-right: 2%;
+  padding-left: 2%;
 }
 
 .container-alt {
@@ -1149,7 +1151,7 @@ select[multiple] {
 .nav.nav-tabs + .tab-content {
   background: #ffffff;
   margin-bottom: 30px;
-  padding: 30px;
+  padding: 2%;
 }
 
 .tabs-vertical-env {
