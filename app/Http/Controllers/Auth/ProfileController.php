@@ -9,8 +9,6 @@ use App\Http\Requests\User\UserUpdateProfile;
 use App\Http\Controllers\Controller;
 use App\Jobs\SendArcherRelationRequest;
 use App\Models\Event;
-use App\Models\EventEntry;
-use App\Models\FlatScore;
 use App\Models\Membership;
 use App\Models\Organisation;
 use App\Models\UserRelation;
@@ -19,14 +17,11 @@ use App\User;
 use Illuminate\Support\Facades\Auth;
 Use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Cache;
+
 
 class ProfileController extends Controller
 {
-
-
-
-
-
 
 
     /******************************************************************************
@@ -52,7 +47,10 @@ class ProfileController extends Controller
             abort(404);
         }
 
-        $events = DB::select("
+        $data = $this->getcacheditem('userprofile' . $request->username);
+
+        if (empty($data)) {
+            $events = DB::select("
             SELECT `e`.`eventid`, `e`.`eventtypeid`, `e`.`label`,
                    CONCAT_WS(' - ', DATE_FORMAT(`e`.`start`, '%d-%M %Y'), DATE_FORMAT(`e`.`end`, '%d-%M %Y')) as date
             FROM `evententrys` ee
@@ -64,11 +62,11 @@ class ProfileController extends Controller
 
         ", ['userid' => $user->userid]);
 
-        $erc = new EventResultsController();
-        $finalresults = [];
-        foreach ($events as $event) {
+            $erc = new EventResultsController();
+            $finalresults = [];
+            foreach ($events as $event) {
 
-            $flatscores = DB::select("
+                $flatscores = DB::select("
                 SELECT sf.*, CONCAT_WS(' ', r.label, ec.label) as roundname, r.unit, ec.date as compdate, ec.sequence
                 FROM `scores_flat` sf
                 JOIN `rounds` r USING (`roundid`)
@@ -78,46 +76,53 @@ class ProfileController extends Controller
                 AND `sf`.`total` <> 0
                 ", ['eventid' => $event->eventid, 'userid' => $user->userid]);
 
-            $scores += count($flatscores);
+                $scores += count($flatscores);
 
-            if ($event->eventtypeid === 1) {
-                $evententry = $erc->getEventEntrySorted($event->eventid, $user->userid);
+                if ($event->eventtypeid === 1) {
+                    $evententry = $erc->getEventEntrySorted($event->eventid, $user->userid);
 
-                if (!empty($evententry)) {
-                    $results = $erc->formatOverallResults($evententry, $flatscores);
-                    $result = reset($results);
-                    foreach ($result as $key => $value) {
-                        $data = reset($value['results']);
-                        unset($data['Archer']);
-                        $finalresults['events'][$event->label . '|' . $event->date][$key] = $data;
-                    }
-                }
-            }
-            else if ($event->eventtypeid === 2) {
-                $eventObj = Event::where('eventid', $event->eventid)->first();
-                $results = [];
-                foreach (range(1,15) as $week) {
-                    $result = $erc->getLeagueCompetitionResults($eventObj, $week, true, $user->userid);
-
-                    // reformat the data
-                    if (!empty($result['evententrys'])) {
-                        foreach ($result['evententrys'] as $key => $value) {
-                            $value = reset($value);
-                            $results[] = reset($value);
+                    if (!empty($evententry)) {
+                        $results = $erc->formatOverallResults($evententry, $flatscores);
+                        $result = reset($results);
+                        foreach ($result as $key => $value) {
+                            $data = reset($value['results']);
+                            unset($data['Archer']);
+                            $finalresults['events'][$event->label . '|' . $event->date][$key] = $data;
                         }
                     }
                 }
+                else if ($event->eventtypeid === 2) {
+                    $eventObj = Event::where('eventid', $event->eventid)->first();
+                    $results = [];
+                    foreach (range(1,15) as $week) {
+                        $result = $erc->getLeagueCompetitionResults($eventObj, $week, true, $user->userid);
 
-                $finalresults['leagues'][$event->label . '|' . $event->date] = $results;
+                        // reformat the data
+                        if (!empty($result['evententrys'])) {
+                            foreach ($result['evententrys'] as $key => $value) {
+                                $value = reset($value);
+                                $results[] = reset($value);
+                            }
+                        }
+                    }
+
+                    $finalresults['leagues'][$event->label . '|' . $event->date] = $results;
+                }
             }
+
+            $scorecount = $scores;
+            $eventcount = count($events);
+
+            $data = compact('user', 'eventcount','scorecount', 'finalresults');
+
+            Cache::put('userprofile' . $request->username, $data, 60);
         }
 
-//        dd($finalresults['events']);
+        if (empty($data)) {
+            abort(503);
+        }
 
-        $scorecount = $scores;
-        $eventcount = count($events);
-
-        return view('profile.public.public-profile', compact('user', 'eventcount','scorecount', 'finalresults'));
+        return view('profile.public.public-profile', $data);
     }
 
     /**
