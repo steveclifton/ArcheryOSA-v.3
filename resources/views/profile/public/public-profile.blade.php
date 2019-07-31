@@ -149,7 +149,7 @@
                             @endif
 
                             @if (!empty($finalresults['leagues']))
-                                <div class="tab-pane" id="leagues">
+                                <div class="tab-pane {{$class}}" id="leagues">
 
                                     @foreach($finalresults['leagues'] as $key => $value)
                                         @php @list($name, $date) = explode('|', $key); @endphp
