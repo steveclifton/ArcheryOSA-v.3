@@ -36,6 +36,7 @@ Route::get('/users/{username}', 'Auth\PublicProfile\UserController@getPublicProf
 
 Route::get('profile/relationship/authorise/{hash}', 'Auth\ProfileController@authoriseRelation');
 
+Route::get('profile/public/{username}', 'Auth\ProfileController@getPublicProfile')->name('publicprofile');
 
 
 Route::middleware(['web'])->group(function() {

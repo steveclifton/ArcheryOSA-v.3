@@ -2,11 +2,17 @@
 
 namespace App\Http\Controllers\Auth;
 
+use App\Http\Controllers\Events\PublicEvents\EventResultsController;
 use App\Http\Requests\User\CreateChild;
 use App\Http\Requests\User\UpdateChild;
 use App\Http\Requests\User\UserUpdateProfile;
 use App\Http\Controllers\Controller;
 use App\Jobs\SendArcherRelationRequest;
+use App\Models\Event;
+use App\Models\EventEntry;
+use App\Models\FlatScore;
+use App\Models\Membership;
+use App\Models\Organisation;
 use App\Models\UserRelation;
 use App\User;
 
@@ -36,7 +42,83 @@ class ProfileController extends Controller
         return view('profile.auth.profile');
     }
 
+    public function getPublicProfile(Request $request)
+    {
+        $user = User::where('username', $request->username)->first();
 
+        $scores = 0;
+
+        if (empty($user)) {
+            abort(404);
+        }
+
+        $events = DB::select("
+            SELECT `e`.`eventid`, `e`.`eventtypeid`, `e`.`label`,
+                   CONCAT_WS(' - ', DATE_FORMAT(`e`.`start`, '%d-%M %Y'), DATE_FORMAT(`e`.`end`, '%d-%M %Y')) as date
+            FROM `evententrys` ee
+            JOIN `events` e USING (`eventid`)
+            JOIN `scores_flat` sf USING (`entryid`)
+            WHERE ee.`userid` = :userid
+            GROUP BY `e`.`eventid`
+            ORDER BY `e`.end DESC
+
+        ", ['userid' => $user->userid]);
+
+        $erc = new EventResultsController();
+        $finalresults = [];
+        foreach ($events as $event) {
+
+            $flatscores = DB::select("
+                SELECT sf.*, CONCAT_WS(' ', r.label, ec.label) as roundname, r.unit, ec.date as compdate, ec.sequence
+                FROM `scores_flat` sf
+                JOIN `rounds` r USING (`roundid`)
+                JOIN `eventcompetitions` ec ON (sf.`eventcompetitionid` = ec.`eventcompetitionid`)
+                WHERE sf.`eventid` = :eventid
+                AND `sf`.`userid` = :userid
+                AND `sf`.`total` <> 0
+                ", ['eventid' => $event->eventid, 'userid' => $user->userid]);
+
+            $scores += count($flatscores);
+
+            if ($event->eventtypeid === 1) {
+                $evententry = $erc->getEventEntrySorted($event->eventid, $user->userid);
+
+                if (!empty($evententry)) {
+                    $results = $erc->formatOverallResults($evententry, $flatscores);
+                    $result = reset($results);
+                    foreach ($result as $key => $value) {
+                        $data = reset($value['results']);
+                        unset($data['Archer']);
+                        $finalresults['events'][$event->label . '|' . $event->date][$key] = $data;
+                    }
+                }
+            }
+            else if ($event->eventtypeid === 2) {
+                $eventObj = Event::where('eventid', $event->eventid)->first();
+                $results = [];
+                foreach (range(1,15) as $week) {
+                    $result = $erc->getLeagueCompetitionResults($eventObj, $week, true, $user->userid);
+
+                    // reformat the data
+                    if (!empty($result['evententrys'])) {
+                        foreach ($result['evententrys'] as $key => $value) {
+                            $value = reset($value);
+                            $results[] = reset($value);
+                        }
+                    }
+                }
+
+                $finalresults['leagues'][$event->label . '|' . $event->date] = $results;
+            }
+        }
+
+//        dd($finalresults['events']);
+
+        $scorecount = $scores;
+        $eventcount = count($events);
+
+        return view('profile.public.public-profile', compact('user', 'eventcount','scorecount', 'finalresults'));
+    }
 
     /**
      * Gets the users details form
@@ -68,8 +150,121 @@ class ProfileController extends Controller
         return view('profile.auth.results.all');
     }
 
+    /******************************************************************************
+     * Membership
+     ******************************************************************************/
+    public function getMemberships()
+    {
+        $memberships = Auth::user()->getMemberships();
+
+        foreach (Auth::user()->getChildren() as $child) {
+            $tmpMembership = $child->getMemberships();
+
+            foreach ($tmpMembership as $membership) {
+                $memberships[] = $membership;
+            }
+        }
+
+        foreach ($memberships as $membership) {
+            $membership->username = User::where('userid', $membership->userid)->pluck('firstname')->first();
+        }
 
 
+        return view('profile.auth.membership-list', compact('memberships'));
+    }
+
+    public function getMembershipCreate()
+    {
+        $organisations = Organisation::all();
+        return view('profile.auth.membershipcreate', compact('organisations'));
+    }
+
+    public function getMembershipUpdate(Request $request)
+    {
+        $membership = Membership::where('membershipid', $request->membershipid)->first();
+
+        $allowed = ($membership->userid) == Auth::id();
+
+        // Make sure the request is for a user or their child accounts
+        if (!$allowed) {
+
+            $children = Auth::user()->getChildren();
+            foreach ($children as $child) {
+                if ($membership->userid == $child->userid) {
+                    $allowed = true;
+                    break;
+                }
+            }
+
+            if (!$allowed) {
+                return abort('503');
+            }
+        }
+
+
+
+        $organisations = Organisation::all();
+        return view('profile.auth.membershipupdate', compact('organisations', 'membership'));
+    }
+
+    public function createMembership(Request $request)
+    {
+
+        // check to see if they have one for the organisation - shouldnt have more than 1
+        $membership = Membership::where('userid', $request->userid)
+                                ->where('organisationid', $request->organisationid)
+                                ->first();
+
+        $status = 'Updated!';
+        if (empty($membership)) {
+            $status = 'Created!';
+            $membership = new Membership();
+        }
+
+        $membership->userid = $request->userid;
+        $membership->membership = $request->membership;
+        $membership->organisationid = $request->organisationid;
+
+        $membership->save();
+
+        return redirect('/profile/memberships')->with('success', 'Membership ' . $status);
+    }
+
+    public function updateMembership(Request $request)
+    {
+        // check to see if they have one for the organisation - shouldnt have more than 1
+        $membership = Membership::where('membershipid', $request->membershipid)
+                                ->first();
+
+
+        $allowed = !empty($membership) && ($membership->userid === Auth::id());
+
+        // Make sure the request is for a user or their child accounts
+        if (!$allowed) {
+
+            foreach (Auth::user()->getChildren() as $child) {
+                if ($membership->userid == $child->userid) {
+                    $allowed = true;
+                    break;
+                }
+            }
+
+            if (!$allowed) {
+                return abort('503');
+            }
+        }
+
+        if (empty($membership)) {
+            return back()->with('failure', 'Cannot Find Membership');
+        }
+
+        $membership->membership = $request->membership;
+        $membership->organisationid = $request->organisationid;
+
+        $membership->save();
+
+        return redirect('/profile/memberships')->with('success', 'Membership Updated!');
+    }
 
     /******************************************************************************
      * CHILDREN
@@ -224,6 +419,7 @@ class ProfileController extends Controller
 
         return back()->with('success', 'Request sent!');
     }
+
     public function authoriseRelation(Request $request)
     {
         $userrelation = UserRelation::where('hash', $request->hash ?? -1)->where('authorised', 0)->get()->first();
@@ -277,6 +473,11 @@ class ProfileController extends Controller
         ]);
 
     }
+
+
+
+
+
 
 
 
