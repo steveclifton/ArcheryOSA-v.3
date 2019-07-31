@@ -44,7 +44,7 @@
                     <div class="text-left">
                         <p class="text-muted font-13"><strong>Full Name :</strong> <span class="m-l-15">{{$user->getFullname()}}</span></p>
 
-                        @if(1)
+                        @if(0)
                             <p class="text-muted font-13"><strong>Mobile :</strong><span class="m-l-15">(123) 123 1234</span></p>
                             <p class="text-muted font-13"><strong>Email :</strong> <span class="m-l-15">coderthemes@gmail.com</span></p>
                             <p class="text-muted font-13"><strong>Location :</strong> <span class="m-l-15">USA</span></p>
@@ -54,13 +54,13 @@
 
 
                     <div class="button-list m-t-20">
-                        @if (empty($user->facebook))
+                        @if (!empty($user->facebook))
                             <button type="button" class="btn btn-facebook waves-effect waves-light">
                                 <i class="fa fa-facebook"></i>
                             </button>
                         @endif
 
-                        @if (empty($user->instagram))
+                        @if (!empty($user->instagram))
                             <button type="button" class="btn btn-instagram waves-effect waves-light">
                                 <i class="fa fa-instagram"></i>
                             </button>
@@ -113,11 +113,11 @@
                             @endif
 
                         </ul>
-
+                        @php $class = 'active show'; @endphp
                         <div class="tab-content">
                             @if (!empty($finalresults['events']))
-                                <div class="tab-pane active show" id="events">
-
+                                <div class="tab-pane {{$class}}" id="events">
+                                    @php $class = ''; @endphp
                                     @foreach ($finalresults['events'] as $key => $value)
                                         @php @list($name, $date) = explode('|', $key); @endphp
                                         <h5 class="tableTitle">{{$name ?? ''}}</h5>
