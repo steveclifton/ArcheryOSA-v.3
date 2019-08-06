@@ -202,13 +202,13 @@ class EventRegistrationController extends EventController
         $evententry->eventid       = $event->eventid;
         $evententry->entrystatusid = 1; // 1 is pending
         $evententry->paid          = 0; // 0 is not paid yet
-        $evententry->firstname     = !empty($validated['firstname'])      ? strtolower($validated['firstname'])  : '';
-        $evententry->lastname      = !empty($validated['lastname'])       ? strtolower($validated['lastname'])   : '';
+        $evententry->firstname     = !empty($validated['firstname'])      ? ($validated['firstname'])  : '';
+        $evententry->lastname      = !empty($validated['lastname'])       ? ($validated['lastname'])   : '';
         $evententry->email         = !empty($validated['email'])          ? $validated['email']                  : '';
-        $evententry->address       = !empty($validated['address'])        ? strtolower($validated['address'])    : '';
-        $evententry->phone         = !empty($validated['phone'])          ? strtolower($validated['phone'])      : '';
-        $evententry->membership    = !empty($validated['membership'])     ? strtolower($validated['membership']) : '';
-        $evententry->notes         = !empty($validated['notes'])          ? strtolower($validated['notes'])      : '';
+        $evententry->address       = !empty($validated['address'])        ? ($validated['address'])    : '';
+        $evententry->phone         = !empty($validated['phone'])          ? ($validated['phone'])      : '';
+        $evententry->membership    = !empty($validated['membership'])     ? ($validated['membership']) : '';
+        $evententry->notes         = !empty($validated['notes'])          ? ($validated['notes'])      : '';
         $evententry->clubid        = !empty($validated['clubid'])         ? intval($validated['clubid'])         : '';
         $evententry->schoolid      = !empty($validated['schoolid'])       ? intval($validated['schoolid'])       : '';
         $evententry->country       = !empty($validated['country'])        ? ($validated['country'])              : '';
@@ -306,13 +306,13 @@ class EventRegistrationController extends EventController
 
         $evententry->userid       = $validated['userid'];
         $evententry->eventid      = $event->eventid;
-        $evententry->firstname    = !empty($validated['firstname'])      ? strtolower($validated['firstname'])   : '';
-        $evententry->lastname     = !empty($validated['lastname'])       ? strtolower($validated['lastname'])    : '';
+        $evententry->firstname    = !empty($validated['firstname'])      ? ($validated['firstname'])   : '';
+        $evententry->lastname     = !empty($validated['lastname'])       ? ($validated['lastname'])    : '';
         $evententry->email        = !empty($validated['email'])          ? $validated['email']                   : '';
-        $evententry->address      = !empty($validated['address'])        ? strtolower($validated['address'])     : '';
-        $evententry->phone        = !empty($validated['phone'])          ? strtolower($validated['phone'])       : '';
-        $evententry->membership   = !empty($validated['membership'])     ? strtolower($validated['membership'])  : '';
-        $evententry->notes        = !empty($validated['notes'])          ? strtolower($validated['notes'])       : '';
+        $evententry->address      = !empty($validated['address'])        ? ($validated['address'])     : '';
+        $evententry->phone        = !empty($validated['phone'])          ? ($validated['phone'])       : '';
+        $evententry->membership   = !empty($validated['membership'])     ? ($validated['membership'])  : '';
+        $evententry->notes        = !empty($validated['notes'])          ? ($validated['notes'])       : '';
         $evententry->clubid       = !empty($validated['clubid'])         ? intval($validated['clubid'])          : '';
         $evententry->divisionid   = !empty($validated['divisionid'])     ? $validated['divisionid']              : '';
         $evententry->pickup       = !empty($validated['pickup']);
@@ -412,11 +412,11 @@ class EventRegistrationController extends EventController
             // if still empty, create a new user
             if (empty($user)) {
                 $user = new User();
-                $user->firstname = strtolower($validated['firstname']);
-                $user->lastname  = strtolower($validated['lastname']);
+                $user->firstname = ($validated['firstname']);
+                $user->lastname  = ($validated['lastname']);
                 $user->email     = !empty($validated['email']) ? $validated['email'] : $this->createHash(12);
                 $user->roleid    = 4;
-                $user->username  = strtolower(preg_replace("/[^a-zA-Z0-9]/", "", $validated['firstname'].$validated['lastname'])) . rand(1,1440);
+                $user->username  = (preg_replace("/[^a-zA-Z0-9]/", "", $validated['firstname'].$validated['lastname'])) . rand(1,1440);
                 $user->password  = $this->createHash(12);
                 $user->save();
             }
@@ -447,14 +447,14 @@ class EventRegistrationController extends EventController
         $evententry->eventid       = $event->eventid;
         $evententry->entrystatusid = 1; // 1 is pending
         $evententry->paid          = 0; // 0 is not paid yet
-        $evententry->firstname     = !empty($validated['firstname'])      ? strtolower($validated['firstname'])  : '';
-        $evententry->lastname      = !empty($validated['lastname'])       ? strtolower($validated['lastname'])   : '';
+        $evententry->firstname     = !empty($validated['firstname'])      ? ($validated['firstname'])  : '';
+        $evententry->lastname      = !empty($validated['lastname'])       ? ($validated['lastname'])   : '';
         $evententry->email         = !empty($validated['email'])          ? $validated['email']                  : '';
         $evententry->bib           = !empty($validated['bib'])            ? $validated['bib']                  : '';
-        $evententry->address       = !empty($validated['address'])        ? strtolower($validated['address'])    : '';
-        $evententry->phone         = !empty($validated['phone'])          ? strtolower($validated['phone'])      : '';
-        $evententry->membership    = !empty($validated['membership'])     ? strtolower($validated['membership']) : '';
-        $evententry->notes         = !empty($validated['notes'])          ? strtolower($validated['notes'])      : '';
+        $evententry->address       = !empty($validated['address'])        ? ($validated['address'])    : '';
+        $evententry->phone         = !empty($validated['phone'])          ? ($validated['phone'])      : '';
+        $evententry->membership    = !empty($validated['membership'])     ? ($validated['membership']) : '';
+        $evententry->notes         = !empty($validated['notes'])          ? ($validated['notes'])      : '';
         $evententry->clubid        = !empty($validated['clubid'])         ? intval($validated['clubid'])         : '';
         $evententry->divisionid    = !empty($validated['divisionid'])     ? $validated['divisionid']             : '';
         $evententry->schoolid      = !empty($validated['schoolid'])       ? $validated['schoolid']               : '';
@@ -522,14 +522,14 @@ class EventRegistrationController extends EventController
 
         $evententry->userid       = $validated['userid'];
         $evententry->eventid      = $event->eventid;
-        $evententry->firstname    = !empty($validated['firstname'])      ? strtolower($validated['firstname'])   : '';
-        $evententry->lastname     = !empty($validated['lastname'])       ? strtolower($validated['lastname'])    : '';
+        $evententry->firstname    = !empty($validated['firstname'])      ? ($validated['firstname'])   : '';
+        $evententry->lastname     = !empty($validated['lastname'])       ? ($validated['lastname'])    : '';
         $evententry->email        = !empty($validated['email'])          ? $validated['email']                   : '';
         $evententry->bib          = !empty($validated['bib'])            ? $validated['bib']                   : '';
-        $evententry->address      = !empty($validated['address'])        ? strtolower($validated['address'])     : '';
-        $evententry->phone        = !empty($validated['phone'])          ? strtolower($validated['phone'])       : '';
-        $evententry->membership   = !empty($validated['membership'])     ? strtolower($validated['membership'])  : '';
-        $evententry->notes        = !empty($validated['notes'])          ? strtolower($validated['notes'])       : '';
+        $evententry->address      = !empty($validated['address'])        ? ($validated['address'])     : '';
+        $evententry->phone        = !empty($validated['phone'])          ? ($validated['phone'])       : '';
+        $evententry->membership   = !empty($validated['membership'])     ? ($validated['membership'])  : '';
+        $evententry->notes        = !empty($validated['notes'])          ? ($validated['notes'])       : '';
         $evententry->clubid       = !empty($validated['clubid'])         ? intval($validated['clubid'])          : '';
         $evententry->divisionid   = !empty($validated['divisionid'])     ? $validated['divisionid']              : '';
         $evententry->schoolid     = !empty($validated['schoolid'])       ? $validated['schoolid']                : '';
