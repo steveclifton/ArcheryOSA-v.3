@@ -61,7 +61,7 @@ class EventExportController extends Controller
                    ee.country as countrycode, 
                    (SELECT `name` FROM `countries` WHERE `iso_3166_3` = ee.country) as country,
                    DATE_FORMAT(str_to_date(ee.dateofbirth, '%d-%m-%Y'),'%Y-%m-%d') as dateofbirth,
-                   'NZ' as subclass,
+                   (SELECT `name` FROM `countries` WHERE `iso_3166_2` = ee.country) as subclass,
                    c.description as clubcode,
                    c.label as clubname
             FROM `evententrys` ee
