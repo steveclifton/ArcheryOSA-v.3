@@ -76,7 +76,6 @@ class EventExportController extends Controller
             ORDER BY `d`.label, ee.firstname
         ", ['eventid' => $event->eventid]);
 
-        dd($entrys);
         foreach ($entrys as $entry) {
 
             if ($entry->gender == 'f') {
