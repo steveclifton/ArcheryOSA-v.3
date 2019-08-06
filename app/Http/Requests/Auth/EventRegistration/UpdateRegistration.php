@@ -68,7 +68,13 @@ class UpdateRegistration extends FormRequest
             'country'        => 'required',
             'divisionid'     => 'required',
             'dateofbirth'    => $dobstate,
-            'bib'            => 'nullable'
+            'bib'            => 'nullable',
+            'individualqualround' => 'nullable',
+            'teamqualround' => 'nullable',
+            'individualfinal' => 'nullable',
+            'teamfinal' => 'nullable',
+            'mixedteamfinal' => 'nullable',
+            'subclass' => 'nullable'
 
         ];
     }

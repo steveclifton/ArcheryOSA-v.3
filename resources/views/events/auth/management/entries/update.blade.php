@@ -131,6 +131,7 @@
                         <textarea name="address" class="form-control" rows="2">{{old('address')  ?? $evententry->address ?? ''}}</textarea>
                     </div>
                 </div>
+
                 <div class="form-group row">
                     <label class="col-sm-12 col-md-3 col-form-label">Country*</label>
                     <div class="col-md-9">
@@ -318,13 +319,76 @@
                     <input name="roundids" type="hidden" id="jsfields" value=""/>
                 @endif
 
-
                 <div class="form-group mb-0 justify-content-start row">
                     <div class="col-sm-12 col-md-3 col-form-label"></div>
                     <div class="col-3">
                         <button type="submit" class="myButton btn btn-inverse btn-info waves-effect waves-light">Update</button>
                     </div>
+                </div>
 
+                <hr>
+                <h4 class="m-t-0 m-b-30 text-center addFormHeader header-title">Ianseo Settings</h4>
+
+                <div class="form-group row">
+                    <label class="col-sm-12 col-md-3 col-form-label">Individual Qual Round</label>
+                    <div class="col-md-9">
+                        <select name="individualqualround" class="form-control">
+                            <option value="1" {!! $evententry->individualqualround == 1 ? 'selected' : '' !!}>Yes</option>
+                            <option value="0" {!! $evententry->individualqualround == 0 ? 'selected' : '' !!}>No</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="form-group row">
+                    <label class="col-sm-12 col-md-3 col-form-label">Team Qual Round</label>
+                    <div class="col-md-9">
+                        <select name="teamqualround" class="form-control">
+                            <option value="1" {!! $evententry->teamqualround == 1 ? 'selected' : '' !!}>Yes</option>
+                            <option value="0" {!! $evententry->teamqualround == 0 ? 'selected' : '' !!}>No</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="form-group row">
+                    <label class="col-sm-12 col-md-3 col-form-label">Individual Final</label>
+                    <div class="col-md-9">
+                        <select name="individualfinal" class="form-control">
+                            <option value="1" {!! $evententry->individualfinal == 1 ? 'selected' : '' !!}>Yes</option>
+                            <option value="0" {!! $evententry->individualfinal == 0 ? 'selected' : '' !!}>No</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="form-group row">
+                    <label class="col-sm-12 col-md-3 col-form-label">Team Final</label>
+                    <div class="col-md-9">
+                        <select name="teamfinal" class="form-control">
+                            <option value="1" {!! $evententry->teamfinal == 1 ? 'selected' : '' !!}>Yes</option>
+                            <option value="0" {!! $evententry->teamfinal == 0 ? 'selected' : '' !!}>No</option>
+                        </select>
+                    </div>
+                </div>
+
+
+                <div class="form-group row">
+                    <label class="col-sm-12 col-md-3 col-form-label">Mixed Team Final</label>
+                    <div class="col-md-9">
+                        <select name="mixedteamfinal" class="form-control">
+                            <option value="1" {!! $evententry->mixedteamfinal == 1 ? 'selected' : '' !!}>Yes</option>
+                            <option value="0" {!! $evententry->mixedteamfinal == 0 ? 'selected' : '' !!}>No</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="form-group row">
+                    <label class="col-sm-12 col-md-3 col-form-label">Sub Class</label>
+                    <div class="col-md-9">
+                        <select name="subclass" class="form-control">
+                            <option value="NZ" {!! $evententry->subclass == 'NZ' ? 'selected' : '' !!}>ArcheryNZ Paid Member</option>
+                            <option value="IN" {!! $evententry->subclass == 'IN' ? 'selected' : '' !!}>Internernational Competitor (non-ArcheryNZ but affiliated to World Archery)</option>
+                            <option value="OP" {!! $evententry->subclass == 'OP' ? 'selected' : '' !!}>Open category (non-ArcheryNZ but permitted to shoot as a one-off exception)</option>
+                        </select>
+                    </div>
                 </div>
 
             </form>

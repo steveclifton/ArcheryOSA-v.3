@@ -461,6 +461,13 @@ class EventRegistrationController extends EventController
         $evententry->dateofbirth   = !empty($validated['dateofbirth'])    ? $validated['dateofbirth']            : '';
         $evententry->gender        = !empty($validated['gender'] == 'm')  ? 'm' : 'f';
         $evententry->country       = !empty($validated['country'])        ? ($validated['country'])              : '';
+        $evententry->individualqualround     = ($validated['individualqualround']);
+        $evententry->teamqualround     = ($validated['teamqualround']);
+        $evententry->individualfinal     = ($validated['individualfinal']);
+        $evententry->teamfinal     = ($validated['teamfinal']);
+        $evententry->mixedteamfinal     = ($validated['mixedteamfinal']);
+        $evententry->subclass     = ($validated['subclass']);
+
         $evententry->enteredby     = Auth::id();
         $evententry->hash          = $this->createHash();
         $evententry->save();
@@ -536,6 +543,12 @@ class EventRegistrationController extends EventController
         $evententry->gender       = !empty($validated['gender'] == 'm')  ? 'm' : 'f';
         $evententry->dateofbirth  = !empty($validated['dateofbirth'])    ? $validated['dateofbirth'] : '';
         $evententry->country       = !empty($validated['country'])        ? ($validated['country'])              : '';
+        $evententry->individualqualround     = ($validated['individualqualround']);
+        $evententry->teamqualround     = ($validated['teamqualround']);
+        $evententry->individualfinal     = ($validated['individualfinal']);
+        $evententry->teamfinal     = ($validated['teamfinal']);
+        $evententry->mixedteamfinal     = ($validated['mixedteamfinal']);
+        $evententry->subclass     = ($validated['subclass']);
 
         $evententry->save();
 
