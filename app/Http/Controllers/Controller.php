@@ -85,6 +85,18 @@ class Controller extends BaseController
         return $user->userid;
     }
 
+
+    public function ucname($string) {
+        $string = ucwords(strtolower($string));
+
+        foreach (array('-', '\'') as $delimiter) {
+            if (strpos($string, $delimiter)!==false) {
+                $string =implode($delimiter, array_map('ucfirst', explode($delimiter, $string)));
+            }
+        }
+        return $string;
+    }
+
 }
 
 

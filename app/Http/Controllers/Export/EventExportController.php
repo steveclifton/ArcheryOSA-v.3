@@ -45,14 +45,25 @@ class EventExportController extends Controller
         $eventcompetitionids = EventCompetition::where('eventid', $event->eventid)->pluck('eventcompetitionid')->toArray();
 
         $entrys = DB::select("
-            SELECT ee.bib, 1 as session, d.class as division, d.age as class, ta.target as target, 
-                   1 as individualqualround, 0 as teamqualround, 1 as individualfinal, 0 as teamfinal,
-                    ee.lastname,ee.firstname, ee.gender,
+            SELECT ee.bib, 
+                   1 as `session`, 
+                   d.class as division, 
+                   d.age as class, 
+                   ta.target as target, 
+                   1 as individualqualround, 
+                   0 as teamqualround, 
+                   1 as individualfinal, 
+                   0 as teamfinal,
+                   1 as mixedteamfinal,
+                   ee.lastname,
+                   ee.firstname, 
+                   ee.gender,
                    ee.country as countrycode, 
+                   (SELECT `name` FROM `countries` WHERE `iso_3166_3` = ee.country) as country,
                    DATE_FORMAT(str_to_date(ee.dateofbirth, '%d-%m-%Y'),'%Y-%m-%d') as dateofbirth,
                    'NZ' as subclass,
                    c.description as clubcode,
-                    c.label as clubname
+                   c.label as clubname
             FROM `evententrys` ee
             JOIN `entrycompetitions` ec USING (`entryid`)
             JOIN `divisions` d ON (`ec`.`divisionid` = `d`.`divisionid`)
@@ -71,9 +82,10 @@ class EventExportController extends Controller
             if ($entry->gender == 'f') {
                 $entry->gender = 'w';
             }
-            
-            $country = DB::select("SELECT * FROM `countries` WHERE `iso_3166_3` = :country", ['country' => $entry->countrycode]);
-            $entry->country = $country['name'] ?? 'New Zealand';
+
+            $entry->firstname = $this->ucname($entry->firstname);
+            $entry->lastname  = $this->ucname($entry->lastname);
+
         }
 
         $filename = str_replace(' ', '-', $event->label) .'-' . date('d-m', time());
@@ -81,11 +93,11 @@ class EventExportController extends Controller
             case 'csv':
                 $csv = Writer::createFromFileObject(new \SplTempFileObject());
 
-                $csv->insertOne(['Bib', 'Session', 'Division', 'Class', 'Target', 'Individualqualround', 'Teamqualround',
-                    'Individualfinal', 'Teamfinal', 'Lastname', 'Firstname', 'Gender', 'Country Code', 'Country', 'DOB', 'Subclass', 'Clubcode', 'Clubname' ]);
+                $csv->insertOne(['Bib', 'Session', 'Division', 'Class', 'Target', 'IndividualQualRound', 'TeamQualRound',
+                    'IndividualFinal', 'TeamFinal', 'MixedTeamFinal', 'Lastname', 'Firstname', 'Gender', 'Country Code', 'Country', 'DOB', 'Subclass', 'Clubcode', 'Clubname' ]);
 
                 foreach ($entrys as $entry) {
-                    $csv->insertOne((array) $entry);
+                    $csv->insertOne(array_map('ucwords', (array) $entry));
                 }
 
                 $csv->output( $filename . '.csv');
