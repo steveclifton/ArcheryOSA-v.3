@@ -106,7 +106,10 @@ class ProfileController extends Controller
                         }
                     }
 
-                    $finalresults['leagues'][$event->label . '|' . $event->date] = $results;
+                    if (!empty($results)) {
+                        $finalresults['leagues'][$event->label . '|' . $event->date] = $results;
+                    }
+
                 }
             }
 
