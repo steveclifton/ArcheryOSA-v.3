@@ -43,11 +43,11 @@ class Handler extends ExceptionHandler
             SendExceptionEmail::dispatch($message, 'ArcheryOSA Exception');
         }
         else {
-            Log::channel('daily')->warning(['REQUEST_URI' => $_SERVER['REQUEST_URI'],
-                                            'REMOTE_ADDR' => $_SERVER['REMOTE_ADDR'],
-                                            'HTTP_USER_AGENT' => $_SERVER['HTTP_USER_AGENT'],
-                                            'QUERY_STRING' => $_SERVER['QUERY_STRING'],
-                                            'REQUEST_METHOD' => $_SERVER['REQUEST_METHOD'],
+            Log::channel('daily')->warning(['REQUEST_URI' => ($_SERVER['REQUEST_URI'] ?? ''),
+                                            'REMOTE_ADDR' => ($_SERVER['REMOTE_ADDR'] ?? ''),
+                                            'HTTP_USER_AGENT' => ($_SERVER['HTTP_USER_AGENT'] ?? ''),
+                                            'QUERY_STRING' => ($_SERVER['QUERY_STRING'] ?? ''),
+                                            'REQUEST_METHOD' => ($_SERVER['REQUEST_METHOD'] ?? ''),
                                         ]);
         }
 
