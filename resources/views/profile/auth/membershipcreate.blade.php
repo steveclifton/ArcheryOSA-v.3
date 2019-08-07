@@ -52,7 +52,7 @@
                     <div class="col-md-9">
                         <input name="membership" type="text"
                                class="form-control {{ $errors->has('membership') ? ' is-invalid' : '' }}"
-                               id="inputMembership" value="{{old('membership')}}">
+                               id="inputMembership" value="{{old('membership')}}" required>
 
                         @if ($errors->has('membership'))
                             <span class="invalid-feedback" role="alert">

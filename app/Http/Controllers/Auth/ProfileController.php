@@ -215,6 +215,10 @@ class ProfileController extends Controller
     public function createMembership(Request $request)
     {
 
+        if (empty($request->membership)) {
+            return back()->with('failure', 'Membership number required');
+        }
+
         // check to see if they have one for the organisation - shouldnt have more than 1
         $membership = Membership::where('userid', $request->userid)
                                 ->where('organisationid', $request->organisationid)
@@ -237,6 +241,11 @@ class ProfileController extends Controller
 
     public function updateMembership(Request $request)
     {
+
+        if (empty($request->membership)) {
+            return back()->with('failure', 'Membership number required');
+        }
+        
         // check to see if they have one for the organisation - shouldnt have more than 1
         $membership = Membership::where('membershipid', $request->membershipid)
                                 ->first();
