@@ -2,6 +2,7 @@
 
 namespace App\Exceptions;
 
+use App\Jobs\SendExceptionEmail;
 use Exception;
 use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
 
@@ -34,6 +35,11 @@ class Handler extends ExceptionHandler
      */
     public function report(Exception $exception)
     {
+        $message = ($exception->getMessage() ?? '') . '<br>' . ($exception->getFile() ?? '') . '<br>Line: ' . ($exception->getLine() ?? '');
+
+        // send email
+        SendExceptionEmail::dispatch($message);
+
         parent::report($exception);
     }
 
