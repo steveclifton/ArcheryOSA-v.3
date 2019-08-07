@@ -20,7 +20,7 @@ class ExceptionAlertEmail extends Mailable
      */
     public function __construct($exception)
     {
-        $this->exception = $exception;
+        $this->exception = getenv('APP_URL') . '<br>' . $exception;
     }
 
     /**
