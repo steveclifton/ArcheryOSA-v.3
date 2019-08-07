@@ -137,7 +137,6 @@ class EventResultsController extends EventController
             WHERE sf.`eventid` = :eventid
         ", ['eventid' => $event->eventid]);
 
-
         $finalResults = $this->formatOverallResults($entrys, $flatscores);
 
         $data = compact('event', 'finalResults');
@@ -248,6 +247,10 @@ class EventResultsController extends EventController
 
                     $result = [];
                     $result['Archer'] = ucwords($archer->firstname . ' ' . $archer->lastname);
+
+                    if (!empty($archer->schoolname)) {
+                        $result['School'] = ucwords($archer->schoolname);
+                    }
 
                     foreach($ecomp as $key) {
                         $result[$key] = '';
@@ -466,12 +469,13 @@ class EventResultsController extends EventController
 
         $entrys = DB::select("
             SELECT ee.userid, ee.firstname, ee.lastname, ee.gender, ec.roundid, ee.divisionid,  
-                  d.label as divisionname, d.bowtype, r.unit, r.code, r.label as roundname
+                  d.label as divisionname, d.bowtype, r.unit, r.code, r.label as roundname, s.label as schoolname
             FROM `evententrys` ee
             JOIN `entrycompetitions` ec USING (`entryid`)
             JOIN `divisions` d ON (`ec`.`divisionid` = `d`.`divisionid`)
             JOIN `rounds` r ON (ec.roundid = r.roundid)
             JOIN `scores_flat` sf ON (ee.entryid = sf.entryid)
+            LEFT JOIN `schools` s ON (ee.schoolid = s.schoolid)
             WHERE `ee`.`eventid` = :eventid
             AND `ee`.`entrystatusid` = 2
             $and
