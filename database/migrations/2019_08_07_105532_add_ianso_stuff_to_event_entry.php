@@ -15,10 +15,10 @@ class AddIansoStuffToEventEntry extends Migration
     {
         Schema::table('evententrys', function($table) {
             $table->integer('individualqualround')->default(1);
-            $table->integer('teamqualround')->default(1);
+            $table->integer('teamqualround')->default(0);
             $table->integer('individualfinal')->default(1);
-            $table->integer('teamfinal')->default(1);
-            $table->integer('mixedteamfinal')->default(1);
+            $table->integer('teamfinal')->default(0);
+            $table->integer('mixedteamfinal')->default(0);
             $table->char('subclass', 4)->default('NZ');
         });
     }
