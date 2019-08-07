@@ -169,6 +169,13 @@ Route::middleware(['web'])->group(function() {
         Route::post('profile/children/update', 'Auth\ProfileController@updateChild');
 
 
+        //Membership
+        Route::get('profile/memberships', 'Auth\ProfileController@getMemberships');
+        Route::get('profile/membership/create', 'Auth\ProfileController@getMembershipCreate');
+        Route::get('profile/membership/update/{membershipid}', 'Auth\ProfileController@getMembershipUpdate');
+        Route::post('profile/membership/create', 'Auth\ProfileController@createMembership');
+        Route::post('profile/membership/update/{membershipid}', 'Auth\ProfileController@updateMembership');
+
 
         // Show my events
         Route::get('profile/myevents', 'Auth\ProfileController@getMyEvents');

@@ -26,7 +26,7 @@
             </div>
 
             <div class="col-lg-4 col-md-4 col-sm-4">
-                <a href="#">
+                <a href="/profile/memberships">
                     <div class="db-social-box">
                         <span class="fa fa-files-o"></span>
                         <h5>Memberships</h5>

@@ -6,6 +6,7 @@ use App\Models\EntryStatus;
 use App\Models\Event;
 use App\Models\EventAdmin;
 use App\Models\EventEntry;
+use App\Models\Membership;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Support\Facades\Auth;
@@ -116,4 +117,16 @@ class User extends Authenticatable
                 return 'User';
         }
     }
+
+    public function getMemberships()
+    {
+        return Membership::where('userid', $this->userid)->get();
+    }
+
+
+    public function getChildren()
+    {
+        return User::where('parentuserid', Auth::id())->get();
+    }
+
 }
