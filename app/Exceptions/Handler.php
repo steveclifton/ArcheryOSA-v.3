@@ -5,6 +5,7 @@ namespace App\Exceptions;
 use App\Jobs\SendExceptionEmail;
 use Exception;
 use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
+use Illuminate\Support\Facades\Log;
 
 class Handler extends ExceptionHandler
 {
@@ -40,6 +41,14 @@ class Handler extends ExceptionHandler
             $message .= ($exception->getMessage() ?? '') . '<br>' . ($exception->getFile() ?? '') . '<br>Line: ' . ($exception->getLine() ?? '');
 
             SendExceptionEmail::dispatch($message, 'ArcheryOSA Exception');
+        }
+        else {
+            Log::channel('daily')->warning(['REQUEST_URI' => $_SERVER['REQUEST_URI'],
+                                            'REMOTE_ADDR' => $_SERVER['REMOTE_ADDR'],
+                                            'HTTP_USER_AGENT' => $_SERVER['HTTP_USER_AGENT'],
+                                            'QUERY_STRING' => $_SERVER['QUERY_STRING'],
+                                            'REQUEST_METHOD' => $_SERVER['REQUEST_METHOD'],
+                                        ]);
         }
 
         parent::report($exception);
