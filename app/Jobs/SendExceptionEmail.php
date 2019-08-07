@@ -2,7 +2,6 @@
 
 namespace App\Jobs;
 
-use App\Mail\EventUpdate;
 use App\Mail\ExceptionAlertEmail;
 use App\User;
 use Illuminate\Bus\Queueable;
@@ -17,14 +16,16 @@ class SendExceptionEmail implements ShouldQueue
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
 
     protected $exception;
+    protected $subject;
     /**
      * Create a new job instance.
      *
      * @return void
      */
-    public function __construct($exception)
+    public function __construct($exception, $subject)
     {
         $this->exception = $exception;
+        $this->subject = $subject;
     }
 
     /**
@@ -37,6 +38,6 @@ class SendExceptionEmail implements ShouldQueue
         $user = User::where('userid', 1)->first();
 
         Mail::to($user->email)
-            ->send(new ExceptionAlertEmail($this->exception));
+            ->send(new ExceptionAlertEmail($this->exception, $this->subject));
     }
 }

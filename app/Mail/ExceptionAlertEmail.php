@@ -12,15 +12,18 @@ class ExceptionAlertEmail extends Mailable
     use Queueable, SerializesModels;
 
     protected $exception;
+    public $subject;
 
     /**
      * Create a new message instance.
-     *
-     * @return void
+     * ExceptionAlertEmail constructor.
+     * @param $exception
+     * @param $subject
      */
-    public function __construct($exception)
+    public function __construct($exception, $subject)
     {
         $this->exception = getenv('APP_URL') . '<br>' . $exception;
+        $this->subject = $subject;
     }
 
     /**
@@ -31,6 +34,7 @@ class ExceptionAlertEmail extends Mailable
     public function build()
     {
         return $this->view('emails.exception')
+            ->subject($this->subject)
             ->with([
                 'exception' => $this->exception,
             ]);

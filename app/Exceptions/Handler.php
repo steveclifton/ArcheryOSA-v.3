@@ -35,10 +35,12 @@ class Handler extends ExceptionHandler
      */
     public function report(Exception $exception)
     {
-        $message = ($exception->getMessage() ?? '') . '<br>' . ($exception->getFile() ?? '') . '<br>Line: ' . ($exception->getLine() ?? '');
 
-        // send email
-        SendExceptionEmail::dispatch($message);
+        $message = request()->getPathInfo() . '<br>';
+        $message .= ($exception->getMessage() ?? '') . '<br>' . ($exception->getFile() ?? '') . '<br>Line: ' . ($exception->getLine() ?? '');
+
+        SendExceptionEmail::dispatch($message, 'ArcheryOSA Exception');
+
 
         parent::report($exception);
     }
