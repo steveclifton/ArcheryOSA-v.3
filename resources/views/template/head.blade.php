@@ -12,6 +12,8 @@
 <link rel="apple-touch-icon" sizes="152x152" href="/icon-152x152.png">
 <link rel="apple-touch-icon" sizes="192x192" href="/icon-192x192.png">
 <link rel="apple-touch-icon" sizes="512x512" href="/icon-512x512.png">
+<link rel="apple-touch-icon" sizes="512x512" href="/apple-touch-icon-120x120.png">
+<link rel="apple-touch-icon" sizes="512x512" href="/apple-touch-icon-120x120-precomposed.png">
 
 <meta name="apple-mobile-web-app-status-bar-style" content="black">
 
