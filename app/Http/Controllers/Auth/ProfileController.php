@@ -78,7 +78,7 @@ class ProfileController extends Controller
 
                 $scores += count($flatscores);
 
-                if ($event->eventtypeid === 1) {
+                if ($event->eventtypeid === 1 || $event->eventtypeid === 3) {
                     $evententry = $erc->getEventEntrySorted($event->eventid, $user->userid);
 
                     if (!empty($evententry)) {
