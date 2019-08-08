@@ -246,7 +246,7 @@ class EventResultsController extends EventController
                 foreach ($rounds as $archer) {
 
                     $result = [];
-                    $result['Archer'] = ucwords($archer->firstname . ' ' . $archer->lastname);
+                    $result['Archer'] = '<a href="/profile/public/'.$archer->username.'">' . ucwords($archer->firstname . ' ' . $archer->lastname) . '</a>';
 
                     if (!empty($archer->schoolname)) {
                         $result['School'] = ucwords($archer->schoolname);
@@ -298,9 +298,10 @@ class EventResultsController extends EventController
         $entrys = DB::select("
             SELECT ee.firstname, ee.lastname, ee.gender, ec.entrycompetitionid, 
                 ec.eventcompetitionid, ec.roundid, d.label as divisionname, d.bowtype, r.unit,
-                sf.*
+                sf.*, u.username
             FROM `evententrys` ee
             JOIN `entrycompetitions` ec USING (`entryid`)
+            JOIN `users` u on (ee.userid = u.userid)
             JOIN `divisions` d ON (`ec`.`divisionid` = `d`.`divisionid`)
             JOIN `rounds` r ON (ec.roundid = r.roundid)
             JOIN `scores_flat` sf ON (ee.entryid = sf.entryid AND ec.entrycompetitionid = sf.entrycompetitionid AND ec.roundid = sf.roundid)
@@ -402,8 +403,9 @@ class EventResultsController extends EventController
         $entrys = DB::select("
             SELECT ee.firstname, ee.lastname, ee.gender, ec.entrycompetitionid, 
                 ec.eventcompetitionid, ec.roundid, d.label as divisionname, d.bowtype, r.unit,
-                sf.*, lp.points
+                sf.*, lp.points, u.username
             FROM `evententrys` ee
+            JOIN `users` u ON (ee.userid = u.userid)
             JOIN `entrycompetitions` ec USING (`entryid`)
             JOIN `divisions` d ON (`ec`.`divisionid` = `d`.`divisionid`)
             JOIN `rounds` r ON (ec.roundid = r.roundid)
@@ -469,8 +471,9 @@ class EventResultsController extends EventController
 
         $entrys = DB::select("
             SELECT ee.userid, ee.firstname, ee.lastname, ee.gender, ec.roundid, ee.divisionid,  
-                  d.label as divisionname, d.bowtype, r.unit, r.code, r.label as roundname, s.label as schoolname
+                  d.label as divisionname, d.bowtype, r.unit, r.code, r.label as roundname, s.label as schoolname, u.username
             FROM `evententrys` ee
+            JOIN `users` u ON (ee.userid = u.userid)
             JOIN `entrycompetitions` ec USING (`entryid`)
             JOIN `divisions` d ON (`ec`.`divisionid` = `d`.`divisionid`)
             JOIN `rounds` r ON (ec.roundid = r.roundid)

@@ -111,7 +111,11 @@
                                         <tbody>
                                         @foreach($archers as $archer)
                                             <tr class="results">
-                                                <th scope="row" width="15%">{{ucwords($archer->firstname . ' ' . $archer->lastname)}}</th>
+                                                <th scope="row" width="15%">
+                                                    <a href="/profile/public/{{$archer->username}}">
+                                                        {{ucwords($archer->firstname . ' ' . $archer->lastname)}}
+                                                    </a>
+                                                </th>
                                                 <td width="10%">
                                                     {{number_format($archer->average->average ?? 0, 2)}}
                                                 </td>

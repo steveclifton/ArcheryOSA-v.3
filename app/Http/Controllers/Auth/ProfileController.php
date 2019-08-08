@@ -84,6 +84,11 @@ class ProfileController extends Controller
                     if (!empty($evententry)) {
                         $results = $erc->formatOverallResults($evententry, $flatscores);
                         $result = reset($results);
+
+                        if (empty($result)) {
+                            continue;
+                        }
+
                         foreach ($result as $key => $value) {
                             $data = reset($value['results']);
                             unset($data['Archer']);
