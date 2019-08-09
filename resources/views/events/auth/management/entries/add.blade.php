@@ -346,6 +346,74 @@
 
                 </div>
 
+
+
+
+                <hr>
+                <h4 class="m-t-0 m-b-30 text-center addFormHeader header-title">Ianseo Settings</h4>
+
+                <div class="form-group row">
+                    <label class="col-sm-12 col-md-3 col-form-label">Individual Qual Round</label>
+                    <div class="col-md-9">
+                        <select name="individualqualround" class="form-control">
+                            <option value="1" {!! old('individualqualround') ?? null == 1 ? 'selected' : '' !!}>Yes</option>
+                            <option value="0" {!! old('individualqualround') ?? null == 0 ? 'selected' : '' !!}>No</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="form-group row">
+                    <label class="col-sm-12 col-md-3 col-form-label">Team Qual Round</label>
+                    <div class="col-md-9">
+                        <select name="teamqualround" class="form-control">
+                            <option value="1" {!! old('teamqualround') ?? null == 1 ? 'selected' : '' !!}>Yes</option>
+                            <option value="0" {!! old('teamqualround') ?? null == 0 ? 'selected' : '' !!}>No</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="form-group row">
+                    <label class="col-sm-12 col-md-3 col-form-label">Individual Final</label>
+                    <div class="col-md-9">
+                        <select name="individualfinal" class="form-control">
+                            <option value="1" {!! old('individualfinal') ?? null == 1 ? 'selected' : '' !!}>Yes</option>
+                            <option value="0" {!! old('individualfinal') ?? null == 0 ? 'selected' : '' !!}>No</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="form-group row">
+                    <label class="col-sm-12 col-md-3 col-form-label">Team Final</label>
+                    <div class="col-md-9">
+                        <select name="teamfinal" class="form-control">
+                            <option value="1" {!! old('teamfinal') ?? null == 1 ? 'selected' : '' !!}>Yes</option>
+                            <option value="0" {!! old('teamfinal') ?? null == 0 ? 'selected' : '' !!}>No</option>
+                        </select>
+                    </div>
+                </div>
+
+
+                <div class="form-group row">
+                    <label class="col-sm-12 col-md-3 col-form-label">Mixed Team Final</label>
+                    <div class="col-md-9">
+                        <select name="mixedteamfinal" class="form-control">
+                            <option value="1" {!! old('mixedteamfinal') ?? null == 1 ? 'selected' : '' !!}>Yes</option>
+                            <option value="0" {!! old('mixedteamfinal') ?? null == 0 ? 'selected' : '' !!}>No</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="form-group row">
+                    <label class="col-sm-12 col-md-3 col-form-label">Sub Class</label>
+                    <div class="col-md-9">
+                        <select name="subclass" class="form-control">
+                            <option value="NZ" {!! old('subclass') ?? null == 'NZ' ? 'selected' : '' !!}>ArcheryNZ Paid Member</option>
+                            <option value="IN" {!! old('subclass') ?? null == 'IN' ? 'selected' : '' !!}>Internernational Competitor (non-ArcheryNZ but affiliated to World Archery)</option>
+                            <option value="OP" {!! old('subclass') ?? null == 'OP' ? 'selected' : '' !!}>Open category (non-ArcheryNZ but permitted to shoot as a one-off exception)</option>
+                        </select>
+                    </div>
+                </div>
+
             </form>
         </div>
     </div>
