@@ -167,11 +167,12 @@
                                     {!! $event->region !!}
                                 </td>
                             </tr>
+
                             @if(!empty($event->cost))
                                 <tr>
                                     <th scope="row">Cost</th>
                                     <td>
-                                        {!! (strpos($event->cost, '$') === 0) ? $event->cost : '$' . $event->cost !!}
+                                        {{$event->cost ?? 'TBA'}}
                                     </td>
                                 </tr>
                                 <tr>
