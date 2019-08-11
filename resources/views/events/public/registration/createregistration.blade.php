@@ -107,6 +107,11 @@
                                     <strong>{{ $errors->first('membership') }}</strong>
                                 </span>
                             @endif
+                            @if (!empty($event->organisationid) && $event->organisationid == 1)
+                                <span class="help-block">
+                                    <small>Archery New Zealand Membership Number</small>
+                                </span>
+                            @endif
                     </div>
                 </div>
 
