@@ -32,7 +32,7 @@ Route::get('/records/nz', 'Record\RecordController@getCountryRecords');
 
 
 // Get users public profile
-Route::get('/users/{username}', 'Auth\PublicProfile\UserController@getPublicProfile');
+//Route::get('/users/{username}', 'Auth\PublicProfile\UserController@getPublicProfile');
 
 Route::get('profile/relationship/authorise/{hash}', 'Auth\ProfileController@authoriseRelation');
 
