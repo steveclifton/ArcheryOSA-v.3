@@ -161,7 +161,7 @@
                                 </tr>
                                 </thead>
                                 <tbody>
-                                @foreach(array_slice($upcomingevents, 6, 10) as $event)
+                                @foreach(array_slice($upcomingevents, 6) as $event)
                                     <tr>
                                         <th scope="row">
                                             <a href="/event/details/{{$event->eventurl}}">{{$event->label}}</a>
@@ -174,7 +174,7 @@
                                 </tbody>
                             </table>
                         </div>
-                        <h4 class="page-title"><a href="/events">See all upcoming events!</a></h4>
+{{--                        <h4 class="page-title"><a href="/events">See all upcoming events!</a></h4>--}}
                     @endif
                 </div>
             </div>
