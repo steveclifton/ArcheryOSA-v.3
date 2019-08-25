@@ -23,8 +23,8 @@
 
             @include('template.alerts')
 
-            <h4 class="m-t-0 m-b-30 text-center addFormHeader header-title">Competitions</h4>
-            <p style="text-align: center">Add or update the competitions for your event. <br>You <strong>must</strong> save the changes before changing the date</p>
+            <h4 class="m-t-0 m-b-30 text-center addFormHeader header-title">Event Entry</h4>
+           
 
             <form class="form-horizontal myForms treeForm"
                   method="POST"
