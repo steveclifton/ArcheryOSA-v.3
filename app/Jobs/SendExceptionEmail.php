@@ -36,7 +36,7 @@ class SendExceptionEmail implements ShouldQueue
     public function handle()
     {
         $user = User::where('userid', 1)->first();
-
+        return;
         Mail::to($user->email)
             ->send(new ExceptionAlertEmail($this->exception, $this->subject));
     }
