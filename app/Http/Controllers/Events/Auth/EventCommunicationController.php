@@ -91,7 +91,7 @@ class EventCommunicationController extends EventController
         $file1 = null;
         if (!empty($request->file('upload1'))) {
             $file = $request->file('upload1');
-            $name = $file->getClientOriginalName() . '.' . $file->getClientOriginalExtension();
+            $name = $file->getClientOriginalName();
             $destinationPath = public_path('/content/files');
 
             $file->move($destinationPath, $name);
@@ -102,7 +102,7 @@ class EventCommunicationController extends EventController
         $file2 = null;
         if (!empty($request->file('upload2'))) {
             $file = $request->file('upload2');
-            $name = $file->getClientOriginalName() . '.' . $file->getClientOriginalExtension();
+            $name = $file->getClientOriginalName();
             $destinationPath = public_path('/content/files');
 
             $file->move($destinationPath, $name);
@@ -113,7 +113,7 @@ class EventCommunicationController extends EventController
         $file3 = null;
         if (!empty($request->file('upload3'))) {
             $file = $request->file('upload3');
-            $name = $file->getClientOriginalName() . '.' . $file->getClientOriginalExtension();
+            $name = $file->getClientOriginalName();
             $destinationPath = public_path('/content/files');
 
             $file->move($destinationPath, $name);
