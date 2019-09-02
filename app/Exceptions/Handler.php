@@ -40,7 +40,7 @@ class Handler extends ExceptionHandler
             $message = request()->getPathInfo() . '<br>';
             $message .= ($exception->getMessage() ?? '') . '<br>' . ($exception->getFile() ?? '') . '<br>Line: ' . ($exception->getLine() ?? '');
 
-            SendExceptionEmail::dispatch($message, 'ArcheryOSA Exception-' . getenv('SITE_NAME'));
+            //SendExceptionEmail::dispatch($message, 'ArcheryOSA Exception-' . getenv('SITE_NAME'));
         }
         else {
             Log::channel('daily')->warning(['REQUEST_URI' => ($_SERVER['REQUEST_URI'] ?? ''),
