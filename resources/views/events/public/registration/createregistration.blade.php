@@ -190,7 +190,7 @@
                         <div class="col-md-9">
                             <select name="schoolid"
                                     class="form-control {{ $errors->has('schoolid') ? 'is-invalid' : '' }}" required>
-                                <option disabled selected>Pick a School</option>
+                                <option disabled selected>Select a School</option>
 
                                 @foreach($schools as $school)
                                     <option value="{{$school->schoolid}}"
@@ -238,7 +238,7 @@
                         <label class="col-sm-12 col-md-3 col-form-label">Division*</label>
                         <div class="col-md-9">
                             <select name="divisionid" class="form-control {{ $errors->has('divisionid') ? 'is-invalid' : '' }}" required>
-                                <option disabled selected>Pick one</option>
+                                <option disabled selected>Select one</option>
                                 @foreach($divisionsfinal as $division)
                                     <option value="{{$division->divisionid}}"
                                             {!! old('divisionid') == $division->divisionid ? 'selected' : '' !!}>
@@ -251,27 +251,26 @@
                                 <strong>{{ $errors->first('divisionid') }}</strong>
                             </span>
                             @endif
-                            {{--<span class="help-block"><small>Select an organisation the division belongs to</small></span>--}}
                         </div>
                     </div>
                 @endif
 
 
 
-
-                <div class="form-group row justify-content-end">
+                <div class="form-group row">
                     <label class="col-sm-12 col-md-3 col-form-label">Gender*</label>
-                    <div class=" col-md-9">
-                        <div class="radio radio-primary">
-                            <input name="gender" id="radio1" type="radio" value="m" checked>
-                            <label for="radio1">
-                                Male
-                            </label><br>
-                            <input name="gender" id="radio2" type="radio" value="f">
-                            <label for="radio2">
-                                Female
-                            </label>
-                        </div>
+                    <div class="col-md-9">
+                        <select name="gender"
+                                class="form-control {{ $errors->has('gender') ? 'is-invalid' : '' }}" required>
+                            <option disabled selected>Select one</option>
+                            <option value="m" {!! old('gender') == 'm' ? 'selected' : '' !!}>Male</option>
+                            <option value="f" {!! old('gender') == 'f' ? 'selected' : '' !!}>Female</option>
+                        </select>
+                        @if ($errors->has('gender'))
+                            <span class="invalid-feedback" role="alert">
+                                <strong>{{ $errors->first('gender') }}</strong>
+                            </span>
+                        @endif
                     </div>
                 </div>
 
