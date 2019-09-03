@@ -332,6 +332,42 @@
                 @endif
 
 
+                @if (!empty($event->mqs))
+
+                    @php $oldmqs = old('mqs') @endphp
+                    <h4 class="m-t-0 m-b-30 text-center addFormHeader header-title">MQS Scores Required</h4>
+
+                    <div class="form-group row">
+                        <label class="col-sm-12 col-md-3 col-form-label">MQS Score 1*</label>
+                        <div class="col-md-6">
+                            <input name="mqs[]" type="text" class="form-control" value="{{!empty($oldmqs[0]) ? $oldmqs[0] : 0 }}" required >
+                        <span class="help-block"><small>Leave as 0 if not applicable</small></span>
+
+                        </div>
+
+                    </div>
+                    <div class="form-group row">
+                        <label class="col-sm-12 col-md-3 col-form-label">MQS Score 2*</label>
+                        <div class="col-md-6">
+                            <input name="mqs[]" type="text" class="form-control" value="{{!empty($oldmqs[1]) ? $oldmqs[1] : 0 }}" required >
+                        <span class="help-block"><small>Leave as 0 if not applicable</small></span>
+
+                        </div>
+
+                    </div>
+                    <div class="form-group row">
+                        <label class="col-sm-12 col-md-3 col-form-label">MQS Score 3*</label>
+                        <div class="col-md-6">
+                            <input name="mqs[]" type="text" class="form-control" value="{{!empty($oldmqs[2]) ? $oldmqs[2] : 0 }}" required >
+                        <span class="help-block"><small>Leave as 0 if not applicable</small></span>
+
+                        </div>
+
+                    </div>
+                @endif
+
+
+                <hr>
                 <div class="form-group mb-0 justify-content-start row">
                     <div class="col-sm-12 col-md-3 col-form-label"></div>
                     <div class="col-3">
