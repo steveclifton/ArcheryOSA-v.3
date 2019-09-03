@@ -12,6 +12,7 @@ use App\Models\Event;
 use App\Models\EventCompetition;
 use App\Models\ScoringLevel;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class EventCompetitionController extends EventController
 {
@@ -248,8 +249,29 @@ class EventCompetitionController extends EventController
 
     }
 
+    /**
+     * Removes a
+     * @param Request $request
+     * @return \Illuminate\Http\RedirectResponse
+     */
+    public function deleteEventCompetition(Request $request) {
+        $event = Event::where('eventurl', $request->eventurl)->first();
+        // remove eventcomp
+        $eventcompetition = EventCompetition::where('eventcompetitionid', $request->eventcompetitionid)->first();
 
+        if (!$this->userOk($event->eventurl) || empty($eventcompetition)) {
+            return back()->with('failure', 'Cannot remove event');
+        }
 
+        EntryCompetition::where('eventid', $event->eventid)
+                        ->where('eventcompetitionid', $request->eventcompetitionid)
+                        ->delete();
+
+        $eventcompetition->delete();
+
+        return back()->with('success', 'Event Competition Removed');
+
+    }
 
 
     // League
