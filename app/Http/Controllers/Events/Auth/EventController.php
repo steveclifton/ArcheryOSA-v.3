@@ -9,9 +9,11 @@ use App\Http\Requests\Auth\Events\CreateEvent;
 use App\Http\Requests\Auth\Events\UpdateEvent;
 use App\Models\Club;
 
+use App\Models\EntryCompetition;
 use App\Models\Event;
 use App\Models\EventAdmin;
 use App\Models\EventCompetition;
+use App\Models\EventEntry;
 use App\Models\EventType;
 use App\Models\Organisation;
 use Illuminate\Http\Request;
@@ -263,13 +265,34 @@ class EventController extends Controller
         }
 
 
-
         $entryclose = !empty($validated['entryclose']) ? new \DateTime($validated['entryclose']) : null;
         $startdate  = new \DateTime($validated['start']);
         $enddate    = new \DateTime($validated['end']);
 
         $difference = $startdate->diff($enddate)->days + 1;
 
+        $dateranges = [];
+        foreach ($this->helper->getDateRange($validated['start'], $validated['end']) as $date) {
+            $dateranges[] = $date->format('Y-m-d');
+        }
+
+        if (!empty($dateranges)) {
+
+            // get the event competitions that are not in the new date range
+            $eventcompetitions = EventCompetition::where('eventid', $event->eventid)
+                ->whereNotIn('date', ($dateranges))
+                ->get();
+
+            // delete the entry competition where the dates havechanged
+            // delete eventcompetitions where the dates have changed
+            foreach ($eventcompetitions as $eventcompetition) {
+                EntryCompetition::where('eventid', $event->eventid)
+                    ->where('eventcompetitionid', $eventcompetition->eventcompetitionid)
+                    ->delete();
+
+                $eventcompetition->delete();
+            }
+        }
 
         $event->label          = ucwords($validated['label']);
         $event->hash           = $this->createHash();
