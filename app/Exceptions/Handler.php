@@ -37,8 +37,8 @@ class Handler extends ExceptionHandler
     public function report(Exception $exception)
     {
         if (!$this->shouldntReport($exception)) {
-            $message = request()->getPathInfo() . '<br>';
-            $message .= ($exception->getMessage() ?? '') . '<br>' . ($exception->getFile() ?? '') . '<br>Line: ' . ($exception->getLine() ?? '');
+            //$message = request()->getPathInfo() . '<br>';
+            //$message .= ($exception->getMessage() ?? '') . '<br>' . ($exception->getFile() ?? '') . '<br>Line: ' . ($exception->getLine() ?? '');
 
             //SendExceptionEmail::dispatch($message, 'ArcheryOSA Exception-' . getenv('SITE_NAME'));
         }
@@ -65,4 +65,14 @@ class Handler extends ExceptionHandler
     {
         return parent::render($request, $exception);
     }
+
+    protected function whoopsHandler()
+    {
+        try {
+            return app(\Whoops\Handler\HandlerInterface::class);
+        } catch (\Illuminate\Contracts\Container\BindingResolutionException $e) {
+            return (new \Illuminate\Foundation\Exceptions\WhoopsHandler)->forDebug();
+        }
+    }
+
 }
