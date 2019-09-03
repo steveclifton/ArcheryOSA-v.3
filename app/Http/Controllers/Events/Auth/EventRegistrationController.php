@@ -151,6 +151,17 @@ class EventRegistrationController extends EventController
                     'divisions', 'schools','countrys'));
     }
 
+    protected function getRequestDetails($validated, $required)
+    {
+        $return = [];
+        foreach ($required as $r) {
+            if (isset($validated[$r])) {
+                $return[$r] = $validated[$r];
+            }
+        }
+
+        return json_encode($return);
+    }
 
     /**
      * POST
@@ -216,6 +227,7 @@ class EventRegistrationController extends EventController
         $evententry->pickup        = !empty($validated['pickup']);
         $evententry->dateofbirth   = !empty($validated['dateofbirth'])    ? $validated['dateofbirth']            : '';
         $evententry->gender        = !empty($validated['gender'] == 'm')  ? 'm' : 'f';
+        $evententry->details       = $this->getRequestDetails($validated, ['mqs']);
         $evententry->enteredby     = Auth::id();
         $evententry->hash          = $this->createHash();
         $evententry->save();
@@ -320,7 +332,7 @@ class EventRegistrationController extends EventController
         $evententry->gender       = !empty($validated['gender'] == 'm')  ? 'm' : 'f';
         $evententry->dateofbirth  = !empty($validated['dateofbirth'])    ? $validated['dateofbirth']             : '';
         $evententry->country      = !empty($validated['country'])        ? ($validated['country'])               : '';
-
+        $evententry->details      = $this->getRequestDetails($validated, ['mqs']);
         $evententry->save();
 
         $entrycompetitions = EntryCompetition::where('userid', $user->userid)
@@ -467,7 +479,7 @@ class EventRegistrationController extends EventController
         $evententry->teamfinal     = ($validated['teamfinal']);
         $evententry->mixedteamfinal     = ($validated['mixedteamfinal']);
         $evententry->subclass     = ($validated['subclass']);
-
+        $evententry->details       = $this->getRequestDetails($validated, ['mqs']);
         $evententry->enteredby     = Auth::id();
         $evententry->hash          = $this->createHash();
         $evententry->save();
@@ -549,6 +561,7 @@ class EventRegistrationController extends EventController
         $evententry->teamfinal     = ($validated['teamfinal']);
         $evententry->mixedteamfinal     = ($validated['mixedteamfinal']);
         $evententry->subclass     = ($validated['subclass']);
+        $evententry->details       = $this->getRequestDetails($validated, ['mqs']);
 
         $evententry->save();
 
