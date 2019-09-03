@@ -49,6 +49,11 @@ class CreateRegistration extends FormRequest
             $membershiprequired = 'required';
         }
 
+        $mqs = 'nullable';
+        if (!empty($event->mqs)) {
+            $mqs = 'required';
+        }
+
         return [
             'userid'         => 'nullable',
             'eventid'        => 'required',
@@ -73,7 +78,8 @@ class CreateRegistration extends FormRequest
             'individualfinal' => 'nullable',
             'teamfinal' => 'nullable',
             'mixedteamfinal' => 'nullable',
-            'subclass' => 'nullable'
+            'subclass' => 'nullable',
+            'mqs'      => $mqs
         ];
     }
 
