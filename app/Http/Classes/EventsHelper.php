@@ -94,6 +94,18 @@ class EventsHelper
         return $daterange;
     }
 
+    public function getDateRange($start, $end)
+    {
+
+        $start = new \DateTime( $start );
+        $end = new \DateTime( $end );
+        $end = $end->modify( '+1 day' );
+        $interval = new \DateInterval('P1D');
+        $daterange = new \DatePeriod($start, $interval ,$end);
+
+        return $daterange;
+    }
+
     public function getEventsDateInterval($event)
     {
         if (!is_object($event)) {
