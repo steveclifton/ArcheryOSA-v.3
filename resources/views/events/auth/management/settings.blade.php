@@ -142,7 +142,7 @@
                             </label>
 
                         </div>
-                        <span class="help-block"><small>This will enable entry notification emails</small></span>
+                        <span class="help-block"><small>This will enable entry notification emails to the event admin</small></span>
 
                     </div>
                 </div>
@@ -173,7 +173,7 @@
                             </label>
 
                         </div>
-                        <span class="help-block"><small>This will allow users to enter into multiple divisions for the event</small></span>
+                        <span class="help-block"><small>This will allow archers to enter into multiple divisions for the event</small></span>
 
                     </div>
                 </div>
@@ -237,7 +237,6 @@
                 </div>
                 <br>
 
-
                 <div class="form-group row justify-content-end">
                     <div class=" col-md-9">
                         <div class="checkbox checkbox-primary">
@@ -253,6 +252,22 @@
                 </div>
                 <br>
 
+                <div class="form-group row justify-content-end">
+                    <div class=" col-md-9">
+                        <div class="checkbox checkbox-primary">
+                            <input name="mqs" id="mqs" type="checkbox" {{$event->mqs ? 'checked' : ''}}>
+                            <label for="mqs">
+                                MQS Required
+                            </label>
+
+                        </div>
+                        <span class="help-block">
+                            <small>Archers must enter their MQS scores during event entry</small>
+                        </span>
+
+                    </div>
+                </div>
+                <br>
 
                 <hr>
                 <br>
