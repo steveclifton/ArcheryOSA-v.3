@@ -105,7 +105,7 @@
                 <div class="form-group row">
                     <label for="label" class="col-sm-12 col-md-3 col-form-label">Start Date*</label>
                     <div class="col-md-9">
-                        <input type="text" name="start" class="datepicker-autoclose form-control {{ $errors->has('start') ? 'is-invalid' : '' }}"
+                        <input type="text" name="start" class="dalert datepicker-autoclose form-control {{ $errors->has('start') ? 'is-invalid' : '' }}"
                                placeholder="Choose Date" value="{{ date('d-m-Y', strtotime($event->start)) ?? old('start')}}" id="datepicker-autoclose">
 
                         @if ($errors->has('start'))
@@ -119,7 +119,7 @@
                 <div class="form-group row">
                     <label for="label" class="col-sm-12 col-md-3 col-form-label">End Date*</label>
                     <div class="col-md-9">
-                        <input type="text" name="end" class="datepicker-autoclose form-control {{ $errors->has('end') ? 'is-invalid' : '' }}"
+                        <input type="text" name="end" class="dalert datepicker-autoclose form-control {{ $errors->has('end') ? 'is-invalid' : '' }}"
                                placeholder="Choose Date" value="{{ date('d-m-Y', strtotime($event->end)) ?? old('end')}}" id="datepicker-autoclose">
 
                         @if ($errors->has('end'))
@@ -259,5 +259,15 @@
             </form>
         </div>
     </div>
+
+
+    <script>
+
+        $(function() {
+            $(document).on('click', '.dalert', function() {
+                alert('Changing the event dates will remove any Competitions or Entries for the missing dates. Proceed with caution');
+            });
+        });
+    </script>
 
 @endsection
