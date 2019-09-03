@@ -66,11 +66,14 @@
                 </div>
 
 
-
                 <div class="form-group mb-0 justify-content-start row">
                     <div class="col-sm-12 col-md-3 col-form-label"></div>
                     <div class="col-3">
                         <button type="submit" class="myButton btn btn-inverse btn-info waves-effect waves-light">Save</button>
+                    </div>
+
+                    <div class="col-3" id="deletediv" style="display: {{$formaction == 'update' ? 'block' : 'none'}}">
+                        <a href="/events/manage/competitions/delete/{{$event->eventurl}}/{{$competition['eventcompetitionid']}}" id="deleteeventcomp" class="btn btn-danger" onclick="return confirm('Are you sure you want to delete this competition?')">Delete</a>
                     </div>
                 </div>
 
@@ -78,6 +81,7 @@
         </div>
     </div>
 
+    <script>var eventurl = '{{$event->eventurl}}';</script>
     <script src="{{URL::asset('/js/admin/divisions.js')}}"></script>
 
 @endsection

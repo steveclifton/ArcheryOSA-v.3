@@ -78,6 +78,7 @@ $(function () {
 
 
     $(document).on('change', '#eventcompetitions', function (e) {
+        $('#deletediv').hide();
 
         var date = $("option:selected", this).val();
         var eventid = $('input[name="eventid"]').val();
@@ -105,6 +106,10 @@ $(function () {
                 $('#checkTreeDivisions').jstree(jsTreeObj);
 
                 $(".treeFormCompetitions").attr("action", json.formaction);
+                if (date != 'createnew') {
+                    $('#deleteeventcomp').attr('href', '/events/manage/competitions/delete/'+eventurl+'/' + eventcompetitionid);
+                    $('#deletediv').show();
+                }
             }
 
         });

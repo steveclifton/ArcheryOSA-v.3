@@ -73,6 +73,7 @@ Route::middleware(['web'])->group(function() {
         Route::get('events/manage/competitions/{eventurl}', 'Events\Auth\EventCompetitionController@getEventCompetitionsView');
         Route::post('events/manage/competitions/create/{eventurl}', 'Events\Auth\EventCompetitionController@createEventCompetition');
         Route::post('events/manage/competitions/update/{eventurl}', 'Events\Auth\EventCompetitionController@updateEventCompetition');
+        Route::get('events/manage/competitions/delete/{eventurl}/{eventcompetitionid}', 'Events\Auth\EventCompetitionController@deleteEventCompetition');
 
         // Exports
         Route::get('events/manage/exports/{eventurl}', 'Export\EventExportController@getExportView');

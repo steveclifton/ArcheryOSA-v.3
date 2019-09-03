@@ -61,6 +61,7 @@
         <div class="">
             <div class="card-box">
                 <h4 class="text-dark header-title m-t-0 m-b-30">Select the divisions required for this day's competitions</h4>
+                <h6 class="text-danger header-title m-t-0 m-b-30">Removing divisions may change existing event entrys</h6>
                 <div id="checkTreeDivisions">
                     @foreach($mappeddivisions as $orgname => $divisions)
                         <ul>
