@@ -209,6 +209,24 @@
 
                 @endif
 
+                <div class="form-group row">
+                    <label class="col-sm-12 col-md-3 col-form-label">Gender*</label>
+                    <div class="col-md-9">
+                        <select name="gender"
+                                class="form-control {{ $errors->has('gender') ? 'is-invalid' : '' }}" required>
+                            <option disabled selected>Select one</option>
+                            <option value="m" {!! (old('gender') ?? $evententry->gender == 'm') ? 'selected' : '' !!}>Male</option>
+                            <option value="f" {!! (old('gender') ?? $evententry->gender == 'f') ? 'selected' : '' !!}>Female</option>
+                        </select>
+                        @if ($errors->has('gender'))
+                            <span class="invalid-feedback" role="alert">
+                                <strong>{{ $errors->first('gender') }}</strong>
+                            </span>
+                        @endif
+                    </div>
+                </div>
+
+
                 @if ($event->isLeague() || $multipledivisions)
                     <div class="form-group row">
                         <label class="col-sm-12 col-md-3 col-form-label">Division*</label>
@@ -255,22 +273,6 @@
                     </div>
                 @endif
 
-                <div class="form-group row">
-                    <label class="col-sm-12 col-md-3 col-form-label">Gender*</label>
-                    <div class="col-md-9">
-                        <select name="gender"
-                                class="form-control {{ $errors->has('gender') ? 'is-invalid' : '' }}" required>
-                            <option disabled selected>Select one</option>
-                            <option value="m" {!! (old('gender') ?? $evententry->gender == 'm') ? 'selected' : '' !!}>Male</option>
-                            <option value="f" {!! (old('gender') ?? $evententry->gender == 'f') ? 'selected' : '' !!}>Female</option>
-                        </select>
-                        @if ($errors->has('gender'))
-                            <span class="invalid-feedback" role="alert">
-                                <strong>{{ $errors->first('gender') }}</strong>
-                            </span>
-                        @endif
-                    </div>
-                </div>
 
 
                 @if (!empty($event->pickup))
