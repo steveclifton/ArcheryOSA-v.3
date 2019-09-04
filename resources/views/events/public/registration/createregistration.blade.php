@@ -23,7 +23,7 @@
 
             @include('template.alerts')
 
-            <h4 class="m-t-0 m-b-30 text-center addFormHeader header-title">Event Entry</h4>
+            <h4 class="m-t-0 m-b-30 text-center addFormHeader header-title">Create Event Entry</h4>
            
 
             <form class="form-horizontal myForms treeForm"

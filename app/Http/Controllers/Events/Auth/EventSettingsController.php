@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Events\Auth;
 
+use App\Models\EntryCompetition;
 use App\Models\Event;
 use App\Models\EventAdmin;
 use App\Models\EventCompetition;
@@ -30,7 +31,9 @@ class EventSettingsController extends EventController
             $eventcompetition = EventCompetition::where('eventid', $event->eventid)->first();
         }
 
-        return view('events.auth.management.settings', compact('event', 'eventstatuses', 'leagueweeks', 'eventcompetition'));
+        $entry = EntryCompetition::where('eventid', $event->eventid)->first();
+
+        return view('events.auth.management.settings', compact('entry', 'event', 'eventstatuses', 'leagueweeks', 'eventcompetition'));
     }
 
     public function updateEventSettings(Request $request)

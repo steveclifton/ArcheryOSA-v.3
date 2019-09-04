@@ -167,13 +167,21 @@
                 <div class="form-group row justify-content-end">
                     <div class=" col-md-9">
                         <div class="checkbox checkbox-primary">
-                            <input name="multipledivisions" id="allowmulti" type="checkbox" {{$event->multipledivisions ? 'checked' : ''}}>
+                            <input {{!empty($entry) ? 'disabled' : ''}} name="multipledivisions" id="allowmulti" type="checkbox" {{$event->multipledivisions ? 'checked' : ''}}>
                             <label for="allowmulti">
                                 Allow multiple division entries
                             </label>
 
                         </div>
-                        <span class="help-block"><small>This will allow archers to enter into multiple divisions for the event</small></span>
+                        @if (!empty($entry))
+                            <span class="help-block">
+                                <small>Disabled as event entries exist</small>
+                            </span>
+                        @else
+                            <span class="help-block">
+                                <small>This will allow archers to enter into multiple divisions for the event</small>
+                            </span>
+                        @endif
 
                     </div>
                 </div>
