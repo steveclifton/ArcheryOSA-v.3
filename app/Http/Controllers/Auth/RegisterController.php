@@ -50,7 +50,7 @@ class RegisterController extends Controller
      */
     public function showRegistrationForm()
     {
-        $sitekey = getenv('GOOGLE_RECAPTCHA_KEY');
+        $sitekey = env('GOOGLE_RECAPTCHA_KEY');
 
         return view('auth.register', compact('sitekey'));
     }
