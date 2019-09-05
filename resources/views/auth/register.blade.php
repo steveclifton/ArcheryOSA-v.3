@@ -73,7 +73,7 @@
                     <div class="form-group">
                         <div class="col-12">
                             <div class="g-recaptcha"
-                                 data-sitekey="{{env('GOOGLE_RECAPTCHA_KEY')}}">
+                                 data-sitekey="{{getenv('GOOGLE_RECAPTCHA_KEY')}}">
                             </div>
                         </div>
                     </div>
