@@ -44,6 +44,18 @@ class RegisterController extends Controller
     }
 
     /**
+     * Show the application registration form.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function showRegistrationForm()
+    {
+        $sitekey = getenv('GOOGLE_RECAPTCHA_KEY');
+
+        return view('auth.register', compact('sitekey'));
+    }
+
+    /**
      * Get a validator for an incoming registration request.
      *
      * @param  array  $data

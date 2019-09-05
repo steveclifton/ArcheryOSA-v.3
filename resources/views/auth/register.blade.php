@@ -69,10 +69,11 @@
                         </div>
                     </div>
 
+
                     <div class="form-group">
                         <div class="col-12">
                             <div class="g-recaptcha"
-                                 data-sitekey="{{$_ENV['GOOGLE_RECAPTCHA_KEY'] ?? ''}}">
+                                 data-sitekey="{{$sitekey}}">
                             </div>
                         </div>
                     </div>
