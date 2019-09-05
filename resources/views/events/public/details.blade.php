@@ -108,7 +108,7 @@
                 <div class="clearfix visible-sm"></div>
 
                 <div class="col-lg-6 m-t-sm-40 ">
-                    <h1>{{$event->label}}</h1>
+                    <h1 style="font-size: 24px; text-align: center">{{$event->label}}</h1>
                 @php
                     $entryclose = (!empty($event->entryclose) && $event->entryclose != '1970-01-01') ? date('d F Y', strtotime($event->entryclose)) : 'Not Specified';
 
