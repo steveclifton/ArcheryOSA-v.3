@@ -1,6 +1,12 @@
 @extends('template.default')
 
-@section ('title'){{ucwords($event->label)}} @endsection
+@php
+    $text = !empty($event->info) ? $event->info : $event->label;
+@endphp
+
+@section ('title', ucwords($event->label) . ' ')
+@section('description', substr($text, 0, 155))
+@section('url', 'event/details/' . $event->eventurl)
 
 @section('content')
 
@@ -102,8 +108,7 @@
                 <div class="clearfix visible-sm"></div>
 
                 <div class="col-lg-6 m-t-sm-40 ">
-                    <p class="text-muted m-b-30 font-16">Event Details</p>
-
+                    <h1>{{$event->label}}</h1>
                 @php
                     $entryclose = (!empty($event->entryclose) && $event->entryclose != '1970-01-01') ? date('d F Y', strtotime($event->entryclose)) : 'Not Specified';
 

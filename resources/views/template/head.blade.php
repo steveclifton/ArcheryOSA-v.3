@@ -1,6 +1,12 @@
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
-<meta name="description" content="Archery OSA is a free online archery event management system which allows you to run your archery events completely online"/>
+
+<meta name="description" content="@yield('description','Archery OSA is a free online archery event management system which allows you to run your archery events completely online')"/>
+<meta property="og:description" content="@yield('description','Archery OSA is a free online archery event management system which allows you to run your archery events completely online')" />
+<link rel="canonical" href="https://archeryosa.com/@yield('url', '')" itemprop="url">
+<link rel="canonical" href="https://archeryosa.com/@yield('url', '')">
+<meta property="og:url" content="https://archeryosa.com/@yield('url', '')" />
+
 <meta name="referrer" content="always">
 <meta http-equiv="X-UA-Compatible" content="IE=edge" />
 
@@ -8,14 +14,11 @@
 <meta property="og:locale" content="en_US" />
 <meta property="og:type" content="website" />
 <meta property="og:title" content="ArcheryOSA" />
-<meta property="og:description" content="Archery OSA is a free online archery event management system which allows you to run your archery events completely online" />
-<meta property="og:url" content="https://archeryosa.com/" />
 <meta property="og:site_name" content="ArcheryOSA" />
 
 <link rel="icon" href="{{URL::asset('/images/favion.ico')}}" type="image/x-icon" />
 <link rel="shortcut icon" href="{{URL::asset('/images/favion.ico')}}" type="image/x-icon" />
-<link rel="canonical" href="https://archeryosa.com/" itemprop="url">
-<link rel="canonical" href="https://archeryosa.com/">
+
 
 <link rel="apple-touch-icon" href="touch-icon-iphone.png">
 <link rel="apple-touch-icon" sizes="144x144" href="/icon-144x144.png">
