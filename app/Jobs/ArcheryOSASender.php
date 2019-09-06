@@ -32,7 +32,7 @@ class ArcheryOSASender
     {
 
         if (getenv('APP_LIVE') == "false") {
-            return Auth::user()->email;
+            return 'info@archeryosa.com';
         }
 
         return $email;
