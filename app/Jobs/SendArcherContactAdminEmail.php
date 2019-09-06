@@ -2,7 +2,7 @@
 
 namespace App\Jobs;
 
-use App\Mail\ArcherRelationRequest;
+use App\Mail\ArcherContactAdmin;
 use Illuminate\Bus\Queueable;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Queue\InteractsWithQueue;
@@ -10,28 +10,29 @@ use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Support\Facades\Mail;
 
-class SendArcherRelationRequest extends ArcheryOSASender implements ShouldQueue
+class SendArcherContactAdminEmail extends ArcheryOSASender implements ShouldQueue
 {
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
 
-    private $email;
-    private $firstname;
-    private $requestusername;
-    private $hash;
-    private $url;
+    private $email = null;
+    private $event = null;
+    private $entryurl = null;
+    private $userfrom = null;
+    private $usermessage = null;
 
     /**
      * Create a new job instance.
      *
      * @return void
      */
-    public function __construct($email, $firstname, $requestusername, $hash, $url)
+    public function __construct($event, $entryurl, $userfrom, $usermessage)
     {
-        $this->email = $email;
-        $this->firstname = $firstname;
-        $this->requestusername = $requestusername;
-        $this->hash = $hash;
-        $this->url = $url;
+        $this->email = $event->email;
+        $this->event = $event;
+        $this->entryurl = $entryurl;
+        $this->userfrom = $userfrom;
+        $this->usermessage = $usermessage;
+
     }
 
     /**
@@ -43,8 +44,7 @@ class SendArcherRelationRequest extends ArcheryOSASender implements ShouldQueue
     {
         if ($this->checkEmailAddress($this->email)) {
             Mail::to($this->getEmailAddress($this->email))
-                ->send(new ArcherRelationRequest($this->firstname, $this->requestusername, $this->hash, $this->url));
+                ->send(new ArcherContactAdmin($this->event, $this->entryurl, $this->userfrom, $this->usermessage));
         }
-
     }
 }

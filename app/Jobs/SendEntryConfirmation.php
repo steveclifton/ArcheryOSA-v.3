@@ -40,7 +40,7 @@ class SendEntryConfirmation extends ArcheryOSASender implements ShouldQueue
     public function handle()
     {
         if ( $this->checkEmailAddress($this->email)) {
-            Mail::to($this->email)
+            Mail::to($this->getEmailAddress($this->email))
                 ->send(new EntryConfirmation(ucwords($this->eventname), ucwords($this->firstname), $this->eventurl));
         }
     }

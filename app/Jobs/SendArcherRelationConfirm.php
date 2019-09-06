@@ -9,7 +9,7 @@ use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
 
-class SendArcherRelationConfirm implements ShouldQueue
+class SendArcherRelationConfirm extends ArcheryOSASender implements ShouldQueue
 {
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
 
@@ -38,7 +38,7 @@ class SendArcherRelationConfirm implements ShouldQueue
     {
 
         if ($this->checkEmailAddress($this->email)) {
-            Mail::to($this->email)
+            Mail::to($this->getEmailAddress($this->email))
                 ->send(new ArcherRelationConfirm($this->userfirstname, $this->requestuserfirstname));
         }
 

@@ -9,6 +9,8 @@
 namespace App\Jobs;
 
 
+use Illuminate\Support\Facades\Auth;
+
 class ArcheryOSASender
 {
     public function __construct()
@@ -24,5 +26,16 @@ class ArcheryOSASender
         }
 
         return false;
+    }
+
+    public function getEmailAddress($email)
+    {
+
+        if (getenv('APP_LIVE') == "false") {
+            return Auth::user()->email;
+        }
+
+        return $email;
+
     }
 }

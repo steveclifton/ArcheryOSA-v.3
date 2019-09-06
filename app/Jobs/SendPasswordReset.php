@@ -37,7 +37,7 @@ class SendPasswordReset extends ArcheryOSASender implements ShouldQueue
     public function handle()
     {
         if ($this->checkEmailAddress($this->email)) {
-            Mail::to($this->email)
+            Mail::to($this->getEmailAddress($this->email))
                 ->send(new ResetPassword($this->hash, $this->email, ucwords($this->name)));
         }
 
