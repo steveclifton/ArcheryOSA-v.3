@@ -41,15 +41,13 @@
                 </div>
                 <br>
 
-
                 <meta name="csrf-token" content="{{ csrf_token() }}">
-                <meta name="eventurl" content="{{ $event->eventurl}}">
+                <meta name="eventurl" content="{{ $event->eventurl }}">
 
                 <table id="datatable-buttons" class="table table-striped table-bordered" cellspacing="0" width="100%">
                     <thead>
                         <tr>
                             <th>Name</th>
-                            <th>Division</th>
                             <th>Status</th>
                             <th>Note</th>
                             <th>Send Mail</th>
@@ -60,7 +58,7 @@
                             @if (!empty($event->pickup))
                                 <th>Airport Pickup</th>
                             @endif
-                            @if($canremoveentry)
+                            @if (!empty($canremoveentry))
                                 <th>Remove</th>
                             @endif
                         </tr>
@@ -72,7 +70,6 @@
                             <td>
                                 <a href="/events/manage/evententries/{{$event->eventurl}}/update/{{$entry->username}}">{{ucwords($entry->name)}}</a>
                             </td>
-                            <td>{{$entry->division}}</td>
                             <td id="status">{{$entry->status}}</td>
                             <td align="center">
                                 @if(!empty($entry->notes))

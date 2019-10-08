@@ -93,7 +93,7 @@ Route::middleware(['web'])->group(function() {
         // event entries
         Route::get('events/manage/evententries/{eventurl}', 'Events\Auth\EventEntryController@getEventEntriesView');
         Route::get('events/manage/evententries/{eventurl}/add', 'Events\Auth\EventEntryController@getEventEntryAddView');
-        Route::get('events/manage/evententries/{eventurl}/update/{username}', 'Events\Auth\EventEntryController@getEventEntryUpdateView');
+        Route::get('events/manage/evententries/{eventurl}/update/{username}', 'Events\Auth\EventEntryController@getEventEntryUpdateView')->name('evententryupdate');
         Route::get('events/manage/evententries/{eventurl}/email/{username}', 'Events\Auth\EventEntryController@getEventEntryEmailView');
         Route::post('event/registration/create/admin/{eventurl}', 'Events\Auth\EventRegistrationController@createAdminRegistration');
         Route::post('event/registration/update/admin/{eventurl}', 'Events\Auth\EventRegistrationController@updateAdminRegistration');
@@ -201,6 +201,9 @@ Route::middleware(['web'])->group(function() {
         Route::post('ajax/events/manage/{eventurl}/updateadmin', 'Events\Auth\EventAdminController@updateUser');
         Route::post('ajax/events/manage/{eventurl}/deleteadmin', 'Events\Auth\EventAdminController@deleteUser');
         Route::post('ajax/events/manage/{eventurl}/addadmin', 'Events\Auth\EventAdminController@addUser');
+
+        // contact
+        Route::post('ajax/events/contact/', 'Events\Auth\EventRegistrationController@sendContactToAdmin');
 
         /**
          * EXPORT

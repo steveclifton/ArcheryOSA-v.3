@@ -80,7 +80,8 @@ class UpdateRegistration extends FormRequest
             'teamfinal' => 'nullable',
             'mixedteamfinal' => 'nullable',
             'subclass' => 'nullable',
-            'mqs'      => $mqs
+            'mqs'      => $mqs,
+            'eventcompetitionid' => 'nullable'
 
         ];
     }

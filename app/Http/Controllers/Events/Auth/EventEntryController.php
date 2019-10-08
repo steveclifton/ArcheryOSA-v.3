@@ -76,16 +76,12 @@ class EventEntryController extends EventController
             $leaguecompround = $leaguecompround->eventcompetitionid . '-' . $leaguecompround->roundids;
         }
 
-        $multipledivisions = $event->multipledivisions;
         $divisionsfinal    = [];
         $competitionsfinal = [];
         foreach ($eventcompetitions as $eventcompetition) {
 
-            if (empty($multipledivisions) && $eventcompetition->multipledivisions) {
-                $multipledivisions = true;
-            }
+            $eventcompetition->divisioncomplete = $divisions = Division::wherein('divisionid', json_decode($eventcompetition->divisionids))->orderBy('bowtype')->get();
 
-            $divisions = Division::wherein('divisionid', json_decode($eventcompetition->divisionids))->orderBy('bowtype')->get();
             foreach ($divisions as $division) {
                 $divisionsfinal[$division->divisionid] = $division;
             }
@@ -98,6 +94,8 @@ class EventEntryController extends EventController
             }
 
             $competitionsfinal[$eventcompetition->date][$eventcompetition->label] = $eventcompetition;
+
+            $eventcomps[] = $eventcompetition;
         }
 
         $clubs = Club::where('visible', 1)->orderby('label')->get();
@@ -111,7 +109,7 @@ class EventEntryController extends EventController
 
         return view('events.auth.management.entries.add',
             compact('event', 'schools', 'clubs', 'divisionsfinal', 'competitionsfinal',
-                'leaguecompround', 'multipledivisions', 'countrys'));
+                'leaguecompround', 'eventcomps', 'countrys'));
     }
 
     public function getEventEntryUpdateView(Request $request)
@@ -134,24 +132,19 @@ class EventEntryController extends EventController
             SELECT *
             FROM `eventcompetitions`
             WHERE `eventid` = :eventid
+            ORDER BY `date` ASC
         ", ['eventid' => $event->eventid]);
 
-        $leaguecompround = null;
-        if ($event->isLeague()) {
-            $leaguecompround = reset($eventcompetitions);
-            $leaguecompround = $leaguecompround->eventcompetitionid . '-' . $leaguecompround->roundids;
+
+        if (empty($eventcompetitions)) {
+            return back()->with('failure', 'Unable to get entry form');
         }
 
-        $multipledivisions = $event->multipledivisions;
-        $divisionsfinal    = [];
-        $competitionsfinal = [];
+
+        $divisionsfinal = [];
         foreach ($eventcompetitions as $eventcompetition) {
+            $eventcompetition->divisioncomplete = $divisions = Division::wherein('divisionid', json_decode($eventcompetition->divisionids))->orderBy('bowtype')->get();
 
-            if (empty($multipledivisions) && $eventcompetition->multipledivisions) {
-                $multipledivisions = true;
-            }
-
-            $divisions = Division::wherein('divisionid', json_decode($eventcompetition->divisionids))->orderBy('bowtype')->get();
             foreach ($divisions as $division) {
                 $divisionsfinal[$division->divisionid] = $division;
             }
@@ -163,7 +156,21 @@ class EventEntryController extends EventController
                 $eventcompetition->rounds = Round::wherein('roundid', json_decode($eventcompetition->roundids))->get();
             }
 
-            $competitionsfinal[$eventcompetition->date][$eventcompetition->label] = $eventcompetition;
+            $eventcomps[] = $eventcompetition;
+        }
+
+
+        // Get an array of the users entry divisions
+        $userentrydivisions = [];
+        $userentryrounds = [];
+        foreach ($evententry->entrycompetitions() as $entrycomp) {
+
+            if ($event->isleague()) {
+                $userentrydivisions[] = $entrycomp->divisionid;
+                continue;
+            }
+            $userentrydivisions[$entrycomp->eventcompetitionid] = $entrycomp->divisionid;
+            $userentryrounds[$entrycomp->eventcompetitionid] = $entrycomp->roundid;
         }
 
         $clubs = Club::where('visible', 1)->orderby('label')->get();
@@ -172,20 +179,11 @@ class EventEntryController extends EventController
         if ($event->schoolrequired) {
             $schools = School::where('visible', 1)->orderby('label')->get();
         }
-
-        $entrycompetitions = EntryCompetition::where('entryid', $evententry->entryid)->get();
-
-        $entrycompetitionids = [];
-        foreach ($entrycompetitions as $entrycompetition) {
-            $entrycompetitionids[$entrycompetition->eventcompetitionid][$entrycompetition->roundid] = $entrycompetition->roundid;
-        }
         $countrys = Countries::all();
 
         return view('events.auth.management.entries.update',
-                compact('user', 'entrycompetitionids', 'evententry', 'event', 'schools',
-                        'clubs', 'divisionsfinal', 'competitionsfinal',
-                        'leaguecompround', 'multipledivisions', 'countrys'
-                        )
+                compact('user', 'evententry', 'event', 'schools',
+                        'clubs', 'divisionsfinal', 'countrys', 'eventcomps','userentrydivisions', 'userentryrounds')
                     );
     }
 

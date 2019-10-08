@@ -18,7 +18,7 @@
                     <a href="/event/results/{{$event->eventurl}}">
                         <div class="card m-b-20">
                             <img class="card-img-top img-fluid" src="{{URL::asset('/images/events/' . $event->imagedt)}}"
-                                 alt="Card image cap">
+                                 alt="{{$event->label}}">
                             <div class="card-body">
                                 <h4 class="card-title font-18 mt-0">{{$event->label}}</h4>
                                 <p class="card-text">Start : {!! date('d F Y', strtotime($event->start)) !!}</p>

@@ -69,7 +69,7 @@ class CreateRegistration extends FormRequest
             'gender'         => 'nullable',
             'pickup'         => 'nullable',
             'country'        => 'required',
-            'roundids'       => 'required',
+            'roundids'       => 'nullable',
             'divisionid'     => 'required',
             'dateofbirth'    => $dobstate,
             'bib'            => 'nullable',
@@ -79,7 +79,8 @@ class CreateRegistration extends FormRequest
             'teamfinal' => 'nullable',
             'mixedteamfinal' => 'nullable',
             'subclass' => 'nullable',
-            'mqs'      => $mqs
+            'mqs'      => $mqs,
+            'eventcompetitionid' => 'nullable'
         ];
     }
 

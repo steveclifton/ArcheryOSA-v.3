@@ -59,7 +59,6 @@
                     </div>
                 </div>
 
-
                 <div class="form-group row">
                     <label for="label" class="col-sm-12 col-md-3 col-form-label">Email*</label>
                     <div class="col-md-9">
@@ -72,7 +71,6 @@
                         @endif
                     </div>
                 </div>
-
 
                 <div class="form-group row">
                     <label for="label" class="col-sm-12 col-md-3 col-form-label">Bib Number</label>
@@ -109,7 +107,7 @@
                 @endif
 
                 <div class="form-group row">
-                    <label for="label" class="col-sm-12 col-md-3 col-form-label">Membership</label>
+                    <label for="label" class="col-sm-12 col-md-3 col-form-label">Membership{{$event->membershiprequired ? '*' : ''}}</label>
                     <div class="col-md-9">
                         <input name="membership" type="text" class="form-control"
                                value="{{old('membership') ?? $evententry->membership ?? '' }}">
@@ -123,7 +121,6 @@
                                value="{{old('phone') ?? $evententry->phone ?? ''}}"  >
                     </div>
                 </div>
-
 
                 <div class="form-group row">
                     <label class="col-sm-12 col-md-3 col-form-label">Address</label>
@@ -203,62 +200,7 @@
 
                 @endif
 
-
-                @php
-                    $divArr = explode(',', $evententry->divisionid);
-                @endphp
-
-                @if ($event->isLeague() || $multipledivisions)
-                    <div class="form-group row">
-                        <label class="col-sm-12 col-md-3 col-form-label">Division*</label>
-                        <div class="col-md-9">
-                            @foreach($divisionsfinal as $division)
-                                <div id="checkb" class="checkbox checkbox-primary">
-                                    <input name="multipledivs[]" id="divids-{{$division->divisionid}}" type="checkbox" value="{{$division->divisionid}}"
-                                            {!! in_array($division->divisionid, $divArr) ? 'checked' : '' !!}>
-                                    <label for="divids-{{$division->divisionid}}">
-                                        {{$division->label}}
-
-                                    </label>
-                                </div>
-
-                            @endforeach
-                            @if ($errors->has('divisionid'))
-                                <span class="invalid-feedback" role="alert">
-                                <strong>{{ $errors->first('divisionid') }}</strong>
-                            </span>
-                            @endif
-                            {{--<span class="help-block"><small>Select an organisation the division belongs to</small></span>--}}
-                        </div>
-                    </div>
-                    <input type="hidden" name="divisionid" id="mDivid">
-                @else
-                    <div class="form-group row">
-                        <label class="col-sm-12 col-md-3 col-form-label">Division*</label>
-                        <div class="col-md-9">
-                            <select name="divisionid" class="form-control {{ $errors->has('divisionid') ? 'is-invalid' : '' }}" required>
-                                <option disabled selected>Pick one</option>
-                                @foreach($divisionsfinal as $division)
-                                    <option value="{{$division->divisionid}}"
-                                            {!! (old('divisionid') ?? $evententry->divisionid ) == $division->divisionid ? 'selected' : '' !!}>
-                                        {{$division->label}}
-                                    </option>
-                                @endforeach
-                            </select>
-                            @if ($errors->has('divisionid'))
-                                <span class="invalid-feedback" role="alert">
-                                <strong>{{ $errors->first('divisionid') }}</strong>
-                            </span>
-                            @endif
-                            {{--<span class="help-block"><small>Select an organisation the division belongs to</small></span>--}}
-                        </div>
-                    </div>
-                @endif
-
-
-
-
-                <div class="form-group row justify-content-end">
+                <div class="form-group row">
                     <label class="col-sm-12 col-md-3 col-form-label">Gender*</label>
                     <div class=" col-md-9">
                         <div class="radio radio-primary">
@@ -274,56 +216,24 @@
                     </div>
                 </div>
 
-                @if ($event->isLeague())
-                    <input name="roundids" type="hidden" id="jsfields" value="{{$leaguecompround}}"/>
-                @else
+                @if (!empty($event->pickup))
                     <div class="form-group row">
-                        <label class="col-sm-12 col-md-3 col-form-label">Competitions*</label>
+                        <label class="col-sm-12 col-md-3 col-form-label">Airport Pickup</label>
                         <div class="col-md-9">
-                            <div class="">
-                                <div class="alert-danger">WARNING - changing a users rounds or divisions will result it scores being lost for effected <br>
-                                changes, if scores already exist, please check scores after any changes.</div>
-                                <br>
-                                <div class="card-box">
-                                    <h4 class="text-dark header-title m-t-0 m-b-30">Select the competitions you wish to enter</h4>
-                                    @php $i = 1 @endphp
-                                    <div id="checkTree">
-                                        @foreach($competitionsfinal as $date => $eventcompetition)
-                                            <ul>
-                                                <li data-jstree='{"opened":true, "icon": "ion-calendar"}'>{{date('D d F', strtotime($date))}}
-                                                    @foreach($eventcompetition as $label => $ec)
-                                                    <ul>
-                                                        <li data-jstree='{"opened":true, "icon": "ion-calendar"}'>{{$label}}
-                                                            <ul>
-                                                            @foreach($ec->rounds as $round)
-                                                                <li data-eventcompetitionid="{{$ec->eventcompetitionid}}"
-                                                                    data-roundid="{{$round->roundid}}"
-                                                                    data-jstree='{"opened":true, "icon": "ion-star",
-                                                                    "selected":"{{ !empty($entrycompetitionids[$ec->eventcompetitionid][$round->roundid]) ? 'true' : '' }}"
-                                                                    }'>{{$round->label}}
-                                                            @endforeach
-                                                            </ul>
-                                                        </li>
-                                                    </ul>
-                                                    @endforeach
-                                                </li>
-                                            </ul>
-                                        @endforeach
-                                    </div>
+                            <div id="checkb" class="checkbox checkbox-primary">
+                                <input name="pickup" type="checkbox" id="pickupc" {!! !empty($evententry->gender) ? 'selected' : '' !!}>
+                                <label for="pickupc">
+                                    Required
+                                </label>
+                            </div>
+                            <span class="help-block"><small>Please let us know if you need airport transport</small></span>
 
-                                </div>
-                            </div><!-- end col -->
-                            <div id="comperror" class="alert alert-danger hidden">Please select at least 1 competition</div>
                         </div>
                     </div>
-                    <input name="roundids" type="hidden" id="jsfields" value=""/>
                 @endif
 
-                <div class="form-group mb-0 justify-content-start row">
-                    <div class="col-sm-12 col-md-3 col-form-label"></div>
-                    <div class="col-3">
-                        <button type="submit" class="myButton btn btn-inverse btn-info waves-effect waves-light">Update</button>
-                    </div>
+                <div id="eventcompforms">
+                    @include('events.public.registration.eventcompform.compformupdate-admin')
                 </div>
 
                 @if (!empty($event->mqs))
@@ -428,6 +338,14 @@
                             <option value="IN" {!! $evententry->subclass == 'IN' ? 'selected' : '' !!}>Internernational Competitor (non-ArcheryNZ but affiliated to World Archery)</option>
                             <option value="OP" {!! $evententry->subclass == 'OP' ? 'selected' : '' !!}>Open category (non-ArcheryNZ but permitted to shoot as a one-off exception)</option>
                         </select>
+                    </div>
+                </div>
+
+
+                <div class="form-group mb-0 justify-content-start row">
+                    <div class="col-sm-12 col-md-3 col-form-label"></div>
+                    <div class="col-3">
+                        <button type="submit" class="myButton btn btn-inverse btn-info waves-effect waves-light">Update</button>
                     </div>
                 </div>
 

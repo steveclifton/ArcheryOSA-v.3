@@ -9,6 +9,7 @@ trait UserResults
 {
     private function getUserTop10Scores($userid, $divisionid, $eventid)
     {
+
         $result = DB::select("
             SELECT sum(`total`) as total
             FROM (SELECT `total`
@@ -20,7 +21,6 @@ trait UserResults
                     LIMIT 10
                 ) AS total
             ", ['userid' => $userid, 'divisionid' => $divisionid, 'eventid' => $eventid]);
-
 
         return !empty($result[0]) ? $result[0] : 0;
 

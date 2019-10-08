@@ -24,91 +24,64 @@
             @include('template.alerts')
 
 
-            <h4 class="m-t-0 m-b-30 text-center addFormHeader header-title">Update Event Entry</h4>
+            <h4 class="m-t-0 m-b-30 text-center addFormHeader header-title">Event Entry</h4>
 
+
+            <br>
             <form class="form-horizontal myForms treeForm"
                   method="POST"
                   action="/event/registration/update/{{$event->eventurl}}"
                   role="form">
                 @csrf
-                <meta name="csrf-token" content="{{ csrf_token() }}">
-                <input name="eventid" type="hidden" value="{{$event->eventid}}">
+
                 <input name="userid" type="hidden" value="{{$user->userid}}">
-
-
 
                 <div class="form-group row">
                     <label for="label" class="col-sm-12 col-md-3 col-form-label">Firstname*</label>
                     <div class="col-md-9">
-                        <input name="firstname" type="text" class="form-control{{ $errors->has('firstname') ? ' is-invalid' : '' }}"
-                               value="{{ old('firstname') ?? $evententry->firstname}}" required >
-                        @if ($errors->has('firstname'))
-                            <span class="invalid-feedback" role="alert">
-                                <strong>{{ $errors->first('firstname') }}</strong>
-                            </span>
-                        @endif
+                        <input name="firstname" type="text" class="form-control"
+                               value="{{ ucwords($evententry->firstname)}}" required >
                     </div>
                 </div>
 
                 <div class="form-group row">
                     <label for="label" class="col-sm-12 col-md-3 col-form-label">Lastname*</label>
                     <div class="col-md-9">
-                        <input name="lastname" type="text" class="form-control{{ $errors->has('lastname') ? ' is-invalid' : '' }}"
-                               value="{{old('lastname') ?? $evententry->lastname ?? ucwords($user->lastname)}}" required >
-                        @if ($errors->has('lastname'))
-                            <span class="invalid-feedback" role="alert">
-                                <strong>{{ $errors->first('lastname') }}</strong>
-                            </span>
-                        @endif
+                        <input name="lastname" type="text" class="form-control"
+                               value="{{ucwords($evententry->lastname)}}" required >
                     </div>
                 </div>
 
 
                 <div class="form-group row">
-                    <label for="label" class="col-sm-12 col-md-3 col-form-label">Email*</label>
+                    <label for="label" class="col-sm-12 col-md-3 col-form-label">Email</label>
                     <div class="col-md-9">
-                        <input name="email" type="text" class="form-control{{ $errors->has('email') ? ' is-invalid' : '' }}"
-                               value="{{ old('email') ?? $evententry->email ?? ucwords($user->email)}}" required >
-                        @if ($errors->has('email'))
-                            <span class="invalid-feedback" role="alert">
-                                <strong>{{ $errors->first('email') }}</strong>
-                            </span>
-                        @endif
+                        <input name="email" type="text" class="form-control"
+                               value="{{ucwords($evententry->email)}}" readonly disabled>
                     </div>
                 </div>
 
                 @if ($event->dateofbirth)
-                <div class="form-group row">
-                    <label for="label" class="col-sm-12 col-md-3 col-form-label">Date of Birth*</label>
-                    <div class="col-md-9">
+                    <div class="form-group row">
+                        <label for="label" class="col-sm-12 col-md-3 col-form-label">Date of Birth</label>
+                        <div class="col-md-9">
 
-                        <input type="text" name="dateofbirth" class="form-control {{ $errors->has('dateofbirth') ? 'is-invalid' : '' }}"
-                               placeholder="dd-mm-yyyy"
-                               value="{{ old('dateofbirth') ?? $evententry->dateofbirth ?? $user->dateofbirth ?? ''}}"
-                               id="datepicker-autoclose">
+                            <input type="text" name="dateofbirth" class="form-control datepicker-autoclose "
+                                   placeholder="dd-mm-yyyy"
+                                   value="{{ $evententry->dateofbirth}}"
+                                   id="datepicker-autoclose">
 
-                        @if ($errors->has('dateofbirth'))
-                            <span class="invalid-feedback" role="alert">
-                                <strong>{{ $errors->first('dateofbirth') }}</strong>
-                            </span>
-                        @endif
-                        <span class="help-block"><small>Required for event registration</small></span>
+                            <span class="help-block"><small>Required for event registration</small></span>
 
+                        </div>
                     </div>
-                </div>
                 @endif
 
                 <div class="form-group row">
-                    <label for="label" class="col-sm-12 col-md-3 col-form-label">Membership Number</label>
+                    <label for="label" class="col-sm-12 col-md-3 col-form-label">Membership Number*</label>
                     <div class="col-md-9">
-                        <input name="membership" type="text" class="form-control {{ $errors->has('membership') ? ' is-invalid' : '' }}"
-                               value="{{ old('membership') ?? $evententry->membership }}"
-                                {!! !empty($event->membershiprequired) ? 'required' : '' !!}>
-                        @if ($errors->has('membership'))
-                            <span class="invalid-feedback" role="alert">
-                                <strong>{{ $errors->first('membership') }}</strong>
-                            </span>
-                        @endif
+                        <input name="membership" type="text" class="form-control"
+                               value="{{$evententry->membership }}" required>
                         @if (!empty($event->organisationid) && $event->organisationid == 1)
                             <span class="help-block">
                                     <small>Archery New Zealand Membership Number</small>
@@ -121,7 +94,7 @@
                     <label for="label" class="col-sm-12 col-md-3 col-form-label">Phone</label>
                     <div class="col-md-9">
                         <input name="phone" type="text" class="form-control"
-                               value="{{ old('phone') ?? $evententry->phone ?? $user->phone ?? ''}}"  >
+                               value="{{ $evententry->phone ?? ''}}">
                     </div>
                 </div>
 
@@ -129,7 +102,7 @@
                 <div class="form-group row">
                     <label class="col-sm-12 col-md-3 col-form-label">Address</label>
                     <div class="col-md-9">
-                        <textarea name="address" class="form-control" rows="2">{{ old('address') ?? $evententry->address }}</textarea>
+                        <textarea name="address" class="form-control" rows="2">{{ $evententry->address }}</textarea>
                     </div>
                 </div>
 
@@ -138,50 +111,40 @@
                     <label class="col-sm-12 col-md-3 col-form-label">Country*</label>
                     <div class="col-md-9">
                         <select name="country"
-                                class="form-control {{ $errors->has('country') ? 'is-invalid' : '' }}" required>
+                                class="form-control " readonly disabled>
 
                             <option value="NZL">New Zealand</option>
                             <option value="AUS">Australia</option>
                             <option disabled>__________________</option>
                             @foreach ($countrys as $country)
                                 <option value="{{$country->iso_3166_3}}"
-                                        {!! (old('country') ?? $evententry->country ) == $country->iso_3166_3 ? 'selected' : '' !!}>
+                                        {!! ($evententry->country) == $country->iso_3166_3 ? 'selected' : '' !!}>
                                     {{$country->name}}
                                 </option>
                             @endforeach
                         </select>
-                        @if ($errors->has('country'))
-                            <span class="invalid-feedback" role="alert">
-                                <strong>{{ $errors->first('country') }}</strong>
-                            </span>
-                        @endif
                     </div>
                 </div>
 
                 <div class="form-group row">
                     <label class="col-sm-12 col-md-3 col-form-label">Notes</label>
                     <div class="col-md-9">
-                        <textarea name="notes" class="form-control" rows="2">{{ old('notes') ?? $evententry->notes}}</textarea>
+                        <textarea name="notes" class="form-control" rows="2">{{ $evententry->notes}}</textarea>
                     </div>
                 </div>
 
                 <div class="form-group row">
                     <label class="col-sm-12 col-md-3 col-form-label">Club</label>
                     <div class="col-md-9">
-                        <select name="clubid" class="form-control  {{ $errors->has('clubid') ? 'is-invalid' : '' }}">
+                        <select name="clubid" class="form-control">
                             @if(empty($event->clubrequired)) <option value="0">None</option> @endif
                             @foreach($clubs as $club)
                                 <option value="{{$club->clubid}}"
-                                        {!!  (old('clubid') ?? $evententry->clubid) == $club->clubid ? 'selected' : '' !!}>
+                                        {!!  ($evententry->clubid) == $club->clubid ? 'selected' : '' !!}>
                                     {{$club->label}}
                                 </option>
                             @endforeach
                         </select>
-                        @if ($errors->has('clubid'))
-                            <span class="invalid-feedback" role="alert">
-                                <strong>{{ $errors->first('clubid') }}</strong>
-                            </span>
-                        @endif
                     </div>
                 </div>
 
@@ -190,97 +153,39 @@
                         <label class="col-sm-12 col-md-3 col-form-label">School*</label>
                         <div class="col-md-9">
                             <select name="schoolid"
-                                    class="form-control {{ $errors->has('schoolid') ? 'is-invalid' : '' }}" required>
+                                    class="form-control">
 
                                 @foreach($schools as $school)
                                     <option value="{{$school->schoolid}}"
-                                            {!! ( (old('schoolid') ?? $evententry->schoolid) == $school->schoolid) ? 'selected' : '' !!}>
+                                            {!! ( ($evententry->schoolid) == $school->schoolid) ? 'selected' : '' !!}>
                                         {{$school->label}}
                                     </option>
                                 @endforeach
                             </select>
-                            @if ($errors->has('schoolid'))
-                                <span class="invalid-feedback" role="alert">
-                                <strong>{{ $errors->first('schoolid') }}</strong>
-                            </span>
-                            @endif
+
                         </div>
                     </div>
 
                 @endif
 
                 <div class="form-group row">
-                    <label class="col-sm-12 col-md-3 col-form-label">Gender*</label>
+                    <label class="col-sm-12 col-md-3 col-form-label">Gender</label>
                     <div class="col-md-9">
                         <select name="gender"
-                                class="form-control {{ $errors->has('gender') ? 'is-invalid' : '' }}" required>
+                                class="form-control" readonly="" disabled>
                             <option disabled selected>Select one</option>
-                            <option value="m" {!! (old('gender') ?? $evententry->gender == 'm') ? 'selected' : '' !!}>Male</option>
-                            <option value="f" {!! (old('gender') ?? $evententry->gender == 'f') ? 'selected' : '' !!}>Female</option>
+                            <option value="m" {!! ($evententry->gender == 'm') ? 'selected' : '' !!}>Male</option>
+                            <option value="f" {!! ($evententry->gender == 'f') ? 'selected' : '' !!}>Female</option>
                         </select>
-                        @if ($errors->has('gender'))
-                            <span class="invalid-feedback" role="alert">
-                                <strong>{{ $errors->first('gender') }}</strong>
-                            </span>
-                        @endif
                     </div>
                 </div>
 
-
-                @if ($event->isLeague() || $multipledivisions)
-                    <div class="form-group row">
-                        <label class="col-sm-12 col-md-3 col-form-label">Division*</label>
-                        <div class="col-md-9">
-                            @foreach($divisionsfinal as $division)
-                                <div id="checkb" class="checkbox checkbox-primary">
-                                    <input name="multipledivs[]" id="divids-{{$division->divisionid}}" type="checkbox" value="{{$division->divisionid}}"
-                                            {!! in_array($division->divisionid, $divisions) ? 'checked' : '' !!}>
-                                    <label for="divids-{{$division->divisionid}}">
-                                        {{$division->label}}
-                                    </label>
-                                </div>
-
-                            @endforeach
-                            @if ($errors->has('divisionid'))
-                                <span class="invalid-feedback" role="alert">
-                                <strong>{{ $errors->first('divisionid') }}</strong>
-                            </span>
-                            @endif
-                            {{--<span class="help-block"><small>Select an organisation the division belongs to</small></span>--}}
-                        </div>
-                    </div>
-                    <input type="hidden" name="divisionid" id="mDivid">
-                @else
-                    <div class="form-group row">
-                        <label class="col-sm-12 col-md-3 col-form-label">Division*</label>
-                        <div class="col-md-9">
-                            <select name="divisionid" class="form-control {{ $errors->has('divisionid') ? 'is-invalid' : '' }}" required>
-                                <option disabled selected >Pick one</option>
-                                @foreach($divisionsfinal as $division)
-                                    <option value="{{$division->divisionid}}"
-                                            {!! (old('divisionid') ?? $evententry->divisionid) == $division->divisionid ? 'selected' : '' !!}>
-                                        {{$division->label}}
-                                    </option>
-                                @endforeach
-                            </select>
-                            @if ($errors->has('divisionid'))
-                                <span class="invalid-feedback" role="alert">
-                                    <strong>{{ $errors->first('divisionid') }}</strong>
-                                </span>
-                            @endif
-                            {{--<span class="help-block"><small>Select an organisation the division belongs to</small></span>--}}
-                        </div>
-                    </div>
-                @endif
-
-
-
                 @if (!empty($event->pickup))
                     <div class="form-group row">
-                        <label class="col-sm-12 col-md-3 col-form-label">Airport Pickup</label>
+                        <label class="col-sm-12 col-md-3 col-form-label">Airport Pickup*</label>
                         <div class="col-md-9">
                             <div id="checkb" class="checkbox checkbox-primary">
-                                <input name="pickup" type="checkbox" id="pickupc" {!! ($evententry->pickup ?? old('pickup'))  ? 'checked' : '' !!}>
+                                <input name="pickup" type="checkbox" id="pickupc" {!! ($evententry->pickup )  ? 'checked' : '' !!}>
                                 <label for="pickupc">
                                     Required
                                 </label>
@@ -289,51 +194,32 @@
                         </div>
                     </div>
                 @endif
-
-                @if ($event->eventtypeid == 2)
-                    <input name="roundids" type="hidden" id="jsfields" value="{{$leaguecompround}}"/>
-                @else
-                    <div class="form-group row">
-                        <label class="col-sm-12 col-md-3 col-form-label">Competitions*</label>
-                        <div class="col-md-9">
-                            <div class="">
-                                <div class="card-box">
-                                    <h4 class="text-dark header-title m-t-0 m-b-30">Select the competitions you wish to enter</h4>
-                                    @php $i = 1 @endphp
-                                    <div id="checkTree">
-                                        @foreach($competitionsfinal as $date => $eventcompetition)
-                                            <ul>
-                                                <li data-jstree='{"opened":true, "icon": "ion-calendar","disabled":true}'>{{date('D d F', strtotime($date))}}
-                                                    @foreach($eventcompetition as $label => $ec)
-                                                    <ul>
-                                                        <li data-jstree='{"opened":true, "icon": "ion-calendar","disabled":true}'>{{$label}}
-                                                        <ul>
-                                                            @foreach($ec->rounds as $round)
-                                                                <li data-eventcompetitionid="{{$ec->eventcompetitionid}}"
-                                                                    data-roundid="{{$round->roundid}}"
-                                                                    data-jstree='{"opened":true, "icon": "ion-star",
-                                                    "selected":"{{ !empty($entrycompetitionids[$ec->eventcompetitionid][$round->roundid]) ? 'true' : '' }}"
-                                                    }'>{{$round->label}}
-                                                            @endforeach
-                                                        </ul>
-                                                        </li>
-                                                    </ul>
-                                                    @endforeach
-                                                </li>
-                                            </ul>
-                                        @endforeach
-                                    </div>
-
-                                </div>
-                                </div><!-- end col -->
-                            <div id="comperror" class="alert alert-danger hidden">Please select at least 1 competition</div>
-                        </div>
+                <br>
+                <div class="form-group mb-0 justify-content-start row">
+                    <div class="col-sm-12 col-md-3 col-form-label"></div>
+                    <div class="col-3">
+                        <button type="submit" class="myButton btn btn-inverse btn-info waves-effect waves-light">Update</button>
                     </div>
-                    <input name="roundids" type="hidden" id="jsfields" value="" />
-                @endif
+                </div>
+                <br>
+                <hr>
+
+                <br>
+                <h5 style="text-align: center; color: lightcoral">To change any of the below details please contact the event organiser</h5>
+
+                <div class="widget-inline-box text-center">
+                    <button type="button" class="btn btn-warning waves-effect waves-light"
+                            data-toggle="modal"
+                            data-target="#myModal">Contact
+                    </button>
+                </div>
+
+                <div id="eventcompforms">
+                    @include('events.public.registration.eventcompform.compformupdate')
+                </div>
 
                 @if (!empty($event->mqs))
-
+                    <hr>
                     @php
                         $oldmqs = old('mqs');
                         if (!is_array($oldmqs)) {
@@ -346,7 +232,7 @@
                     <div class="form-group row">
                         <label class="col-sm-12 col-md-3 col-form-label">MQS Score 1*</label>
                         <div class="col-md-6">
-                            <input name="mqs[]" type="text" class="form-control" value="{{!empty($oldmqs[0]) ? $oldmqs[0] : 0 }}" required >
+                            <input name="mqs[]" type="text" class="form-control" value="{{!empty($oldmqs[0]) ? $oldmqs[0] : 0 }}" disabled readonly>
                             <span class="help-block"><small>Leave as 0 if not applicable</small></span>
 
                         </div>
@@ -355,7 +241,7 @@
                     <div class="form-group row">
                         <label class="col-sm-12 col-md-3 col-form-label">MQS Score 2*</label>
                         <div class="col-md-6">
-                            <input name="mqs[]" type="text" class="form-control" value="{{!empty($oldmqs[1]) ? $oldmqs[1] : 0 }}" required >
+                            <input name="mqs[]" type="text" class="form-control" value="{{!empty($oldmqs[1]) ? $oldmqs[1] : 0 }}" disabled readonly>
                             <span class="help-block"><small>Leave as 0 if not applicable</small></span>
 
                         </div>
@@ -364,25 +250,92 @@
                     <div class="form-group row">
                         <label class="col-sm-12 col-md-3 col-form-label">MQS Score 3*</label>
                         <div class="col-md-6">
-                            <input name="mqs[]" type="text" class="form-control" value="{{!empty($oldmqs[2]) ? $oldmqs[2] : 0 }}" required >
+                            <input name="mqs[]" type="text" class="form-control" value="{{!empty($oldmqs[2]) ? $oldmqs[2] : 0 }}" disabled readonly>
                             <span class="help-block"><small>Leave as 0 if not applicable</small></span>
-
                         </div>
-
                     </div>
                 @endif
-
-                <hr>
-                <div class="form-group mb-0 justify-content-start row">
-                    <div class="col-sm-12 col-md-3 col-form-label"></div>
-                    <div class="col-3">
-                        <button type="submit" class="myButton btn btn-inverse btn-info waves-effect waves-light">Update</button>
-                    </div>
-                </div>
 
             </form>
         </div>
     </div>
 
-    <script src="{{URL::asset('/js/events/registration.js')}}"></script>
+
+    <div id="myModal" class="modal fade"
+         tabindex="-1" role="dialog"
+         aria-labelledby="full-width-modalLabel"
+         aria-hidden="true" style="display: none;">
+
+        <div class="modal-dialog ">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 class="modal-title" id="full-width-modalLabel">Contact</h4>
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                </div>
+                <br>
+                <div class="alert" id="sendingmessage">
+
+                </div>
+                <div class="modal-body">
+                    <div class="col-lg-12">
+                        <div class="form-group row">
+                            <div class="col-md-12">
+                                <textarea id="contactinput" class="form-control" rows="5"></textarea>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-success waves-effect" id="submitcontact">
+                        Send
+                    </button>
+                    <button type="button" class="btn btn-secondary waves-effect" id="closemodal" data-dismiss="modal">
+                        Close
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <meta name="csrf-token" content="{{ csrf_token() }}">
+    <script>
+        $(function() {
+
+            $(document).on('click', '#submitcontact', function(e){
+                e.preventDefault();
+                var message = $('#contactinput').val();
+
+                $.ajax({
+                    method: "POST",
+                    headers: {
+                        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                    },
+                    url: "/ajax/events/contact/",
+                    data: {
+                        entryid: '{{$evententry->entryid}}',
+                        message: message
+                    }
+                }).done(function( json ) {
+
+                    if (json) {
+
+                        $('#sendingmessage').addClass(' alert-success').html("Message sent to organiser");
+
+                        setTimeout(function () {
+                            $('#closemodal').trigger('click');
+                        }, 1000);
+
+                        return;
+                    }
+
+                    $('#sendingmessage').addClass(' alert-danger').html("Message not sent, please contact info@archeryosa.com");
+
+                });
+
+
+            })
+
+        });
+    </script>
+
 @endsection

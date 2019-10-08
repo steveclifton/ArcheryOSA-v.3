@@ -124,7 +124,8 @@ class EventResultsController extends EventController
      */
     public function getEventOverallResults(Event $event, $apicall = false)
     {
-        $entrys = $this->getEventEntrySorted($event->eventid);
+        $entrys = $this->getEventEntrySorted($event->eventid, null, true);
+
 
         // get all the scores once, sort them
         $flatscores = DB::select("
@@ -460,7 +461,7 @@ class EventResultsController extends EventController
      * @param $eventid
      * @return array|bool|mixed
      */
-    public function getEventEntrySorted($eventid, $userid = null)
+    public function getEventEntrySorted($eventid, $userid = null, $groupbyentry = false)
     {
         $and = '';
         $args = ['eventid' => $eventid];
@@ -469,20 +470,25 @@ class EventResultsController extends EventController
             $args['userid'] = $userid;
         }
 
+        $groupby = '';
+        if (!empty($groupbyentry)) {
+            $groupby = " GROUP BY `ee`.`entryid` ";
+        }
+
         $entrys = DB::select("
-            SELECT ee.userid, ee.firstname, ee.lastname, ee.gender, ec.roundid, ee.divisionid,  
+            SELECT ee.userid, ee.firstname, ee.lastname, ee.gender, ec.roundid, ec.divisionid,  
                   d.label as divisionname, d.bowtype, r.unit, r.code, r.label as roundname, s.label as schoolname, u.username
             FROM `evententrys` ee
             JOIN `users` u ON (ee.userid = u.userid)
-            JOIN `entrycompetitions` ec USING (`entryid`)
+            JOIN `entrycompetitions` ec ON (ec.`entryid` = ee.`entryid`)
             JOIN `divisions` d ON (`ec`.`divisionid` = `d`.`divisionid`)
             JOIN `rounds` r ON (ec.roundid = r.roundid)
-            JOIN `scores_flat` sf ON (ee.entryid = sf.entryid)
+            JOIN `scores_flat` sf ON (ee.entryid = sf.entryid AND `sf`.`divisionid` = ec.divisionid)
             LEFT JOIN `schools` s ON (ee.schoolid = s.schoolid)
             WHERE `ee`.`eventid` = :eventid
             AND `ee`.`entrystatusid` = 2
-            $and
-            GROUP BY `ee`.`entryid`
+            $and 
+            $groupby
             ORDER BY d.label, ee.userid, ec.eventcompetitionid
         ", $args);
 

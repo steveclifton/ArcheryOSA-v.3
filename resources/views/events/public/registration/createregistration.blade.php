@@ -35,8 +35,6 @@
                 <input name="eventid" type="hidden" value="{{$event->eventid}}">
                 <input name="userid" type="hidden" value="{{$user->userid}}">
 
-
-
                 <div class="form-group row">
                     <label for="label" class="col-sm-12 col-md-3 col-form-label">Firstname*</label>
                     <div class="col-md-9">
@@ -62,7 +60,6 @@
                         @endif
                     </div>
                 </div>
-
 
                 <div class="form-group row">
                     <label for="label" class="col-sm-12 col-md-3 col-form-label">Email*</label>
@@ -98,7 +95,7 @@
                 @endif
 
                 <div class="form-group row">
-                    <label for="label" class="col-sm-12 col-md-3 col-form-label">Membership Number</label>
+                    <label for="label" class="col-sm-12 col-md-3 col-form-label">Membership Number {!! !empty($event->membershiprequired) ? '*' : '' !!}</label>
                     <div class="col-md-9">
                         <input name="membership" type="text" class="form-control {{ $errors->has('email') ? ' is-invalid' : '' }}"
                                value="{{old('membership') ?? $user->membership}}" {!! !empty($event->membershiprequired) ? 'required' : '' !!}>
@@ -122,7 +119,6 @@
                                value="{{old('phone') ?? $user->phone ?? ''}}"  >
                     </div>
                 </div>
-
 
                 <div class="form-group row">
                     <label class="col-sm-12 col-md-3 col-form-label">Address</label>
@@ -154,7 +150,6 @@
                         @endif
                     </div>
                 </div>
-
 
                 <div class="form-group row">
                     <label class="col-sm-12 col-md-3 col-form-label">Notes</label>
@@ -226,56 +221,6 @@
                     </div>
                 </div>
 
-
-                @if ($event->isLeague() || $multipledivisions)
-                    <div class="form-group row">
-                        <label class="col-sm-12 col-md-3 col-form-label">Division*</label>
-                        <div class="col-md-9">
-                            @foreach($divisionsfinal as $division)
-                                <div id="checkb" class="checkbox checkbox-primary">
-                                    <input name="multipledivs[]" id="divids-{{$division->divisionid}}" type="checkbox" value="{{$division->divisionid}}"
-                                            {!! old('divisionid') == $division->divisionid ? 'selected' : '' !!}>
-                                    <label for="divids-{{$division->divisionid}}">
-                                        {{$division->label}}
-                                    </label>
-                                </div>
-
-                            @endforeach
-                            @if ($errors->has('divisionid'))
-                                <span class="invalid-feedback" role="alert">
-                                    <strong>{{ $errors->first('divisionid') }}</strong>
-                                </span>
-                            @endif
-                            {{--<span class="help-block"><small>Select an organisation the division belongs to</small></span>--}}
-                        </div>
-                    </div>
-                    <input type="hidden" name="divisionid" id="mDivid">
-                @else
-                    <div class="form-group row">
-                        <label class="col-sm-12 col-md-3 col-form-label">Division*</label>
-                        <div class="col-md-9">
-                            <select name="divisionid" class="form-control {{ $errors->has('divisionid') ? 'is-invalid' : '' }}" required>
-                                <option disabled selected>Select one</option>
-                                @foreach($divisionsfinal as $division)
-                                    <option value="{{$division->divisionid}}"
-                                            {!! old('divisionid') == $division->divisionid ? 'selected' : '' !!}>
-                                        {{$division->label}}
-                                    </option>
-                                @endforeach
-                            </select>
-                            @if ($errors->has('divisionid'))
-                                <span class="invalid-feedback" role="alert">
-                                <strong>{{ $errors->first('divisionid') }}</strong>
-                            </span>
-                            @endif
-                        </div>
-                    </div>
-                @endif
-
-
-
-
-
                 @if (!empty($event->pickup))
                     <div class="form-group row">
                         <label class="col-sm-12 col-md-3 col-form-label">Airport Pickup</label>
@@ -292,49 +237,12 @@
                     </div>
                 @endif
 
-                @if ($event->isLeague())
-                    <input name="roundids" type="hidden" id="jsfields" value="{{$leaguecompround}}"/>
-                @else
-                    <div class="form-group row">
-                        <label class="col-sm-12 col-md-3 col-form-label">Competitions*</label>
-                        <div class="col-md-9">
-                            <div class="">
-                                <div class="card-box">
-                                    <h4 class="text-dark header-title m-t-0 m-b-30">Select the competitions you wish to enter</h4>
-                                    @php $i = 1 @endphp
-                                    <div id="checkTree">
-                                        @foreach($competitionsfinal as $date => $eventcompetition)
-                                        <ul>
-                                            <li data-jstree='{"opened":true, "icon": "ion-calendar", "disabled":true}'>{{date('D d F', strtotime($date))}}
-                                                @foreach($eventcompetition as $label => $ec)
-                                                <ul>
-                                                    <li data-jstree='{"opened":true, "icon": "ion-calendar","disabled":true}'>{{$label}}
-                                                        <ul>
-                                                        @foreach($ec->rounds as $round)
-                                                            <li data-eventcompetitionid="{{$ec->eventcompetitionid}}"
-                                                                data-roundid="{{$round->roundid}}"
-                                                                data-jstree='{"opened":true, "icon": "ion-star"}'>{{$round->label}}
-                                                        @endforeach
-                                                        </ul>
-                                                    </li>
-                                                </ul>
-                                                @endforeach
-                                            </li>
-                                        </ul>
-                                        @endforeach
-                                    </div>
-
-                                </div>
-                            </div><!-- end col -->
-                            <div id="comperror" class="alert alert-danger hidden">Please select at least 1 competition</div>
-                        </div>
-                    </div>
-                    <input name="roundids" type="hidden" id="jsfields" value=""/>
-                @endif
-
+                <div id="eventcompforms">
+                    @include('events.public.registration.eventcompform.compformcreate')
+                </div>
 
                 @if (!empty($event->mqs))
-
+                    <hr>
                     @php $oldmqs = old('mqs') @endphp
                     <h4 class="m-t-0 m-b-30 text-center addFormHeader header-title">MQS Scores Required</h4>
 

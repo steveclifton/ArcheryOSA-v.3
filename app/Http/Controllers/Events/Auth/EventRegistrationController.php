@@ -4,12 +4,15 @@ namespace App\Http\Controllers\Events\Auth;
 
 use App\Http\Requests\Auth\EventRegistration\CreateRegistration;
 use App\Http\Requests\Auth\EventRegistration\UpdateRegistration;
+use App\Jobs\SendArcherContactAdminEmail;
+use App\Jobs\SendArcherRelationConfirm;
 use App\Jobs\SendEntryReceived;
 use App\Jobs\SendEventAdminEntryReceived;
 use App\Models\Club;
 use App\Models\Division;
 use App\Models\EntryCompetition;
 use App\Models\Event;
+use App\Models\EventCompetition;
 use App\Models\EventEntry;
 use App\Models\Round;
 use App\Models\School;
@@ -24,7 +27,34 @@ use Webpatser\Countries\Countries;
 class EventRegistrationController extends EventController
 {
 
+    public function sendContactToAdmin(Request $request)
+    {
+        $evententry = EventEntry::where('entryid', $request->entryid)->first();
 
+        $event = Event::where('eventid', $evententry->eventid)->first();
+
+        if (empty($evententry) || empty($request->message) || empty($event)) {
+            return json_encode(false);
+        }
+
+        $from = ($evententry->firstname ?? '') . ' ' . ($evententry->lastname ?? '');
+
+        $user = User::where('userid', $evententry->userid)->first();
+
+        $entryurl = route('evententryupdate', ['eventurl' => $event->eventurl, 'username' => $user->username]);
+
+        if (empty($user) || empty($entryurl)) {
+            return json_encode(false);
+        }
+
+        SendArcherContactAdminEmail::dispatch($event, $entryurl, $from, $request->message);
+
+        $evententry->contactmessage = $request->message;
+        $evententry->save();
+
+        return json_encode(true);
+
+    }
 
     public function getRegistrationList(Request $request)
     {
@@ -55,8 +85,154 @@ class EventRegistrationController extends EventController
         );
     }
 
-
     public function getRegistration(Request $request)
+    {
+        $event = Event::where('eventurl', $request->eventurl ?? -1)->first();
+
+        $user  = User::where('username', $request->username ?? -1)->first();
+
+        if (empty($event) || empty($user)) {
+            return back();
+        }
+
+        $evententry = EventEntry::where('eventid', $event->eventid)
+                                ->where('userid', $user->userid)
+                                ->first();
+
+        // means they have an entry already, return that
+        if (!empty($evententry)) {
+            return $this->getRegistrationUpdate($event, $user, $evententry);
+        }
+
+        if ($event->isEvent() && !$event->canEnterEvent()) {
+            return redirect('/event/details/' . $event->eventurl)->with('failure', 'Event entrys are closed');
+        }
+
+        $eventcompetitions = DB::select("
+            SELECT *
+            FROM `eventcompetitions`
+            WHERE `eventid` = :eventid
+            ORDER BY `date` ASC
+        ", ['eventid' => $event->eventid]);
+
+
+        if (empty($eventcompetitions)) {
+            return back()->with('failure', 'Unable to get entry form');
+        }
+
+        $leaguecompround = null;
+        if ($event->isLeague()) {
+            $leaguecompround = reset($eventcompetitions);
+            $leaguecompround = $leaguecompround->eventcompetitionid;
+        }
+
+        $divisionsfinal    = [];
+        $competitionsfinal = [];
+        foreach ($eventcompetitions as $eventcompetition) {
+
+            $eventcompetition->divisioncomplete = $divisions = Division::wherein('divisionid', json_decode($eventcompetition->divisionids))->orderBy('bowtype')->get();
+
+            foreach ($divisions as $division) {
+                $divisionsfinal[$division->divisionid] = $division;
+            }
+
+            if ($event->isLeague()) {
+                $eventcompetition->rounds = Round::where('roundid', $eventcompetition->roundids)->get();
+            }
+            else {
+                $eventcompetition->rounds = Round::wherein('roundid', json_decode($eventcompetition->roundids))->get();
+            }
+
+            $competitionsfinal[$eventcompetition->date][$eventcompetition->label] = $eventcompetition;
+
+            $eventcomps[] = $eventcompetition;
+        }
+
+        $clubs = Club::where('visible', 1)->orderby('label')->get();
+
+        $schools = null;
+        if ($event->schoolrequired) {
+            $schools = School::where('visible', 1)->orderby('label')->get();
+        }
+
+        $countrys = Countries::all();
+
+        // Means they need to create an event
+        if (empty($evententry)) {
+            return view('events.public.registration.createregistration',
+                    compact('eventcomps', 'user', 'event', 'clubs', 'divisionsfinal', 'competitionsfinal',
+                        'leaguecompround', 'schools','countrys'));
+        }
+
+    }
+
+    public function getRegistrationUpdate($event, $user, $evententry)
+    {
+        if (empty($event) || empty($user)) {
+            return back()->with('failure', 'Cannot process');
+        }
+
+        $eventcompetitions = DB::select("
+            SELECT *
+            FROM `eventcompetitions`
+            WHERE `eventid` = :eventid
+            ORDER BY `date` ASC
+        ", ['eventid' => $event->eventid]);
+
+
+        if (empty($eventcompetitions)) {
+            return back()->with('failure', 'Unable to get entry form');
+        }
+
+
+        $divisionsfinal = [];
+        foreach ($eventcompetitions as $eventcompetition) {
+            $eventcompetition->divisioncomplete = $divisions = Division::wherein('divisionid', json_decode($eventcompetition->divisionids))->orderBy('bowtype')->get();
+
+            foreach ($divisions as $division) {
+                $divisionsfinal[$division->divisionid] = $division;
+            }
+
+            if ($event->isLeague()) {
+                $eventcompetition->rounds = Round::where('roundid', $eventcompetition->roundids)->get();
+            }
+            else {
+                $eventcompetition->rounds = Round::wherein('roundid', json_decode($eventcompetition->roundids))->get();
+            }
+
+            $eventcomps[] = $eventcompetition;
+        }
+
+
+        // Get an array of the users entry divisions
+        $userentrydivisions = [];
+        $userentryrounds = [];
+        foreach ($evententry->entrycompetitions() as $entrycomp) {
+
+            if ($event->isleague()) {
+                $userentrydivisions[] = $entrycomp->divisionid;
+                continue;
+            }
+            $userentrydivisions[$entrycomp->eventcompetitionid] = $entrycomp->divisionid;
+            $userentryrounds[$entrycomp->eventcompetitionid] = $entrycomp->roundid;
+        }
+
+        $clubs = Club::where('visible', 1)->orderby('label')->get();
+
+        $schools = null;
+        if ($event->schoolrequired) {
+            $schools = School::where('visible', 1)->orderby('label')->get();
+        }
+
+        $countrys = Countries::all();
+
+        return view('events.public.registration.updateregistration',
+            compact('userentrydivisions','userentryrounds','eventcomps', 'evententry', 'user', 'event', 'clubs', 'divisionsfinal', 'schools','countrys'));
+
+    }
+
+
+    public function getEventCompetitionList(Request $request)
     {
 
         $event = Event::where('eventurl', $request->eventurl ?? -1)->first();
@@ -71,88 +247,25 @@ class EventRegistrationController extends EventController
             return redirect('/event/details/' . $event->eventurl)->with('failure', 'Event entrys are closed');
         }
 
-
         $eventcompetitions = DB::select("
-            SELECT *
-            FROM `eventcompetitions`
-            WHERE `eventid` = :eventid
-            ORDER BY `date` ASC
-        ", ['eventid' => $event->eventid]);
+            SELECT ec.*, ee.entrystatusid, u.username, IFNULL(es.label, 'Not Entered') as status
+            FROM `eventcompetitions` ec
+            LEFT JOIN `entrycompetitions` enc ON (ec.eventcompetitionid = enc.eventcompetitionid AND enc.userid = :userid)
+            LEFT JOIN `evententrys` ee ON (ee.eventid = ec.eventid AND ee.userid = :userid1 )
+            LEFT JOIN `users` u ON (u.userid = :userid2)
+            LEFT JOIN `entrystatus` es ON (ee.entrystatusid = es.entrystatusid)
+            WHERE ec.`eventid` = :eventid
+            ORDER BY ec.`date` ASC
+        ", ['eventid' => $event->eventid, 'userid' => $user->userid, 'userid1' => $user->userid, 'userid2' => $user->userid]);
 
-        $leaguecompround = null;
-        if ($event->isLeague()) {
-            $leaguecompround = reset($eventcompetitions);
-            $leaguecompround = $leaguecompround->eventcompetitionid . '-' . $leaguecompround->roundids;
-        }
+        return view('events.public.registration.eventcompetitionlist',
+            compact('user', 'event', 'eventcompetitions'));
 
-        $multipledivisions = $event->multipledivisions;
-        $divisionsfinal    = [];
-        $competitionsfinal = [];
-        foreach ($eventcompetitions as $eventcompetition) {
-
-            if (empty($multipledivisions) && $eventcompetition->multipledivisions) {
-                $multipledivisions = true;
-            }
-
-            $divisions = Division::wherein('divisionid', json_decode($eventcompetition->divisionids))->orderBy('bowtype')->get();
-
-            foreach ($divisions as $division) {
-                $divisionsfinal[$division->divisionid] = $division;
-            }
-
-            if ($event->isLeague()) {
-                $eventcompetition->rounds = Round::where('roundid', $eventcompetition->roundids)->get();
-            }
-            else {
-                $eventcompetition->rounds = Round::wherein('roundid', json_decode($eventcompetition->roundids))->get();
-            }
-
-            $competitionsfinal[$eventcompetition->date][$eventcompetition->label] = $eventcompetition;
-        }
-
-        $clubs = Club::where('visible', 1)->orderby('label')->get();
-
-        $schools = null;
-        if ($event->schoolrequired) {
-            $schools = School::where('visible', 1)->orderby('label')->get();
-        }
-
-        $evententry = EventEntry::where('eventid', $event->eventid)
-            ->where('userid', $user->userid)
-            ->first();
-
-        $countrys = Countries::all();
-
-        // Means they need to create an event
-        if (empty($evententry)) {
-            return view('events.public.registration.createregistration',
-                    compact('user', 'event', 'clubs', 'divisionsfinal', 'competitionsfinal',
-                        'leaguecompround', 'multipledivisions', 'schools','countrys'));
-        }
-
-        $entrycompetitions = EntryCompetition::where('entryid', $evententry->entryid)->get();
-
-        $entrycompetitionids = [];
-        foreach ($entrycompetitions as $entrycompetition) {
-            $entrycompetitionids[$entrycompetition->eventcompetitionid][$entrycompetition->roundid] = $entrycompetition->roundid;
-        }
-
-        $divisions = [];
-        if ($event->isLeague() || $event->multipledivisions) {
-            $divisions = explode(',',$evententry->divisionid);
-        }
-
-
-
-        // Not empty, means they have entered the event already,
-        return view('events.public.registration.updateregistration',
-                compact('user', 'event', 'evententry', 'clubs', 'divisionsfinal', 'competitionsfinal',
-                    'entrycompetitions', 'entrycompetitionids', 'leaguecompround', 'multipledivisions',
-                    'divisions', 'schools','countrys'));
     }
 
     protected function getRequestDetails($validated, $required)
     {
+
         $return = [];
         foreach ($required as $r) {
             if (isset($validated[$r])) {
@@ -163,20 +276,70 @@ class EventRegistrationController extends EventController
         return json_encode($return);
     }
 
+    protected function create($event, $evententry, $eventcompetition, $validated)
+    {
+        if ($event->isleague()) {
+            foreach ($validated['divisionid'] as $divisionid) {
+
+                $entrycompetition = new EntryCompetition();
+                $entrycompetition->entryid            = $evententry->entryid;
+                $entrycompetition->eventid            = $event->eventid;
+                $entrycompetition->userid             = $validated['userid'];
+                $entrycompetition->competitionid      = '';
+                $entrycompetition->eventcompetitionid = $eventcompetition->eventcompetitionid;
+                $entrycompetition->divisionid         = $divisionid;
+                $entrycompetition->competitionid      = '';
+                $entrycompetition->roundid            = $eventcompetition->roundids;
+                $entrycompetition->save();
+            }
+        }
+        else {
+            foreach ($validated['roundids'] as $eventcompetitionid => $roundid) {
+                $divisionid = isset($validated['divisionid'][$eventcompetitionid]) ? $validated['divisionid'][$eventcompetitionid] : null;
+
+                if (empty($divisionid)) {
+                    continue;
+                }
+                $entrycompetition = new EntryCompetition();
+                $entrycompetition->entryid            = $evententry->entryid;
+                $entrycompetition->eventid            = $event->eventid;
+                $entrycompetition->userid             = $validated['userid'];
+                $entrycompetition->competitionid      = '';
+                $entrycompetition->eventcompetitionid = $eventcompetitionid;
+                $entrycompetition->divisionid         = $divisionid;
+                $entrycompetition->roundid            = $roundid;
+                $entrycompetition->save();
+
+            }
+        }
+    }
+
+
     /**
-     * POST
-     * @param Request $request
-     * @return \Illuminate\Contracts\View\Factory|\Illuminate\Http\RedirectResponse|\Illuminate\View\View
+     * METHOD: POST
+     * @param CreateRegistration $request
+     * @return \Illuminate\Http\RedirectResponse|\Illuminate\Routing\Redirector
      */
     public function createRegistration(CreateRegistration $request)
     {
         $validated = $request->validated();
 
-        $event = Event::where('eventid', $validated['eventid'])->first();
+        $event = Event::where('eventurl', $request->eventurl)->first();
 
         if ($event->isEvent() && !$event->canEnterEvent()) {
             return redirect('/event/details/' . $event->eventurl)->with('failure', 'Event entrys are closed');
         }
+
+        $eventcompetition = null;
+        if ($event->isLeague()) {
+            // get the event competition
+            $eventcompetition = EventCompetition::where('eventcompetitionid', $validated['eventcompetitionid'])->first();
+
+            if (empty($eventcompetition)) {
+                return redirect('/event/details/' . $event->eventurl)->with('failure', 'Unable to enter event');
+            }
+        }
+
 
         $user = Auth::user();
 
@@ -208,58 +371,30 @@ class EventRegistrationController extends EventController
 
         // Store the single event entry
         $evententry = new EventEntry();
-
         $evententry->userid        = $validated['userid'];
         $evententry->eventid       = $event->eventid;
         $evententry->entrystatusid = 1; // 1 is pending
         $evententry->paid          = 0; // 0 is not paid yet
-        $evententry->firstname     = !empty($validated['firstname'])      ? ($validated['firstname'])  : '';
-        $evententry->lastname      = !empty($validated['lastname'])       ? ($validated['lastname'])   : '';
-        $evententry->email         = !empty($validated['email'])          ? $validated['email']                  : '';
-        $evententry->address       = !empty($validated['address'])        ? ($validated['address'])    : '';
-        $evententry->phone         = !empty($validated['phone'])          ? ($validated['phone'])      : '';
-        $evententry->membership    = !empty($validated['membership'])     ? ($validated['membership']) : '';
-        $evententry->notes         = !empty($validated['notes'])          ? ($validated['notes'])      : '';
-        $evententry->clubid        = !empty($validated['clubid'])         ? intval($validated['clubid'])         : '';
-        $evententry->schoolid      = !empty($validated['schoolid'])       ? intval($validated['schoolid'])       : '';
-        $evententry->country       = !empty($validated['country'])        ? ($validated['country'])              : '';
-        $evententry->divisionid    = !empty($validated['divisionid'])     ? $validated['divisionid']             : '';
+        $evententry->firstname     = !empty($validated['firstname'])      ? ($validated['firstname'])        : '';
+        $evententry->lastname      = !empty($validated['lastname'])       ? ($validated['lastname'])         : '';
+        $evententry->email         = !empty($validated['email'])          ? $validated['email']              : '';
+        $evententry->address       = !empty($validated['address'])        ? ($validated['address'])          : '';
+        $evententry->phone         = !empty($validated['phone'])          ? ($validated['phone'])            : '';
+        $evententry->membership    = !empty($validated['membership'])     ? ($validated['membership'])       : '';
+        $evententry->notes         = !empty($validated['notes'])          ? ($validated['notes'])            : '';
+        $evententry->clubid        = !empty($validated['clubid'])         ? intval($validated['clubid'])     : '';
+        $evententry->schoolid      = !empty($validated['schoolid'])       ? intval($validated['schoolid'])   : '';
+        $evententry->country       = !empty($validated['country'])        ? ($validated['country'])          : '';
+        $evententry->divisionid    = (!empty($validated['divisionid']) && is_array($validated['divisionid'])) ? reset($validated['divisionid'])  : '';
         $evententry->pickup        = !empty($validated['pickup']);
-        $evententry->dateofbirth   = !empty($validated['dateofbirth'])    ? $validated['dateofbirth']            : '';
+        $evententry->dateofbirth   = !empty($validated['dateofbirth'])    ? $validated['dateofbirth']        : '';
         $evententry->gender        = !empty($validated['gender'] == 'm')  ? 'm' : 'f';
         $evententry->details       = $this->getRequestDetails($validated, ['mqs']);
         $evententry->enteredby     = Auth::id();
         $evententry->hash          = $this->createHash();
         $evententry->save();
 
-
-        $divisionids = explode(',', $validated['divisionid']);
-
-        foreach ($divisionids as $divisionid) {
-
-            // Get the competitionids for the entry
-            $eventcompetitionids = !empty($validated['roundids']) ? explode(',', $validated['roundids']) : [];
-            foreach ($eventcompetitionids as $competitionid) {
-
-                @list($eventcompetitionid, $roundid) = explode('-', $competitionid);
-                if (empty($eventcompetitionid) || empty($roundid)) {
-                    continue;
-                }
-
-
-                $entrycompetition = new EntryCompetition();
-                $entrycompetition->entryid            = $evententry->entryid;
-                $entrycompetition->eventid            = $event->eventid;
-                $entrycompetition->eventcompetitionid = $eventcompetitionid;
-                $entrycompetition->userid             = $validated['userid'];
-                $entrycompetition->divisionid         = $divisionid;
-                $entrycompetition->competitionid      = '';
-                $entrycompetition->roundid            = $roundid;
-
-                $entrycompetition->save();
-            }
-
-        }
+        $this->create($event, $evententry, $eventcompetition, $validated);
 
         SendEntryReceived::dispatch($evententry->email, $event->label);
 
@@ -275,16 +410,15 @@ class EventRegistrationController extends EventController
         return redirect('/event/register/' . $event->eventurl)->with('success', 'Entry Received!');
     }
 
-    /**
-     * POST
-     * @param UpdateRegistration $request
-     * @return \Illuminate\Http\RedirectResponse
-     */
-    public function updateRegistration(UpdateRegistration $request)
-    {
-        $validated = $request->validated();
 
-        $event = Event::where('eventid', $validated['eventid'])->first();
+    /**
+     * @param Request $request
+     * @return \Illuminate\Http\RedirectResponse|\Illuminate\Routing\Redirector
+     */
+    public function updateRegistration(Request $request)
+    {
+
+        $event = Event::where('eventurl', $request->eventurl)->first();
 
         if ($event->isEvent() && !$event->canEnterEvent()) {
             return redirect('/event/details/' . $event->eventurl)->with('failure', 'Event entrys are closed');
@@ -292,15 +426,15 @@ class EventRegistrationController extends EventController
 
         $user = Auth::user();
 
-        if ($validated['userid'] != $user->userid) {
+        if ($request->input('userid') != $user->userid) {
             // make sure the person logged in can enter the person
             $user = UserRelation::where('userid', Auth::id())
-                ->where('relationid', $validated['userid'])
+                ->where('relationid', $request->input('userid'))
                 ->where('authorised', 1)
                 ->first();
 
             if (!empty($user)) {
-                $user = User::where('userid', $validated['userid'])->first();
+                $user = User::where('userid', $request->input('userid'))->first();
             }
         }
 
@@ -316,93 +450,29 @@ class EventRegistrationController extends EventController
                                 ->first();
 
 
-        $evententry->userid       = $validated['userid'];
-        $evententry->eventid      = $event->eventid;
-        $evententry->firstname    = !empty($validated['firstname'])      ? ($validated['firstname'])   : '';
-        $evententry->lastname     = !empty($validated['lastname'])       ? ($validated['lastname'])    : '';
-        $evententry->email        = !empty($validated['email'])          ? $validated['email']                   : '';
-        $evententry->address      = !empty($validated['address'])        ? ($validated['address'])     : '';
-        $evententry->phone        = !empty($validated['phone'])          ? ($validated['phone'])       : '';
-        $evententry->membership   = !empty($validated['membership'])     ? ($validated['membership'])  : '';
-        $evententry->notes        = !empty($validated['notes'])          ? ($validated['notes'])       : '';
-        $evententry->clubid       = !empty($validated['clubid'])         ? intval($validated['clubid'])          : '';
-        $evententry->divisionid   = !empty($validated['divisionid'])     ? $validated['divisionid']              : '';
-        $evententry->pickup       = !empty($validated['pickup']);
-        $evententry->schoolid     = !empty($validated['schoolid'])       ? $validated['schoolid']                : '';
-        $evententry->gender       = !empty($validated['gender'] == 'm')  ? 'm' : 'f';
-        $evententry->dateofbirth  = !empty($validated['dateofbirth'])    ? $validated['dateofbirth']             : '';
-        $evententry->country      = !empty($validated['country'])        ? ($validated['country'])               : '';
-        $evententry->details      = $this->getRequestDetails($validated, ['mqs']);
+        $evententry->firstname    = $request->input('firstname') ?? $evententry->firstname;
+        $evententry->lastname     = $request->input('lastname') ?? $evententry->lastname;
+        $evententry->address      = $request->input('address') ?? $evententry->address;
+        $evententry->phone        = $request->input('phone') ?? $evententry->phone;
+        $evententry->membership   = $request->input('membership') ?? $evententry->membership;
+        $evententry->notes        = $request->input('notes') ?? $evententry->notes;
+        $evententry->clubid       = $request->input('clubid') ?? $evententry->clubid;
+        $evententry->pickup       = $request->input('pickup') ? 1 : 0;
+        $evententry->schoolid     = $request->input('schoolid') ?? $evententry->schoolid;
+        $evententry->dateofbirth  = $request->input('dateofbirth') ?? $evententry->dateofbirth;
         $evententry->save();
-
-        $entrycompetitions = EntryCompetition::where('userid', $user->userid)
-                                            ->where('entryid', $evententry->entryid)
-                                            ->get();
-
-
-        $divisionids = explode(',', $validated['divisionid']);
-
-        foreach ($divisionids as $divisionid) {
-            // Get the competitionids for the entry
-            $eventcompetitionids = !empty($validated['roundids']) ? explode(',', $validated['roundids']) : [];
-            foreach ($eventcompetitionids as $competitionid) {
-
-                // explode out the ids
-                @list($eventcompetitionid, $roundid) = explode('-', $competitionid);
-
-                if (empty($eventcompetitionid) || empty($roundid)) {
-                    continue;
-                }
-
-                // try to get the entry that matches the ids
-                $entrycompetition = EntryCompetition::where('eventcompetitionid', $eventcompetitionid)
-                    ->where('roundid', $roundid)
-                    ->where('divisionid', $divisionid)
-                    ->where('userid', $user->userid)
-                    ->first();
-
-                // doesnt exist, create it
-                if (empty($entrycompetition)) {
-                    $entrycompetition = new EntryCompetition();
-                    $entrycompetition->entryid            = $evententry->entryid;
-                    $entrycompetition->eventid            = $event->eventid;
-                    $entrycompetition->eventcompetitionid = $eventcompetitionid;
-                    $entrycompetition->userid             = $validated['userid'];
-                    $entrycompetition->divisionid         = $divisionid;
-                    $entrycompetition->competitionid      = '';
-                    $entrycompetition->roundid            = $roundid;
-                    $entrycompetition->save();
-                }
-                else {
-
-                    // It does exist, so remove it from the array
-                    foreach ($entrycompetitions as $key => $ec) {
-
-                        $entrycomp = $ec->eventcompetitionid == $entrycompetition->eventcompetitionid;
-
-                        $roundid   = $ec->roundid            == $entrycompetition->roundid;
-
-                        if ($entrycomp && $roundid) {
-                            unset($entrycompetitions[$key]);
-                        }
-                    }
-                }
-            } // foreach
-        }
-
-        // if there is still stuff left in the collection, it means they have been unticked by the user
-        if (!empty($entrycompetitions)) {
-            foreach ($entrycompetitions as $ec) {
-                $ec->delete();
-            }
-        }
-
 
 
         return redirect('/event/register/' . $event->eventurl)->with('success', 'Entry Updated!');
     }
 
 
+
+
+
+    /**
+     * ADMIN UPDATE METHODS
+    */
     public function createAdminRegistration(CreateRegistration $request)
     {
 
@@ -415,6 +485,24 @@ class EventRegistrationController extends EventController
         if (empty($event)) {
             return back()->with('failure', 'Please try again later');
         }
+
+        // make sure they are not already entered
+        $entryCheck = EventEntry::where('eventid', $event->eventid)->where('userid', $validated['userid'])->first();
+        if (!empty($entryCheck)) {
+            return back()->with('failure', 'Archer already entered');
+        }
+
+
+        $eventcompetition = null;
+        if ($event->isLeague()) {
+            // get the event competition
+            $eventcompetition = EventCompetition::where('eventcompetitionid', $validated['eventcompetitionid'])->first();
+
+            if (empty($eventcompetition)) {
+                return back()->with('failure', 'Please contact AOSA');
+            }
+        }
+
 
 
         // could be a manual entry, try lookup by email
@@ -468,50 +556,24 @@ class EventRegistrationController extends EventController
         $evententry->membership    = !empty($validated['membership'])     ? ($validated['membership']) : '';
         $evententry->notes         = !empty($validated['notes'])          ? ($validated['notes'])      : '';
         $evententry->clubid        = !empty($validated['clubid'])         ? intval($validated['clubid'])         : '';
-        $evententry->divisionid    = !empty($validated['divisionid'])     ? $validated['divisionid']             : '';
+        $evententry->divisionid    = (!empty($validated['divisionid']) && is_array($validated['divisionid'])) ? reset($validated['divisionid'])  : '';
         $evententry->schoolid      = !empty($validated['schoolid'])       ? $validated['schoolid']               : '';
         $evententry->dateofbirth   = !empty($validated['dateofbirth'])    ? $validated['dateofbirth']            : '';
         $evententry->gender        = !empty($validated['gender'] == 'm')  ? 'm' : 'f';
         $evententry->country       = !empty($validated['country'])        ? ($validated['country'])              : '';
-        $evententry->individualqualround     = ($validated['individualqualround']);
-        $evententry->teamqualround     = ($validated['teamqualround']);
-        $evententry->individualfinal     = ($validated['individualfinal']);
+        $evententry->individualqualround = ($validated['individualqualround']);
+        $evententry->teamqualround = ($validated['teamqualround']);
+        $evententry->individualfinal = ($validated['individualfinal']);
         $evententry->teamfinal     = ($validated['teamfinal']);
-        $evententry->mixedteamfinal     = ($validated['mixedteamfinal']);
-        $evententry->subclass     = ($validated['subclass']);
+        $evententry->mixedteamfinal = ($validated['mixedteamfinal']);
+        $evententry->subclass      = ($validated['subclass']);
         $evententry->details       = $this->getRequestDetails($validated, ['mqs']);
         $evententry->enteredby     = Auth::id();
         $evententry->hash          = $this->createHash();
+
         $evententry->save();
 
-
-        $divisionids = explode(',', $validated['divisionid']);
-
-        foreach ($divisionids as $divisionid) {
-
-            // Get the competitionids for the entry
-            $eventcompetitionids = !empty($validated['roundids']) ? explode(',', $validated['roundids']) : [];
-            foreach ($eventcompetitionids as $competitionid) {
-
-                @list($eventcompetitionid, $roundid) = explode('-', $competitionid);
-                if (empty($eventcompetitionid) || empty($roundid)) {
-                    continue;
-                }
-
-
-                $entrycompetition = new EntryCompetition();
-                $entrycompetition->entryid            = $evententry->entryid;
-                $entrycompetition->eventid            = $event->eventid;
-                $entrycompetition->eventcompetitionid = $eventcompetitionid;
-                $entrycompetition->userid             = $validated['userid'];
-                $entrycompetition->divisionid         = $divisionid;
-                $entrycompetition->competitionid      = '';
-                $entrycompetition->roundid            = $roundid;
-
-                $entrycompetition->save();
-            }
-
-        }
+        $this->create($event, $evententry, $eventcompetition, $validated);
 
         //SendEntryReceived::dispatch($evententry->email, $event->label);
 
@@ -519,14 +581,23 @@ class EventRegistrationController extends EventController
 
     }
 
-    public function updateAdminRegistration(UpdateRegistration $request)
+    public function updateAdminRegistration(Request $request)
     {
-        $validated = $request->validated();
+
+        $event = Event::where('eventurl', $request->eventurl)->first();
+
+        $user = User::where('userid', $request->input('userid'))->first();
 
 
-        $event = Event::where('eventid', $validated['eventid'])->first();
+        $eventcompetition = null;
+        if ($event->isLeague()) {
+            // get the event competition
+            $eventcompetition = EventCompetition::where('eventid', $event->eventid)->first();
 
-        $user = User::where('userid', $validated['userid'])->first();
+            if (empty($eventcompetition)) {
+                return back()->with('failure', 'Please contact AOSA');
+            }
+        }
 
 
         if (empty($event) || empty($user)) {
@@ -535,99 +606,142 @@ class EventRegistrationController extends EventController
 
         // Store the single event entry
         $evententry = EventEntry::where('userid', $user->userid)
-            ->where('eventid', $event->eventid)
-            ->first();
+                                ->where('eventid', $event->eventid)
+                                ->first();
+
+        $divisiondata = ($request->input('divisionid') ?? []);
+        $divisiondata = array_combine($divisiondata, $divisiondata);
 
 
-        $evententry->userid       = $validated['userid'];
-        $evententry->eventid      = $event->eventid;
-        $evententry->firstname    = !empty($validated['firstname'])      ? ($validated['firstname'])   : '';
-        $evententry->lastname     = !empty($validated['lastname'])       ? ($validated['lastname'])    : '';
-        $evententry->email        = !empty($validated['email'])          ? $validated['email']                   : '';
-        $evententry->bib          = !empty($validated['bib'])            ? $validated['bib']                   : '';
-        $evententry->address      = !empty($validated['address'])        ? ($validated['address'])     : '';
-        $evententry->phone        = !empty($validated['phone'])          ? ($validated['phone'])       : '';
-        $evententry->membership   = !empty($validated['membership'])     ? ($validated['membership'])  : '';
-        $evententry->notes        = !empty($validated['notes'])          ? ($validated['notes'])       : '';
-        $evententry->clubid       = !empty($validated['clubid'])         ? intval($validated['clubid'])          : '';
-        $evententry->divisionid   = !empty($validated['divisionid'])     ? $validated['divisionid']              : '';
-        $evententry->schoolid     = !empty($validated['schoolid'])       ? $validated['schoolid']                : '';
-        $evententry->gender       = !empty($validated['gender'] == 'm')  ? 'm' : 'f';
-        $evententry->dateofbirth  = !empty($validated['dateofbirth'])    ? $validated['dateofbirth'] : '';
-        $evententry->country       = !empty($validated['country'])        ? ($validated['country'])              : '';
-        $evententry->individualqualround     = ($validated['individualqualround']);
-        $evententry->teamqualround     = ($validated['teamqualround']);
-        $evententry->individualfinal     = ($validated['individualfinal']);
-        $evententry->teamfinal     = ($validated['teamfinal']);
-        $evententry->mixedteamfinal     = ($validated['mixedteamfinal']);
-        $evententry->subclass     = ($validated['subclass']);
-        $evententry->details       = $this->getRequestDetails($validated, ['mqs']);
-
+        $evententry->firstname    = $request->input('firstname') ?? $evententry->firstname;
+        $evententry->lastname     = $request->input('lastname') ?? $evententry->lastname;
+        $evententry->email        = $request->input('email') ?? $evententry->email;
+        $evententry->bib          = $request->input('bib') ?? $evententry->bib;
+        $evententry->address      = $request->input('address') ?? $evententry->address;
+        $evententry->phone        = $request->input('phone') ?? $evententry->phone;
+        $evententry->membership   = $request->input('membership') ?? $evententry->membership;
+        $evententry->notes        = $request->input('notes') ?? $evententry->notes;
+        $evententry->clubid       = $request->input('clubid') ?? $evententry->clubid;
+        $evententry->divisionid    = (!empty($divisiondata) && is_array($divisiondata)) ? reset($divisiondata)  : '';
+        $evententry->schoolid     = $request->input('schoolid') ?? $evententry->schoolid;
+        $evententry->gender       = !empty($request->input('gender') == 'm')  ? 'm' : 'f';
+        $evententry->dateofbirth  = $request->input('dateofbirth') ?? $evententry->dateofbirth;
+        $evententry->country      = $request->input('country') ?? $evententry->country;
+        $evententry->individualqualround = $request->input('individualqualround') ?? $evententry->individualqualround;
+        $evententry->teamqualround = $request->input('teamqualround') ?? $evententry->teamqualround;
+        $evententry->individualfinal = $request->input('individualfinal') ?? $evententry->individualfinal;
+        $evententry->teamfinal     = $request->input('teamfinal') ?? $evententry->teamfinal;
+        $evententry->mixedteamfinal = $request->input('mixedteamfinal') ?? $evententry->mixedteamfinal;
+        $evententry->subclass      = $request->input('subclass') ?? $evententry->subclass;
+        $evententry->details       = $this->getRequestDetails(['mqs'=>$request->input('mqs')], ['mqs']);
         $evententry->save();
 
+
         $entrycompetitions = EntryCompetition::where('userid', $user->userid)
+                                                ->where('eventid', $event->eventid)
                                                 ->where('entryid', $evententry->entryid)
                                                 ->get();
 
+        if ($event->isleague()) {
 
-        $divisionids = explode(',', $validated['divisionid']);
+            foreach ($entrycompetitions ?? [] as $ecomp) {
 
-
-        foreach ($divisionids as $divisionid) {
-            // Get the competitionids for the entry
-            $eventcompetitionids = !empty($validated['roundids']) ? explode(',', $validated['roundids']) : [];
-            foreach ($eventcompetitionids as $competitionid) {
-
-                // explode out the ids
-                @list($eventcompetitionid, $roundid) = explode('-', $competitionid);
-
-                if (empty($eventcompetitionid) || empty($roundid)) {
-                    continue;
+                // if not in the original array, means they are removing the division entry
+                if (!in_array($ecomp->divisionid, $divisiondata)) {
+                    $ecomp->delete();
+                    unset($divisiondata[$ecomp->divisionid]);
                 }
 
-                // try to get the entry that matches the ids
-                $entrycompetition = EntryCompetition::where('eventcompetitionid', $eventcompetitionid)
-                    ->where('roundid', $roundid)
-                    ->where('divisionid', $divisionid)
-                    ->where('userid', $user->userid)
-                    ->first();
-
-                // doesnt exist, create it
-                if (empty($entrycompetition)) {
-                    $entrycompetition = new EntryCompetition();
-                    $entrycompetition->entryid            = $evententry->entryid;
-                    $entrycompetition->eventid            = $event->eventid;
-                    $entrycompetition->eventcompetitionid = $eventcompetitionid;
-                    $entrycompetition->userid             = $validated['userid'];
-                    $entrycompetition->divisionid         = $divisionid;
-                    $entrycompetition->competitionid      = '';
-                    $entrycompetition->roundid            = $roundid;
-                    $entrycompetition->save();
+                //if its still in the array, then leave as is
+                else if (in_array($ecomp->divisionid, $divisiondata)) {
+                    unset($divisiondata[$ecomp->divisionid]);
                 }
-                else {
+            }
 
-                    // It does exist, so remove it from the array
-                    foreach ($entrycompetitions as $key => $ec) {
+            // $entrycompetitions should now contain only those left to be added
+            foreach ($divisiondata as $divisionid) {
 
-                        $entrycomp = $ec->eventcompetitionid == $entrycompetition->eventcompetitionid;
+                $entrycompetition = new EntryCompetition();
+                $entrycompetition->entryid            = $evententry->entryid;
+                $entrycompetition->eventid            = $event->eventid;
+                $entrycompetition->userid             = $user->userid;
+                $entrycompetition->competitionid      = '';
+                $entrycompetition->eventcompetitionid = $eventcompetition->eventcompetitionid;
+                $entrycompetition->divisionid         = $divisionid;
+                $entrycompetition->competitionid      = '';
+                $entrycompetition->roundid            = $eventcompetition->roundids;
+                $entrycompetition->save();
 
-                        $roundid   = $ec->roundid            == $entrycompetition->roundid;
-
-                        if ($entrycomp && $roundid) {
-                            unset($entrycompetitions[$key]);
-                        }
-                    }
-                }
-            } // foreach
-        }
-
-        // if there is still stuff left in the collection, it means they have been unticked by the user
-        if (!empty($entrycompetitions)) {
-            foreach ($entrycompetitions as $ec) {
-                $ec->delete();
             }
         }
+        else {
 
+            $neweventcomps = [];
+
+            $roundids = $request->input('roundids');
+            $divisionids = $request->input('divisionid');
+
+            foreach ($roundids as $eventcompetition => $roundid) {
+                $neweventcomps[$eventcompetition] = (object) [
+                    'roundid' => $roundid,
+                    'divisionid' => (!empty($divisionids[$eventcompetition])) ? $divisionids[$eventcompetition] : null
+                ];
+            }
+
+
+            // Get the entrycompetition for the eventcomptition
+            // if one exists, update the round/division
+            // if not , create
+
+            foreach ($entrycompetitions as $ec) {
+
+                if (!in_array($ec->eventcompetitionid, array_keys($neweventcomps))) {
+                    // means they have removed
+                    // remove entry
+                    $ec->delete();
+                    // remove scores
+
+                    // remove it from the array so it wont be added back
+                    unset($neweventcomps[$ec->eventcompetitionid]);
+                }
+                else if (in_array($ec->eventcompetitionid, array_keys($neweventcomps))) {
+                    $newentry = $neweventcomps[$ec->eventcompetitionid];
+
+                    // if either of the values == remove
+                    if ($newentry->roundid == 'remove' || $newentry->divisionid == 'remove')  {
+                        $ec->delete();
+                        unset($neweventcomps[$ec->eventcompetitionid]);
+                        continue;
+                    }
+
+                    if (!empty($newentry->roundid) && !empty($newentry->divisionid)) {
+                        $ec->roundid = $newentry->roundid;
+                        $ec->divisionid = $newentry->divisionid;
+                        $ec->save();
+
+                        unset($neweventcomps[$ec->eventcompetitionid]);
+
+                    }
+                }
+            }
+
+            foreach ($neweventcomps as $eventcompetitionid => $newentry) {
+
+                if (!empty($newentry->roundid) && !empty($newentry->divisionid)) {
+
+                    $entrycompetition = new EntryCompetition();
+                    $entrycompetition->entryid = $evententry->entryid;
+                    $entrycompetition->eventid = $event->eventid;
+                    $entrycompetition->userid = $user->userid;
+                    $entrycompetition->competitionid = '';
+                    $entrycompetition->eventcompetitionid = $eventcompetitionid;
+                    $entrycompetition->divisionid = $newentry->divisionid;
+                    $entrycompetition->roundid = $newentry->roundid;
+                    $entrycompetition->save();
+
+                }
+            }
+        }
 
 
         return back()->with('success', 'Entry Updated!');

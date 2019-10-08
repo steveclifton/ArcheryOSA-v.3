@@ -87,9 +87,8 @@
                     </div>
                 </div>
 
-
                 <div class="form-group row">
-                    <label for="label" class="col-sm-12 col-md-3 col-form-label">Email</label>
+                    <label for="label" class="col-sm-12 col-md-3 col-form-label">Email*</label>
                     <div class="col-md-9">
                         <input name="email" type="text" class="form-control{{ $errors->has('email') ? ' is-invalid' : '' }}"
                                value="{{old('email')}}"
@@ -137,7 +136,7 @@
                 @endif
 
                 <div class="form-group row">
-                    <label for="label" class="col-sm-12 col-md-3 col-form-label">Membership</label>
+                    <label for="label" class="col-sm-12 col-md-3 col-form-label">Membership{{$event->membershiprequired ? '*' : ''}}</label>
                     <div class="col-md-9">
                         <input name="membership" type="text" class="form-control"
                                value="{{old('membership')}}">
@@ -151,7 +150,6 @@
                                value="{{old('phone')}}"  >
                     </div>
                 </div>
-
 
                 <div class="form-group row">
                     <label class="col-sm-12 col-md-3 col-form-label">Address</label>
@@ -223,127 +221,49 @@
                             </select>
                             @if ($errors->has('schoolid'))
                                 <span class="invalid-feedback" role="alert">
-                                <strong>{{ $errors->first('schoolid') }}</strong>
-                            </span>
+                                    <strong>{{ $errors->first('schoolid') }}</strong>
+                                </span>
                             @endif
                         </div>
                     </div>
 
                 @endif
 
-                @if ($event->isLeague() || $multipledivisions)
-                    <div class="form-group row">
-                        <label class="col-sm-12 col-md-3 col-form-label">Division*</label>
-                        <div class="col-md-9">
-                            @foreach($divisionsfinal as $division)
-                                <div id="checkb" class="checkbox checkbox-primary">
-                                    <input name="multipledivs[]" id="divids-{{$division->divisionid}}" type="checkbox" value="{{$division->divisionid}}"
-                                            {!! old('divisionid') == $division->divisionid ? 'selected' : '' !!}>
-                                    <label for="divids-{{$division->divisionid}}">
-                                        {{$division->label}}
-
-                                    </label>
-                                </div>
-
-                            @endforeach
-                            @if ($errors->has('divisionid'))
-                                <span class="invalid-feedback" role="alert">
-                                <strong>{{ $errors->first('divisionid') }}</strong>
-                            </span>
-                            @endif
-                            {{--<span class="help-block"><small>Select an organisation the division belongs to</small></span>--}}
-                        </div>
-                    </div>
-                    <input type="hidden" name="divisionid" id="mDivid">
-                @else
-                    <div class="form-group row">
-                        <label class="col-sm-12 col-md-3 col-form-label">Division*</label>
-                        <div class="col-md-9">
-                            <select name="divisionid" class="form-control {{ $errors->has('divisionid') ? 'is-invalid' : '' }}" required>
-                                <option disabled selected>Pick one</option>
-                                @foreach($divisionsfinal as $division)
-                                    <option value="{{$division->divisionid}}"
-                                            {!! old('divisionid') == $division->divisionid ? 'selected' : '' !!}>
-                                        {{$division->label}}
-                                    </option>
-                                @endforeach
-                            </select>
-                            @if ($errors->has('divisionid'))
-                                <span class="invalid-feedback" role="alert">
-                                <strong>{{ $errors->first('divisionid') }}</strong>
-                            </span>
-                            @endif
-                            {{--<span class="help-block"><small>Select an organisation the division belongs to</small></span>--}}
-                        </div>
-                    </div>
-                @endif
-
-
-
-
-                <div class="form-group row justify-content-end">
+                <div class="form-group row">
                     <label class="col-sm-12 col-md-3 col-form-label">Gender*</label>
-                    <div class=" col-md-9">
-                        <div class="radio radio-primary">
-                            <input name="gender" id="radio1" type="radio" value="m" checked>
-                            <label for="radio1">
-                                Male
-                            </label><br>
-                            <input name="gender" id="radio2" type="radio" value="f">
-                            <label for="radio2">
-                                Female
-                            </label>
-                        </div>
+                    <div class="col-md-9">
+                        <select name="gender"
+                                class="form-control {{ $errors->has('gender') ? 'is-invalid' : '' }}" required>
+                            <option disabled selected>Select one</option>
+                            <option value="m" {!! old('gender') == 'm' ? 'selected' : '' !!}>Male</option>
+                            <option value="f" {!! old('gender') == 'f' ? 'selected' : '' !!}>Female</option>
+                        </select>
+                        @if ($errors->has('gender'))
+                            <span class="invalid-feedback" role="alert">
+                                <strong>{{ $errors->first('gender') }}</strong>
+                            </span>
+                        @endif
                     </div>
                 </div>
 
-                @if ($event->isLeague())
-                    <input name="roundids" type="hidden" id="jsfields" value="{{$leaguecompround}}"/>
-                @else
+                @if (!empty($event->pickup))
                     <div class="form-group row">
-                        <label class="col-sm-12 col-md-3 col-form-label">Competitions*</label>
+                        <label class="col-sm-12 col-md-3 col-form-label">Airport Pickup</label>
                         <div class="col-md-9">
-                            <div class="">
-                                <div class="card-box">
-                                    <h4 class="text-dark header-title m-t-0 m-b-30">Select the competitions you wish to enter</h4>
-                                    @php $i = 1 @endphp
-                                    <div id="checkTree">
-                                        @foreach($competitionsfinal as $date => $eventcompetition)
-                                            <ul>
-                                                <li data-jstree='{"opened":{{$i++ == 1 ? 'true' : 'false'}}, "icon": "ion-calendar"}'>{{date('D d F', strtotime($date))}}
-                                                    @foreach($eventcompetition as $label => $ec)
-                                                        <ul>
-                                                            <li data-jstree='{"opened":{{$i++ == 1 ? 'true' : 'false'}}, "icon": "ion-calendar"}'>{{$label}}
-                                                                <ul>
-                                                                    @foreach($ec->rounds as $round)
-                                                                        <li data-eventcompetitionid="{{$ec->eventcompetitionid}}"
-                                                                            data-roundid="{{$round->roundid}}"
-                                                                            data-jstree='{"opened":true, "icon": "ion-star"}'>{{$round->label}}
-                                                                    @endforeach
-                                                                </ul>
-                                                            </li>
-                                                        </ul>
-                                                    @endforeach
-                                                </li>
-                                            </ul>
-                                        @endforeach
-                                    </div>
+                            <div id="checkb" class="checkbox checkbox-primary">
+                                <input name="pickup" type="checkbox" id="pickupc" {!! old('pickup')  ? 'selected' : '' !!}>
+                                <label for="pickupc">
+                                    Required
+                                </label>
+                            </div>
+                            <span class="help-block"><small>Please let us know if you need airport transport</small></span>
 
-                                </div>
-                            </div><!-- end col -->
-                            <div id="comperror" class="alert alert-danger hidden">Please select at least 1 competition</div>
                         </div>
                     </div>
-                    <input name="roundids" type="hidden" id="jsfields" value=""/>
                 @endif
 
-
-                <div class="form-group mb-0 justify-content-start row">
-                    <div class="col-sm-12 col-md-3 col-form-label"></div>
-                    <div class="col-3">
-                        <button type="submit" class="myButton btn btn-inverse btn-info waves-effect waves-light">Enter</button>
-                    </div>
-
+                <div id="eventcompforms">
+                    @include('events.public.registration.eventcompform.compformcreate')
                 </div>
 
 
@@ -381,9 +301,6 @@
 
                     </div>
                 @endif
-
-
-
 
                 <hr>
                 <h4 class="m-t-0 m-b-30 text-center addFormHeader header-title">Ianseo Settings</h4>
@@ -428,7 +345,6 @@
                     </div>
                 </div>
 
-
                 <div class="form-group row">
                     <label class="col-sm-12 col-md-3 col-form-label">Mixed Team Final</label>
                     <div class="col-md-9">
@@ -450,9 +366,16 @@
                     </div>
                 </div>
 
+                <div class="form-group mb-0 justify-content-start row">
+                    <div class="col-sm-12 col-md-3 col-form-label"></div>
+                    <div class="col-3">
+                        <button type="submit" class="myButton btn btn-inverse btn-info waves-effect waves-light">Enter</button>
+                    </div>
+                </div>
             </form>
         </div>
     </div>
-
+    <script src="{{URL::asset('/js/events/registration.js')}}"></script>
     <script src="{{URL::asset('/js/admin/registration.js')}}"></script>
+
 @endsection

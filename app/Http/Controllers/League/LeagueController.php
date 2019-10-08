@@ -48,7 +48,7 @@ class LeagueController extends Controller
                 ee.`userid` = '".Auth::id()."'
             )
             GROUP BY `ec`.`entrycompetitionid`
-            ORDER BY `d`.label, ee.firstname
+            ORDER BY ee.firstname
         ", ['eventid'=> $event->eventid,
             'eventcompetitionid' => $eventcompetition->eventcompetitionid]
         );
