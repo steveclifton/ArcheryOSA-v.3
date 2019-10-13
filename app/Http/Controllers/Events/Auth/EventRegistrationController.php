@@ -388,7 +388,7 @@ class EventRegistrationController extends EventController
         $evententry->divisionid    = (!empty($validated['divisionid']) && is_array($validated['divisionid'])) ? reset($validated['divisionid'])  : '';
         $evententry->pickup        = !empty($validated['pickup']);
         $evententry->dateofbirth   = !empty($validated['dateofbirth'])    ? $validated['dateofbirth']        : '';
-        $evententry->gender        = !empty($validated['gender'] == 'm')  ? 'm' : 'f';
+        $evententry->gender        = !empty(($validated['gender'] ?? '') == 'm')  ? 'm' : 'f';
         $evententry->details       = $this->getRequestDetails($validated, ['mqs']);
         $evententry->enteredby     = Auth::id();
         $evententry->hash          = $this->createHash();
@@ -559,7 +559,7 @@ class EventRegistrationController extends EventController
         $evententry->divisionid    = (!empty($validated['divisionid']) && is_array($validated['divisionid'])) ? reset($validated['divisionid'])  : '';
         $evententry->schoolid      = !empty($validated['schoolid'])       ? $validated['schoolid']               : '';
         $evententry->dateofbirth   = !empty($validated['dateofbirth'])    ? $validated['dateofbirth']            : '';
-        $evententry->gender        = !empty($validated['gender'] == 'm')  ? 'm' : 'f';
+        $evententry->gender        = !empty(($validated['gender'] ?? '') == 'm')  ? 'm' : 'f';
         $evententry->country       = !empty($validated['country'])        ? ($validated['country'])              : '';
         $evententry->individualqualround = ($validated['individualqualround']);
         $evententry->teamqualround = ($validated['teamqualround']);

@@ -66,7 +66,7 @@ class CreateRegistration extends FormRequest
             'notes'          => 'nullable',
             'clubid'         => $clubrequired,
             'schoolid'       => $schoolrequired,
-            'gender'         => 'nullable',
+            'gender'         => 'required',
             'pickup'         => 'nullable',
             'country'        => 'required',
             'roundids'       => 'nullable',
