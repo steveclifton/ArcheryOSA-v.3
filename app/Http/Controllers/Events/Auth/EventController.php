@@ -276,7 +276,12 @@ class EventController extends Controller
             $dateranges[] = $date->format('Y-m-d');
         }
 
-        if (!empty($dateranges)) {
+        $olddateranges = [];
+        foreach($this->helper->getDateRange($event->start, $event->end) as $date) {
+            $olddateranges[] = $date->format('Y-m-d');
+        }
+
+        if ((count($dateranges) != count($olddateranges)) && !empty($dateranges)) {
 
             // get the event competitions that are not in the new date range
             $eventcompetitions = EventCompetition::where('eventid', $event->eventid)
