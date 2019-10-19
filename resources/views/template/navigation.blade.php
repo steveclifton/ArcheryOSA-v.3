@@ -96,6 +96,13 @@
                         </li>
                     @endif
 
+                    <li class="has-submenu">
+                        <a href="#"><i class="ion-trophy"></i>Records</a>
+                        <ul class="submenu">
+                            <li><a href="/records/anz">ArcheryNZ Records</a></li>
+                        </ul>
+                    </li>
+
 
                     <li class="has-submenu">
                         <a href="#"><i class="ion-trophy"></i>Results</a>
@@ -104,8 +111,6 @@
                                 <li><a href="{{route('publicprofile', ['username' => Auth()->user()->username])}}">My Profile!</a></li>
                             @endauth
                             <li><a href="/events/results">Event Results</a></li>
-{{--                            <li><a href="/records/nz">NZ Records</a></li>--}}
-{{--                            <li><a href="/rankings/nz">NZ Rankings</a></li>--}}
                         </ul>
                     </li>
 

@@ -28,7 +28,7 @@ Route::get('/event/details/{eventurl}', 'Events\PublicEvents\EventController@get
 
 // Results and Ranking
 Route::get('/rankings/nz', 'Ranking\RankingController@getCountryRankings');
-Route::get('/records/nz', 'Record\RecordController@getCountryRecords');
+Route::get('/records/anz', 'Record\RecordController@getCountryRecords');
 
 
 // Get users public profile
