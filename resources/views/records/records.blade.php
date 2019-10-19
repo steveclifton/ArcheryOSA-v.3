@@ -1,6 +1,6 @@
 @extends('template.default')
 
-@section ('title') NZ National Outdoor Records @endsection
+@section ('title') NZ Outdoor Records @endsection
 
 @section('content')
     <link href="{{URL::asset('/plugins/datatables/dataTables.bootstrap4.min.css')}}" rel="stylesheet">
@@ -13,7 +13,7 @@
         <h4 class="page-title">
             <a href="javascript:;">Records</a>
             <i class="ion-arrow-right-c"></i>
-            <a href="javascript:;">NZ National Outdoor</a>
+            <a href="javascript:;">NZ Outdoor</a>
         </h4>
     </div>
 
