@@ -22,6 +22,8 @@ class AddRecords extends Migration
             $table->string('score')->nullable();
             $table->string('xcount')->nullable();
             $table->string('date')->nullable();
+            $table->string('organisationid')->nullable();
+            $table->string('type')->nullable();
             $table->string('bowtype');
             $table->timestamps();
             $table->increments('recordid');

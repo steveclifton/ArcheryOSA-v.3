@@ -7,6 +7,10 @@
         $arr = json_decode($competition['roundids']);
     }
 
+    if (!is_array($arr)) {
+        $arr = [];
+    }
+
 @endphp
 <div class="form-group row">
     <label class="col-sm-12 col-md-3 col-form-label">Rounds*</label>
