@@ -517,6 +517,9 @@ class ProfileController extends Controller
         $validated = $request->validated();
 
         $user = Auth::user();
+
+        $olduser = clone $user;
+
         $user->firstname   = $validated['firstname'];
         $user->lastname    = $validated['lastname'];
         $user->phone       = $validated['phone'];
@@ -526,6 +529,10 @@ class ProfileController extends Controller
         $user->postcode    = $validated['postcode'];
         $user->dateofbirth = $validated['dateofbirth'];
         $user->membership  = $validated['membership'];
+
+        if ($user->firstname != $olduser->firstname || $user->lastname != $olduser->lastname) {
+            $user->username = strtolower(preg_replace("/[^a-zA-Z0-9]/", "", $validated['firstname'].$validated['lastname'])) . rand(1,1440);
+        }
 
         $user->save();
 
