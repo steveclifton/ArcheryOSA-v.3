@@ -15,7 +15,7 @@
         </h4>
     </div>
 
-    @if($eventcompetitions->isEmpty())
+    @if($event->eventtypeid !== 4 && $eventcompetitions->isEmpty())
         <div class="alert alert-warning">
             Competition missing, please select 'Add Competitions' to continue
         </div>
