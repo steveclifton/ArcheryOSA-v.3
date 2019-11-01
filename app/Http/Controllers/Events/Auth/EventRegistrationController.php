@@ -108,6 +108,14 @@ class EventRegistrationController extends EventController
             return redirect('/event/details/' . $event->eventurl)->with('failure', 'Event entrys are closed');
         }
 
+        $countrys = Countries::all();
+
+
+        if ($event->isNonShooting()) {
+            return view('events.public.registration.createregistration-nonscoring',
+                compact('user', 'event', 'countrys'));
+        }
+
         $eventcompetitions = DB::select("
             SELECT *
             FROM `eventcompetitions`
@@ -155,7 +163,6 @@ class EventRegistrationController extends EventController
             $schools = School::where('visible', 1)->orderby('label')->get();
         }
 
-        $countrys = Countries::all();
 
         // Means they need to create an event
         if (empty($evententry)) {
@@ -171,6 +178,15 @@ class EventRegistrationController extends EventController
         if (empty($event) || empty($user)) {
             return back()->with('failure', 'Cannot process');
         }
+
+
+        $countrys = Countries::all();
+
+        if ($event->isNonShooting()) {
+            return view('events.public.registration.updateregistration-nonshooting',
+                compact('user', 'event', 'countrys', 'evententry'));
+        }
+
 
         $eventcompetitions = DB::select("
             SELECT *
@@ -224,7 +240,6 @@ class EventRegistrationController extends EventController
             $schools = School::where('visible', 1)->orderby('label')->get();
         }
 
-        $countrys = Countries::all();
 
         return view('events.public.registration.updateregistration',
             compact('userentrydivisions','userentryrounds','eventcomps', 'evententry', 'user', 'event', 'clubs', 'divisionsfinal', 'schools','countrys'));
@@ -322,13 +337,18 @@ class EventRegistrationController extends EventController
      */
     public function createRegistration(CreateRegistration $request)
     {
-        $validated = $request->validated();
-
         $event = Event::where('eventurl', $request->eventurl)->first();
 
         if ($event->isEvent() && !$event->canEnterEvent()) {
             return redirect('/event/details/' . $event->eventurl)->with('failure', 'Event entrys are closed');
         }
+
+        if ($event->isNonShooting()) {
+            return $this->createNonShootingRegistration($event, $request);
+        }
+
+        $validated = $request->validated();
+
 
         $eventcompetition = null;
         if ($event->isLeague()) {
@@ -561,19 +581,21 @@ class EventRegistrationController extends EventController
         $evententry->dateofbirth   = !empty($validated['dateofbirth'])    ? $validated['dateofbirth']            : '';
         $evententry->gender        = !empty(($validated['gender'] ?? '') == 'm')  ? 'm' : 'f';
         $evententry->country       = !empty($validated['country'])        ? ($validated['country'])              : '';
-        $evententry->individualqualround = ($validated['individualqualround']);
-        $evententry->teamqualround = ($validated['teamqualround']);
-        $evententry->individualfinal = ($validated['individualfinal']);
-        $evententry->teamfinal     = ($validated['teamfinal']);
-        $evententry->mixedteamfinal = ($validated['mixedteamfinal']);
-        $evententry->subclass      = ($validated['subclass']);
+        $evententry->individualqualround = ($validated['individualqualround'] ?? 0);
+        $evententry->teamqualround = ($validated['teamqualround'] ?? 0);
+        $evententry->individualfinal = ($validated['individualfinal'] ?? 0);
+        $evententry->teamfinal     = ($validated['teamfinal'] ?? 0);
+        $evententry->mixedteamfinal = ($validated['mixedteamfinal'] ?? 0);
+        $evententry->subclass      = ($validated['subclass'] ?? 0);
         $evententry->details       = $this->getRequestDetails($validated, ['mqs']);
         $evententry->enteredby     = Auth::id();
         $evententry->hash          = $this->createHash();
 
         $evententry->save();
 
-        $this->create($event, $evententry, $eventcompetition, $validated);
+        if (!$event->isNonShooting()) {
+            $this->create($event, $evententry, $eventcompetition, $validated);
+        }
 
         //SendEntryReceived::dispatch($evententry->email, $event->label);
 
@@ -674,7 +696,7 @@ class EventRegistrationController extends EventController
 
             }
         }
-        else {
+        else if (!$event->isNonShooting()) {
 
             $neweventcomps = [];
 
@@ -745,6 +767,72 @@ class EventRegistrationController extends EventController
 
 
         return back()->with('success', 'Entry Updated!');
+    }
+
+
+    public function createNonShootingRegistration(Event $event, Request $request)
+    {
+
+        $validated = $request->validated();
+
+        $user = Auth::user();
+
+        if ($validated['userid'] != $user->userid) {
+            // make sure the person logged in can enter the person
+            $user = UserRelation::where('userid', Auth::id())
+                ->where('relationid', $validated['userid'])
+                ->where('authorised', 1)
+                ->first();
+
+            if (!empty($user)) {
+                $user = User::where('userid', $validated['userid'])->first();
+            }
+        }
+
+        if (empty($event) || empty($user)) {
+            return back()->with('failure', 'Please try again later');
+        }
+
+        // check to see if an entry exists for this user
+        $existingevententry = EventEntry::where('eventid', $event->eventid)
+            ->where('userid', $user->userid)
+            ->first();
+
+        if (!empty($existingevententry) ) {
+            return back()->with('failure', 'An entry already exists, please check back in a few minutes');
+        }
+
+
+        $evententry = new EventEntry();
+        $evententry->userid        = $request->input('userid');
+        $evententry->eventid       = $event->eventid;
+        $evententry->entrystatusid = 1; // 1 is pending
+        $evententry->paid          = 0; // 0 is not paid yet
+        $evententry->firstname     = !empty($validated['firstname'])      ? ($validated['firstname'])        : '';
+        $evententry->lastname      = !empty($validated['lastname'])       ? ($validated['lastname'])         : '';
+        $evententry->membership      = !empty($validated['membership'])       ? ($validated['membership'])         : '';
+        $evententry->email         = !empty($validated['email'])          ? $validated['email']              : '';
+        $evententry->address       = !empty($validated['address'])        ? ($validated['address'])          : '';
+        $evententry->phone         = !empty($validated['phone'])          ? ($validated['phone'])            : '';
+        $evententry->notes         = !empty($validated['notes'])          ? ($validated['notes'])            : '';
+        $evententry->enteredby     = Auth::id();
+        $evententry->hash          = $this->createHash();
+        $evententry->save();
+
+
+        SendEntryReceived::dispatch($evententry->email, $event->label);
+
+        if ($event->adminnotifications) {
+            SendEventAdminEntryReceived::dispatch($event->email,
+                $event->label,
+                $validated['email'],
+                $evententry->firstname . ' ' . $evententry->lastname,
+                $event->eventurl
+            );
+        }
+
+        return redirect('/event/register/' . $event->eventurl)->with('success', 'Entry Received!');
+
     }
 
 }
