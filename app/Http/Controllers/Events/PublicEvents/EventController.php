@@ -69,13 +69,19 @@ class EventController extends Controller
                         ->count();
 
 
-        $evententryopen = $event->isEvent() ? $event->canEnterEvent() : true;
+        $evententryopen = true;
+
+        if ($event->isEvent()) {
+            $evententryopen = $event->canEnterEvent();
+        }
+        else if ($event->isNonShooting()) {
+            $evententryopen = $event->canEnterNonShooting();
+        }
 
         // if its a league then check it see its open
         if ($evententryopen && $event->isLeague()) {
             $evententryopen = $event->canEnterLeague();
         }
-
 
         $roundlabels = $this->helper->getCompetitionRoundLabels($event);
 
