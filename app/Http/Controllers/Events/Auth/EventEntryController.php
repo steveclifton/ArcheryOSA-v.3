@@ -41,15 +41,30 @@ class EventEntryController extends EventController
             return redirect()->back()->with('failure', 'Event not found');
         }
 
-        $evententries = DB::select("
-            SELECT ee.entryid, u.username, CONCAT_WS(' ', ee.firstname, ee.lastname ) as name, ee.confirmationemail, 
-                  ee.paid, ee.notes, d.label as division, ee.created_at as created, es.label as status, ee.pickup 
-            FROM `evententrys` ee
-            JOIN `users` u USING (`userid`)
-            JOIN `divisions` d USING (`divisionid`)
-            JOIN `entrystatus` es USING (`entrystatusid`)
-            WHERE `eventid` = '".(int)$event->eventid."'
-        ");
+        $event = Event::where('eventid', $event->eventid)->first();
+
+        if ($event->isNonShooting()) {
+            $evententries = DB::select("
+                SELECT ee.entryid, u.username, CONCAT_WS(' ', ee.firstname, ee.lastname ) as name, ee.confirmationemail, 
+                      ee.paid, ee.notes,  ee.created_at as created, es.label as status, ee.pickup 
+                FROM `evententrys` ee
+                JOIN `users` u USING (`userid`)
+                JOIN `entrystatus` es USING (`entrystatusid`)
+                WHERE `eventid` = '".(int)$event->eventid."'
+            ");
+        }
+        else {
+            $evententries = DB::select("
+                SELECT ee.entryid, u.username, CONCAT_WS(' ', ee.firstname, ee.lastname ) as name, ee.confirmationemail, 
+                      ee.paid, ee.notes, d.label as division, ee.created_at as created, es.label as status, ee.pickup 
+                FROM `evententrys` ee
+                JOIN `users` u USING (`userid`)
+                JOIN `divisions` d USING (`divisionid`)
+                JOIN `entrystatus` es USING (`entrystatusid`)
+                WHERE `eventid` = '".(int)$event->eventid."'
+            ");
+        }
+
 
         $canremoveentry = true;
 
@@ -62,6 +77,12 @@ class EventEntryController extends EventController
 
         if (empty($event)) {
             return back()->with('failure', 'Cannot add at this stage');
+        }
+        $countrys = Countries::all();
+
+        if ($event->isNonShooting()) {
+            return view('events.auth.management.entries.add-nonshooting',
+                compact('event', 'countrys'));
         }
 
         $eventcompetitions = DB::select("
@@ -105,7 +126,6 @@ class EventEntryController extends EventController
             $schools = School::where('visible', 1)->orderby('label')->get();
         }
 
-        $countrys = Countries::all();
 
         return view('events.auth.management.entries.add',
             compact('event', 'schools', 'clubs', 'divisionsfinal', 'competitionsfinal',
@@ -127,6 +147,13 @@ class EventEntryController extends EventController
                         ->where('userid', $user->userid)
                         ->first();
 
+        $countrys = Countries::all();
+
+        if ($event->isNonShooting()) {
+            return view('events.auth.management.entries.update-nonshooting',
+                compact('user', 'evententry', 'event', 'countrys')
+            );
+        }
 
         $eventcompetitions = DB::select("
             SELECT *
@@ -179,7 +206,6 @@ class EventEntryController extends EventController
         if ($event->schoolrequired) {
             $schools = School::where('visible', 1)->orderby('label')->get();
         }
-        $countrys = Countries::all();
 
         return view('events.auth.management.entries.update',
                 compact('user', 'evententry', 'event', 'schools',
