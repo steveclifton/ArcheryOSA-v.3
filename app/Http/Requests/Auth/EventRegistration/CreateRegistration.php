@@ -30,6 +30,22 @@ class CreateRegistration extends FormRequest
         if (empty($event)) {
             return false;
         }
+
+        if ($event->isnonshooting()) {
+            return [
+                'userid'         => 'nullable',
+                'eventid'        => 'required',
+                'firstname'      => 'required',
+                'lastname'       => 'required',
+                'email'          => 'nullable',
+                'membership'     => 'nullable',
+                'phone'          => 'nullable',
+                'address'        => 'nullable',
+                'notes'          => 'nullable',
+            ];
+        }
+
+
         $dobstate = 'nullable|date';
         if ($event->dateofbirth ?? false) {
             $dobstate = 'required|date';
