@@ -133,6 +133,8 @@ class EventSettingsController extends EventController
         $event->pickup             = !empty($request->input('pickup'))             ? 1 : 0;
         $event->schoolrequired     = !empty($request->input('schoolrequired'))     ? 1 : 0;
         $event->mqs                = !empty($request->input('mqs'))                ? 1 : 0;
+        $event->waver              = !empty($request->input('waver'))              ? 1 : 0;
+        $event->wavermessage       = $request->input('wavermessage');
         $event->membershiprequired = !empty($request->input('membershiprequired')) ? 1 : 0;
         $event->filename           = (!empty($event->filename) && !empty($request->input('removefile'))) ? NULL : $event->filename;
         $event->save();

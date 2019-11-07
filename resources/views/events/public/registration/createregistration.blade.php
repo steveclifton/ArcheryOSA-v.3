@@ -20,9 +20,7 @@
 
     <div class="col-md-8 offset-md-2">
         <div class="card-box">
-
             @include('template.alerts')
-
             <h4 class="m-t-0 m-b-30 text-center addFormHeader header-title">Create Event Entry</h4>
            
 
@@ -275,7 +273,28 @@
                     </div>
                 @endif
 
+                @if (!empty($event->waver))
 
+                    <div class="form-group row">
+                        <label class="col-sm-12 col-md-3 col-form-label">Event Waver*</label>
+                        <div class="col-md-9">
+                            <div id="checkb" class="checkbox checkbox-primary">
+                                <input required class="form-control {{ $errors->has('waver') ? 'is-invalid' : '' }}" name="waver" type="checkbox" id="waverc" {!! old('waver')  ? 'selected' : '' !!}>
+                                <label for="waverc">
+                                    Accept
+                                </label>
+                                @if ($errors->has('waver'))
+                                    <span class="invalid-feedback" role="alert">
+                                        <strong>{{ $errors->first('waver') }}</strong>
+                                    </span>
+                                @endif
+                            </div>
+                            <span class="help-block"><small>{!! nl2br($event->wavermessage) !!}</small></span>
+
+                        </div>
+                    </div>
+
+                @endif
                 <hr>
                 <div class="form-group mb-0 justify-content-start row">
                     <div class="col-sm-12 col-md-3 col-form-label"></div>

@@ -70,6 +70,11 @@ class CreateRegistration extends FormRequest
             $mqs = 'required';
         }
 
+        $waver = 'nullable';
+        if (!empty($event->waver)) {
+            $waver = 'required';
+        }
+
         return [
             'userid'         => 'nullable',
             'eventid'        => 'required',
@@ -96,7 +101,9 @@ class CreateRegistration extends FormRequest
             'mixedteamfinal' => 'nullable',
             'subclass' => 'nullable',
             'mqs'      => $mqs,
-            'eventcompetitionid' => 'nullable'
+            'eventcompetitionid' => 'nullable',
+            'waver' => $waver
+
         ];
     }
 

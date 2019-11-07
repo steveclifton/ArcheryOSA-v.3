@@ -337,11 +337,14 @@ class EventRegistrationController extends EventController
      */
     public function createRegistration(CreateRegistration $request)
     {
+
+
         $event = Event::where('eventurl', $request->eventurl)->first();
 
         if ($event->isEvent() && !$event->canEnterEvent()) {
             return redirect('/event/details/' . $event->eventurl)->with('failure', 'Event entrys are closed');
         }
+
 
         if ($event->isNonShooting()) {
             return $this->createNonShootingRegistration($event, $request);
@@ -384,8 +387,13 @@ class EventRegistrationController extends EventController
                                         ->where('userid', $user->userid)
                                         ->first();
 
+
         if (!empty($existingevententry) ) {
             return back()->with('failure', 'An entry already exists, please check back in a few minutes');
+        }
+
+        if (!empty($event->waver) && empty($validated['waver'])) {
+            return back()->with('failure', 'You must accept the waver to enter this competition');
         }
 
 
@@ -394,6 +402,7 @@ class EventRegistrationController extends EventController
         $evententry->userid        = $validated['userid'];
         $evententry->eventid       = $event->eventid;
         $evententry->entrystatusid = 1; // 1 is pending
+        $evententry->waveraccepted = 1; // 1 is accepted
         $evententry->paid          = 0; // 0 is not paid yet
         $evententry->firstname     = !empty($validated['firstname'])      ? ($validated['firstname'])        : '';
         $evententry->lastname      = !empty($validated['lastname'])       ? ($validated['lastname'])         : '';
