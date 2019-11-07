@@ -337,21 +337,17 @@ class EventRegistrationController extends EventController
      */
     public function createRegistration(CreateRegistration $request)
     {
-
-
         $event = Event::where('eventurl', $request->eventurl)->first();
 
         if ($event->isEvent() && !$event->canEnterEvent()) {
             return redirect('/event/details/' . $event->eventurl)->with('failure', 'Event entrys are closed');
         }
 
-
         if ($event->isNonShooting()) {
             return $this->createNonShootingRegistration($event, $request);
         }
 
         $validated = $request->validated();
-
 
         $eventcompetition = null;
         if ($event->isLeague()) {
@@ -394,6 +390,10 @@ class EventRegistrationController extends EventController
 
         if (!empty($event->waver) && empty($validated['waver'])) {
             return back()->with('failure', 'You must accept the waver to enter this competition');
+        }
+
+        if (empty($validated['roundids'])) {
+            return back()->with('failure', 'Please check the competitions and try again');
         }
 
 
