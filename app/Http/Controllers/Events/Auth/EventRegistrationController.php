@@ -392,7 +392,7 @@ class EventRegistrationController extends EventController
             return back()->with('failure', 'You must accept the waver to enter this competition');
         }
 
-        if (empty($validated['roundids'])) {
+        if (($event->isEvent() || $event->isPostal()) && empty($validated['roundids'])) {
             return back()->with('failure', 'Please check the competitions and try again');
         }
 
