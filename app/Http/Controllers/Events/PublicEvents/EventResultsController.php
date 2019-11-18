@@ -345,8 +345,8 @@ class EventResultsController extends EventController
      */
     public function getLeagueOverallResults(Event $event, $apicall = false)
     {
-        $entrys = $this->getEventEntrySorted($event->eventid);
-
+        $entrys = $this->getEventEntrySorted($event->eventid, null, true);
+        
         $eventcompetition = EventCompetition::where('eventid', $event->eventid)->first();
 
         $evententrys = [];
