@@ -345,8 +345,8 @@ class EventResultsController extends EventController
      */
     public function getLeagueOverallResults(Event $event, $apicall = false)
     {
-        $entrys = $this->getEventEntrySorted($event->eventid, null, true);
-        
+        $entrys = $this->getEventEntrySorted($event->eventid);
+
         $eventcompetition = EventCompetition::where('eventid', $event->eventid)->first();
 
         $evententrys = [];
@@ -370,7 +370,7 @@ class EventResultsController extends EventController
                 unset($entry->userid);
             }
 
-            $evententrys[$entry->bowtype][$gender . $entry->divisionname][] = $entry;
+            $evententrys[$entry->bowtype][$gender . $entry->divisionname][$entry->userid] = $entry;
         }
 
         $data = compact('event', 'evententrys', 'eventcompetition');
