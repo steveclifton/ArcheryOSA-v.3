@@ -370,7 +370,7 @@ class EventResultsController extends EventController
                 unset($entry->userid);
             }
 
-            $evententrys[$entry->bowtype][$gender . $entry->divisionname][$entry->userid] = $entry;
+            $evententrys[$entry->bowtype][$gender . $entry->divisionname][$entry->username] = $entry;
         }
 
         $data = compact('event', 'evententrys', 'eventcompetition');
