@@ -233,6 +233,24 @@ class EventCompetitionController extends EventController
         }
 
 
+        if (!empty($request->hasFile('filename'))) {
+            $file = $request->file('filename');
+
+            // clean up the old one
+            if (!empty($eventcompetition->filename) && is_file(public_path('files/results/' . $eventcompetition->filename))) {
+                unlink(public_path('files/results/' . $eventcompetition->filename));
+            }
+
+            @list($fileName, $fileExt) = explode('.', $file->getClientOriginalName());
+
+            $filename = $fileName .'-' . date('d-h-m') . '.' . $file->getClientOriginalExtension();
+
+            // save the file
+            $file->move('files/results', $filename);
+            $eventcompetition->filename = $filename;
+
+        }
+
         $eventcompetition->eventid          = !empty($validated['eventid'])       ? intval($validated['eventid']) : '';
         $eventcompetition->label            = !empty($validated['label'])         ? ucwords($validated['label']) : '';
         $eventcompetition->date             = !empty($validated['date'])          ? $validated['date'] : '';
@@ -243,6 +261,8 @@ class EventCompetitionController extends EventController
         $eventcompetition->divisionids      = !empty($divisionidsfinal)           ? json_encode($divisionidsfinal) : json_encode('');
         $eventcompetition->scoringlevel     = !empty($validated['scoringlevel'])  ? intval($validated['scoringlevel']) : 0;
         $eventcompetition->scoringenabled   = empty($validated['scoringenabled']) ? 0 : 1;
+        $eventcompetition->filename = (!empty($eventcompetition->filename) && !empty($request->input('removefile'))) ? NULL : $eventcompetition->filename;
+
         $eventcompetition->save();
 
         return redirect()->back()->with('success', 'Competition updated!');

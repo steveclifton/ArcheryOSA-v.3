@@ -68,6 +68,15 @@ class EventController extends Controller
                         ->where('eventid', $event->eventid)
                         ->count();
 
+        if (empty($scorecount)) {
+            // only check if its empty,
+            $resultsfile = EventCompetition::where('eventid', $event->eventid)
+                                            ->wherenotnull('filename')
+                                            ->first();
+
+            $scorecount = !empty($resultsfile);
+        }
+
 
         $evententryopen = true;
 

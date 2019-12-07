@@ -62,20 +62,15 @@
 
 
     <div class="row">
-        <div class="col-sm-3 weekSelector">
-            {{--<select class="form-control">--}}
-            {{--<option>Week 12</option>--}}
-            {{--<option>Week 13</option>--}}
-            {{--<option>Week 14</option>--}}
-            {{--<option>Week 15</option>--}}
-            {{--<option>Week 16</option>--}}
-            {{--</select>--}}
+        <div class="col-sm-3 ">
+           
         </div>
     </div>
 
 
 	<div class="row">
         <div class="col-lg-12">
+
             <ul class="nav nav-tabs tabs">
                 @php $i = 1; @endphp
                 @foreach($evententrys as $bowtype => $e)
@@ -88,6 +83,11 @@
             </ul>
 
             <div class="tab-content">
+                @if (!empty($eventcompetition->filename))
+                    <div>
+                        <a href="/eventdownload/{{$eventcompetition->filename}}">Download Results</a>
+                    </div>
+                @endif
                 @php $i = 1; @endphp
                 @foreach ($evententrys as $bowtype => $ee)
                     <div class="tab-pane {!! $i++ === 1 ? 'active' : '' !!}" id="{{$bowtype}}">

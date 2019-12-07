@@ -35,7 +35,8 @@
             </p>
 
             <form class="form-horizontal myForms treeFormCompetitions" method="POST"
-                  action="/events/manage/competitions/{{$formaction}}/{{$event->eventurl}}" role="form">
+                  action="/events/manage/competitions/{{$formaction}}/{{$event->eventurl}}" role="form"
+                  enctype="multipart/form-data">
                 @csrf
                 <meta name="csrf-token" content="{{ csrf_token() }}">
                 <input name="eventid" type="hidden" value="{{$event->eventid}}">
