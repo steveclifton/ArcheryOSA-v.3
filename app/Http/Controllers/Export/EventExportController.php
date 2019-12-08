@@ -216,7 +216,7 @@ class EventExportController extends Controller
                 JOIN `entrycompetitions` ec USING (`entryid`)
                 JOIN `divisions` d ON (`ec`.`divisionid` = `d`.`divisionid`)
                 JOIN `rounds` r ON (ec.roundid = r.roundid)
-                JOIN `clubs` c ON (ee.clubid = c.clubid)
+                LEFT JOIN `clubs` c ON (ee.clubid = c.clubid)
                 JOIN `scores_flat` sf ON (ee.entryid = sf.entryid AND ec.entrycompetitionid = sf.entrycompetitionid AND ec.roundid = sf.roundid)
                 WHERE `ee`.`eventid` = '".$event->eventid."'
                 AND `ec`.`eventcompetitionid` = :eventcompetitionid
