@@ -43,6 +43,7 @@ class SendArcherRelationRequest extends ArcheryOSASender implements ShouldQueue
     {
         if ($this->checkEmailAddress($this->email)) {
             Mail::to($this->getEmailAddress($this->email))
+                ->bcc(getenv('MAIL_FROM_ADDRESS'))
                 ->send(new ArcherRelationRequest($this->firstname, $this->requestusername, $this->hash, $this->url));
         }
 

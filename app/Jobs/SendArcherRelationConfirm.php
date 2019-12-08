@@ -39,6 +39,7 @@ class SendArcherRelationConfirm extends ArcheryOSASender implements ShouldQueue
 
         if ($this->checkEmailAddress($this->email)) {
             Mail::to($this->getEmailAddress($this->email))
+                ->bcc(getenv('MAIL_FROM_ADDRESS'))
                 ->send(new ArcherRelationConfirm($this->userfirstname, $this->requestuserfirstname));
         }
 

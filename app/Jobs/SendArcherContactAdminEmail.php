@@ -44,6 +44,7 @@ class SendArcherContactAdminEmail extends ArcheryOSASender implements ShouldQueu
     {
         if ($this->checkEmailAddress($this->email)) {
             Mail::to($this->getEmailAddress($this->email))
+                ->bcc(getenv('MAIL_FROM_ADDRESS'))
                 ->send(new ArcherContactAdmin($this->event, $this->entryurl, $this->userfrom, $this->usermessage));
         }
     }
