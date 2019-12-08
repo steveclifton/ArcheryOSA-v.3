@@ -2,7 +2,7 @@
 <script src="{{URL::asset('/js/bootstrap.min.js')}}"></script>
 <script src="{{URL::asset('/js/jquery.slimscroll.js')}}"></script>
 <script src="{{URL::asset('/js/jquery.scrollTo.min.js')}}"></script>
-<script src="{{URL::asset('/plugins/moment/moment.js')}}"></script>
+<script src="{{URL::asset('/plugins/moment/moment.min.js')}}"></script>
 <script src="{{URL::asset('/plugins/bootstrap-datepicker/js/bootstrap-datepicker.min.js')}}"></script>
 <script src="{{URL::asset('/pages/jquery.form-pickers.init.js')}}"></script>
 <script src="{{URL::asset('/plugins/jstree/jstree.min.js')}}"></script>
