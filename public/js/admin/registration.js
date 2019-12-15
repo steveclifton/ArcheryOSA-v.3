@@ -3,12 +3,15 @@ $(function () {
     var users = {};
 
     $(document).on('keyup', '#searchUser', function() {
-        let search = $(this).val();
+        var search = $(this).val();
+
         $('#searchResults').hide();
+
         if (isNaN(search) && search.length < 3 || search == '') {
             return;
         }
-        $('#tableData').empty();
+
+        $('#tableData').html('');
 
         $.ajax({
             method: "POST",
@@ -24,11 +27,12 @@ $(function () {
             if (json.success) {
                 json.data.forEach(function(value) {
 
-                    var row = '<tr>\n' +
-                        '<th scope="row">'+value.userid+'</th>\n' +
-                        '<td>'+value.firstname+'</td>\n' +
-                        '<td>'+value.lastname+'</td>\n' +
-                        '<td><button type="button" class="btn addUser btn-success waves-effect waves-light" data-userid="'+value.userid+'">Add</button></td>\n' +
+                    var row =
+                        '<tr>' +
+                            '<th scope="row">'+value.email+'</th>' +
+                            '<td>'+value.firstname+'</td>' +
+                            '<td>'+value.lastname+'</td>' +
+                            '<td><button type="button" class="btn addUser btn-success waves-effect waves-light" data-userid="'+value.userid+'">Add</button></td>' +
                         '</tr>';
 
                     $('#tableData').append(row);
@@ -55,6 +59,11 @@ $(function () {
         $('input[name="firstname"]').val(user.firstname);
         $('input[name="lastname"]').val(user.lastname);
         $('input[name="email"]').val(user.email);
+        $('input[name="membership"]').val(user.membership);
+        $('input[name="phone"]').val(user.phone);
+        $('.genderSelect option[value='+ user.gender +']').attr('selected','selected');
+        $('.clubSelect option[value='+ user.clubid +']').attr('selected','selected');
+
 
 
     });

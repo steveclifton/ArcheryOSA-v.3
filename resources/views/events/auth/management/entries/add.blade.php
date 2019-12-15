@@ -32,7 +32,7 @@
                     <table class="table">
                         <thead>
                             <tr>
-                                <th>User ID</th>
+                                <th>Email</th>
                                 <th>First Name</th>
                                 <th>Last Name</th>
                                 <th>Action</th>
@@ -192,7 +192,7 @@
                 <div class="form-group row">
                     <label class="col-sm-12 col-md-3 col-form-label">Club</label>
                     <div class="col-md-9">
-                        <select name="clubid" class="form-control">
+                        <select name="clubid" class=" clubSelect form-control">
                             <option value="0">None</option>
                             @foreach($clubs as $club)
                                 <option value="{{$club->clubid}}"
@@ -233,7 +233,7 @@
                     <label class="col-sm-12 col-md-3 col-form-label">Gender*</label>
                     <div class="col-md-9">
                         <select name="gender"
-                                class="form-control {{ $errors->has('gender') ? 'is-invalid' : '' }}" required>
+                                class="genderSelect form-control {{ $errors->has('gender') ? 'is-invalid' : '' }}" required>
                             <option disabled selected>Select one</option>
                             <option value="m" {!! old('gender') == 'm' ? 'selected' : '' !!}>Male</option>
                             <option value="f" {!! old('gender') == 'f' ? 'selected' : '' !!}>Female</option>

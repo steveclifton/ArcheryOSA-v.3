@@ -8,6 +8,7 @@ use App\Http\Requests\User\UpdateChild;
 use App\Http\Requests\User\UserUpdateProfile;
 use App\Http\Controllers\Controller;
 use App\Jobs\SendArcherRelationRequest;
+use App\Models\Club;
 use App\Models\Event;
 use App\Models\Membership;
 use App\Models\Organisation;
@@ -139,7 +140,9 @@ class ProfileController extends Controller
      */
     public function getMyDetails()
     {
-        return view('profile.auth.mydetails');
+        $clubs = Club::get();
+
+        return view('profile.auth.mydetails', compact('clubs'));
     }
 
     public function getMyEvents()
@@ -529,6 +532,8 @@ class ProfileController extends Controller
         $user->postcode    = $validated['postcode'];
         $user->dateofbirth = $validated['dateofbirth'];
         $user->membership  = $validated['membership'];
+        $user->clubid      = $validated['club'];
+        $user->gender      = in_array($validated['gender'], ['m', 'f']) ? $validated['gender'] : null ;
 
         if ($user->firstname != $olduser->firstname || $user->lastname != $olduser->lastname) {
             $user->username = strtolower(preg_replace("/[^a-zA-Z0-9]/", "", $validated['firstname'].$validated['lastname'])) . rand(1,1440);

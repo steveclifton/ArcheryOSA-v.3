@@ -53,8 +53,31 @@
                             @endif
                         </div>
                     </div>
+
                     <div class="form-row">
-                        <div class="form-group col-md-6">
+                        <div class="form-group col-md-2">
+                            <label class="col-form-label">Gender</label>
+                            <select name="gender"
+                                    class="form-control {{ $errors->has('gender') ? 'is-invalid' : '' }}" required>
+
+                                <option value="0">N/A</option>
+                                    <option value="m"
+                                            {!! (old('gender') ?? Auth::user()->gender ?? '') == 'm' ? 'selected' : '' !!}>
+                                        Male
+                                    </option>
+                                    <option value="f"
+                                            {!! (old('gender') ?? Auth::user()->gender ?? '') == 'f' ? 'selected' : '' !!}>
+                                        Female
+                                    </option>
+                            </select>
+                            @if ($errors->has('gender'))
+                                <span class="invalid-feedback" role="alert">
+                                    <strong>{{ $errors->first('gender') }}</strong>
+                                </span>
+                            @endif
+                        </div>
+
+                        <div class="form-group col-md-4">
                             <label for="inputAddress" class="col-form-label">Address</label>
                             <input type="text" name="address" class="form-control {{ $errors->has('address') ? 'is-invalid' : '' }}" id="inputAddress" placeholder="Address" value="{{old('address1') ?? Auth::user()->address1 ?? ''}}">
                             @if ($errors->has('address'))
@@ -112,6 +135,27 @@
                                 </span>
                             @endif
                         </div>
+
+                        <div class="form-group col-md-4">
+                            <label class="col-form-label">Primary Club</label>
+                            <select name="club"
+                                    class="form-control {{ $errors->has('club') ? 'is-invalid' : '' }}" required>
+
+                                <option value="0">None</option>
+                                @foreach($clubs as $club)
+                                    <option value="{{$club->clubid}}"
+                                            {!! (old('club') ?? Auth::user()->clubid ?? '') == $club->clubid ? 'selected' : '' !!}>
+                                        {{$club->label}}
+                                    </option>
+                                @endforeach
+                            </select>
+                            @if ($errors->has('club'))
+                                <span class="invalid-feedback" role="alert">
+                                    <strong>{{ $errors->first('club') }}</strong>
+                                </span>
+                            @endif
+                        </div>
+
 
                     </div>
 
