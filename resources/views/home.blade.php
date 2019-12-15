@@ -68,7 +68,7 @@
                                              alt="{{$event->label}}">
                                         <div class="card-body">
                                             <h4 class="card-title font-18 mt-0">{{$event->label}}</h4>
-                                            <p class="card-text">Start : {!! date('d F Y', strtotime($event->start)) !!}</p>
+                                            <p class="card-text">Start : {!! date('d M Y', strtotime($event->start)) !!}</p>
                                             <p class="card-text">Event Level : {!! $event->level !!}</p>
                                             <p class="card-text">Region : {!! $event->region !!}</p>
 
@@ -91,7 +91,7 @@
                                     @foreach(array_slice($myevents, 3) as $event)
                                         <tr>
                                             <th scope="row"><a href="{{route('event', ['eventurl'=>$event->eventurl])}}">{{$event->label}}</a></th>
-                                            <td>{{date('d F Y', strtotime($event->start))}}</td>
+                                            <td>{{date('d M Y', strtotime($event->start))}}</td>
                                             <td>{{$event->status}}</td>
                                         </tr>
                                     @endforeach
@@ -128,7 +128,7 @@
                                          alt="{{$event->label}}">
                                     <div class="card-body">
                                         <h4 class="card-title font-18 mt-0">{{$event->label}}</h4>
-                                        <p class="card-text">Start : {!! date('d F Y', strtotime($event->start)) !!}</p>
+                                        <p class="card-text">Start : {!! date('d M Y', strtotime($event->start)) !!}</p>
                                         <p class="card-text">Event Level : {!! $event->level !!}</p>
                                         <p class="card-text">Region : {!! $event->region !!}</p>
                                     </div>
@@ -154,7 +154,7 @@
                                             <a href="/event/details/{{$event->eventurl}}">{{$event->label}}</a>
                                         </th>
                                         <td>{!! $event->level !!}</td>
-                                        <td>{{date('d F Y', strtotime($event->start))}}</td>
+                                        <td>{{date('d M Y', strtotime($event->start))}}</td>
                                         <td>{{$event->region}}</td>
                                     </tr>
                                 @endforeach
