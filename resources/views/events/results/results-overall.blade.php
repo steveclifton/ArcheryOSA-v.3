@@ -36,7 +36,7 @@
                 <div class="">
                     <div id="owl-slider-2" class="owl-carousel">
                         <div class="item">
-                            <h3><a href="#" class="text-white font-600">{{ucwords($event->label)}}</a></h3>
+                            <h3><a href="#" class="text-white font-600 archeryHeadText">{{ucwords($event->label)}}</a></h3>
 
                             <p class="m-t-30"><em></em></p>
                         </div>
@@ -56,7 +56,7 @@
                 <div class="">
                     <div id="owl-slider-2" class="owl-carousel">
                         <div class="item">
-                            <h3><a href="#" class="archeryHeadText">{{ucwords($event->label)}}</a></h3>
+                            <h3><a href="#" class=" archeryHeadText">{{ucwords($event->label)}}</a></h3>
                             <p class="m-t-30"><em></em></p>
                         </div>
                     </div>
