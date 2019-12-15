@@ -152,7 +152,9 @@
 }
 
 .tableTitle {
+  font-size: 1.05rem;
   margin-bottom: 10px;
+  
 }
 
 .row a {
