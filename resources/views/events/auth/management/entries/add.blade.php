@@ -6,11 +6,10 @@
 
     <div class="page-title-box">
         <h4 class="page-title">
-            <a href="/events/manage">Events</a>
-            <i class="ion-arrow-right-c"></i>
-            <a href="/events/manage/{{$event->eventurl}}">{{ucwords($event->label)}}</a>
-            <i class="ion-arrow-right-c"></i>
             <a href="/events/manage/evententries/{{$event->eventurl}}">Event Entries</a>
+            /
+            <a href="javascript:;">Add</a>
+
         </h4>
     </div>
 

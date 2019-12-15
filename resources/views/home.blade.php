@@ -4,17 +4,8 @@
 
 
 @section('content')
-    <div class="row">
-        <div class="col-sm-12">
-            <div class="page-title-box">
-                {{-- <h4 class="page-title">Upcoming Events</h4> --}}
-            </div>
-        </div>
-    </div>
 
-    <div class="col-md-12 homePageBanner">
-
-        {{-- <p class="text-muted m-b-30 font-13">A slideshow component for cycling through elements, like a carousel.</p> --}}
+    <div class="col-md-12 homePageBanner" style="padding-bottom: 30px; padding-top: 20px">
 
         <div class="panel panel-default text-center d-lg-none text-white slider-bg m-b-0"
              style="background: url({{asset('/images/archerybanner.jpg')}});">
@@ -23,8 +14,9 @@
                 <div class="">
                     <div id="owl-slider-2" class="owl-carousel">
                         <div class="item">
-                            <h3><a href="#" class="text-white font-600">Archery OSA</a></h3>
-                            {{-- <p class="small">02 April, 2015</p> --}}
+                            <h3>
+                                <a href="#" class="text-white font-600">Archery OSA</a>
+                            </h3>
                             <p class="m-t-30"><em></em></p>
                             <a href="{{route('results')}}" class="btn btn-inverse waves-effect waves-light">Latest Results!</a>
                         </div><!-- /.item -->
@@ -40,8 +32,9 @@
                 <div class="">
                     <div id="owl-slider-2" class="owl-carousel">
                         <div class="item">
-                            <h3><a href="#" class="archeryHeadText">Archery OSA</a></h3>
-                            {{-- <p class="small">02 April, 2015</p> --}}
+                            <h3>
+                                <a href="#" class="archeryHeadText">Archery OSA</a>
+                            </h3>
                             <p class="m-t-30"><em></em></p>
                             <a href="{{route('results')}}" class="btn btn-inverse waves-effect waves-light">Latest Results!</a>
                         </div><!-- /.item -->
@@ -51,12 +44,6 @@
         </div>
     </div> <!-- col-->
 
-    <div class="row">
-        <div class="col-sm-12">
-            <div class="page-title-box">
-            </div>
-        </div>
-    </div>
 
 
     @if(Auth::check() && !empty($myevents))

@@ -8,10 +8,8 @@
         <div class="col-sm-12">
             <div class="page-title-box">
                 <h4 class="page-title">
-                    <a href="/events">Events</a>
-                        <i class="ion-arrow-right-c"></i>
                     <a href="/event/details/{{$event->eventurl}}">{{ucwords($event->label)}}</a>
-                        <i class="ion-arrow-right-c"></i>
+                        /
                     <a href="javascript:;">Registration</a>
                 </h4>
             </div>
@@ -19,14 +17,6 @@
     </div>
 
 
-    <!-- Section-Title -->
-    <div class="row">
-        <div class="col-sm-12">
-            <div class="page-title-box">
-                <h5 class="page-title">Select the Archer you wish to enter into the event</h5>
-            </div>
-        </div>
-    </div>
     <div class="row">
         <div class="col-lg-12">
             <div class="card-box">

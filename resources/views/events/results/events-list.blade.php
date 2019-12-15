@@ -6,7 +6,9 @@
     <div class="row">
         <div class="col-sm-12">
             <div class="page-title-box">
-                <h4 class="page-title "><a href="/events">Events Results</a></h4>
+                <h4 class="page-title">
+                    <a href="javascript:;">Events Results</a>
+                </h4>
             </div>
         </div>
     </div>
@@ -59,7 +61,7 @@
                                 @foreach(array_slice($events, 3) as $event)
                                     <tr>
                                         <th scope="row"><a href="/event/results/{{$event->eventurl}}">{{$event->label}}</a></th>
-                                        <td>{{date('d F Y', strtotime($event->start))}}</td>
+                                        <td>{{date('d M Y', strtotime($event->start))}}</td>
                                         <td class="text-success">{{$event->eventstatus}}</td>
                                     </tr>
                                 @endforeach

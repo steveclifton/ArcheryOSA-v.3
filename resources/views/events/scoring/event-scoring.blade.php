@@ -8,12 +8,9 @@
         <div class="col-sm-12">
             <div class="page-title-box">
                 <h4 class="page-title">
-
-                    <a href="/events/manage/{{$event->eventurl}}">{{ucwords($event->label)}}</a>
-                    <i class="ion-arrow-right-c"></i>
-                    <a href="/event/scoring/{{$event->eventurl}}">{{ucwords($eventcompetition->label)}}</a>
-                    <i class="ion-arrow-right-c"></i>
-                    <a href="javascript:;">Scoring</a>
+                    <a href="/event/scoring/{{$event->eventurl}}">{{ucwords($event->label)}}</a>
+                    /
+                    <a href="javascript:;">{{ucwords($eventcompetition->label)}}</a>
                 </h4>
             </div>
         </div>

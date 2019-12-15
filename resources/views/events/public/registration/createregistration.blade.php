@@ -8,11 +8,9 @@
         <div class="col-sm-12">
             <div class="page-title-box">
                 <h4 class="page-title">
-                    <a href="/events">Events</a>
-                        <i class="ion-arrow-right-c"></i>
-                    <a href="/event/details/{{$event->eventurl}}">{{ucwords($event->label)}}</a>
-                        <i class="ion-arrow-right-c"></i>
-                    <a href="javascript:;">Enter</a>
+                    <a href="/event/register/{{$event->eventurl}}">{{ucwords($event->label)}}</a>
+                    /
+                    <a href="javascript:;">Entry</a>
                 </h4>
             </div>
         </div>
@@ -164,7 +162,7 @@
                             <option value="{{ empty($event->clubrequired) ? '0' : ''}}">None</option>
                             @foreach($clubs as $club)
                                 <option value="{{$club->clubid}}"
-                                        {!! old('clubid') == $club->clubid ? 'selected' : '' !!}>
+                                        {!! old('clubid') ?? $user->clubid == $club->clubid ? 'selected' : '' !!}>
                                     {{$club->label}}
                                 </option>
                             @endforeach
@@ -208,8 +206,8 @@
                         <select name="gender"
                                 class="form-control {{ $errors->has('gender') ? 'is-invalid' : '' }}" required>
                             <option disabled selected>Select one</option>
-                            <option value="m" {!! old('gender') == 'm' ? 'selected' : '' !!}>Male</option>
-                            <option value="f" {!! old('gender') == 'f' ? 'selected' : '' !!}>Female</option>
+                            <option value="m" {!! (old('gender') ?? $user->gender) == 'm' ? 'selected' : '' !!}>Male</option>
+                            <option value="f" {!! (old('gender') ?? $user->gender) == 'f' ? 'selected' : '' !!}>Female</option>
                         </select>
                         @if ($errors->has('gender'))
                             <span class="invalid-feedback" role="alert">

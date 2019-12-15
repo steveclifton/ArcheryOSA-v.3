@@ -15,8 +15,8 @@
         <div class="col-sm-12">
             <div class="page-title-box">
                 <h4 class="page-title">
-                    <a href="/event/results/{{$event->eventurl}}">Results</a>
-                    <i class="ion-arrow-right-c"></i>
+                    <a href="/event/results/{{$event->eventurl}}">{{$event->label}}</a>
+                    /
                     <a href="javascript:;">Overall</a>
                 </h4>
             </div>
@@ -66,13 +66,6 @@
     </div> <!-- col-->
 
 
-
-    <div class="row">
-        <div class="col-sm-3 weekSelector">
-        </div>
-    </div>
-
-    <h3>Overall Results</h3>
 	<div class="row">
         <div class="col-lg-12">
             <ul class="nav nav-tabs tabs">

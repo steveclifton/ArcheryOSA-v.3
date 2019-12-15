@@ -8,21 +8,13 @@
             <div class="page-title-box">
                 <h4 class="page-title">
                     <a href="/event/details/{{$event->eventurl}}">{{ucwords($event->label)}}</a>
-                    <i class="ion-arrow-right-c"></i>
+                    /
                     <a href="javascript:;">Results</a>
                 </h4>
             </div>
         </div>
     </div>
 
-    <!-- Section-Title -->
-    <div class="row">
-        <div class="col-sm-12">
-            <div class="page-title-box">
-                <h5 class="page-title">League Competition Results</h5>
-            </div>
-        </div>
-    </div>
     <div class="row">
         <div class="col-lg-12">
             <div class="card-box">

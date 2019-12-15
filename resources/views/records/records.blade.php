@@ -12,7 +12,7 @@
     <div class="page-title-box">
         <h4 class="page-title">
             <a href="javascript:;">Records</a>
-            <i class="ion-arrow-right-c"></i>
+            /
             <a href="javascript:;">ArcheryNZ Outdoor Records</a>
         </h4>
     </div>

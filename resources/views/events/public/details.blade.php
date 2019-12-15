@@ -15,10 +15,10 @@
     <div class="row">
         <div class="col-sm-12">
             <div class="page-title-box">
-                <h4 class="page-title" ">
-                <a href="/events">Events</a>
-                <i class="ion-arrow-right-c"></i>
-                <a href="javascript:;">{{ucwords($event->label)}}</a>
+                <h4 class="page-title">
+                    <i class="ion-arrow-left-c"></i>
+                    <a href="/events">Events</a>
+
                 </h4>
             </div>
         </div>
@@ -37,7 +37,7 @@
                         <div class="carousel-inner" role="listbox">
                             <div class="carousel-item active">
                                 <img class="d-block img-fluid" src="{{URL::asset('/images/events/' . $event->imagedt)}}"
-                                     alt="First slide"/>
+                                     alt="{{$event->label}}"/>
 
                             </div>
 

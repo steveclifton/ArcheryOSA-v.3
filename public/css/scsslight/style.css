@@ -1417,11 +1417,11 @@ select[multiple] {
 }
 
 .page-title-box {
-  padding: 22px 0;
+  padding: 22px 0 18px 0;
 }
 
 .page-title-box .page-title {
-  font-size: 20px;
+  font-size: 16px;
   margin-bottom: 0;
   margin-top: 0;
   font-weight: 600;
@@ -1833,7 +1833,7 @@ select[multiple] {
 
 @media (max-width: 991px) {
   .wrapper {
-    padding-top: 60px;
+    padding-top: 30px;
   }
 
   .container {

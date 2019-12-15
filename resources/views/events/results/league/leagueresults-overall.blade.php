@@ -13,15 +13,15 @@
 		<div class="col-sm-12">
 	    	<div class="page-title-box">
                 <h4 class="page-title">
-                    <a href="/event/results/{{$event->eventurl}}">Results</a>
-                    <i class="ion-arrow-right-c"></i>
+                    <a href="/event/results/{{$event->eventurl}}">{{$event->label}}</a>
+                    /
                     <a href="javascript:;">Overall</a>
                 </h4>
 	    	</div>
 		</div>
 	</div>
     @if (!empty($event->imagebanner))
-    <div class="col-md-12 homePageBanner">
+        <div class="col-md-12 homePageBanner">
         <div class="panel panel-default text-center d-lg-none text-white slider-bg m-b-0"
              style="background-position:center !important;
                      background-size:contain !important;
@@ -63,15 +63,8 @@
                 </div>
             </div>
         </div>
-    </div> <!-- col-->
-    @endif
-
-
-    <div class="row">
-        <div class="col-sm-3 weekSelector">
-        </div>
     </div>
-
+    @endif
 
 	<div class="row">
         <div class="col-lg-12">

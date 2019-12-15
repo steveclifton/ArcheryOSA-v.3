@@ -35,14 +35,7 @@
     </div>
 
     @if(!empty(array_slice($events, 3)))
-        <!-- Section-Title -->
-        <div class="row">
-            <div class="col-sm-12">
-                <div class="page-title-box">
-                    <h4 class="page-title">Upcoming Events</h4>
-                </div>
-            </div>
-        </div>
+
         <div class="row">
             <div class="col-lg-12">
                 <div class="card-box">
