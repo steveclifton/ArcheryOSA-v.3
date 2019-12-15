@@ -1,28 +1,14 @@
-<!-- Navigation Bar-->
 <header id="topnav">
     <div class="topbar-main">
         <div class="container-fluid">
-
-            <!-- Logo container-->
             <div class="logo">
-                <!-- Text Logo -->
-                <!--<a href="index.html" class="logo">-->
-                <!--UBold-->
-                <!--</a>-->
-                <!-- Image Logo -->
                 <a href="/" class="logo">
                     <img src="{{URL::asset('/images/Archeryosa.jpg')}}" alt="" height="28" class="logo-lg">
                     <img src="{{URL::asset('/images/Archeryosa.jpg')}}" alt="" height="20" class="logo-sm">
                 </a>
-
             </div>
-            <!-- End Logo container-->
-
-
             <div class="menu-extras topbar-custom">
-
                 <ul class="list-inline float-right mb-0">
-
                     <li class="menu-item list-inline-item">
                         <!-- Mobile menu toggle-->
                         <a class="navbar-toggle nav-link">
@@ -177,11 +163,8 @@
                             </ul>
                         </li>
                     @endif
-
                 </ul>
-                <!-- End navigation menu -->
-            </div> <!-- end #navigation -->
-        </div> <!-- end container -->
-    </div> <!-- end navbar-custom -->
+            </div>
+        </div>
+    </div>
 </header>
-<!-- End Navigation Bar-->

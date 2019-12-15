@@ -5,4 +5,5 @@
 <link href="{{URL::asset('/css/icons.min.css')}}" rel="stylesheet" type="text/css" />
 <link href="{{URL::asset('/css/scsslight/style.min.css')}}" rel="stylesheet" type="text/css" />
 <script src="{{URL::asset('/js/modernizr.min.js')}}"></script>
-<script src="{{URL::asset('/js/jquery.min.js')}}"></script>\
+<script src="{{URL::asset('/js/jquery.min.js')}}"></script>
+<br>
