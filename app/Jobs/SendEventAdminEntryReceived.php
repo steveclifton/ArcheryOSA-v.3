@@ -46,7 +46,6 @@ class SendEventAdminEntryReceived extends ArcheryOSASender implements ShouldQueu
     {
         if ($this->checkEmailAddress($this->email)) {
             Mail::to($this->getEmailAddress($this->email))
-                ->bcc(getenv('MAIL_FROM_ADDRESS'))
                 ->send(new EventAdminEntryReceived(ucwords($this->eventname), $this->entryname, $this->fullname, $this->eventurl));
         }
     }

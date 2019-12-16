@@ -37,7 +37,6 @@ class SendPasswordResetConfirmation extends ArcheryOSASender implements ShouldQu
 
         if ($this->checkEmailAddress($this->email)) {
             Mail::to($this->getEmailAddress($this->email))
-                ->bcc(getenv('MAIL_FROM_ADDRESS'))
                 ->send(new PasswordUpdated($this->name));
         }
 

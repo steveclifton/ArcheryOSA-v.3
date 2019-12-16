@@ -38,7 +38,6 @@ class SendExceptionEmail implements ShouldQueue
         $user = User::where('userid', 1)->first();
         return;
         Mail::to($this->getEmailAddress($user->email))
-            ->bcc(getenv('MAIL_FROM_ADDRESS'))
             ->send(new ExceptionAlertEmail($this->exception, $this->subject));
     }
 }
