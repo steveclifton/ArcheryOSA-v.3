@@ -32,7 +32,7 @@
                 <div style="margin-tops: 20px">
                     <div class="alert hidden" role="alert" ></div>
                 </div>
-            <a role="button" href="javascript:;" class="myButton btn btn-inverse btn-info waves-effect waves-light">Save Results</a>
+            <a role="button" href="javascript:;" class="myButton btn btn-danger">Save Results</a>
 
             @php $i = 1; @endphp
             @foreach($evententrys as $bowtype => $ee)
@@ -74,7 +74,7 @@
                                                 <i class="md-add-box showMore"></i>
                                                 <div class="hidden">
                                                     Hits<input type="text" class="form-control" value="{{!empty($a->score1) ? $a->score1->hits : '' }}" data-type="hits" placeholder="Hits">
-                                                    10+X<input type="text" class="form-control" value="{{!empty($a->score1) ? $a->score1->inners : '' }}" data-type="inner" placeholder="10">
+                                                    10+X<input type="text" class="form-control" value="{{!empty($a->score1) ? $a->score1->inners : '' }}" data-type="inners" placeholder="10">
                                                     X<input type="text" class="form-control" value="{{!empty($a->score1) ? $a->score1->max : '' }}" data-type="max" placeholder="X">
                                                 </div>
                                             @endif
@@ -87,7 +87,7 @@
                                                     <i class="md-add-box showMore"></i>
                                                     <div class="hidden">
                                                         Hits<input type="text" class="form-control" value="{{!empty($a->score2) ? $a->score2->hits : '' }}" data-type="hits" placeholder="Hits">
-                                                        10+X<input type="text" class="form-control" value="{{!empty($a->score2) ? $a->score2->inners : '' }}" data-type="inner" placeholder="10">
+                                                        10+X<input type="text" class="form-control" value="{{!empty($a->score2) ? $a->score2->inners : '' }}" data-type="inners" placeholder="10">
                                                         X<input type="text" class="form-control" value="{{!empty($a->score2) ? $a->score2->max : '' }}" data-type="max" placeholder="X">
                                                     </div>
                                                 @endif
@@ -100,7 +100,7 @@
                                                     <i class="md-add-box showMore"></i>
                                                     <div class="hidden">
                                                         Hits<input type="text" class="form-control" value="{{!empty($a->score3) ? $a->score3->hits : '' }}" data-type="hits" placeholder="Hits">
-                                                        10+X<input type="text" class="form-control" value="{{!empty($a->score3) ? $a->score3->inners : '' }}" data-type="inner" placeholder="10">
+                                                        10+X<input type="text" class="form-control" value="{{!empty($a->score3) ? $a->score3->inners : '' }}" data-type="inners" placeholder="10">
                                                         X<input type="text" class="form-control" value="{{!empty($a->score3) ? $a->score3->max : '' }}" data-type="max" placeholder="X">
                                                     </div>
                                                 @endif
@@ -113,7 +113,7 @@
                                                     <i class="md-add-box showMore"></i>
                                                     <div class="hidden">
                                                         Hits<input type="text" class="form-control" value="{{!empty($a->score4) ? $a->score4->hits : '' }}" data-type="hits" placeholder="Hits">
-                                                        10+X<input type="text" class="form-control" value="{{!empty($a->score4) ? $a->score4->inners : '' }}" data-type="inner" placeholder="10">
+                                                        10+X<input type="text" class="form-control" value="{{!empty($a->score4) ? $a->score4->inners : '' }}" data-type="inners" placeholder="10">
                                                         X<input type="text" class="form-control" value="{{!empty($a->score4) ? $a->score4->max : '' }}" data-type="max" placeholder="X">
                                                     </div>
                                                 @endif
@@ -166,7 +166,7 @@
                     $(this).siblings('div').toggle();
                 });
 
-                $(document).on('keyup', '.distInp', function () {
+                $(document).on('keyup', '.form-control', function () {
                     outstanding = true;
 
                     var parent = $(this).closest('tr').children('td');
@@ -181,6 +181,9 @@
                     });
                     parent.find('.totalInp').val(total);
                     $(this).closest('tr').addClass('hasScored');
+
+                    $('.myButton').removeClass('btn-danger').addClass('btn-success');
+
                 });
 
 
@@ -277,7 +280,7 @@
                                    hits    : hits,
                                    inners  : inners,
                                    max     : max
-                               }
+                               };
 
                                jsonData.score.push(data);
                            }
@@ -316,6 +319,12 @@
                         $('.alert').addClass('alert-danger').html(errormessage.join('')).removeClass('hidden');
                         return;
                     }
+
+                    if (sendJson.length <= 0) {
+                        $('.alert').addClass('alert-danger').html('No results to submit').removeClass('hidden');
+                        return;
+                    }
+
 
                     $.ajax({
                         method: "POST",
