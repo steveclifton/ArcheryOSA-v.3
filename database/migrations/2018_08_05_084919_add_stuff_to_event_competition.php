@@ -14,8 +14,8 @@ class AddStuffToEventCompetition extends Migration
     public function up()
     {
         Schema::table('eventcompetitions', function($table) {
-            $table->text('competitionids')->default(0)->nullable();
-            $table->text('divisionids')->default(0)->default(0)->nullable();
+            $table->text('competitionids')->nullable();
+            $table->text('divisionids')->nullable();
             $table->integer('ignoregenders')->default(0);
         });
     }
