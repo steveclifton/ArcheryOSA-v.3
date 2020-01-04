@@ -25,7 +25,6 @@
                                 <h4 class="card-title font-18 mt-0">{{$event->label}}</h4>
                                 <p class="card-text">Start : {!! date('d F Y', strtotime($event->start)) !!}</p>
                                 <p class="card-text">Finish : {!! date('d F Y', strtotime($event->end)) !!}</p>
-                                <p class="card-text">Status : {{$event->eventstatus}}</p>
                             </div>
                         </div>
                     </a>
@@ -54,7 +53,7 @@
                                 <tr>
                                     <th>Name</th>
                                     <th>Start</th>
-                                    <th>Status</th>
+                                    <th>Finish</th>
                                 </tr>
                                 </thead>
                                 <tbody>
@@ -62,7 +61,7 @@
                                     <tr>
                                         <th scope="row"><a href="/event/results/{{$event->eventurl}}">{{$event->label}}</a></th>
                                         <td>{{date('d M Y', strtotime($event->start))}}</td>
-                                        <td class="text-success">{{$event->eventstatus}}</td>
+                                        <td>{{date('d M Y', strtotime($event->end))}}</td>
                                     </tr>
                                 @endforeach
                                 </tbody>
