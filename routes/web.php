@@ -6,6 +6,7 @@ require_once 'downloads.php';
 
 
 Route::get('/', 'HomeController@index')->name('home');
+Route::get('privacy', 'HomeController@getPrivacyPolicy')->name('privacy');
 
 
 
