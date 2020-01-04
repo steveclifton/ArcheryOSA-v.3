@@ -32,19 +32,22 @@
 
 <script src='https://www.google.com/recaptcha/api.js'></script>
 
-<script async src="https://www.googletagmanager.com/gtag/js?id=UA-109735416-1"></script>
-<script>
-    window.dataLayer = window.dataLayer || [];
-    function gtag(){dataLayer.push(arguments);}
-    gtag('js', new Date());
-    gtag('config', 'UA-147182984-1');
-</script>
+@if (!empty(getenv('GOOGLE_UA')))
+    <script async src="https://www.googletagmanager.com/gtag/js?id={{getenv('GOOGLE_UA')}}"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+        gtag('config', '{{getenv('GOOGLE_UA')}}');
+    </script>
+@endif
 
-<script>
-    (function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
-            new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
-        j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
-        'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
-    })(window,document,'script','dataLayer','GTM-PL2ND3T');
-</script>
-
+@if (!empty(getenv('GOOGLE_GTM')))
+    <script>
+        (function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+                new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+            j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+            'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+        })(window,document,'script','dataLayer','{{getenv('GOOGLE_GTM')}}');
+    </script>
+@endif
