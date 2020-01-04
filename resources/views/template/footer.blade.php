@@ -5,7 +5,7 @@
     <div class="container">
         <div class="row">
             <div class="col-12 text-center">
-                © {{date('Y')}} Archery OSA
+                © {{date('Y')}} Archery OSA | <a href="/privacy">Privacy Policy</a>
             </div>
         </div>
     </div>
