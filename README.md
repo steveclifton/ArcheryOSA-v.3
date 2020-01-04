@@ -31,3 +31,4 @@ https://github.com/steveclifton/ArcheryOSA-v.3/blob/master/API.md
 * [composer](https://getcomposer.org/) install
 * Create .env file from .env.example
 * Migrate database tables
+* `php artisan key:generate`
