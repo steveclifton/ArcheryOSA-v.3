@@ -56,15 +56,13 @@ class EventEntryController extends EventController
         else {
             $evententries = DB::select("
                 SELECT ee.entryid, u.username, CONCAT_WS(' ', ee.firstname, ee.lastname ) as name, ee.confirmationemail, 
-                      ee.paid, ee.notes, d.label as division, ee.created_at as created, es.label as status, ee.pickup 
+                      ee.paid, ee.notes, ee.created_at as created, es.label as status, ee.pickup 
                 FROM `evententrys` ee
                 JOIN `users` u USING (`userid`)
-                JOIN `divisions` d USING (`divisionid`)
                 JOIN `entrystatus` es USING (`entrystatusid`)
                 WHERE `eventid` = '".(int)$event->eventid."'
             ");
         }
-
 
         $canremoveentry = true;
 

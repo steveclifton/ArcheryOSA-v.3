@@ -397,6 +397,17 @@ class EventRegistrationController extends EventController
         }
 
 
+        $divisionid = 0;
+        if (is_array($validated['divisionid'])) {
+            foreach ($validated['divisionid'] as $did) {
+                if (is_numeric($did)) {
+                    $divisionid = $did;
+                    break;
+                }
+            }
+        }
+
+
         // Store the single event entry
         $evententry = new EventEntry();
         $evententry->userid        = $validated['userid'];
@@ -414,7 +425,7 @@ class EventRegistrationController extends EventController
         $evententry->clubid        = !empty($validated['clubid'])         ? intval($validated['clubid'])     : '';
         $evententry->schoolid      = !empty($validated['schoolid'])       ? intval($validated['schoolid'])   : '';
         $evententry->country       = !empty($validated['country'])        ? ($validated['country'])          : '';
-        $evententry->divisionid    = (!empty($validated['divisionid']) && is_array($validated['divisionid'])) ? reset($validated['divisionid'])  : '';
+        $evententry->divisionid    = $divisionid;
         $evententry->pickup        = !empty($validated['pickup']);
         $evententry->dateofbirth   = !empty($validated['dateofbirth'])    ? $validated['dateofbirth']        : '';
         $evententry->gender        = !empty(($validated['gender'] ?? '') == 'm')  ? 'm' : 'f';
@@ -571,6 +582,15 @@ class EventRegistrationController extends EventController
             $evententry = new EventEntry();
         }
 
+        $divisionid = 0;
+        if (is_array($validated['divisionid'])) {
+            foreach ($validated['divisionid'] as $did) {
+                if (is_numeric($did)) {
+                    $divisionid = $did;
+                    break;
+                }
+            }
+        }
 
         $evententry->userid        = $validated['userid'];
         $evententry->eventid       = $event->eventid;
@@ -585,7 +605,7 @@ class EventRegistrationController extends EventController
         $evententry->membership    = !empty($validated['membership'])     ? ($validated['membership']) : '';
         $evententry->notes         = !empty($validated['notes'])          ? ($validated['notes'])      : '';
         $evententry->clubid        = !empty($validated['clubid'])         ? intval($validated['clubid'])         : '';
-        $evententry->divisionid    = (!empty($validated['divisionid']) && is_array($validated['divisionid'])) ? reset($validated['divisionid'])  : '';
+        $evententry->divisionid    = $divisionid;
         $evententry->schoolid      = !empty($validated['schoolid'])       ? $validated['schoolid']               : '';
         $evententry->dateofbirth   = !empty($validated['dateofbirth'])    ? $validated['dateofbirth']            : '';
         $evententry->gender        = !empty(($validated['gender'] ?? '') == 'm')  ? 'm' : 'f';
@@ -643,6 +663,14 @@ class EventRegistrationController extends EventController
         $divisiondata = ($request->input('divisionid') ?? []);
         $divisiondata = array_combine($divisiondata, $divisiondata);
 
+        $divisionid = 0;
+        foreach ($divisiondata as $did) {
+            if (is_numeric($did)) {
+                $divisionid = $did;
+                break;
+            }
+        }
+
 
         $evententry->firstname    = $request->input('firstname') ?? $evententry->firstname;
         $evententry->lastname     = $request->input('lastname') ?? $evententry->lastname;
@@ -653,7 +681,7 @@ class EventRegistrationController extends EventController
         $evententry->membership   = $request->input('membership') ?? $evententry->membership;
         $evententry->notes        = $request->input('notes') ?? $evententry->notes;
         $evententry->clubid       = $request->input('clubid') ?? $evententry->clubid;
-        $evententry->divisionid    = (!empty($divisiondata) && is_array($divisiondata)) ? reset($divisiondata)  : '';
+        $evententry->divisionid   = $divisionid;
         $evententry->schoolid     = $request->input('schoolid') ?? $evententry->schoolid;
         $evententry->gender       = !empty($request->input('gender') == 'm')  ? 'm' : 'f';
         $evententry->dateofbirth  = $request->input('dateofbirth') ?? $evententry->dateofbirth;
