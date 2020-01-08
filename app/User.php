@@ -2,6 +2,7 @@
 
 namespace App;
 
+use App\Models\Cart;
 use App\Models\EntryStatus;
 use App\Models\Event;
 use App\Models\EventAdmin;
@@ -39,6 +40,7 @@ class User extends Authenticatable
     protected $hidden = [
         'password', 'remember_token',
     ];
+
 
     /**
      * Need to update this once events are setup, but allows user to see events where they can score
@@ -127,6 +129,33 @@ class User extends Authenticatable
     public function getChildren()
     {
         return User::where('parentuserid', Auth::id())->get();
+    }
+
+    protected function loadcart()
+    {
+        $this->cart = Cart::where('userid', $this->userid)->first();
+    }
+
+    public function getcart()
+    {
+        if (empty($this->cart)) {
+            $this->loadcart();
+        }
+
+        return $this->cart;
+    }
+
+    public function getcartitems()
+    {
+        if (empty($this->cart)) {
+            $this->loadcart();
+        }
+
+        $items = [];
+        if (!empty($this->cart->items)) {
+            $items = json_decode($this->cart->items);
+        }
+        return $items;
     }
 
 }
