@@ -49,7 +49,7 @@
                             @foreach($eventcompetitions as $eventcompetition)
                                 <option value="{{$eventcompetition->date}}"
                                         data-cid="{{$eventcompetition->eventcompetitionid}}"
-                                    {!! $eventcompetition->eventcompetitionid == $competition['eventcompetitionid'] ? 'selected' : '' !!}
+                                    {!! $eventcompetition->eventcompetitionid == ($competition['eventcompetitionid'] ?? null) ? 'selected' : '' !!}
                                     >{{ucwords($eventcompetition->label)}}</option>
                             @endforeach
                         </select>
@@ -74,7 +74,7 @@
                     </div>
 
                     <div class="col-3" id="deletediv" style="display: {{$formaction == 'update' ? 'block' : 'none'}}">
-                        <a href="/events/manage/competitions/delete/{{$event->eventurl}}/{{$competition['eventcompetitionid']}}" id="deleteeventcomp" class="btn btn-danger" onclick="return confirm('Are you sure you want to delete this competition?')">Delete</a>
+                        <a href="/events/manage/competitions/delete/{{$event->eventurl}}/{{$competition['eventcompetitionid'] ?? ''}}" id="deleteeventcomp" class="btn btn-danger" onclick="return confirm('Are you sure you want to delete this competition?')">Delete</a>
                     </div>
                 </div>
 
