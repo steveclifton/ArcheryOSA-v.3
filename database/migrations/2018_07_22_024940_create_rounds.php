@@ -28,10 +28,8 @@ class CreateRounds extends Migration
             $table->string('dist4')->nullable();
             $table->string('dist4max')->nullable();
             $table->integer('visible')->default(1);
-
             $table->string('totalmax');
             $table->timestamps();
-
         });
 
     }
