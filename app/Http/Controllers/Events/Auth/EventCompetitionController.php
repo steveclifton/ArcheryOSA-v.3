@@ -100,13 +100,10 @@ class EventCompetitionController extends EventController
         // Get the events daterange
         $event->daterange = $this->helper->getEventsDateRange($event);
 
-        // Get the first day
-        $firstdate = reset($event->daterange)->format('Y-m-d');
-
         // Add the first competition day to the event
         $competition = EventCompetition::where('eventid', $event->eventid)
-            ->where('date', $firstdate)
-            ->first();
+                                        ->orderby('date')
+                                        ->first();
 
         if (!empty($competition)) {
             $competition = $competition->toArray();
@@ -114,15 +111,11 @@ class EventCompetitionController extends EventController
 
         $formaction = empty($competition) ? 'create' : 'update';
 
-        $entries = EntryCompetition::where('eventid', $event->eventid)
-            ->where('eventcompetitionid',  $competition['eventcompetitionid'])
-            ->first();
-
         $eventcompetitions = EventCompetition::where('eventid', $event->eventid)->get();
 
 
         return view('events.auth.management.competitions',
-                compact('event', 'entries', 'mappedrounds', 'competition', 'eventcompetitions',
+                compact('event', 'mappedrounds', 'competition', 'eventcompetitions',
                     'scoringlevels', 'formaction', 'mappeddivisions')
         );
     }

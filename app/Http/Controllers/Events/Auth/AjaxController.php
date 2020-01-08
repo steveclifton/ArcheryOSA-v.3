@@ -48,7 +48,6 @@ class AjaxController extends EventController
 
     public function getMarkup(Request $request)
     {
-
         $event = Event::where('eventid', $request->eventid ?? -1)->first();
 
         if (empty($event) || empty($request->date)) {
@@ -62,17 +61,12 @@ class AjaxController extends EventController
          * Get the competition
          */
         $competition = EventCompetition::where('eventid', $request->eventid)
-            ->where('eventcompetitionid', $request->eventcompetitionid)
-            ->first();
+                                        ->where('eventcompetitionid', $request->eventcompetitionid)
+                                        ->first();
 
         if (!empty($competition)) {
             $competition = $competition->toArray();
         }
-
-        $entries = EntryCompetition::where('eventid', $event->eventid)
-                                    ->where('eventcompetitionid',  $competition['eventcompetitionid'])
-                                    ->first();
-
 
         if ($event->isPostal()) {
             // Get the events daterange
@@ -104,12 +98,11 @@ class AjaxController extends EventController
         /*
          * Get the compeititon tree info
          */
-        //$mappedcompetitions = $this->helper->getMappedCompetitionTree();
         $mappeddivisions    = $this->helper->getMappedDivisionsTree();
         $mappedrounds       = $this->helper->getMappedRoundTree();
 
         // Make the view
-        $view = View::make('events.auth.management.includes.competitiontree', compact('competition', 'entries', 'mappedrounds', 'mappeddivisions'));
+        $view = View::make('events.auth.management.includes.competitiontree', compact('competition', 'mappedrounds', 'mappeddivisions'));
         $html .= $view->render();
 
 
@@ -134,9 +127,6 @@ class AjaxController extends EventController
         if (empty($competition)) {
             $formaction = '/events/manage/competitions/create/'.$event->eventurl;
         }
-
-
-
 
 
         return response()->json([
