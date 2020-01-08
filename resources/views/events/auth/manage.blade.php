@@ -29,7 +29,7 @@
             <a href="/events/manage/update/{{$event->eventurl}}">
                 <div class="db-social-box topLine">
                     <span class="fa fa-edit"></span>
-                    <h5>Edit Event Details</h5>
+                    <h5>Edit Details</h5>
                 </div>
             </a>
         </div>
@@ -38,7 +38,7 @@
             <a href="/events/manage/settings/{{$event->eventurl}}">
                 <div class="db-social-box topLine">
                     <span class="fa fa-cogs"></span>
-                    <h5>Event Settings</h5>
+                    <h5>Settings</h5>
                 </div>
             </a>
         </div>
@@ -58,7 +58,7 @@
             <a href="/events/manage/evententries/{{$event->eventurl}}">
                 <div class="db-social-box bottomline">
                     <span class="fa fa-users"></span>
-                    <h5>Event Entries</h5>
+                    <h5>Entries</h5>
                 </div>
             </a>
         </div>
@@ -100,7 +100,7 @@
             <a href="/events/manage/eventadmins/{{$event->eventurl}}">
                 <div class="db-social-box bottomLine">
                     <span class="md-account-child"></span>
-                    <h5>Event Admins</h5>
+                    <h5> Admins</h5>
                 </div>
             </a>
         </div>
