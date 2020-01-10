@@ -42,8 +42,8 @@
                         <thead class="thead-light">
                             <tr>
                                 <th>Name</th>
+                                <th>Organisation</th>
                                 <th>Code</th>
-                                <th>Distances</th>
                                 <th>Visible</th>
                             </tr>
                         </thead>
@@ -51,8 +51,8 @@
                             @foreach($rounds as $round)
                                 <tr>
                                     <th scope="row"><a href="/admin/rounds/update/{{$round->roundid}}">{{$round->label}}</a></th>
+                                    <td>{{$round->orgname}}</td>
                                     <td>{{$round->code}}</td>
-                                    <td>{!! implode($round->unit . ', ' , $round->getDistances()) . $round->unit!!}</td>
                                     <td>@if($round->visible)<i class="fa fa-check"></i>@endif</td>
                                 </tr>
                             @endforeach

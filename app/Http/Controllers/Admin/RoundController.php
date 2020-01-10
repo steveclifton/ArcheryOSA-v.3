@@ -9,6 +9,7 @@ use App\Models\Round;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 
 class RoundController extends Controller
 {
@@ -25,7 +26,12 @@ class RoundController extends Controller
      */
     public function get()
     {
-        $rounds = Round::get();
+        $rounds = DB::select("
+            SELECT r.*, o.label as orgname
+            FROM `rounds` r 
+            LEFT JOIN `organisations` o USING (`organisationid`)
+            ORDER BY o.`label`, r.`label` 
+        ");
         return view('admin.rounds.rounds', compact('rounds'));
     }
 
