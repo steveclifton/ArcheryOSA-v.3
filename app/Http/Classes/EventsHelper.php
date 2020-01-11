@@ -128,6 +128,7 @@ class EventsHelper
             FROM `rounds` c
             LEFT JOIN `organisations` o USING (`organisationid`)
             WHERE c.visible = 1
+            ORDER BY c.label
         ");
 
 
