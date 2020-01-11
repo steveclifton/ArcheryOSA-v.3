@@ -149,7 +149,7 @@ class EventRegistrationController extends EventController
                 $eventcompetition->rounds = Round::where('roundid', $eventcompetition->roundids)->get();
             }
             else {
-                $eventcompetition->rounds = Round::wherein('roundid', json_decode($eventcompetition->roundids))->get();
+                $eventcompetition->rounds = Round::wherein('roundid', json_decode($eventcompetition->roundids))->orderby('label', 'DESC')->get();
             }
 
             $competitionsfinal[$eventcompetition->date][$eventcompetition->label] = $eventcompetition;
