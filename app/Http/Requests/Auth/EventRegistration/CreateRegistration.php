@@ -42,6 +42,7 @@ class CreateRegistration extends FormRequest
                 'phone'          => 'nullable',
                 'address'        => 'nullable',
                 'notes'          => 'nullable',
+                'paymenttype'    => 'nullable',
             ];
         }
 
@@ -94,16 +95,16 @@ class CreateRegistration extends FormRequest
             'divisionid'     => 'required',
             'dateofbirth'    => $dobstate,
             'bib'            => 'nullable',
-            'individualqualround' => 'nullable',
-            'teamqualround' => 'nullable',
-            'individualfinal' => 'nullable',
-            'teamfinal' => 'nullable',
+            'teamqualround'  => 'nullable',
+            'teamfinal'      => 'nullable',
             'mixedteamfinal' => 'nullable',
-            'subclass' => 'nullable',
-            'mqs'      => $mqs,
+            'subclass'       => 'nullable',
+            'mqs'            => $mqs,
+            'waver'          => $waver,
+            'paymenttype'    => 'nullable',
+            'individualfinal' => 'nullable',
             'eventcompetitionid' => 'nullable',
-            'waver' => $waver
-
+            'individualqualround' => 'nullable',
         ];
     }
 
