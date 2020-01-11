@@ -8,6 +8,7 @@ use App\Jobs\SendArcherContactAdminEmail;
 use App\Jobs\SendArcherRelationConfirm;
 use App\Jobs\SendEntryReceived;
 use App\Jobs\SendEventAdminEntryReceived;
+use App\Models\Cart;
 use App\Models\Club;
 use App\Models\Division;
 use App\Models\EntryCompetition;
@@ -362,6 +363,7 @@ class EventRegistrationController extends EventController
 
         $user = Auth::user();
 
+
         if ($validated['userid'] != $user->userid) {
             // make sure the person logged in can enter the person
             $user = UserRelation::where('userid', Auth::id())
@@ -396,7 +398,7 @@ class EventRegistrationController extends EventController
             return back()->with('failure', 'Please check the competitions and try again');
         }
 
-
+        // This handles the case where the first event competition is not an entry
         $divisionid = 0;
         if (is_array($validated['divisionid'])) {
             foreach ($validated['divisionid'] as $did) {
@@ -429,6 +431,7 @@ class EventRegistrationController extends EventController
         $evententry->pickup        = !empty($validated['pickup']);
         $evententry->dateofbirth   = !empty($validated['dateofbirth'])    ? $validated['dateofbirth']        : '';
         $evententry->gender        = !empty(($validated['gender'] ?? '') == 'm')  ? 'm' : 'f';
+        $evententry->paymenttype   = !empty(($validated['paymenttype'] ?? 'bt') == 'bt')  ? 'bt' : 'cc';
         $evententry->details       = $this->getRequestDetails($validated, ['mqs']);
         $evententry->enteredby     = Auth::id();
         $evententry->hash          = $this->createHash();
@@ -582,6 +585,7 @@ class EventRegistrationController extends EventController
             $evententry = new EventEntry();
         }
 
+        // This handles the case where the first event competition is not an entry
         $divisionid = 0;
         if (is_array($validated['divisionid'])) {
             foreach ($validated['divisionid'] as $did) {
@@ -663,6 +667,8 @@ class EventRegistrationController extends EventController
         $divisiondata = ($request->input('divisionid') ?? []);
         $divisiondata = array_combine($divisiondata, $divisiondata);
 
+
+        // This handles the case where the first event competition is not an entry
         $divisionid = 0;
         foreach ($divisiondata as $did) {
             if (is_numeric($did)) {

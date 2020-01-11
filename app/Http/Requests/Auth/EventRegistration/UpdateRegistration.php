@@ -81,8 +81,8 @@ class UpdateRegistration extends FormRequest
             'mixedteamfinal' => 'nullable',
             'subclass' => 'nullable',
             'mqs'      => $mqs,
-            'eventcompetitionid' => 'nullable'
-
+            'eventcompetitionid' => 'nullable',
+            'paymenttype'    => 'nullable',
         ];
     }
 
