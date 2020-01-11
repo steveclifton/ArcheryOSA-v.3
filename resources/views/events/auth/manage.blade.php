@@ -52,7 +52,14 @@
             </a>
         </div>
 
-
+        <div class="col-lg-4 col-md-4 col-sm-4">
+            <a href="javascript:;" onclick="alert('Coming Soon')" data-href="/events/manage/eventcosts/{{$event->eventurl}}">
+                <div class="db-social-box bottomLine" style="background-color: lightgrey; opacity: 0.3">
+                    <span class="md-local-grocery-store"></span>
+                    <h5>Costs</h5>
+                </div>
+            </a>
+        </div>
 
         <div class="col-lg-4 col-md-4 col-sm-4">
             <a href="/events/manage/evententries/{{$event->eventurl}}">
@@ -64,32 +71,19 @@
         </div>
 
         <div class="col-lg-4 col-md-4 col-sm-4">
-            <a href="/events/manage/communication/{{$event->eventurl}}">
-                <div class="db-social-box bottomLine">
-                    <span class="fa fa-envelope-open"></span>
-                    <h5>Event Communications</h5>
-                </div>
-            </a>
-        </div>
-
-        <div class="col-lg-4 col-md-4 col-sm-4">
             <a href="/event/scoring/{{$event->eventurl}}">
                 <div class="db-social-box bottomLine">
                     <span class="fa fa-clipboard"></span>
-                    <h5>Event Scoring</h5>
+                    <h5> Scoring</h5>
                 </div>
             </a>
         </div>
-
-
-
-
     </div>
 
     <div class="row">
         <div class="col-lg-4 col-md-4 col-sm-4">
             <a href="/events/manage/exports/{{$event->eventurl}}">
-                <div class="db-social-box bottomLine">
+                <div class="db-social-box topLine">
                     <span class="fa fa-print"></span>
                     <h5>Exports</h5>
                 </div>
@@ -98,17 +92,37 @@
 
         <div class="col-lg-4 col-md-4 col-sm-4">
             <a href="/events/manage/eventadmins/{{$event->eventurl}}">
-                <div class="db-social-box bottomLine">
+                <div class="db-social-box topLine">
                     <span class="md-account-child"></span>
                     <h5> Admins</h5>
                 </div>
             </a>
         </div>
+
+
+        <div class="col-lg-4 col-md-4 col-sm-4">
+            <a href="/events/manage/communication/{{$event->eventurl}}">
+                <div class="db-social-box topLine">
+                    <span class="fa fa-envelope-open"></span>
+                    <h5> Communications</h5>
+                </div>
+            </a>
+        </div>
+
         <div class="col-lg-4 col-md-4 col-sm-4">
             <a href="/events/manage/targetallocations/{{$event->eventurl}}">
                 <div class="db-social-box bottomLine">
                     <span class="md-account-child"></span>
                     <h5>Target Allocations</h5>
+                </div>
+            </a>
+        </div>
+
+        <div class="col-lg-4 col-md-4 col-sm-4" >
+            <a href="javascript:;" onclick="alert('Coming Soon')" data-href="/events/manage/eventpayments/{{$event->eventurl}}">
+                <div class="db-social-box bottomLine" style="background-color: lightgrey; opacity: 0.3">
+                    <span class="md-attach-money"></span>
+                    <h5>Entry Payments</h5>
                 </div>
             </a>
         </div>
