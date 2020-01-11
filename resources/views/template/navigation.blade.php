@@ -21,6 +21,17 @@
                         <!-- End mobile menu toggle-->
                     </li>
 
+                    @if (Auth::check() && !empty(Auth::user()->getcart()))
+
+                        <li class="list-inline-item dropdown notification-list">
+                            <a class="nav-link dropdown-toggle arrow-none waves-light waves-effect" href="/checkout" role="button" >
+                                <i class="dripicons-cart noti-icon"></i>
+                                <span class="badge badge-pink noti-icon-badge">{{count(Auth::user()->getcartitems())}}</span>
+                            </a>
+                        </li>
+
+                    @endif
+
                     <li class="list-inline-item dropdown notification-list">
                         <a class="nav-link dropdown-toggle waves-effect waves-light nav-user" data-toggle="dropdown" href="#" role="button"
                            aria-haspopup="false" aria-expanded="false">
