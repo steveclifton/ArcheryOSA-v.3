@@ -17,7 +17,7 @@ class Createpersistentcart extends Migration
             $table->increments('cartid');
             $table->integer('userid');
             $table->text('items')->nullable();
-            $table->integer('totalmax')->default(0)->nullable();
+            $table->float('total')->default(0)->nullable();
             $table->timestamps();
         });
     }

@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class AddEventCosts extends Migration
+class AddCostToEntryCompetition extends Migration
 {
     /**
      * Run the migrations.
@@ -13,12 +13,8 @@ class AddEventCosts extends Migration
      */
     public function up()
     {
-        Schema::table('events', function($table) {
-            $table->float('totalcost')->default(0)->nullable();
-        });
-
-        Schema::table('eventcompetitions', function($table) {
-            $table->float('cost')->default(0)->nullable();
+        Schema::table('entrycompetitions', function($table) {
+            $table->float('cost')->nullable();
         });
     }
 
@@ -29,6 +25,6 @@ class AddEventCosts extends Migration
      */
     public function down()
     {
-        //
+
     }
 }
