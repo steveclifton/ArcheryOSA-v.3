@@ -434,6 +434,8 @@ class EventRegistrationController extends EventController
             }
         }
 
+        $paymenttype = $validated['paymenttype'];
+
         // Store the single event entry
         $evententry = new EventEntry();
         $evententry->userid        = $validated['userid'];
@@ -455,7 +457,7 @@ class EventRegistrationController extends EventController
         $evententry->pickup        = !empty($validated['pickup']);
         $evententry->dateofbirth   = !empty($validated['dateofbirth'])    ? $validated['dateofbirth']        : '';
         $evententry->gender        = !empty(($validated['gender'] ?? '') == 'm')  ? 'm' : 'f';
-        $evententry->paymenttype   = ( !empty(($validated['paymenttype']) && in_array($validated['paymenttype'], ['bt','cc','other'])) ) ? $validated['paymenttype'] : 'other';
+        $evententry->paymenttype   = ( !empty(($paymenttype) && in_array($paymenttype, ['bt','cc','other'])) ) ? $paymenttype : 'other';
         $evententry->details       = $this->getRequestDetails($validated, ['mqs']);
         $evententry->enteredby     = Auth::id();
         $evententry->hash          = $this->createHash();
@@ -514,12 +516,34 @@ class EventRegistrationController extends EventController
             return back()->with('failure', 'Please try again later');
         }
 
+        $paymenttype = $request->input('paymenttype');
 
 
         // Store the single event entry
         $evententry = EventEntry::where('userid', $user->userid)
                                 ->where('eventid', $event->eventid)
                                 ->first();
+
+        // Only allow changing to be done by non-paid entries
+        if (empty($evententry->paid) && $evententry->paymenttype != $paymenttype) {
+
+            // If the payment type WAS CC, REMOVE the cart item if it exists still
+            if ($evententry->paymenttype == 'cc') {
+                Auth::user()->removeEntryFromCart($evententry->entryid);
+            }
+            // Entry is NOW as CC, Add to the cart
+            else if ($paymenttype == 'cc') {
+
+                $entrycomps = [];
+                $entrycompetitions = EntryCompetition::where('entryid', $evententry->entryid)->get();
+
+                foreach ($entrycompetitions as $entrycompetition) {
+                    $entrycomps[$entrycompetition->eventcompetitionid] = $entrycompetition;
+                }
+
+                Auth::user()->addentrycartitem($event, $evententry, $entrycomps);
+            }
+        }
 
 
         $evententry->firstname    = $request->input('firstname') ?? $evententry->firstname;
@@ -532,7 +556,10 @@ class EventRegistrationController extends EventController
         $evententry->pickup       = $request->input('pickup') ? 1 : 0;
         $evententry->schoolid     = $request->input('schoolid') ?? $evententry->schoolid;
         $evententry->dateofbirth  = $request->input('dateofbirth') ?? $evententry->dateofbirth;
+        $evententry->paymenttype  = ( !empty(($paymenttype) && in_array($paymenttype, ['bt','cc','other'])) ) ? $paymenttype : 'other';
         $evententry->save();
+
+
 
 
         return redirect('/event/register/' . $event->eventurl)->with('success', 'Entry Updated!');
@@ -625,6 +652,8 @@ class EventRegistrationController extends EventController
             }
         }
 
+        $paymenttype = $request->input('paymenttype');
+
         $evententry->userid        = $validated['userid'];
         $evententry->eventid       = $event->eventid;
         $evententry->entrystatusid = 1; // 1 is pending
@@ -652,7 +681,7 @@ class EventRegistrationController extends EventController
         $evententry->details       = $this->getRequestDetails($validated, ['mqs']);
         $evententry->enteredby     = Auth::id();
         $evententry->hash          = $this->createHash();
-        $evententry->paymenttype   = ( !empty(($validated['paymenttype']) && in_array($validated['paymenttype'], ['bt','cc','other'])) ) ? $validated['paymenttype'] : 'other';
+        $evententry->paymenttype   = ( !empty(($paymenttype) && in_array($paymenttype, ['bt','cc','other'])) ) ? $paymenttype : 'other';
 
         $evententry->save();
 
@@ -706,7 +735,7 @@ class EventRegistrationController extends EventController
                 break;
             }
         }
-
+        $paymenttype = $request->input('paymenttype');
 
         $evententry->firstname    = $request->input('firstname') ?? $evententry->firstname;
         $evententry->lastname     = $request->input('lastname') ?? $evententry->lastname;
@@ -729,7 +758,7 @@ class EventRegistrationController extends EventController
         $evententry->mixedteamfinal = $request->input('mixedteamfinal') ?? $evententry->mixedteamfinal;
         $evententry->subclass      = $request->input('subclass') ?? $evententry->subclass;
         $evententry->details       = $this->getRequestDetails(['mqs'=>$request->input('mqs')], ['mqs']);
-        $evententry->paymenttype   = ( !empty(($request->input('paymenttype')) && in_array($request->input('paymenttype'), ['bt','cc','other'])) ) ? $request->input('paymenttype') : 'other';
+        $evententry->paymenttype   = ( !empty(($paymenttype) && in_array($paymenttype, ['bt','cc','other'])) ) ? $paymenttype : 'other';
 
         $evententry->save();
 

@@ -39,6 +39,29 @@ class Cart extends Model
         return true;
     }
 
+    public function removeEntryCartItem($entryid)
+    {
+        $cartitems = $this->getCartItems();
+
+        if (empty($cartitems)) {
+            return false;
+        }
+
+        // if is an array and the item is in there (key'd by entryid)
+        // - remove
+        if (is_array($cartitems) && isset($cartitems[$entryid])) {
+            unset($cartitems[$entryid]);
+        }
+
+        $this->items = json_encode($cartitems);
+
+        $this->save();
+
+        $this->updateCartTotal();
+
+        return true;
+    }
+
     /**
      * Update the Carts total
      * @return float|int|mixed|null

@@ -76,10 +76,18 @@
                 @endif
 
                 <div class="form-group row">
-                    <label for="label" class="col-sm-12 col-md-3 col-form-label">Membership Number*</label>
+                    <label for="label" class="col-sm-12 col-md-3 col-form-label">Membership Number{!! !empty($event->membershiprequired) ? '*' : '' !!}</label>
                     <div class="col-md-9">
                         <input name="membership" type="text" class="form-control"
-                               value="{{$evententry->membership }}" required>
+                               value="{{$evententry->membership }}"
+                                {!! !empty($event->membershiprequired) ? 'required' : '' !!}>
+
+                        @if ($errors->has('membership'))
+                            <span class="invalid-feedback" role="alert">
+                                <strong>{{ $errors->first('membership') }}</strong>
+                            </span>
+                        @endif
+
                         @if (!empty($event->organisationid) && $event->organisationid == 1)
                             <span class="help-block">
                                     <small>Archery New Zealand Membership Number</small>
@@ -174,6 +182,18 @@
                             <option disabled selected>Select one</option>
                             <option value="m" {!! ($evententry->gender == 'm') ? 'selected' : '' !!}>Male</option>
                             <option value="f" {!! ($evententry->gender == 'f') ? 'selected' : '' !!}>Female</option>
+                        </select>
+                    </div>
+                </div>
+
+                <h5 style="text-align: center; padding-top: 40px; padding-bottom: 20px">Payment Type</h5>
+                <div class="form-group row" style="padding-bottom: 40px">
+                    <label class="col-sm-12 col-md-3 col-form-label">Payment Type</label>
+                    <div class="col-md-9">
+                        <select name="paymenttype" class="form-control" id="paymentType" {{$evententry->paid ? 'disabled readonly' : ''}}>
+                            <option value="other" {!! ($evententry->paymenttype == 'other') ? 'selected' : '' !!}>Other</option>
+                            @if(!empty($canusecc))<option value="cc" {!! ($evententry->paymenttype == 'cc') ? 'selected' : '' !!}>Credit Card</option>@endif
+                            <option value="bt" {!! ($evententry->paymenttype == 'bt') ? 'selected' : '' !!}>Bank Transfer</option>
                         </select>
                     </div>
                 </div>

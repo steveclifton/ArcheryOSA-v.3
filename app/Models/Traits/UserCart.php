@@ -86,6 +86,17 @@ trait UserCart
 
     }
 
+    public function removeEntryFromCart($entryid)
+    {
+        $this->loadcart();
+
+        if (empty($entryid)) {
+            return false;
+        }
+
+        return $this->cart->removeEntryCartItem($entryid);
+    }
+
     public function getevententrytotalcost(Event $event, array $entryCompetitions, $eventcompetitions)
     {
         $totalcost = 0;

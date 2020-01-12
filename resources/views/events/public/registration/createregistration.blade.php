@@ -93,13 +93,17 @@
                 <div class="form-group row">
                     <label for="label" class="col-sm-12 col-md-3 col-form-label">Membership Number {!! !empty($event->membershiprequired) ? '*' : '' !!}</label>
                     <div class="col-md-9">
-                        <input name="membership" type="text" class="form-control {{ $errors->has('email') ? ' is-invalid' : '' }}"
-                               value="{{old('membership') ?? $user->membership}}" {!! !empty($event->membershiprequired) ? 'required' : '' !!}>
+                        <input name="membership" type="text"
+                               class="form-control {{ $errors->has('email') ? ' is-invalid' : '' }}"
+                               value="{{old('membership') ?? $user->membership}}"
+                                {!! !empty($event->membershiprequired) ? 'required' : '' !!}>
+
                             @if ($errors->has('membership'))
                                 <span class="invalid-feedback" role="alert">
                                     <strong>{{ $errors->first('membership') }}</strong>
                                 </span>
                             @endif
+
                             @if (!empty($event->organisationid) && $event->organisationid == 1)
                                 <span class="help-block">
                                     <small>Archery New Zealand Membership Number</small>
@@ -298,7 +302,8 @@
                     <label class="col-sm-12 col-md-3 col-form-label">Payment Type</label>
                     <div class="col-md-9">
                         <select name="paymenttype" class="form-control" id="paymentType">
-                            @if(!empty($canusecc))<option value="cc">Credit Card</option>@endif
+                            <option value="other">Other</option>
+                            @if(!empty($canusecc))<option value="cc" selected>Credit Card</option>@endif
                             <option value="bt">Bank Transfer</option>
                         </select>
                     </div>
