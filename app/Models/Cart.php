@@ -39,6 +39,22 @@ class Cart extends Model
         return true;
     }
 
+    /**
+     * Returns a copy of the cart items
+     * @return array
+     */
+    public function getCartItems()
+    {
+        $cartitems = json_decode($this->items);
+
+        return !empty($cartitems) ? (array) $cartitems : [];
+    }
+
+    /**
+     * Remove an entry from the cart
+     * @param $entryid
+     * @return bool
+     */
     public function removeEntryCartItem($entryid)
     {
         $cartitems = $this->getCartItems();
@@ -90,16 +106,7 @@ class Cart extends Model
         return $this->total;
     }
 
-    /**
-     * Returns a copy of the cart items
-     * @return array
-     */
-    public function getCartItems()
-    {
-        $cartitems = json_decode($this->items);
 
-        return !empty($cartitems) ? (array) $cartitems : [];
-    }
 
 
 }

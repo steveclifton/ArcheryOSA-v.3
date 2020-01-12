@@ -467,7 +467,7 @@ class EventRegistrationController extends EventController
 
         // Only add to cart if its for a CreditCard
         if ($evententry->paymenttype == 'cc') {
-            Auth::user()->addentrycartitem($event, $evententry, $entrycomps);
+            Auth::user()->addentrycartitem($event, $evententry);
         }
 
         SendEntryReceived::dispatch($evententry->email, $event->label);
@@ -534,14 +534,7 @@ class EventRegistrationController extends EventController
             // Entry is NOW as CC, Add to the cart
             else if ($paymenttype == 'cc') {
 
-                $entrycomps = [];
-                $entrycompetitions = EntryCompetition::where('entryid', $evententry->entryid)->get();
-
-                foreach ($entrycompetitions as $entrycompetition) {
-                    $entrycomps[$entrycompetition->eventcompetitionid] = $entrycompetition;
-                }
-
-                Auth::user()->addentrycartitem($event, $evententry, $entrycomps);
+                Auth::user()->addentrycartitem($event, $evententry);
             }
         }
 
@@ -687,14 +680,7 @@ class EventRegistrationController extends EventController
         if ($paymenttype == 'cc') {
             $user = User::where('userid', $validated['userid'])->first();
 
-            $entrycomps = [];
-            $entrycompetitions = EntryCompetition::where('entryid', $evententry->entryid)->get();
-
-            foreach ($entrycompetitions as $entrycompetition) {
-                $entrycomps[$entrycompetition->eventcompetitionid] = $entrycompetition;
-            }
-
-            $user->addentrycartitem($event, $evententry, $entrycomps);
+            $user->addentrycartitem($event, $evententry);
         }
 
         if (!$event->isNonShooting()) {
@@ -763,14 +749,7 @@ class EventRegistrationController extends EventController
         else if (($paymenttype == 'cc') && $evententry->paymenttype != $paymenttype) {
             $user_enteredby = User::where('userid', $evententry->enteredby)->first();
 
-            $entrycomps = [];
-            $entrycompetitions = EntryCompetition::where('entryid', $evententry->entryid)->get();
-
-            foreach ($entrycompetitions as $entrycompetition) {
-                $entrycomps[$entrycompetition->eventcompetitionid] = $entrycompetition;
-            }
-
-            $user_enteredby->addentrycartitem($event, $evententry, $entrycomps);
+            $user_enteredby->addentrycartitem($event, $evententry);
         }
 
 

@@ -4,6 +4,7 @@ namespace App\Models\Traits;
 
 
 use App\Models\Cart;
+use App\Models\EntryCompetition;
 use App\Models\Event;
 use App\Models\EventCompetition;
 use App\Models\EventEntry;
@@ -63,7 +64,7 @@ trait UserCart
      * @param array $entryCompetitions
      * @return bool
      */
-    public function addentrycartitem(Event $event, EventEntry $entry, array $entryCompetitions)
+    public function addentrycartitem(Event $event, EventEntry $entry)
     {
         $this->loadcart();
 
@@ -73,14 +74,21 @@ trait UserCart
 
         $eventcompetitions = EventCompetition::where('eventid', $event->eventid)->get();
 
+        // Get all the entry competitions
+        $entrycompetitions = EntryCompetition::where('entryid', $entry->entryid)->get();
+        $entrycomps = [];
+        foreach ($entrycompetitions as $entrycompetition) {
+            $entrycomps[$entrycompetition->eventcompetitionid] = $entrycompetition;
+        }
+
         $cartitem = new \stdClass();
         $cartitem->userid = $entry->userid;
         $cartitem->entryid = $entry->entryid;
         $cartitem->eventid = $entry->eventid;
         $cartitem->eventname = $event->label;
         $cartitem->username = $entry->firstname . ' ' . $entry->lastname;
-        $cartitem->eventcompetitions = $this->getevententrycomplabels($event, $entryCompetitions, $eventcompetitions);
-        $cartitem->total = $this->getevententrytotalcost($event, $entryCompetitions, $eventcompetitions);
+        $cartitem->eventcompetitions = $this->getevententrycomplabels($event, $entrycomps, $eventcompetitions);
+        $cartitem->total = $this->getevententrytotalcost($event, $entrycomps, $eventcompetitions);
 
         return $this->cart->addEntryCartItem($cartitem);
 
