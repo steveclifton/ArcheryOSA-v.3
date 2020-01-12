@@ -567,8 +567,6 @@ class EventRegistrationController extends EventController
 
 
 
-
-
     /**
      * ADMIN UPDATE METHODS
     */
@@ -685,6 +683,20 @@ class EventRegistrationController extends EventController
 
         $evententry->save();
 
+        // If the admin has said they wll pay by CC, Add it to THE USERS CC
+        if ($paymenttype == 'cc') {
+            $user = User::where('userid', $validated['userid'])->first();
+
+            $entrycomps = [];
+            $entrycompetitions = EntryCompetition::where('entryid', $evententry->entryid)->get();
+
+            foreach ($entrycompetitions as $entrycompetition) {
+                $entrycomps[$entrycompetition->eventcompetitionid] = $entrycompetition;
+            }
+
+            $user->addentrycartitem($event, $evententry, $entrycomps);
+        }
+
         if (!$event->isNonShooting()) {
             $this->create($event, $evententry, $eventcompetition, $validated);
         }
@@ -737,6 +749,31 @@ class EventRegistrationController extends EventController
         }
         $paymenttype = $request->input('paymenttype');
 
+
+        // if the original entry WAS paying by CC, remove
+        if (($evententry->paymenttype == 'cc') && $evententry->paymenttype != $paymenttype) {
+            // Get the person who entered them AND themselves, remove from both in case
+            $user_enteredby = User::where('userid', $evententry->enteredby)->first();
+            $user_entered = User::where('userid', $evententry->userid)->first();
+
+            $user_enteredby->removeentryfromcart($evententry->entryid);
+            $user_entered->removeentryfromcart($evententry->entryid);
+        }
+        // original wasnt CC, but now is, ADD TO THEIR CART
+        else if (($paymenttype == 'cc') && $evententry->paymenttype != $paymenttype) {
+            $user_enteredby = User::where('userid', $evententry->enteredby)->first();
+
+            $entrycomps = [];
+            $entrycompetitions = EntryCompetition::where('entryid', $evententry->entryid)->get();
+
+            foreach ($entrycompetitions as $entrycompetition) {
+                $entrycomps[$entrycompetition->eventcompetitionid] = $entrycompetition;
+            }
+
+            $user_enteredby->addentrycartitem($event, $evententry, $entrycomps);
+        }
+
+
         $evententry->firstname    = $request->input('firstname') ?? $evententry->firstname;
         $evententry->lastname     = $request->input('lastname') ?? $evententry->lastname;
         $evententry->email        = $request->input('email') ?? $evententry->email;
@@ -761,6 +798,7 @@ class EventRegistrationController extends EventController
         $evententry->paymenttype   = ( !empty(($paymenttype) && in_array($paymenttype, ['bt','cc','other'])) ) ? $paymenttype : 'other';
 
         $evententry->save();
+
 
 
         $entrycompetitions = EntryCompetition::where('userid', $user->userid)
