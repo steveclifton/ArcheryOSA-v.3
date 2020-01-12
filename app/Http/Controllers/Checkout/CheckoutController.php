@@ -11,8 +11,12 @@ class CheckoutController extends Controller
 {
     public function getCheckout()
     {
-        $cart = null;
+        $cart = Auth::user()->getcart();
 
-        return view('checkout.checkout', compact('cart'));
+        $cartitems = $cart->getcartitems();
+
+        dd($cartitems);
+
+        return view('checkout.checkout', compact('cart', 'cartitems'));
     }
 }

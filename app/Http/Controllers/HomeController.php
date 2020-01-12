@@ -62,6 +62,12 @@ class HomeController extends Controller
         die;
     }
 
+    public function teststripe()
+    {
+        return view('stripetest');
+    }
+
+
     public function getPrivacyPolicy()
     {
         return view('static.privacy');

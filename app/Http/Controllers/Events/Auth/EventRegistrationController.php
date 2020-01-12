@@ -109,12 +109,14 @@ class EventRegistrationController extends EventController
             return redirect('/event/details/' . $event->eventurl)->with('failure', 'Event entrys are closed');
         }
 
+        $canusecc = $event->canUseCC();
+
         $countrys = Countries::all();
 
 
         if ($event->isNonShooting()) {
             return view('events.public.registration.createregistration-nonscoring',
-                compact('user', 'event', 'countrys'));
+                compact('user', 'event', 'countrys', 'canusecc'));
         }
 
         $eventcompetitions = DB::select("
@@ -157,6 +159,7 @@ class EventRegistrationController extends EventController
             $eventcomps[] = $eventcompetition;
         }
 
+
         $clubs = Club::where('visible', 1)->orderby('label')->get();
 
         $schools = null;
@@ -169,7 +172,7 @@ class EventRegistrationController extends EventController
         if (empty($evententry)) {
             return view('events.public.registration.createregistration',
                     compact('eventcomps', 'user', 'event', 'clubs', 'divisionsfinal', 'competitionsfinal',
-                        'leaguecompround', 'schools','countrys'));
+                        'leaguecompround', 'schools','countrys', 'canusecc'));
         }
 
     }
@@ -183,9 +186,12 @@ class EventRegistrationController extends EventController
 
         $countrys = Countries::all();
 
+        $canusecc = $event->canUseCC();
+
+
         if ($event->isNonShooting()) {
             return view('events.public.registration.updateregistration-nonshooting',
-                compact('user', 'event', 'countrys', 'evententry'));
+                compact('user', 'event', 'countrys', 'evententry', 'canusecc'));
         }
 
 
@@ -243,7 +249,9 @@ class EventRegistrationController extends EventController
 
 
         return view('events.public.registration.updateregistration',
-            compact('userentrydivisions','userentryrounds','eventcomps', 'evententry', 'user', 'event', 'clubs', 'divisionsfinal', 'schools','countrys'));
+            compact('userentrydivisions','userentryrounds','eventcomps',
+                'evententry', 'user', 'event', 'clubs', 'divisionsfinal',
+                'schools','countrys','canusecc'));
 
     }
 
@@ -294,6 +302,7 @@ class EventRegistrationController extends EventController
 
     protected function create($event, $evententry, $eventcompetition, $validated)
     {
+        $entrycomps = [];
         if ($event->isleague()) {
             foreach ($validated['divisionid'] as $divisionid) {
 
@@ -306,16 +315,28 @@ class EventRegistrationController extends EventController
                 $entrycompetition->divisionid         = $divisionid;
                 $entrycompetition->competitionid      = '';
                 $entrycompetition->roundid            = $eventcompetition->roundids;
+                $entrycompetition->cost               = $eventcompetition->cost;
                 $entrycompetition->save();
+
+                $entrycomps[$entrycompetition->eventcompetitionid] = $entrycompetition;
             }
         }
         else {
             foreach ($validated['roundids'] as $eventcompetitionid => $roundid) {
                 $divisionid = isset($validated['divisionid'][$eventcompetitionid]) ? $validated['divisionid'][$eventcompetitionid] : null;
 
-                if (empty($divisionid)) {
+                // Only allow valid rounds and divisions
+                if (empty((int) $roundid) || empty((int) $divisionid)) {
                     continue;
                 }
+
+
+                $ec = EventCompetition::where('eventcompetitionid', $eventcompetitionid)->first();
+
+                if (empty($ec)) {
+                    continue;
+                }
+
                 $entrycompetition = new EntryCompetition();
                 $entrycompetition->entryid            = $evententry->entryid;
                 $entrycompetition->eventid            = $event->eventid;
@@ -324,10 +345,15 @@ class EventRegistrationController extends EventController
                 $entrycompetition->eventcompetitionid = $eventcompetitionid;
                 $entrycompetition->divisionid         = $divisionid;
                 $entrycompetition->roundid            = $roundid;
+                $entrycompetition->cost               = $ec->cost;
                 $entrycompetition->save();
+
+                $entrycomps[$entrycompetition->eventcompetitionid] = $entrycompetition;
 
             }
         }
+
+        return $entrycomps;
     }
 
 
@@ -360,16 +386,14 @@ class EventRegistrationController extends EventController
             }
         }
 
-
         $user = Auth::user();
-
 
         if ($validated['userid'] != $user->userid) {
             // make sure the person logged in can enter the person
             $user = UserRelation::where('userid', Auth::id())
-                ->where('relationid', $validated['userid'])
-                ->where('authorised', 1)
-                ->first();
+                                ->where('relationid', $validated['userid'])
+                                ->where('authorised', 1)
+                                ->first();
 
             if (!empty($user)) {
                 $user = User::where('userid', $validated['userid'])->first();
@@ -385,7 +409,6 @@ class EventRegistrationController extends EventController
                                         ->where('userid', $user->userid)
                                         ->first();
 
-
         if (!empty($existingevententry) ) {
             return back()->with('failure', 'An entry already exists, please check back in a few minutes');
         }
@@ -394,7 +417,9 @@ class EventRegistrationController extends EventController
             return back()->with('failure', 'You must accept the waver to enter this competition');
         }
 
-        if (($event->isEvent() || $event->isPostal()) && empty($validated['roundids'])) {
+        $roundsexist = array_filter(array_values($validated['roundids']));
+
+        if (($event->isEvent() || $event->isPostal()) && empty($roundsexist)) {
             return back()->with('failure', 'Please check the competitions and try again');
         }
 
@@ -408,7 +433,6 @@ class EventRegistrationController extends EventController
                 }
             }
         }
-
 
         // Store the single event entry
         $evententry = new EventEntry();
@@ -431,13 +455,18 @@ class EventRegistrationController extends EventController
         $evententry->pickup        = !empty($validated['pickup']);
         $evententry->dateofbirth   = !empty($validated['dateofbirth'])    ? $validated['dateofbirth']        : '';
         $evententry->gender        = !empty(($validated['gender'] ?? '') == 'm')  ? 'm' : 'f';
-        $evententry->paymenttype   = !empty(($validated['paymenttype'] ?? 'bt') == 'bt')  ? 'bt' : 'cc';
+        $evententry->paymenttype   = ( !empty(($validated['paymenttype']) && in_array($validated['paymenttype'], ['bt','cc','other'])) ) ? $validated['paymenttype'] : 'other';
         $evententry->details       = $this->getRequestDetails($validated, ['mqs']);
         $evententry->enteredby     = Auth::id();
         $evententry->hash          = $this->createHash();
         $evententry->save();
 
-        $this->create($event, $evententry, $eventcompetition, $validated);
+        $entrycomps = $this->create($event, $evententry, $eventcompetition, $validated);
+
+        // Only add to cart if its for a CreditCard
+        if ($evententry->paymenttype == 'cc') {
+            Auth::user()->addentrycartitem($event, $evententry, $entrycomps);
+        }
 
         SendEntryReceived::dispatch($evententry->email, $event->label);
 
@@ -623,6 +652,7 @@ class EventRegistrationController extends EventController
         $evententry->details       = $this->getRequestDetails($validated, ['mqs']);
         $evententry->enteredby     = Auth::id();
         $evententry->hash          = $this->createHash();
+        $evententry->paymenttype   = ( !empty(($validated['paymenttype']) && in_array($validated['paymenttype'], ['bt','cc','other'])) ) ? $validated['paymenttype'] : 'other';
 
         $evententry->save();
 
@@ -699,6 +729,8 @@ class EventRegistrationController extends EventController
         $evententry->mixedteamfinal = $request->input('mixedteamfinal') ?? $evententry->mixedteamfinal;
         $evententry->subclass      = $request->input('subclass') ?? $evententry->subclass;
         $evententry->details       = $this->getRequestDetails(['mqs'=>$request->input('mqs')], ['mqs']);
+        $evententry->paymenttype   = ( !empty(($request->input('paymenttype')) && in_array($request->input('paymenttype'), ['bt','cc','other'])) ) ? $request->input('paymenttype') : 'other';
+
         $evententry->save();
 
 

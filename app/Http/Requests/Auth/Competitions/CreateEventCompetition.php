@@ -50,7 +50,8 @@ class CreateEventCompetition extends FormRequest
             'scoringenabled' => 'nullable',
             'roundids'       => 'required',
             'divisionids'    => 'required',
-            'ignoregenders'  => 'nullable'
+            'ignoregenders'  => 'nullable',
+            'cost'           => 'nullable'
         ];
     }
 

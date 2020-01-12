@@ -135,7 +135,21 @@ class EventController extends Controller
 
         $eventcompetitions = EventCompetition::where('eventid', $event->eventid)->get();
 
-        return view('events.auth.manage', compact('event', 'eventcompetitions'));
+        $warnings = [];
+
+        if ($event->eventtypeid !== 4 && $eventcompetitions->isEmpty()) {
+            $warnings[] = "<li>Competition missing, please select 'Add Competitions' to continue</li>";
+        }
+
+        foreach ($eventcompetitions as $eventcompetition) {
+            if (empty((int) $eventcompetition->cost)) {
+                $warnings['cc'] = '<li><strong>Credit Card payment option unavailable</strong></li>';
+                $warnings[] = '<li>Entry cost for ' . $eventcompetition->label . ' (' . date('d F Y', strtotime($eventcompetition->date)) . ') is missing</li>';
+            }
+        }
+
+
+        return view('events.auth.manage', compact('event', 'eventcompetitions', 'warnings'));
     }
 
 
@@ -223,6 +237,7 @@ class EventController extends Controller
         $event->email           = !empty($validated['email'])           ? $validated['email']         : null;
         $event->location        = !empty($validated['location'])        ? $validated['location']      : null;
         $event->cost            = !empty($validated['cost'])            ? $validated['cost']          : null;
+        $event->totalcost       = !empty($validated['totalcost'])       ? $validated['totalcost']          : null;
         $event->bankaccount     = !empty($validated['bankaccount'])     ? $validated['bankaccount']   : null;
         $event->bankreference   = !empty($validated['bankreference']) ? $validated['bankreference'] : null;
         $event->schedule        = !empty($validated['schedule'])        ? $validated['schedule']      : null;
@@ -306,12 +321,13 @@ class EventController extends Controller
         $event->end            = $enddate->format('Y-m-d H:i:s');
         $event->daycount       = $difference;
         $event->contactname    = !empty($validated['contactname'])     ? $validated['contactname']   : null;
-        $event->region          = !empty($validated['region'])           ? $validated['region']         : null;
+        $event->region         = !empty($validated['region'])          ? $validated['region']        : null;
         $event->phone          = !empty($validated['phone'])           ? $validated['phone']         : null;
         $event->level          = !empty($validated['level'])           ? $validated['level']         : null;
         $event->email          = !empty($validated['email'])           ? $validated['email']         : null;
         $event->location       = !empty($validated['location'])        ? $validated['location']      : null;
         $event->cost           = !empty($validated['cost'])            ? $validated['cost']          : null;
+        $event->totalcost      = !empty($validated['totalcost'])       ? $validated['totalcost']     : null;
         $event->bankaccount    = !empty($validated['bankaccount'])     ? $validated['bankaccount']   : null;
         $event->bankreference  = !empty($validated['bankreference'])   ? $validated['bankreference'] : null;
         $event->schedule       = !empty($validated['schedule'])        ? $validated['schedule']      : null;

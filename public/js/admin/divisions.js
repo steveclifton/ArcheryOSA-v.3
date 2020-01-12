@@ -5,6 +5,7 @@ $(function () {
         $('#diverror').addClass('hidden');
         $('#comperror').addClass('hidden');
         $('#nameerror').addClass('hidden');
+        $('#costerror').addClass('hidden');
 
 
         // Competitions and rounds
@@ -47,7 +48,13 @@ $(function () {
             errors = true;
         }
 
+        if ($('input[name="cost"]').val() == '' || isNaN($('input[name="cost"]').val())) {
+            $('#costerror').removeClass('hidden');
+            errors = true;
+        }
+
         if (errors) {
+            $("html, body").animate({ scrollTop: 0 }, "slow");
             return false;
         }
 

@@ -6,8 +6,6 @@
 
     <div class="page-title-box">
         <h4 class="page-title">
-            <a href="/events/manage">Events</a>
-            <i class="ion-arrow-right-c"></i>
             <a href="/events/manage/{{$event->eventurl}}">{{ucwords($event->label)}}</a>
             <i class="ion-arrow-right-c"></i>
             <a href="/events/manage/evententries/{{$event->eventurl}}">Event Entries</a>
@@ -171,6 +169,18 @@
                                     {{$club->label}}
                                 </option>
                             @endforeach
+                        </select>
+                        {{--<span class="help-block"><small>Select an organisation the division belongs to</small></span>--}}
+                    </div>
+                </div>
+
+                <div class="form-group row">
+                    <label class="col-sm-12 col-md-3 col-form-label">Payment Type</label>
+                    <div class="col-md-9">
+                        <select name="paymenttype" class="form-control">
+                            <option value="other" {{$evententry->paymenttype == 'other' ? 'selected' : ''}}>Other</option>
+                            <option value="cc" {{$evententry->paymenttype == 'cc' ? 'selected' : ''}}>Credit Card</option>
+                            <option value="bt" {{$evententry->paymenttype == 'bt' ? 'selected' : ''}}>Bank Transfer</option>
                         </select>
                         {{--<span class="help-block"><small>Select an organisation the division belongs to</small></span>--}}
                     </div>

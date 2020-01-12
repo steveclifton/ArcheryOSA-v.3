@@ -2,7 +2,6 @@
 
 namespace App;
 
-use App\Models\Cart;
 use App\Models\EntryStatus;
 use App\Models\Event;
 use App\Models\EventAdmin;
@@ -11,10 +10,11 @@ use App\Models\Membership;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Support\Facades\Auth;
+use App\Models\Traits\UserCart;
 
 class User extends Authenticatable
 {
-    use Notifiable;
+    use Notifiable, UserCart;
 
     /**
      * The primary key for the model.
@@ -131,31 +131,5 @@ class User extends Authenticatable
         return User::where('parentuserid', Auth::id())->get();
     }
 
-    protected function loadcart()
-    {
-        $this->cart = Cart::where('userid', $this->userid)->first();
-    }
-
-    public function getcart()
-    {
-        if (empty($this->cart)) {
-            $this->loadcart();
-        }
-
-        return $this->cart;
-    }
-
-    public function getcartitems()
-    {
-        if (empty($this->cart)) {
-            $this->loadcart();
-        }
-
-        $items = [];
-        if (!empty($this->cart->items)) {
-            $items = json_decode($this->cart->items);
-        }
-        return $items;
-    }
 
 }

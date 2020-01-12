@@ -38,7 +38,7 @@
                 <label class="col-sm-12 col-md-3 col-form-label">Division</label>
                 <div class="col-md-9">
                     <select name="divisionid[{{$eventcomp->eventcompetitionid}}]" class=" form-control {{ $errors->has('divisionid') ? 'is-invalid' : '' }}" >
-                        <option disabled selected>Select one</option>
+                        <option value=""  selected>Select one</option>
                         @foreach($eventcomp->divisioncomplete as $division)
                             <option value="{{$division->divisionid}}"
                                     {!! $olddivisionid == $division->divisionid ? 'selected' : '' !!}>
@@ -58,7 +58,7 @@
                 <label class="col-sm-12 col-md-3 col-form-label">Round</label>
                 <div class="col-md-9">
                     <select name="roundids[{{$eventcomp->eventcompetitionid}}]" class="form-control {{ $errors->has('divisionid') ? 'is-invalid' : '' }}" >
-                        <option disabled selected>Select one</option>
+                        <option value="" selected>Select one</option>
                         @foreach($eventcomp->rounds as $round)
                             <option value="{{$round->roundid}}"
                                     {!! $oldroundid == $round->roundid ? 'selected' : '' !!}>

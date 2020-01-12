@@ -10,6 +10,8 @@ class Event extends Model
     protected $table = 'events';
     protected $primaryKey = 'eventid';
 
+    const MIN_ENTRY_COST = '5';
+
     public function isEvent()
     {
         return $this->eventtypeid == 1;
@@ -90,8 +92,6 @@ class Event extends Model
         return (!empty($this->attributes['visible']) && $this->eventstatusid === 1);
     }
 
-
-
     public function canEnterNonShooting()
     {
 
@@ -133,4 +133,30 @@ class Event extends Model
         return false;
     }
 
+    public function getEventCompetitionCosts()
+    {
+        $eventcompetitions = EventCompetition::where('eventid', $this->eventid)->get();
+
+        $total = 0;
+        foreach ($eventcompetitions as $eventcompetition) {
+            if (empty((int) $eventcompetition->cost)) {
+                return false;
+            }
+            $total += $eventcompetition->cost;
+        }
+
+        return $total;
+    }
+
+    public function canUseCC()
+    {
+        $eventcomptotal = $this->getEventCompetitionCosts();
+
+        // Some payment providers have a min cost, make sure its more than that
+        if ($eventcomptotal < self::MIN_ENTRY_COST || $this->totalcost < self::MIN_ENTRY_COST) {
+            return false;
+        }
+
+        return true;
+    }
 }

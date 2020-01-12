@@ -20,3 +20,5 @@ Route::get('event/{eventurl}/{competitionid?}', 'API\APIEventsController@getEven
 
 Route::get('eventtypes', 'API\APIEventsController@getEventTypes');
 
+Route::post('payment', 'Payments\PaymentController@paymentProcess');
+

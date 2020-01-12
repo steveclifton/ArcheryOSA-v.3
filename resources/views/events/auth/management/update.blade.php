@@ -195,7 +195,7 @@
                 </div>
 
                 <div class="form-group row">
-                    <label class="col-sm-12 col-md-3 col-form-label">Cost</label>
+                    <label class="col-sm-12 col-md-3 col-form-label">Cost Summary</label>
                     <div class="col-md-9">
                         <input name="cost" class="form-control{{ $errors->has('cost') ? ' is-invalid' : '' }}" type="text" value="{{ $event->cost ?? old('cost')}}">
                         @if ($errors->has('cost'))
@@ -203,6 +203,21 @@
                                 <strong>{{ $errors->first('cost') }}</strong>
                             </span>
                         @endif
+                        <span class="help-block"><small>Can a a text summary of price. EG. $35 for one day, $60 for two</small></span>
+                    </div>
+                </div>
+
+                <div class="form-group row">
+                    <label class="col-sm-12 col-md-3 col-form-label">Total Cost*</label>
+                    <div class="col-md-9">
+                        <input name="totalcost" class="form-control{{ $errors->has('totalcost') ? ' is-invalid' : '' }}" type="text" value="{{ $event->totalcost ?? old('totalcost')}}">
+                        @if ($errors->has('totalcost'))
+                            <span class="invalid-feedback" role="alert">
+                                <strong>{{ $errors->first('totalcost') }}</strong>
+                            </span>
+                        @endif
+                        <span class="help-block"><small>Total cost to enter <strong>ALL</strong> of the event's competitions. EG. 60</small></span>
+
                     </div>
                 </div>
 

@@ -15,9 +15,11 @@
         </h4>
     </div>
 
-    @if($event->eventtypeid !== 4 && $eventcompetitions->isEmpty())
+    @if(!empty($warnings))
         <div class="alert alert-warning">
-            Competition missing, please select 'Add Competitions' to continue
+            <ul>
+                {!! implode('', $warnings) !!}
+            </ul>
         </div>
     @endif
 
@@ -35,15 +37,6 @@
         </div>
 
         <div class="col-lg-4 col-md-4 col-sm-4">
-            <a href="/events/manage/settings/{{$event->eventurl}}">
-                <div class="db-social-box topLine">
-                    <span class="fa fa-cogs"></span>
-                    <h5>Settings</h5>
-                </div>
-            </a>
-        </div>
-
-        <div class="col-lg-4 col-md-4 col-sm-4">
             <a href="/events/manage/competitions/{{$event->eventurl}}">
                 <div class="db-social-box topLine">
                     <span class="fa fa-bullseye"></span>
@@ -53,17 +46,48 @@
         </div>
 
         <div class="col-lg-4 col-md-4 col-sm-4">
-            <a href="javascript:;" onclick="alert('Coming Soon')" data-href="/events/manage/eventcosts/{{$event->eventurl}}">
-                <div class="db-social-box bottomLine" style="background-color: lightgrey; opacity: 0.3">
-                    <span class="md-local-grocery-store"></span>
-                    <h5>Costs</h5>
+            <a href="/events/manage/settings/{{$event->eventurl}}">
+                <div class="db-social-box topLine">
+                    <span class="fa fa-cogs"></span>
+                    <h5>Settings</h5>
                 </div>
             </a>
         </div>
 
         <div class="col-lg-4 col-md-4 col-sm-4">
+            <a href="javascript:;">
+                <div class="db-social-box bottomLine">
+                    <span class=" md-credit-card"></span>
+                    <h5>Payment Config</h5>
+                </div>
+            </a>
+        </div>
+
+        <div class="col-lg-4 col-md-4 col-sm-4">
+            <a href="/events/manage/eventcosts/{{$event->eventurl}}">
+                <div class="db-social-box bottomLine">
+                    <span class="md-local-grocery-store"></span>
+                    <h5>Entry Costs</h5>
+                </div>
+            </a>
+        </div>
+
+
+        <div class="col-lg-4 col-md-4 col-sm-4" >
+            <a href="/events/manage/eventpayments/{{$event->eventurl}}">
+                <div class="db-social-box bottomLine">
+                    <span class="md-attach-money"></span>
+                    <h5>Entry Payments</h5>
+                </div>
+            </a>
+        </div>
+
+    </div>
+
+    <div class="row">
+        <div class="col-lg-4 col-md-4 col-sm-4">
             <a href="/events/manage/evententries/{{$event->eventurl}}">
-                <div class="db-social-box bottomline">
+                <div class="db-social-box topLine">
                     <span class="fa fa-users"></span>
                     <h5>Entries</h5>
                 </div>
@@ -72,15 +96,13 @@
 
         <div class="col-lg-4 col-md-4 col-sm-4">
             <a href="/event/scoring/{{$event->eventurl}}">
-                <div class="db-social-box bottomLine">
+                <div class="db-social-box topLine">
                     <span class="fa fa-clipboard"></span>
                     <h5> Scoring</h5>
                 </div>
             </a>
         </div>
-    </div>
 
-    <div class="row">
         <div class="col-lg-4 col-md-4 col-sm-4">
             <a href="/events/manage/exports/{{$event->eventurl}}">
                 <div class="db-social-box topLine">
@@ -92,7 +114,7 @@
 
         <div class="col-lg-4 col-md-4 col-sm-4">
             <a href="/events/manage/eventadmins/{{$event->eventurl}}">
-                <div class="db-social-box topLine">
+                <div class="db-social-box bottomLine">
                     <span class="md-account-child"></span>
                     <h5> Admins</h5>
                 </div>
@@ -102,7 +124,7 @@
 
         <div class="col-lg-4 col-md-4 col-sm-4">
             <a href="/events/manage/communication/{{$event->eventurl}}">
-                <div class="db-social-box topLine">
+                <div class="db-social-box bottomLine">
                     <span class="fa fa-envelope-open"></span>
                     <h5> Communications</h5>
                 </div>
@@ -118,13 +140,6 @@
             </a>
         </div>
 
-        <div class="col-lg-4 col-md-4 col-sm-4" >
-            <a href="javascript:;" onclick="alert('Coming Soon')" data-href="/events/manage/eventpayments/{{$event->eventurl}}">
-                <div class="db-social-box bottomLine" style="background-color: lightgrey; opacity: 0.3">
-                    <span class="md-attach-money"></span>
-                    <h5>Entry Payments</h5>
-                </div>
-            </a>
-        </div>
+
     </div>
 @endsection

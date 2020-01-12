@@ -4,4 +4,13 @@ $(function () {
             $(this).attr('required', 'required');
         });
     });
+
+
+    $(document).on('change', '#paymentType', function(e) {
+        var value = $(this).find(":selected").val();
+
+        console.log(value);
+    });
+
+
 });

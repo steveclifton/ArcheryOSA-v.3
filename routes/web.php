@@ -1,6 +1,5 @@
 <?php
 
-
 // Downloads
 require_once 'downloads.php';
 
@@ -8,7 +7,7 @@ require_once 'downloads.php';
 Route::get('/', 'HomeController@index')->name('home');
 Route::get('privacy', 'HomeController@getPrivacyPolicy')->name('privacy');
 
-
+Route::get('teststripe', 'HomeController@teststripe');
 
 Route::get('/events', 'Events\PublicEvents\EventController@getAllEvents');
 
@@ -60,6 +59,13 @@ Route::middleware(['web'])->group(function() {
     Route::middleware(['auth'])->group(function () {
 
 
+        /**
+         * CHECKOUTS
+         */
+        Route::get('checkout', 'Checkout\CheckoutController@getCheckout');
+
+
+
         /*****************
          *  Event management
          *   - defined in this route as not all users will have admin access
@@ -105,6 +111,12 @@ Route::middleware(['web'])->group(function() {
         Route::post('ajax/events/manage/targetallocation/getcomp/{eventurl}', 'Events\Auth\EventTargetAllocationController@getTargetAllocationsTable');
         Route::post('ajax/events/manage/targetallocation/update/{eventurl}', 'Events\Auth\EventTargetAllocationController@UpdateTargetAllocation');
 
+        // Event payments
+        Route::get('events/manage/eventpayments/{eventurl}', 'Events\Auth\EventPaymentsController@getEventPayments');
+
+        // Event Costs
+        Route::get('events/manage/eventcosts/{eventurl}', 'Events\Auth\EventCostController@getEventCosts');
+        Route::post('ajax/events/manage/eventcost/{eventurl}', 'Events\Auth\EventCostController@updateEventCost');
 
 
 

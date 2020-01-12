@@ -45,6 +45,7 @@ class CreateEvent extends FormRequest
             'email'          => 'required|email',
             'location'       => 'nullable',
             'cost'           => 'nullable',
+            'totalcost'      => 'required|numeric',
             'bankaccount'    => 'nullable',
             'bankreference'  => 'nullable',
             'schedule'       => 'nullable',

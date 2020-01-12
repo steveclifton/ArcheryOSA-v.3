@@ -233,9 +233,17 @@
                     </div>
                 @endif
 
+
+
+
+
                 <div id="eventcompforms">
                     @include('events.public.registration.eventcompform.compformcreate')
                 </div>
+
+
+
+
 
                 @if (!empty($event->mqs))
                     <hr>
@@ -266,7 +274,6 @@
                 @endif
 
                 @if (!empty($event->waver))
-
                     <div class="form-group row">
                         <label class="col-sm-12 col-md-3 col-form-label">Event Waver*</label>
                         <div class="col-md-9">
@@ -282,10 +289,8 @@
                                 @endif
                             </div>
                             <span class="help-block"><small>{!! nl2br($event->wavermessage) !!}</small></span>
-
                         </div>
                     </div>
-
                 @endif
 
                 <h5 style="text-align: center; padding-top: 40px; padding-bottom: 20px">Payment Type</h5>
@@ -293,6 +298,7 @@
                     <label class="col-sm-12 col-md-3 col-form-label">Payment Type</label>
                     <div class="col-md-9">
                         <select name="paymenttype" class="form-control" id="paymentType">
+                            @if(!empty($canusecc))<option value="cc">Credit Card</option>@endif
                             <option value="bt">Bank Transfer</option>
                         </select>
                     </div>

@@ -169,6 +169,7 @@ class EventCompetitionController extends EventController
         $eventcompetition = new EventCompetition();
         $eventcompetition->eventid          = !empty($validated['eventid'])       ? intval($validated['eventid']) : '';
         $eventcompetition->label            = !empty($validated['label'])         ? ucwords($validated['label']) : '';
+        $eventcompetition->cost             = !empty($validated['cost'])          ? ucwords($validated['cost']) : '';
         $eventcompetition->date             = !empty($validated['date'])          ? $validated['date'] : '';
         $eventcompetition->location         = !empty($validated['location'])      ? $validated['location'] : '';
         $eventcompetition->schedule         = !empty($validated['schedule'])      ? $validated['schedule'] : '';
@@ -246,6 +247,7 @@ class EventCompetitionController extends EventController
 
         $eventcompetition->eventid          = !empty($validated['eventid'])       ? intval($validated['eventid']) : '';
         $eventcompetition->label            = !empty($validated['label'])         ? ucwords($validated['label']) : '';
+        $eventcompetition->cost             = !empty($validated['cost'])          ? ucwords($validated['cost']) : '';
         $eventcompetition->date             = !empty($validated['date'])          ? $validated['date'] : '';
         $eventcompetition->location         = !empty($validated['location'])      ? $validated['location'] : '';
         $eventcompetition->schedule         = !empty($validated['schedule'])      ? $validated['schedule'] : '';

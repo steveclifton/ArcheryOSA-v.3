@@ -53,6 +53,7 @@ class UpdateEvent extends FormRequest
             'email'          => 'required|email',
             'location'       => 'nullable',
             'cost'           => 'nullable',
+            'totalcost'      => 'required|numeric',
             'bankaccount'    => 'nullable',
             'bankreference'  => 'nullable',
             'schedule'       => 'nullable',
@@ -72,6 +73,8 @@ class UpdateEvent extends FormRequest
             'label.unique'       => 'Event name must be unique',
             'end.after_or_equal' => 'Event finish date must be after the start date',
             'email.required'     => 'Email address is required',
+            'totalcost.required' => 'Event Cost must be added',
+            'totalcost.numeric'  => 'Event Cost must be a number',
         ];
     }
 }
