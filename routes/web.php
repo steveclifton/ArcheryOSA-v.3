@@ -60,6 +60,7 @@ Route::middleware(['web'])->group(function() {
     Route::middleware(['auth'])->group(function () {
 
 
+        
         /*****************
          *  Event management
          *   - defined in this route as not all users will have admin access
