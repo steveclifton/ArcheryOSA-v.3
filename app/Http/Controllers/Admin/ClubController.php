@@ -73,6 +73,7 @@ class ClubController extends Controller
         $club->label          = ucwords($validated['label']);
         $club->organisationid = intval($validated['organisationid']);
         $club->description    = !empty($validated['description']) ? $validated['description'] : null;
+        $club->code           = !empty($validated['code']) ? $validated['code'] : null;
         $club->phone          = !empty($validated['phone']) ? $validated['phone'] : null;
         $club->contactname    = !empty($validated['contactname']) ? $validated['contactname'] : null;
         $club->address        = !empty($validated['address']) ? $validated['address'] : null;
@@ -104,6 +105,7 @@ class ClubController extends Controller
         $club->label          = ucwords($validated['label']);
         $club->organisationid = intval($validated['organisationid']);
         $club->description    = !empty($validated['description']) ? $validated['description'] : null;
+        $club->code           = !empty($validated['code']) ? $validated['code'] : null;
         $club->phone          = !empty($validated['phone']) ? $validated['phone'] : null;
         $club->contactname    = !empty($validated['contactname']) ? $validated['contactname'] : null;
         $club->address        = !empty($validated['address']) ? $validated['address'] : null;

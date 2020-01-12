@@ -40,7 +40,9 @@ class UpdateClub extends FormRequest
             'country' => 'nullable',
             'visible' => 'nullable',
             'url'   => 'nullable|url',
-            'email' => 'nullable|email'
+            'email' => 'nullable|email',
+            'code' => 'nullable'
+
         ];
     }
 

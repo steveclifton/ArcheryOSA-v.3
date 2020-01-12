@@ -34,6 +34,13 @@
                 </div>
 
                 <div class="form-group row">
+                    <label class="col-sm-12 col-md-3 col-form-label">Club Code</label>
+                    <div class="col-md-9">
+                        <input name="code" type="text" class="form-control" value="{{old('code') ?? $club->code}}">
+                    </div>
+                </div>
+
+                <div class="form-group row">
 	                <label class="col-sm-12 col-md-3 col-form-label">Parent Organisation</label>
 	                <div class="col-md-9">
 	                    <select name="organisationid" class="form-control">

@@ -41,6 +41,7 @@
                         <thead class="thead-light">
                             <tr>
                                 <th>Name</th>
+                                <th>Code</th>
                                 <th>Email</th>
                                 <th>Visible</th>
                             </tr>
@@ -48,10 +49,11 @@
                         <tbody>
                             @foreach($clubs as $club)
                                 <tr>
-                                    <th scope="row">
+                                    <th>
                                         <a href="/admin/clubs/update/{{$club->clubid}}">{{ucwords($club->label)}}</a>
                                     </th>
-                                    <th>{{$club->email}}</th>
+                                    <td>{{$club->code}}</td>
+                                    <td>{{$club->email}}</td>
                                     <td>
                                         @if($club->visible)
                                             <i class="fa fa-check"></i>
