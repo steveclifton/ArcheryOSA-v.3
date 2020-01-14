@@ -16,7 +16,7 @@ use Illuminate\Support\Facades\View;
 class EventTargetAllocationController extends EventController
 {
 
-    protected function getUsers($eventid, $eventcompetitionid = null)
+    public function getUsers($eventid, $eventcompetitionid = null)
     {
         $data = ['eventid' => $eventid];
         $and = '';
@@ -31,9 +31,11 @@ class EventTargetAllocationController extends EventController
 
         return DB::select("
             SELECT CONCAT(ee.firstname, ' ', ee.lastname) as fullname, ec.entrycompetitionid, 
+                   ec.eventcompetitionid, evc.`label` as `eventcompname`, evc.`date` as `eventcompdate`,
                    d.label as divisionname, r.label as roundname, ee.entryid, ta.target, ta.info
             FROM `evententrys` ee
             JOIN `entrycompetitions` ec ON (ee.`entryid` = ec.`entryid`)
+            JOIN `eventcompetitions` evc ON (ec.eventcompetitionid = evc.eventcompetitionid)
             JOIN `divisions` d ON (ec.`divisionid` = d.`divisionid`)
             JOIN `rounds` r ON (ec.roundid = r.roundid)
             LEFT JOIN `targetallocations` ta ON (`ta`.`entrycompetitionid` = ec.`entrycompetitionid`)

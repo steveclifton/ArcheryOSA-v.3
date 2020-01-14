@@ -150,11 +150,12 @@ class User extends Authenticatable
         if (empty($this->cart)) {
             $this->loadcart();
         }
-
         $items = [];
+
         if (!empty($this->cart->items)) {
-            $items = json_decode($this->cart->items);
+            $items = (array) json_decode($this->cart->items);
         }
+
         return $items;
     }
 

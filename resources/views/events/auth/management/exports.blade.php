@@ -60,6 +60,13 @@
                                 @endforeach
                             </td>
                         </tr>
+                        <tr>
+                            <td><strong>Target Allocations</strong></td>
+                            <td>
+                                <a href="/event/export/targetallocations/{{$event->eventurl}}"><i class="fa fa-file-pdf-o fa-3x"></i></a>
+                            </td>
+                        </tr>
+
                     </tbody>
                 </table>
             </div>

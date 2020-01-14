@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Export;
 
+use App\Http\Controllers\Events\Auth\EventTargetAllocationController;
 use App\Http\Controllers\Events\PublicEvents\EventResultsController;
 use App\Models\Event;
 use App\Models\EventCompetition;
@@ -31,7 +32,7 @@ class EventExportController extends Controller
 
     public function exportevententries_ianseo(Request $request)
     {
-        $event = Event::where('eventurl', $request->eventurl)->get()->first();
+        $event = Event::where('eventurl', $request->eventurl)->first();
 
         if (empty($event)) {
             die();
@@ -114,7 +115,7 @@ class EventExportController extends Controller
 
     public function exportevententries(Request $request)
     {
-        $event = Event::where('eventurl', $request->eventurl)->get()->first();
+        $event = Event::where('eventurl', $request->eventurl)->first();
 
         if (empty($event)) {
             die();
@@ -202,7 +203,7 @@ class EventExportController extends Controller
 
     public function exportEventScores(Request $request)
     {
-        $event = Event::where('eventurl', $request->eventurl)->get()->first();
+        $event = Event::where('eventurl', $request->eventurl)->first();
 
         if (empty($event) || empty($request->eventcompetitionid)) {
             die();
@@ -265,6 +266,88 @@ class EventExportController extends Controller
         }
 
         $csv->output($filename . '.csv');
+        die;
+
+    }
+
+    public function exportEventTargetAllocations(Request $request)
+    {
+        $event = Event::where('eventurl', $request->eventurl)->first();
+
+        if (empty($event)) {
+            die();
+        }
+
+        $targetallocation = new EventTargetAllocationController();
+
+        $users = $targetallocation->getUsers($event->eventid);
+
+        if (empty($users)) {
+            die('No Target Allocations');
+        }
+
+        $ta = [];
+        foreach ($users as $user) {
+            $key = $user->eventcompname . ' - ' . date('d F Y', strtotime($user->eventcompdate));
+            $ta[$key][] = $user;
+        }
+
+        $htmlarray = [];
+        foreach($ta as $eventcompname => $users) {
+            $html = '<div><h3>' . $eventcompname . '</h3>';
+
+            $html .= '<table>'.
+                        '<thead>'.
+                            '<tr>'.
+                                '<th>Target</th>'.
+                                '<th>Fullname</th>'.
+                                '<th>Division</th>'.
+                                '<th>Round</th>'.
+                            '</tr>'.
+                        '</thead>'.
+                        '<tbody>';
+
+            foreach ($users as $user) {
+                $html .= '<tr>'.
+                    '<td>'.$user->target.'</td>'.
+                    '<td>'.$user->fullname.'</td>'.
+                    '<td>'.$user->divisionname.'</td>'.
+                    '<td>'.$user->roundname.'</td>'.
+                    '</tr>';
+            }
+
+            $html .= '</tbody></table>';
+
+            $htmlarray[] = $html;
+
+        }
+
+        $style = '<style>
+                    table {
+                        border-collapse: collapse;
+                        font-size: 11px;
+                        page-break-inside: avoid;
+                    }
+                    table, th, td {
+                        border: 1px solid black;
+                    }
+                    th, td {
+                        padding: 15px;
+                        text-align: left;
+                    }
+                    </style>';
+
+        $mpdf = new Mpdf(['tempDir' => __DIR__ . '/tmp']);
+        $mpdf->WriteHTML($style);
+        foreach ($htmlarray as $html) {
+            $mpdf->WriteHTML($html);
+
+            if (current($htmlarray) != end($htmlarray)) {
+                $mpdf->AddPage();
+            }
+        }
+
+        $mpdf->Output('TargetAllocations' . '.pdf', \Mpdf\Output\Destination::DOWNLOAD);
         die;
 
     }
