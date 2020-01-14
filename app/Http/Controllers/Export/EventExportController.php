@@ -310,7 +310,7 @@ class EventExportController extends Controller
             foreach ($users as $user) {
                 $html .= '<tr>'.
                     '<td>'.$user->target.'</td>'.
-                    '<td>'.ucwords($user->fullname).'</td>'.
+                    '<td>'.ucwords(strtolower($user->fullname)).'</td>'.
                     '<td>'.$user->divisionname.'</td>'.
                     '<td>'.$user->roundname.'</td>'.
                     '</tr>';
