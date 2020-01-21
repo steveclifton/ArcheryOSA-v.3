@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Events\Auth;
 
 use App\Http\Requests\Auth\EventRegistration\CreateRegistration;
 use App\Http\Requests\Auth\EventRegistration\UpdateRegistration;
+use App\Http\Requests\CreateAdminRegistration;
 use App\Jobs\SendArcherContactAdminEmail;
 use App\Jobs\SendArcherRelationConfirm;
 use App\Jobs\SendEntryReceived;
@@ -516,7 +517,7 @@ class EventRegistrationController extends EventController
     /**
      * ADMIN UPDATE METHODS
     */
-    public function createAdminRegistration(CreateRegistration $request)
+    public function createAdminRegistration(CreateAdminRegistration $request)
     {
 
         $validated = $request->validated();
