@@ -56,7 +56,7 @@ class EventSettingsController extends EventController
         }
 
 
-        if ($event->eventypeid != 4 && !empty($request->input('visible'))) {
+        if ($event->eventtypeid != 4 && !empty($request->input('visible'))) {
             $eventcompetitions = EventCompetition::where('eventid', $event->eventid)->get()->first();
 
             if (empty($eventcompetitions)) {
