@@ -121,30 +121,54 @@ class EventCommunicationController extends EventController
             $filesArr[] = $file3;
         }
 
+        $i = 1;
+        $count = 0;
 
-
+        // limit to 2 per minute
         switch($type) {
 
             case 'all' :
                 $evententrys = EventEntry::where('eventid', $event->eventid)->get();
 
+
                 foreach ($evententrys as $evententry) {
-                    SendEventUpdate::dispatch($evententry->email, $event->label, $request->input('message'), $event->contactname, $event->email, $filesArr);
+                    SendEventUpdate::dispatch($evententry->email, $event->label, $request->input('message'), $event->contactname, $event->email, $filesArr)
+                                        ->delay(now()->addMinutes($i));
+
+                    if (++$count == 2) {
+                        $count = 0;
+                        $i++;
+                    }
+
                 }
                 break;
 
             case 'approved' :
                 $evententrys = EventEntry::where('eventid', $event->eventid)->where('entrystatusid', 2)->get();
+
                 foreach ($evententrys as $evententry) {
-                    SendEventUpdate::dispatch($evententry->email, $event->label, $request->input('message'), $event->contactname, $event->email, $filesArr);
+                    SendEventUpdate::dispatch($evententry->email, $event->label, $request->input('message'), $event->contactname, $event->email, $filesArr)
+                                        ->delay(now()->addMinutes($i));
+                    if (++$count == 2) {
+                        $count = 0;
+                        $i++;
+                    }
+
                 }
                 break;
 
             case 'topay' :
                 $evententrys = EventEntry::where('eventid', $event->eventid)->where('paid', 0)->get();
 
+                $i = 1;
                 foreach ($evententrys as $evententry) {
-                    SendEventUpdate::dispatch($evententry->email, $event->label, $request->input('message'), $event->contactname, $event->email, $filesArr);
+                    SendEventUpdate::dispatch($evententry->email, $event->label, $request->input('message'), $event->contactname, $event->email, $filesArr)
+                                        ->delay(now()->addMinutes($i));
+                    
+                    if (++$count == 2) {
+                        $count = 0;
+                        $i++;
+                    }
                 }
                 break;
 
