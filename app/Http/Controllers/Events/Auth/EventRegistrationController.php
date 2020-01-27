@@ -16,8 +16,10 @@ use App\Models\EntryCompetition;
 use App\Models\Event;
 use App\Models\EventCompetition;
 use App\Models\EventEntry;
+use App\Models\FlatScore;
 use App\Models\Round;
 use App\Models\School;
+use App\Models\Score;
 use App\Models\UserRelation;
 use App\User;
 use Illuminate\Http\Request;
@@ -754,7 +756,6 @@ class EventRegistrationController extends EventController
                 ];
             }
 
-
             // Get the entrycompetition for the eventcomptition
             // if one exists, update the round/division
             // if not , create
@@ -780,7 +781,51 @@ class EventRegistrationController extends EventController
                         continue;
                     }
 
-                    if (!empty($newentry->roundid) && !empty($newentry->divisionid)) {
+                    if (!empty($newentry->roundid) || !empty($newentry->divisionid)) {
+
+                        // change the scores first
+                        $score_flat = FlatScore::where('entrycompetitionid', $ec->entrycompetitionid)->first();
+
+                        if (!empty($score_flat)) {
+                            $round = Round::where('roundid', $newentry->roundid)->first();
+                            // first save the score_flat distance to be the new round
+
+                            // Only change the round details if it has changed
+                            if ($score_flat->roundid != $newentry->roundid) {
+                                $score_flat->roundid = $newentry->roundid;
+                                $score_flat->dist1 = $round->dist1 ?? null;
+                                $score_flat->dist2 = $round->dist2 ?? null;
+                                $score_flat->dist3 = $round->dist3 ?? null;
+                                $score_flat->dist4 = $round->dist4 ?? null;
+                            }
+
+                            // Only change the divisionid if it has changed
+                            if ($score_flat->divisionid != $newentry->divisionid) {
+                                $score_flat->divisionid = $newentry->divisionid;
+                            }
+
+
+                            $score_flat->save();
+
+
+
+                            // Now update the score's keys to be the correct value for the new round
+                            $scores = Score::where('entrycompetitionid', $ec->entrycompetitionid)->orderby('scoreid')->get();
+                            $i = 1;
+                            foreach ($scores as $score) {
+
+                                if (is_numeric($score->key)) {
+                                    // make the key the rounds 1-4th values
+                                    $distance = 'dist' . $i++;
+                                    $score->key = $round->{$distance};
+                                }
+
+                                $score->divisionid = $newentry->divisionid;
+                                $score->roundid = $newentry->roundid;
+                                $score->save();
+                            }
+                        }
+
                         $ec->roundid = $newentry->roundid;
                         $ec->divisionid = $newentry->divisionid;
                         $ec->save();
