@@ -180,7 +180,7 @@ class EventResultsController extends EventController
                 foreach ($flatscoressorted[$entry->userid] as $flatscore) {
 
                     // if its an event
-                    if (($flatscore->eventid === 1) && ($entry->divisionid == $flatscore->divisionid)) {
+                    if (($flatscore->eventtypeid === 1) && ($entry->divisionid == $flatscore->divisionid)) {
                         $entry->score[$flatscore->roundname] = $flatscore->total;
                         continue;
                     }
