@@ -27,11 +27,11 @@ class EventResultsController extends EventController
      */
     public function getCompetitionResults(Request $request)
     {
-        if (empty($request->eventcompetitionid) || empty($request->eventurl)) {
+        $event = Event::where('eventurl', $request->eventurl)->first();
+
+        if (empty($event) || empty($request->eventcompetitionid) || empty($request->eventurl)) {
             return back()->with('failure', 'Invalid Request');
         }
-
-        $event = Event::where('eventurl', $request->eventurl)->first();
 
         if (strcasecmp($request->eventcompetitionid, 'overall') === 0) {
             // league processing
@@ -43,8 +43,6 @@ class EventResultsController extends EventController
             return $this->getEventOverallResults($event);
         }
 
-
-
         // league processing
         if ($event->isLeague()) {
             return $this->getLeagueCompetitionResults($event, $request->eventcompetitionid);
@@ -52,8 +50,6 @@ class EventResultsController extends EventController
 
         // Get the results for the event and the eventcompetitionid
         return $this->getEventCompResults($event, $request->eventcompetitionid);
-
-
     }
 
 
