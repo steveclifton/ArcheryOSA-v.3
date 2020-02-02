@@ -37,18 +37,13 @@ class Handler extends ExceptionHandler
     public function report(Exception $exception)
     {
         if (!$this->shouldntReport($exception)) {
-            //$message = request()->getPathInfo() . '<br>';
-            //$message .= ($exception->getMessage() ?? '') . '<br>' . ($exception->getFile() ?? '') . '<br>Line: ' . ($exception->getLine() ?? '');
-
-            //SendExceptionEmail::dispatch($message, 'ArcheryOSA Exception-' . getenv('SITE_NAME'));
-        }
-        else {
+            
             Log::channel('daily')->warning(['REQUEST_URI' => ($_SERVER['REQUEST_URI'] ?? ''),
-                                            'REMOTE_ADDR' => ($_SERVER['REMOTE_ADDR'] ?? ''),
-                                            'HTTP_USER_AGENT' => ($_SERVER['HTTP_USER_AGENT'] ?? ''),
-                                            'QUERY_STRING' => ($_SERVER['QUERY_STRING'] ?? ''),
-                                            'REQUEST_METHOD' => ($_SERVER['REQUEST_METHOD'] ?? ''),
-                                        ]);
+                'REMOTE_ADDR' => ($_SERVER['REMOTE_ADDR'] ?? ''),
+                'HTTP_USER_AGENT' => ($_SERVER['HTTP_USER_AGENT'] ?? ''),
+                'QUERY_STRING' => ($_SERVER['QUERY_STRING'] ?? ''),
+                'REQUEST_METHOD' => ($_SERVER['REQUEST_METHOD'] ?? ''),
+            ]);
         }
 
         parent::report($exception);
