@@ -9,6 +9,7 @@ use App\Jobs\SendArcherContactAdminEmail;
 use App\Jobs\SendArcherRelationConfirm;
 use App\Jobs\SendEntryReceived;
 use App\Jobs\SendEventAdminEntryReceived;
+use App\Model\Audit;
 use App\Models\Cart;
 use App\Models\Club;
 use App\Models\Division;
@@ -295,8 +296,18 @@ class EventRegistrationController extends EventController
         return json_encode($return);
     }
 
+
+    /**
+     * Create an entrys event competitions
+     * @param $event
+     * @param $evententry
+     * @param $eventcompetition
+     * @param $validated
+     */
     protected function create($event, $evententry, $eventcompetition, $validated)
     {
+        $entrys = [];
+
         if ($event->isleague()) {
             foreach ($validated['divisionid'] as $divisionid) {
 
@@ -310,6 +321,8 @@ class EventRegistrationController extends EventController
                 $entrycompetition->competitionid      = '';
                 $entrycompetition->roundid            = $eventcompetition->roundids;
                 $entrycompetition->save();
+
+                $entrys[] = $entrycompetition;
             }
         }
         else {
@@ -329,8 +342,12 @@ class EventRegistrationController extends EventController
                 $entrycompetition->roundid            = $roundid;
                 $entrycompetition->save();
 
+                $entrys[] = $entrycompetition;
+
             }
         }
+
+        return $entrys;
     }
 
 
@@ -440,7 +457,16 @@ class EventRegistrationController extends EventController
         $evententry->hash          = $this->createHash();
         $evententry->save();
 
-        $this->create($event, $evententry, $eventcompetition, $validated);
+        $entrys = $this->create($event, $evententry, $eventcompetition, $validated);
+
+        Audit::create([
+            'eventid' => $event->eventid,
+            'userid' => Auth::id(),
+            'class' => __CLASS__,
+            'method' => __FUNCTION__,
+            'line' => __LINE__,
+            'before' => json_encode(['evententry' => $evententry, 'eventcompetitions' => $entrys])
+        ]);
 
         SendEntryReceived::dispatch($evententry->email, $event->label);
 
@@ -496,6 +522,12 @@ class EventRegistrationController extends EventController
                                 ->first();
 
 
+        if (empty($evententry)) {
+            return back()->with('failure', 'Please try again later');
+        }
+
+        $evententryBefore = clone $evententry;
+
         $evententry->firstname    = $request->input('firstname') ?? $evententry->firstname;
         $evententry->lastname     = $request->input('lastname') ?? $evententry->lastname;
         $evententry->address      = $request->input('address') ?? $evententry->address;
@@ -507,6 +539,16 @@ class EventRegistrationController extends EventController
         $evententry->schoolid     = $request->input('schoolid') ?? $evententry->schoolid;
         $evententry->dateofbirth  = $request->input('dateofbirth') ?? $evententry->dateofbirth;
         $evententry->save();
+
+        Audit::create([
+            'eventid' => $event->eventid,
+            'userid' => Auth::id(),
+            'class' => __CLASS__,
+            'method' => __FUNCTION__,
+            'line' => __LINE__,
+            'before' => json_encode(['evententry' => $evententryBefore]),
+            'after' => json_encode(['evententry' => $evententry])
+        ]);
 
 
         return redirect('/event/register/' . $event->eventurl)->with('success', 'Entry Updated!');
@@ -629,11 +671,19 @@ class EventRegistrationController extends EventController
 
         $evententry->save();
 
+        $entrys = null;
         if (!$event->isNonShooting()) {
-            $this->create($event, $evententry, $eventcompetition, $validated);
+            $entrys = $this->create($event, $evententry, $eventcompetition, $validated);
         }
 
-        //SendEntryReceived::dispatch($evententry->email, $event->label);
+        Audit::create([
+            'eventid' => $event->eventid,
+            'userid' => Auth::id(),
+            'class' => __CLASS__,
+            'method' => __FUNCTION__,
+            'line' => __LINE__,
+            'before' => json_encode(['evententry' => $evententry, 'eventcompetitions' => $entrys]),
+        ]);
 
         return redirect('/events/manage/evententries/' . $event->eventurl)->with('success', 'Entry Added!');
 
@@ -667,9 +717,14 @@ class EventRegistrationController extends EventController
                                 ->where('eventid', $event->eventid)
                                 ->first();
 
+        if (empty($evententry)) {
+            return back()->with('failure', 'Please try again later');
+        }
+
+        $evententryBefore = clone $evententry;
+
         $divisiondata = ($request->input('divisionid') ?? []);
         $divisiondata = array_combine($divisiondata, $divisiondata);
-
 
         // This handles the case where the first event competition is not an entry
         $divisionid = 0;
@@ -704,15 +759,19 @@ class EventRegistrationController extends EventController
         $evententry->details       = $this->getRequestDetails(['mqs'=>$request->input('mqs')], ['mqs']);
         $evententry->save();
 
-
         $entrycompetitions = EntryCompetition::where('userid', $user->userid)
                                                 ->where('eventid', $event->eventid)
                                                 ->where('entryid', $evententry->entryid)
                                                 ->get();
 
+        // Create array of entry comps for before/after compare
+        $entrycompetitionsBefore = [];
+
         if ($event->isleague()) {
 
             foreach ($entrycompetitions ?? [] as $ecomp) {
+
+                $entrycompetitionsBefore[] = clone $ecomp; // Add to the original list
 
                 // if not in the original array, means they are removing the division entry
                 if (!in_array($ecomp->divisionid, $divisiondata)) {
@@ -762,9 +821,10 @@ class EventRegistrationController extends EventController
 
             foreach ($entrycompetitions as $ec) {
 
+                $entrycompetitionsBefore[] = clone $ec;// Copy into orginal comps array
+
                 if (!in_array($ec->eventcompetitionid, array_keys($neweventcomps))) {
                     // means they have removed
-                    // remove entry
                     $ec->delete();
                     // remove scores
 
@@ -807,8 +867,6 @@ class EventRegistrationController extends EventController
 
                             $score_flat->save();
 
-
-
                             // Now update the score's keys to be the correct value for the new round
                             $scores = Score::where('entrycompetitionid', $ec->entrycompetitionid)->orderby('scoreid')->get();
                             $i = 1;
@@ -849,11 +907,25 @@ class EventRegistrationController extends EventController
                     $entrycompetition->divisionid = $newentry->divisionid;
                     $entrycompetition->roundid = $newentry->roundid;
                     $entrycompetition->save();
-
                 }
             }
         }
 
+        // get them again for comparision below
+        $entrycompetitions = EntryCompetition::where('userid', $user->userid)
+                                                ->where('eventid', $event->eventid)
+                                                ->where('entryid', $evententry->entryid)
+                                                ->get();
+
+        Audit::create([
+            'eventid' => $event->eventid,
+            'userid' => Auth::id(),
+            'class' => __CLASS__,
+            'method' => __FUNCTION__,
+            'line' => __LINE__,
+            'before' => json_encode(['evententry' => $evententryBefore, 'entrycompetitions' => $entrycompetitionsBefore]),
+            'after' => json_encode(['evententry' => $evententry, 'entrycompetitions' => $entrycompetitions])
+        ]);
 
         return back()->with('success', 'Entry Updated!');
     }
@@ -884,13 +956,12 @@ class EventRegistrationController extends EventController
 
         // check to see if an entry exists for this user
         $existingevententry = EventEntry::where('eventid', $event->eventid)
-            ->where('userid', $user->userid)
-            ->first();
+                                        ->where('userid', $user->userid)
+                                        ->first();
 
         if (!empty($existingevententry) ) {
             return back()->with('failure', 'An entry already exists, please check back in a few minutes');
         }
-
 
         $evententry = new EventEntry();
         $evententry->userid        = $request->input('userid');
@@ -899,7 +970,7 @@ class EventRegistrationController extends EventController
         $evententry->paid          = 0; // 0 is not paid yet
         $evententry->firstname     = !empty($validated['firstname'])      ? ($validated['firstname'])        : '';
         $evententry->lastname      = !empty($validated['lastname'])       ? ($validated['lastname'])         : '';
-        $evententry->membership      = !empty($validated['membership'])       ? ($validated['membership'])         : '';
+        $evententry->membership    = !empty($validated['membership'])     ? ($validated['membership'])       : '';
         $evententry->email         = !empty($validated['email'])          ? $validated['email']              : '';
         $evententry->address       = !empty($validated['address'])        ? ($validated['address'])          : '';
         $evententry->phone         = !empty($validated['phone'])          ? ($validated['phone'])            : '';
@@ -907,7 +978,6 @@ class EventRegistrationController extends EventController
         $evententry->enteredby     = Auth::id();
         $evententry->hash          = $this->createHash();
         $evententry->save();
-
 
         SendEntryReceived::dispatch($evententry->email, $event->label);
 
@@ -919,6 +989,15 @@ class EventRegistrationController extends EventController
                 $event->eventurl
             );
         }
+
+        Audit::create([
+            'eventid' => $event->eventid,
+            'userid' => Auth::id(),
+            'class' => __CLASS__,
+            'method' => __FUNCTION__,
+            'line' => __LINE__,
+            'before' => json_encode(['evententry' => $evententry]),
+        ]);
 
         return redirect('/event/register/' . $event->eventurl)->with('success', 'Entry Received!');
 

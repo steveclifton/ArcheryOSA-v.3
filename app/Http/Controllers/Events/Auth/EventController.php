@@ -7,6 +7,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Controllers\League\LeagueController;
 use App\Http\Requests\Auth\Events\CreateEvent;
 use App\Http\Requests\Auth\Events\UpdateEvent;
+use App\Model\Audit;
 use App\Models\Club;
 
 use App\Models\EntryCompetition;
@@ -248,6 +249,15 @@ class EventController extends Controller
         $eventadmin->canedit  = 1;
         $eventadmin->save();
 
+        Audit::create([
+            'eventid' => $event->eventid,
+            'userid' => Auth::id(),
+            'class' => __CLASS__,
+            'method' => __FUNCTION__,
+            'line' => __LINE__,
+            'before' => json_encode(['event' => $event, 'eventadmin' => $eventadmin])
+        ]);
+
         return redirect('/events/manage/' . $event->eventurl);
 
     }
@@ -263,6 +273,8 @@ class EventController extends Controller
         if (empty($event)) {
             return redirect('/');
         }
+
+        $eventBefore = clone $event;
 
 
         $entryclose = !empty($validated['entryclose']) ? new \DateTime($validated['entryclose']) : null;
@@ -324,6 +336,15 @@ class EventController extends Controller
         $event->eventurl       = makeurl($validated['label'], $event->eventid);
         $event->save();
 
+        Audit::create([
+            'eventid' => $event->eventid,
+            'userid' => Auth::id(),
+            'class' => __CLASS__,
+            'method' => __FUNCTION__,
+            'line' => __LINE__,
+            'before' => json_encode(['event' => $eventBefore]),
+            'after' => json_encode(['event' => $event])
+        ]);
 
         return redirect('events/manage/update/' . $event->eventurl)->with('success', 'Event updated!');
 

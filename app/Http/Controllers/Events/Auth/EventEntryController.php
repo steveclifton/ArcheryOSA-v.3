@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Events\Auth;
 
 use App\Jobs\SendEntryConfirmation;
 use App\Jobs\SendEventUpdate;
+use App\Model\Audit;
 use App\Models\Club;
 use App\Models\Division;
 use App\Models\EntryCompetition;
@@ -15,6 +16,7 @@ use App\Models\School;
 use App\Models\Score;
 use App\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Webpatser\Countries\Countries;
 
@@ -300,6 +302,15 @@ class EventEntryController extends EventController
         }
         $entry->save();
 
+        Audit::create([
+            'eventid' => $event->eventid,
+            'userid' => Auth::id(),
+            'class' => __CLASS__,
+            'method' => __FUNCTION__,
+            'line' => __LINE__,
+            'before' => json_encode(['entry' => $entry]),
+        ]);
+
         return response()->json([
             'success' => true,
             'message' => $message
@@ -344,6 +355,15 @@ class EventEntryController extends EventController
         }
         $entry->save();
 
+        Audit::create([
+            'eventid' => $event->eventid,
+            'userid' => Auth::id(),
+            'class' => __CLASS__,
+            'method' => __FUNCTION__,
+            'line' => __LINE__,
+            'before' => json_encode(['entry' => $entry]),
+        ]);
+
         return response()->json([
             'success' => true,
             'message' => $message
@@ -366,9 +386,9 @@ class EventEntryController extends EventController
         $entryid = $request->entryid;
 
         $entry = EventEntry::where('eventid', $this->event->eventid)
-            ->where('entryid', $entryid)
-            ->where('confirmationemail', 0)
-            ->first();
+                            ->where('entryid', $entryid)
+                            ->where('confirmationemail', 0)
+                            ->first();
 
         if (empty($entry)) {
             return response()->json([
@@ -382,6 +402,15 @@ class EventEntryController extends EventController
         // Set it to pending if not entered
         $entry->confirmationemail = 1;
         $entry->save();
+
+        Audit::create([
+            'eventid' => $event->eventid,
+            'userid' => Auth::id(),
+            'class' => __CLASS__,
+            'method' => __FUNCTION__,
+            'line' => __LINE__,
+            'before' => json_encode(['entry' => $entry]),
+        ]);
 
         return response()->json([
             'success' => true
@@ -419,6 +448,15 @@ class EventEntryController extends EventController
         FlatScore::where('entryid', $entry->entryid)->delete();
 
         $entry->delete();
+
+        Audit::create([
+            'eventid' => $event->eventid,
+            'userid' => Auth::id(),
+            'class' => __CLASS__,
+            'method' => __FUNCTION__,
+            'line' => __LINE__,
+            'before' => json_encode(['entry' => $entry]),
+        ]);
 
         return response()->json([
             'success' => true,

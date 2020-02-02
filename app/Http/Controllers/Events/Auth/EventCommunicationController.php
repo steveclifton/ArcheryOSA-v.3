@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Events\Auth;
 
 use App\Jobs\SendEventUpdate;
+use App\Model\Audit;
 use App\Models\EventEntry;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -176,6 +177,17 @@ class EventCommunicationController extends EventController
                 return back()->with('failure', 'Please check details and try again');
                 break;
         }
+
+
+        Audit::create([
+            'eventid' => $event->eventid,
+            'userid' => Auth::id(),
+            'class' => __CLASS__,
+            'method' => __FUNCTION__,
+            'line' => __LINE__,
+            'before' => json_encode(['type' => $type, 'message' => $message]),
+        ]);
+
 
         return redirect('events/manage/' . $event->eventurl)->with('success', 'Email Sent');
 

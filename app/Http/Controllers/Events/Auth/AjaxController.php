@@ -2,12 +2,12 @@
 
 namespace App\Http\Controllers\Events\Auth;
 
-use App\Models\EntryCompetition;
+use App\Model\Audit;
 use App\Models\Event;
 use App\Models\EventCompetition;
 use App\Models\ScoringLevel;
-use App\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\View;
 
@@ -39,6 +39,15 @@ class AjaxController extends EventController
             $user->membership = htmlentities($user->membership);
             $user->phone = htmlentities($user->phone);
         }
+
+        Audit::create([
+            'eventid' => $request->eventid ?? 0,
+            'userid' => Auth::id(),
+            'class' => __CLASS__,
+            'method' => __FUNCTION__,
+            'line' => __LINE__,
+            'before' => json_encode(['search' => $request->search]),
+        ]);
 
         return response()->json([
             'success' => true,

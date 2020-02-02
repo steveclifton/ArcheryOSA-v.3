@@ -20,7 +20,8 @@ $(function () {
             },
             url: "/ajax/evententries/search",
             data: {
-                search: search
+                search: search,
+                eventid: $('input[name="eventid"]').val()
             }
         }).done(function( json ) {
 

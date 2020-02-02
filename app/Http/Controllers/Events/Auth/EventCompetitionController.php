@@ -7,6 +7,7 @@ use App\Http\Requests\Auth\Competitions\CreateEventCompetition;
 use App\Http\Requests\Auth\Competitions\CreateLeagueCompetition;
 use App\Http\Requests\Auth\Competitions\UpdateEventCompetition;
 use App\Http\Requests\Auth\Competitions\UpdateLeagueCompetition;
+use App\Model\Audit;
 use App\Models\EntryCompetition;
 use App\Models\Event;
 use App\Models\EventCompetition;
@@ -167,7 +168,7 @@ class EventCompetitionController extends EventController
 
 
         $eventcompetition = new EventCompetition();
-        $eventcompetition->eventid          = !empty($validated['eventid'])       ? intval($validated['eventid']) : '';
+        $eventcompetition->eventid          = $event->eventid;
         $eventcompetition->label            = !empty($validated['label'])         ? ucwords($validated['label']) : '';
         $eventcompetition->date             = !empty($validated['date'])          ? $validated['date'] : '';
         $eventcompetition->location         = !empty($validated['location'])      ? $validated['location'] : '';
@@ -180,6 +181,15 @@ class EventCompetitionController extends EventController
         $eventcompetition->visible          = 1;
         $eventcompetition->currentweek      = 1;
         $eventcompetition->save();
+
+        Audit::create([
+            'eventid' => $event->eventid,
+            'userid' => Auth::id(),
+            'class' => __CLASS__,
+            'method' => __FUNCTION__,
+            'line' => __LINE__,
+            'before' => json_encode(['eventcompetition' => $eventcompetition]),
+        ]);
 
         return redirect()->back()->with('success', 'Competition created!');
 
@@ -204,6 +214,8 @@ class EventCompetitionController extends EventController
         if (empty($event) || empty($eventcompetition)) {
             return redirect()->back()->with('failure', 'Invalid request');
         }
+
+        $eventcompetitionBefore = clone $eventcompetition;
 
         // Get array of roundids
         $roundids = !empty($validated['roundids']) ? explode(',', $validated['roundids']) : [];
@@ -244,7 +256,7 @@ class EventCompetitionController extends EventController
 
         }
 
-        $eventcompetition->eventid          = !empty($validated['eventid'])       ? intval($validated['eventid']) : '';
+        $eventcompetition->eventid          = $event->eventid;
         $eventcompetition->label            = !empty($validated['label'])         ? ucwords($validated['label']) : '';
         $eventcompetition->date             = !empty($validated['date'])          ? $validated['date'] : '';
         $eventcompetition->location         = !empty($validated['location'])      ? $validated['location'] : '';
@@ -257,6 +269,17 @@ class EventCompetitionController extends EventController
         $eventcompetition->filename = (!empty($eventcompetition->filename) && !empty($request->input('removefile'))) ? NULL : $eventcompetition->filename;
 
         $eventcompetition->save();
+
+
+        Audit::create([
+            'eventid' => $event->eventid,
+            'userid' => Auth::id(),
+            'class' => __CLASS__,
+            'method' => __FUNCTION__,
+            'line' => __LINE__,
+            'before' => json_encode(['eventcompetition' => $eventcompetitionBefore]),
+            'after' => json_encode(['eventcompetition' => $eventcompetition])
+        ]);
 
         return redirect()->back()->with('success', 'Competition updated!');
 
@@ -281,6 +304,15 @@ class EventCompetitionController extends EventController
                         ->delete();
 
         $eventcompetition->delete();
+
+        Audit::create([
+            'eventid' => $event->eventid,
+            'userid' => Auth::id(),
+            'class' => __CLASS__,
+            'method' => __FUNCTION__,
+            'line' => __LINE__,
+            'before' => json_encode(['eventcompetition' => $eventcompetition]),
+        ]);
 
         return back()->with('success', 'Event Competition Removed');
 

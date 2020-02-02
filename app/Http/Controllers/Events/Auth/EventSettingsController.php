@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Events\Auth;
 
+use App\Model\Audit;
 use App\Models\EntryCompetition;
 use App\Models\Event;
 use App\Models\EventAdmin;
@@ -43,6 +44,8 @@ class EventSettingsController extends EventController
         if (empty($event)) {
             return back()->with('failure', 'Invalid');
         }
+
+        $eventBefore = clone $event;
 
         if (empty(Auth::user()->isSuperAdmin())) {
             $eventadmin = EventAdmin::where('userid', Auth::id())
@@ -141,6 +144,17 @@ class EventSettingsController extends EventController
 
 
         $eventcompetition = EventCompetition::where('eventid', $event->eventid)->first();
+
+
+        Audit::create([
+            'eventid' => $event->eventid,
+            'userid' => Auth::id(),
+            'class' => __CLASS__,
+            'method' => __FUNCTION__,
+            'line' => __LINE__,
+            'before' => json_encode(['event' => $eventBefore]),
+            'before' => json_encode(['event' => $event]),
+        ]);
 
         if (!empty($eventcompetition)) {
             $eventcompetition->currentweek   = !empty($request->input('currentweek')) ? intval($request->input('currentweek')) : 1;
