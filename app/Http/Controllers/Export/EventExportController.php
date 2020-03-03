@@ -148,20 +148,31 @@ class EventExportController extends Controller
             die();
         }
 
-        $eventcompetitionids = EventCompetition::where('eventid', $event->eventid)->pluck('eventcompetitionid')->toArray();
+        if ($event->isNonShooting()) {
+            $entrys = DB::select("
+                SELECT ee.firstname, ee.lastname, '' as clubname, ee.email, ee.address, ee.phone, 
+                        '' as divisionname, '' as roundname, ee.membership, ee.paid, ee.gender, ee.notes, ee.created_at, ee.updated_at
+                FROM `evententrys` ee
+                WHERE `ee`.`eventid` = :eventid
+                ORDER BY  ee.firstname
+            ", ['eventid' => $event->eventid]);
+        }
+        else {
+            $eventcompetitionids = EventCompetition::where('eventid', $event->eventid)->pluck('eventcompetitionid')->toArray();
 
-        $entrys = DB::select("
-            SELECT ee.firstname, ee.lastname, c.label as clubname, ee.email, ee.address, ee.phone, 
-                    d.label as divisionname, r.label as roundname, ee.membership, ee.paid, ee.gender, ee.notes, ee.created_at, ee.updated_at
-            FROM `evententrys` ee
-            JOIN `entrycompetitions` ec USING (`entryid`)
-            JOIN `divisions` d ON (`ec`.`divisionid` = `d`.`divisionid`)
-            JOIN `rounds` r ON (ec.roundid = r.roundid)
-            LEFT JOIN `clubs` c ON (ee.clubid = c.clubid)
-            WHERE `ee`.`eventid` = :eventid
-            AND `ec`.`eventcompetitionid` IN (".implode(',', (array)$eventcompetitionids).")
-            ORDER BY `d`.label, ee.firstname
-        ", ['eventid' => $event->eventid]);
+            $entrys = DB::select("
+                SELECT ee.firstname, ee.lastname, c.label as clubname, ee.email, ee.address, ee.phone, 
+                        d.label as divisionname, r.label as roundname, ee.membership, ee.paid, ee.gender, ee.notes, ee.created_at, ee.updated_at
+                FROM `evententrys` ee
+                JOIN `entrycompetitions` ec USING (`entryid`)
+                JOIN `divisions` d ON (`ec`.`divisionid` = `d`.`divisionid`)
+                JOIN `rounds` r ON (ec.roundid = r.roundid)
+                LEFT JOIN `clubs` c ON (ee.clubid = c.clubid)
+                WHERE `ee`.`eventid` = :eventid
+                AND `ec`.`eventcompetitionid` IN (".implode(',', (array)$eventcompetitionids).")
+                ORDER BY `d`.label, ee.firstname
+            ", ['eventid' => $event->eventid]);
+        }
 
         foreach ($entrys as $entry) {
             if (empty($entry->paid)) {
@@ -384,20 +395,20 @@ class EventExportController extends Controller
 
         foreach ($entrys as $entry) {
             $html .= '<tr>'.
-                        '<td>'.$entry->firstname.'</td>'.
-                        '<td>'.$entry->lastname.'</td>'.
-                        '<td>'.$entry->clubname.'</td>'.
-                        '<td>'.$entry->address.'</td>'.
-                        '<td>'.$entry->phone.'</td>'.
-                        '<td>'.$entry->divisionname.'</td>'.
-                        '<td>'.$entry->roundname.'</td>'.
-                        '<td>'.$entry->membership.'</td>'.
-                        '<td>'.$entry->paid.'</td>'.
-                        '<td>'.$entry->gender.'</td>'.
-                        '<td>'.$entry->notes.'</td>'.
-                        '<td>'.$entry->created_at.'</td>'.
-                        '<td>'.$entry->updated_at.'</td>'.
-                    '</tr>';
+                '<td>'.$entry->firstname.'</td>'.
+                '<td>'.$entry->lastname.'</td>'.
+                '<td>'.($entry->clubname ?? '').'</td>'.
+                '<td>'.$entry->address.'</td>'.
+                '<td>'.$entry->phone.'</td>'.
+                '<td>'.($entry->divisionname ?? '').'</td>'.
+                '<td>'.($entry->roundname ??'').'</td>'.
+                '<td>'.$entry->membership.'</td>'.
+                '<td>'.$entry->paid.'</td>'.
+                '<td>'.$entry->gender.'</td>'.
+                '<td>'.$entry->notes.'</td>'.
+                '<td>'.$entry->created_at.'</td>'.
+                '<td>'.$entry->updated_at.'</td>'.
+                '</tr>';
 
         }
 
