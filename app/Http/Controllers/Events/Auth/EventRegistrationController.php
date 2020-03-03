@@ -808,7 +808,10 @@ class EventRegistrationController extends EventController
             $roundids = $request->input('roundids');
             $divisionids = $request->input('divisionid');
 
+
+
             foreach ($roundids as $eventcompetition => $roundid) {
+
                 $neweventcomps[$eventcompetition] = (object) [
                     'roundid' => $roundid,
                     'divisionid' => (!empty($divisionids[$eventcompetition])) ? $divisionids[$eventcompetition] : null
@@ -833,6 +836,8 @@ class EventRegistrationController extends EventController
                 }
                 else if (in_array($ec->eventcompetitionid, array_keys($neweventcomps))) {
                     $newentry = $neweventcomps[$ec->eventcompetitionid];
+
+
 
                     // if either of the values == remove
                     if ($newentry->roundid == 'remove' || $newentry->divisionid == 'remove')  {
