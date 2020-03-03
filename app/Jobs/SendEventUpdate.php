@@ -3,6 +3,7 @@
 namespace App\Jobs;
 
 use App\Mail\EventUpdate;
+use App\User;
 use Illuminate\Bus\Queueable;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Queue\InteractsWithQueue;
@@ -47,6 +48,25 @@ class SendEventUpdate extends ArcheryOSASender implements ShouldQueue
         if ($this->checkEmailAddress($this->email)) {
             Mail::to($this->getEmailAddress($this->email))
                 ->send(new EventUpdate(ucwords($this->eventname), $this->emailmessage, $this->fromname, $this->fromemail, $this->filesArr));
+        }
+        else {
+            $user = User::where('email', $this->email)->first();
+
+
+
+            if (empty($user)) {
+                return null;
+            }
+
+            $parent = $user->getParent();
+
+            if (empty($parent) || !$this->checkEmailAddress($parent->email)) {
+                return null;
+            }
+
+            Mail::to($this->getEmailAddress($parent->email))
+                ->send(new EventUpdate(ucwords($this->eventname), $this->emailmessage, $this->fromname, $this->fromemail, $this->filesArr));
+
         }
     }
 }

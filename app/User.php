@@ -128,7 +128,7 @@ class User extends Authenticatable
 
     public function getChildren()
     {
-        return User::where('parentuserid', Auth::id())->get();
+        return User::where('parentuserid', $this->userid)->get();
     }
 
     protected function loadcart()
@@ -159,4 +159,8 @@ class User extends Authenticatable
         return $items;
     }
 
+    public function getParent()
+    {
+        return User::where('userid', $this->parentuserid)->first();
+    }
 }
