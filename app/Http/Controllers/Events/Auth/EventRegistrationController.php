@@ -632,7 +632,7 @@ class EventRegistrationController extends EventController
 
         // This handles the case where the first event competition is not an entry
         $divisionid = 0;
-        if (is_array($validated['divisionid'])) {
+        if (isset($validated['divisionid']) && is_array($validated['divisionid']) ) {
             foreach ($validated['divisionid'] as $did) {
                 if (is_numeric($did)) {
                     $divisionid = $did;
@@ -645,7 +645,7 @@ class EventRegistrationController extends EventController
         $evententry->eventid       = $event->eventid;
         $evententry->entrystatusid = 1; // 1 is pending
         $evententry->paid          = 0; // 0 is not paid yet
-        $evententry->firstname     = !empty($validated['firstname'])      ? ($validated['firstname'])  : '';
+        $evententry->firstname     = !empty($validated['firstname'])      ? ($validated['firsgbbtname'])  : '';
         $evententry->lastname      = !empty($validated['lastname'])       ? ($validated['lastname'])   : '';
         $evententry->email         = !empty($validated['email'])          ? $validated['email']                  : '';
         $evententry->bib           = !empty($validated['bib'])            ? $validated['bib']                  : '';

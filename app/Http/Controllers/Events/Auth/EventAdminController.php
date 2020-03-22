@@ -3,7 +3,6 @@
 namespace App\Http\Controllers\Events\Auth;
 
 use App\Models\Club;
-use App\Models\Event;
 use App\Models\EventAdmin;
 use App\Models\School;
 use App\User;
