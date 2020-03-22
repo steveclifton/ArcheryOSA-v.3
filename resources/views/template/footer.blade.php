@@ -7,6 +7,9 @@
             <div class="col-12 text-center">
                 © {{date('Y')}} Archery OSA | <a href="/privacy">Privacy Policy</a>
             </div>
+            <div class="col-12 text-center">
+                Contact : <a href="mailto:info@archeryosa.com">info@archeryosa.com</a>
+            </div>
         </div>
     </div>
 </footer>
