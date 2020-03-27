@@ -11,6 +11,7 @@ use Illuminate\Support\Facades\DB;
 
 class EventsHelper
 {
+    const PUBLICEVENTS = [1,2,3];
 
     public function getNZRegions()
     {
@@ -54,6 +55,7 @@ class EventsHelper
             JOIN `eventstatus` es USING (`eventstatusid`)
             WHERE `e`.`start` < NOW() 
             AND `e`.`visible` = 1
+            AND `e`.`eventtypeid` IN (". implode(',', self::PUBLICEVENTS).")
             GROUP BY `e`.`eventid`
             ORDER BY e.start DESC
             LIMIT $limit
