@@ -2,13 +2,12 @@
 
 namespace App\Http\Controllers\Events\PublicEvents;
 
+use App\Http\Controllers\Events\PublicEvents\Event\ResultsController;
 use App\Models\Division;
 use App\Models\Event;
 use App\Models\EventCompetition;
-use App\Models\FlatScore;
 use App\Models\Score;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Traits\UserResults;
 
@@ -39,8 +38,12 @@ class EventResultsController extends EventController
                 return $this->getLeagueOverallResults($event);
             }
 
+            if ($event->ispostal() || empty($_GET['newformat'])) {
+                return $this->getEventOverallResults($event);
+            }
+
             // Normal Event
-            return $this->getEventOverallResults($event);
+            return (new ResultsController())->getOverallResults($event);
         }
 
         // league processing
@@ -122,7 +125,6 @@ class EventResultsController extends EventController
     {
         $entrys = $this->getEventEntrySorted($event->eventid, null, true);
 
-
         // get all the scores once, sort them
         $flatscores = DB::select("
             SELECT sf.*, r.label as roundname, r.unit, ec.date as compdate, ec.sequence,
@@ -142,7 +144,6 @@ class EventResultsController extends EventController
         }
 
         return view('events.results.results-overall', $data);
-
     }
 
 
