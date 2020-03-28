@@ -47,7 +47,7 @@ class EventEntryController extends EventController
 
         if ($event->isNonShooting()) {
             $evententries = DB::select("
-                SELECT ee.entryid, u.username, CONCAT_WS(' ', ee.firstname, ee.lastname ) as name, ee.confirmationemail, 
+                SELECT ee.bib, ee.entryid, u.username, CONCAT_WS(' ', ee.firstname, ee.lastname ) as name, ee.confirmationemail, 
                       ee.paid, ee.notes,  ee.created_at as created, es.label as status, ee.pickup 
                 FROM `evententrys` ee
                 JOIN `users` u USING (`userid`)
@@ -57,7 +57,7 @@ class EventEntryController extends EventController
         }
         else {
             $evententries = DB::select("
-                SELECT ee.entryid, u.username, CONCAT_WS(' ', ee.firstname, ee.lastname ) as name, ee.confirmationemail, 
+                SELECT ee.bib, ee.entryid, u.username, CONCAT_WS(' ', ee.firstname, ee.lastname ) as name, ee.confirmationemail, 
                       ee.paid, ee.notes, ee.created_at as created, es.label as status, ee.pickup 
                 FROM `evententrys` ee
                 JOIN `users` u USING (`userid`)

@@ -87,7 +87,7 @@ class EventController extends Controller
             JOIN `eventadmins` ea USING (`eventid`)
             JOIN `eventstatus` es USING (`eventstatusid`)
             GROUP BY `e`.`eventid`
-            ORDER BY `e`.`start`
+            ORDER BY `e`.`start` DESC
         ");
         }
         else {
@@ -98,7 +98,7 @@ class EventController extends Controller
             JOIN `eventstatus` es USING (`eventstatusid`)
             WHERE `ea`.`userid` = :userid
             GROUP BY `e`.`eventid`
-            ORDER BY `e`.`start`
+            ORDER BY `e`.`start` DESC
         ", ['userid' => Auth::id()]);
         }
 

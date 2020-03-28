@@ -9,8 +9,6 @@
     <link href="{{URL::asset('/plugins/datatables/responsive.bootstrap4.min.css')}}" rel="stylesheet">
     <link href="{{URL::asset('/plugins/datatables/select.bootstrap4.min.css')}}" rel="stylesheet">
 
-
-
     <div class="row">
 		<div class="col-sm-12">
 	    	<div class="page-title-box">
@@ -22,8 +20,10 @@
 	    	</div>
 		</div>
 	</div>
-    @if (!empty($event->imagebanner))
-        <div class="col-md-12 homePageBanner">
+    @if (!empty($event->imagedt))
+
+        <div class="row">
+            <div class="col-md-12 homePageBanner">
             <div class="panel panel-default text-center d-lg-none text-white slider-bg m-b-0"
                  style="background-position:center !important;
                          background-size:contain !important;
@@ -64,87 +64,75 @@
                 </div>
             </div>
         </div> <!-- col-->
+        </div>
     @endif
 
 	<div class="row">
         <div class="col-lg-12">
-            <ul class="nav nav-tabs tabs">
-                @php $i = 1; @endphp
-                @foreach($evententrys as $bowtype => $e)
-                    <li class="nav-item tab">
-                        <a href="#{{$bowtype}}" data-toggle="tab" aria-expanded="false" class="nav-link {!! $i++ === 1 ? 'active' : '' !!}  show">
-                            {{ucwords($bowtype)}}
-                        </a>
-                    </li>
-                @endforeach
-            </ul>
-
+            <ul class="nav nav-tabs tabs"> </ul>
             <div class="tab-content">
                 @if (!empty($eventcompetition->filename))
                     <div>
                         <a href="/eventdownload/{{$eventcompetition->filename}}">Download Results</a>
                     </div>
                 @endif
-                @php $i = 1; @endphp
                 @foreach ($evententrys as $bowtype => $ee)
-                    <div class="tab-pane {!! $i++ === 1 ? 'active' : '' !!}" id="{{$bowtype}}">
+                    <div class="tab-pane active" id="{{$bowtype}}">
                         @foreach($ee as $division => $archers)
 
-                            <h5 class="tableTitle">{{$division}}</h5>
+                            <h5 class="tableTitle d-block d-sm-block d-md-block d-lg-none">{{$division}}</h5>
                             @php $data = reset($archers); @endphp
+                            <div class="table-responsive">
+                                <table class="table table-striped table-bordered datatable-buttons" cellspacing="0" width="100%">
+                                    <thead>
+                                        <tr id="tabltr">
+                                            <th class="d-lg-none">Archer</th>
+                                            <th class="d-none d-sm-none d-md-none d-lg-block d-xl-block">{{$division}}</th>
+                                            <th>{{$data->dist1. $data->unit}}</th>
+                                            @if(!empty($data->dist2))<th>{{$data->dist2. $data->unit}}</th>@endif
+                                            @if(!empty($data->dist3))<th>{{$data->dist3. $data->unit}}</th>@endif
+                                            @if(!empty($data->dist4))<th>{{$data->dist4. $data->unit}}</th>@endif
+                                            <th>Total</th>
+                                        </tr>
 
+                                    </thead>
 
-                                <div class="table-responsive">
-                                    <table class="table table-striped table-bordered datatable-buttons" cellspacing="0" width="100%">
-                                        <thead>
-                                            <tr id="tabltr">
-                                                <th>Archer</th>
-                                                <th>{{$data->dist1. $data->unit}}</th>
-                                                @if(!empty($data->dist2))<th>{{$data->dist2. $data->unit}}</th>@endif
-                                                @if(!empty($data->dist3))<th>{{$data->dist3. $data->unit}}</th>@endif
-                                                @if(!empty($data->dist4))<th>{{$data->dist4. $data->unit}}</th>@endif
-                                                <th>Total</th>
-                                            </tr>
-
-                                        </thead>
-
-                                        <tbody>
-                                        @foreach($archers as $archer)
-                                            <tr class="results">
-                                                <th scope="row" width="15%">
-                                                    <a href="/profile/public/{{$archer->username ?? ''}}">
-                                                        {{ucwords($archer->firstname . ' ' . $archer->lastname)}}
-                                                    </a>
-                                                </th>
-                                                    <td width="10%">
-                                                        {{$archer->dist1score}}
-                                                    </td>
-                                                    @if(!empty($data->dist2))
-                                                        <td width="10%">
-                                                            {{$archer->dist2score}}
-                                                        </td>
-                                                    @endif
-                                                    @if(!empty($data->dist3))
-                                                        <td width="10%">
-                                                            {{$archer->dist3score}}
-                                                        </td>
-                                                    @endif
-                                                    @if(!empty($data->dist4))
-                                                        <td width="10%">
-                                                            {{$archer->dist4score}}
-                                                        </td>
-                                                    @endif
+                                    <tbody>
+                                    @foreach($archers as $archer)
+                                        <tr class="results">
+                                            <th scope="row" width="15%">
+                                                <a href="/profile/public/{{$archer->username ?? ''}}">
+                                                    {{ucwords($archer->firstname . ' ' . $archer->lastname)}}
+                                                </a>
+                                            </th>
                                                 <td width="10%">
-                                                    {{$archer->total ?? ''}}
+                                                    {{$archer->dist1score}}
                                                 </td>
+                                                @if(!empty($data->dist2))
+                                                    <td width="10%">
+                                                        {{$archer->dist2score}}
+                                                    </td>
+                                                @endif
+                                                @if(!empty($data->dist3))
+                                                    <td width="10%">
+                                                        {{$archer->dist3score}}
+                                                    </td>
+                                                @endif
+                                                @if(!empty($data->dist4))
+                                                    <td width="10%">
+                                                        {{$archer->dist4score}}
+                                                    </td>
+                                                @endif
+                                            <td width="10%">
+                                                {{$archer->total ?? ''}}
+                                            </td>
 
-                                            </tr>
-                                        @endforeach
-                                        </tbody>
-                                    </table>
-                                    <hr>
-                                </div>
-
+                                        </tr>
+                                    @endforeach
+                                    </tbody>
+                                </table>
+                                <br>
+                            </div>
                         @endforeach
                     </div>
                 @endforeach
@@ -152,15 +140,6 @@
 
         </div>
     </div>
-
-
-
-
-
-
-
-
-
 
 
     <script src="{{URL::asset('/plugins/datatables/jquery.dataTables.min.js')}}"></script>
@@ -188,14 +167,8 @@
                 bInfo : false,
                 searching : false,
                 "order": [[ index, "desc" ]]
-                // buttons: ['excel', 'pdf']
             });
-            //
-            // table.buttons().container()
-            //     .appendTo('.datatable-buttons_wrapper .col-md-6:eq(0)');
         });
     </script>
-
-
 
 @endsection

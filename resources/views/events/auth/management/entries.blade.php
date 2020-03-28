@@ -45,6 +45,7 @@
                 <table id="datatable-buttons" class="table table-striped table-bordered" cellspacing="0" width="100%">
                     <thead>
                         <tr>
+                            <th>Bib</th>
                             <th>Name</th>
                             <th>Status</th>
                             <th>Note</th>
@@ -65,6 +66,9 @@
                     <tbody>
                         @foreach($evententries as $entry)
                         <tr>
+                            <td>
+                                <a href="/events/manage/evententries/{{$event->eventurl}}/update/{{$entry->username}}">{{ucwords(!empty($entry->bib) ? $entry->bib : '')}}</a>
+                            </td>
                             <td>
                                 <a href="/events/manage/evententries/{{$event->eventurl}}/update/{{$entry->username}}">{{ucwords($entry->name)}}</a>
                             </td>
@@ -137,12 +141,14 @@
             //Buttons examples
             var table = $('#datatable-buttons').DataTable({
                 lengthChange: false,
-                pageLength:30,
-
+                pageLength:45,
+                "order": [[ 0, "asc" ]]
             });
 
             table.buttons().container()
                 .appendTo('#datatable-buttons_wrapper .col-md-6:eq(0)');
+
+
         });
     </script>
 @endsection

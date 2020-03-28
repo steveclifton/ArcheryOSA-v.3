@@ -125,7 +125,7 @@ class EventResultsController extends EventController
 
         // get all the scores once, sort them
         $flatscores = DB::select("
-            SELECT sf.*, CONCAT_WS(' ', r.label, ec.label) as roundname, r.unit, ec.date as compdate, ec.sequence,
+            SELECT sf.*, r.label as roundname, r.unit, ec.date as compdate, ec.sequence,
                     `e`.`eventtypeid`
             FROM `scores_flat` sf
             JOIN `events` e ON (`e`.`eventid` = `sf`.`eventid`)
@@ -154,14 +154,17 @@ class EventResultsController extends EventController
      */
     public function formatOverallResults($entrys, $flatscores)
     {
+        $numberofec = count(array_column($flatscores, 'eventcompetitionid', 'eventcompetitionid'));
 
         $eventcompseq = $flatscoressorted = [];
         foreach ($flatscores as $flatscore) {
             // Add scores to a UserID KEY'd array
             $flatscoressorted[$flatscore->userid][] = $flatscore;
 
-            $eventcompseq[$flatscore->roundname] = $flatscore->sequence;
+            // reformat the round name
+            $flatscore->roundname = $flatscore->roundname . date(' - d M', strtotime($flatscore->compdate)) . '|' .$flatscore->eventcompetitionid;
 
+            $eventcompseq[$flatscore->roundname] = $flatscore->sequence;
         }
 
         // loop over the scores and find the one that matches the div and round
@@ -219,7 +222,7 @@ class EventResultsController extends EventController
                 // Build an array of all the round names
                 $ecomp = [];
                 foreach ($rounds as $round) {
-                    foreach(array_keys($round->score) as $key) {
+                    foreach (array_keys($round->score) as $key) {
                         $ecomp[$key] = $key;
                     }
                 }
@@ -248,9 +251,14 @@ class EventResultsController extends EventController
                     if (!empty($archer->schoolname)) {
                         $result['School'] = ucwords($archer->schoolname);
                     }
-
                     foreach($ecomp as $key) {
                         $result[$key] = '';
+                    }
+
+                    if (count($ecomp) < $numberofec) {
+                        foreach (range(count($ecomp), $numberofec - 1) as $i) {
+                            $result[$i] = '';
+                        }
                     }
 
                     $totalscore = 0;

@@ -9,8 +9,6 @@
     <link href="{{URL::asset('/plugins/datatables/responsive.bootstrap4.min.css')}}" rel="stylesheet">
     <link href="{{URL::asset('/plugins/datatables/select.bootstrap4.min.css')}}" rel="stylesheet">
 
-
-
     <div class="row">
 		<div class="col-sm-12">
 	    	<div class="page-title-box">
@@ -22,81 +20,74 @@
 	    	</div>
 		</div>
 	</div>
-    @if (!empty($event->imagebanner))
-        <div class="col-md-12 homePageBanner">
-        <div class="panel panel-default text-center d-lg-none text-white slider-bg m-b-0"
-             style="background-position:center !important; background-size:contain !important; background-size: cover !important; background-repeat: no-repeat;  width: 100%; background: url({{asset('images/events/' . $event->imagebanner)}});">
-            <div class="slider-overlay br-radius"></div>
-            <div class="panel-body p-0">
-                <div class="">
-                    <div id="owl-slider-2" class="owl-carousel">
-                        <div class="item">
-                            <h1>
-                                <a href="#" class="text-white font-600">{{ucwords($event->label)}}</a>
-                            </h1>
-                            <p class="m-t-30"><em>{{ucwords($eventcompetition->label)}}</em></p>
+    @if (!empty($event->imagedt))
+        <div class="row">
+            <div class="col-md-12 homePageBanner">
+                <div class="panel panel-default text-center d-lg-none text-white slider-bg m-b-0"
+                     style="background-position:center !important;
+                             background-size:contain !important;
+                             background-size: cover !important;
+                             background-repeat: no-repeat;
+                             width: 100%;
+                             background: url({{asset('images/events/' . $event->imagedt)}});">
+                    <div class="slider-overlay br-radius"></div>
+                    <div class="panel-body p-0">
+                        <div class="">
+                            <div id="owl-slider-2" class="owl-carousel">
+                                <div class="item">
+                                    <h3><a href="#" class="text-white font-600 archeryHeadText">{{ucwords($event->label)}}</a></h3>
+                                    <p class="m-t-30"><em></em></p>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
-            </div>
-        </div>
 
-        <div class="panel panel-default text-center desktopOnlyImg d-none d-lg-block text-white slider-bg m-b-0"
-             style="background-position:center !important; background-size:contain !important; background-size: cover !important; background-repeat: no-repeat;  width: 100%; background: url({{asset('images/events/' . $event->imagebanner)}});">
-            <div class="slider-overlay br-radius"></div>
-            <div class="panel-body p-0">
-                <div class="">
-                    <div id="owl-slider-2" class="owl-carousel">
-                        <div class="item">
-                            <h1>
-                                <a href="#" class="text-white font-600">{{ucwords($event->label)}}</a>
-                            </h1>
-                            <p class="m-t-30"><em>{{ucwords($eventcompetition->label)}}</em></p>
+                <div class="panel panel-default text-center desktopOnlyImg d-none d-lg-block text-black slider-bg m-b-0"
+                     style="background-position:center !important;
+                             background-size:contain !important;
+                             background-size: cover !important;
+                             background-repeat: no-repeat;
+                             width: 100%; background: url({{asset('images/events/' . $event->imagedt)}});">
+                    <div class="slider-overlay br-radius"></div>
+                    <div class="panel-body p-0">
+                        <div class="">
+                            <div id="owl-slider-2" class="owl-carousel">
+                                <div class="item">
+                                    <h3><a href="#" class=" archeryHeadText">{{ucwords($event->label)}}</a></h3>
+                                    <p class="m-t-30"><em></em></p>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
-            </div>
+            </div> <!-- col-->
         </div>
-    </div>
     @endif
 
 	<div class="row">
         <div class="col-lg-12">
-            <ul class="nav nav-tabs tabs">
-                @php $i = 1; @endphp
-                @foreach($evententrys as $bowtype => $e)
-                    <li class="nav-item tab">
-                        <a href="#{{$bowtype}}" data-toggle="tab" aria-expanded="false" class="nav-link {!! $i++ === 1 ? 'active' : '' !!}  show">
-                            {{ucwords($bowtype)}}
-                        </a>
-                    </li>
-                @endforeach
-            </ul>
+            <ul class="nav nav-tabs tabs"></ul>
 
             <div class="tab-content">
-                @php $i = 1; @endphp
                 @foreach ($evententrys as $bowtype => $ee)
-                    <div class="tab-pane {!! $i++ === 1 ? 'active' : '' !!}" id="{{$bowtype}}">
+                    <div class="tab-pane active" id="{{$bowtype}}">
                         @foreach($ee as $division => $archers)
-
-                            <h5 class="tableTitle">{{$division}}</h5>
+                            <h5 class="tableTitle d-block d-sm-block d-md-block d-lg-none">{{$division}}</h5>
                             @php $data = reset($archers); @endphp
-
-
                                 <div class="table-responsive">
                                     <table class="table table-striped table-bordered datatable-buttons" cellspacing="0" width="100%">
                                         <thead>
                                             <tr id="tabltr">
-                                                <th>Archer</th>
+                                                <th class="d-lg-none">Archer</th>
+                                                <th class="d-none d-sm-none d-md-none d-lg-block d-xl-block">{{$division}}</th>
                                                 <th>{{$data->dist1. $data->unit}}</th>
-                                                <th>10s+X</th>
+                                                <th>10/X</th>
                                                 <th>X</th>
                                                 <th>Points</th>
                                                 <th>Total</th>
                                             </tr>
-
                                         </thead>
-
                                         <tbody>
                                         @foreach($archers as $archer)
                                             <tr class="results">
@@ -124,9 +115,8 @@
                                         @endforeach
                                         </tbody>
                                     </table>
-                                    <hr>
                                 </div>
-
+                            <br>
                         @endforeach
                     </div>
                 @endforeach
@@ -134,16 +124,6 @@
 
         </div>
     </div>
-
-
-
-
-
-
-
-
-
-
 
     <script src="{{URL::asset('/plugins/datatables/jquery.dataTables.min.js')}}"></script>
     <script src="{{URL::asset('/plugins/datatables/dataTables.bootstrap4.min.js')}}"></script>

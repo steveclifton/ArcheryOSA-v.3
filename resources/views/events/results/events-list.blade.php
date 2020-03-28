@@ -44,7 +44,7 @@
         </div>
         <div class="row">
             <div class="col-lg-12">
-                <div class="card-box">
+                <div class="card-box card-box-small">
 
                     @if (!empty(array_slice($events, 1)))
                         <div class="table-responsive">

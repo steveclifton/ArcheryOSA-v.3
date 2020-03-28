@@ -4,8 +4,8 @@
 
 
 @section('content')
-
-    <div class="col-md-12 homePageBanner" style="padding-bottom: 30px; padding-top: 20px">
+    <div class="row">
+        <div class="col-md-12 homePageBanner" style="padding-bottom: 30px; padding-top: 20px">
 
         <div class="panel panel-default text-center d-lg-none text-white slider-bg m-b-0"
              style="background: url({{asset('/images/archerybanner.jpg')}});">
@@ -43,7 +43,7 @@
             </div> <!-- panel-body -->
         </div>
     </div> <!-- col-->
-
+    </div>
 
 
     @if(Auth::check() && !empty($myevents))
