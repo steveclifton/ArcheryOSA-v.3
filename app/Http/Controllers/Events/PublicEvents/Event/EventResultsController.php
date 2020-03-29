@@ -41,6 +41,10 @@ class EventResultsController extends Controller
             WHERE sf.`eventid` = :eventid
         ", ['eventid' => $event->eventid]);
 
+        if (empty($flatscores)) {
+            return back()->with('failure', 'Unable to process request');
+        }
+
         $archers = [];
         // Sort into array of archers and eventcompids
         foreach ($flatscores as $entry) {
@@ -155,6 +159,10 @@ class EventResultsController extends Controller
             AND `ee`.`entrystatusid` = 2
             ORDER BY `d`.label
         ", ['eventcompetitionid' => $eventcompetitionid, 'eventid' => $event->eventid]);
+
+        if (empty($scores)) {
+            return back()->with('failure', 'Unable to process request');
+        }
 
 
         // Create required Data
