@@ -38,7 +38,7 @@
                     @if(!empty($aboutme))
                         <h4 class="text-uppercase font-18 font-600">About Me</h4>
                         <p class="text-muted font-13 m-b-30">
-                            Hi I'm Johnathn Deo,has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type.
+                           111111
                         </p>
                     @endif
                     <div class="text-left">
@@ -97,11 +97,11 @@
                     <div class="col-lg-12">
                         <ul class="nav nav-tabs tabs">
                             @if (!empty($finalresults['events']))
-                            <li class="nav-item tab">
-                                <a href="#events" data-toggle="tab" aria-expanded="false" class="nav-link active show">
-                                    Events
-                                </a>
-                            </li>
+                                <li class="nav-item tab">
+                                    <a href="#events" data-toggle="tab" aria-expanded="false" class="nav-link active show">
+                                        Events
+                                    </a>
+                                </li>
                             @endif
 
                             @if (!empty($finalresults['leagues']))
@@ -129,7 +129,8 @@
                                                 <thead>
                                                     <tr id="tabltr">
                                                         @foreach(array_keys($data) as $key)
-                                                            <th>{{$key}}</th>
+                                                            @php list($key) = explode('|', $key) @endphp
+                                                            <th>{{ $key }}</th>
                                                         @endforeach
                                                     </tr>
                                                 </thead>
