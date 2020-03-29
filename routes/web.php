@@ -14,9 +14,9 @@ Route::get('/events', 'Events\PublicEvents\EventController@getAllEvents');
 
 Route::get('/events/results', 'Events\PublicEvents\EventController@getPreviousEventsList')->name('results');
 // Get specific event results
-Route::get('/event/results/{eventurl}', 'Events\PublicEvents\EventResultsController@getEventResultsList');
+Route::get('/event/results/{eventurl}', 'Events\PublicEvents\ResultsController@getEventResultsList');
 
-Route::get('/event/results/{eventurl}/{eventcompetitionid}', 'Events\PublicEvents\EventResultsController@getCompetitionResults');
+Route::get('/event/results/{eventurl}/{eventcompetitionid}', 'Events\PublicEvents\ResultsController@getCompetitionResults');
 
 
 // Define create in public route to show users they can apply to create events
