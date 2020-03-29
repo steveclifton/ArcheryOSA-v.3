@@ -33,6 +33,7 @@ An array with the following keys and values:
 - **data** — Array - container for the return data:
     - 'event' - Object of the events details
 	- 'results' - Array of Arrays/Objects keyed by bowtypes and divisions
+	- 'competitions' - Object of Competition names, key'd by their competitionid
 
 ***
 ## Notes
@@ -75,171 +76,59 @@ An array with the following keys and values:
             "entrylimit": null,
             "eventname": "2018 Test Event"
         },
-		"eventtype": "Competition",
+        "eventtype": "Competition",
         "results": {
-            "compound": {
-                "Women's Cadet Compound": [
-	                {
-		                "firstname": "test",
-		                "lastname": "person",
-		                "gender": "f",
-		                "entrycompetitionid": 15,
-		                "eventcompetitionid": 12,
-		                "roundid": 5,
-		                "divisionname": "Cadet Compound",
-		                "bowtype": "compound",
-		                "unit": "m",
-		                "flatscoreid": 12,
-		                "entryid": 12,
-		                "eventid": 2,
-		                "divisionid": 45,
-		                "dist1": "50",
-		                "dist1score": 294,
-		                "dist2": "50",
-		                "dist2score": 296,
-		                "dist3": "50",
-		                "dist3score": 0,
-		                "dist4": "50",
-		                "dist4score": 0,
-		                "total": 590,
-		                "created_at": "2018-10-13 00:23:01",
-		                "updated_at": "2018-10-13 00:23:01",
-		                "week": 0,
-		                "inners": 9,
-		                "max": 1,
-		                "totalhits": 0
-	                }
-                ],
-                "Men's Junior Compound": [
-	                {
-		                "firstname": "test",
-		                "lastname": "person",
-		                "gender": "m",
-		                "entrycompetitionid": 16,
-		                "eventcompetitionid": 12,
-		                "roundid": 5,
-		                "divisionname": "Junior Compound",
-		                "bowtype": "compound",
-		                "unit": "m",
-		                "flatscoreid": 13,
-		                "entryid": 13,
-		                "eventid": 2,
-		                "divisionid": 44,
-		                "dist1": "50",
-		                "dist1score": 297,
-		                "dist2": "50",
-		                "dist2score": 314,
-		                "dist3": "50",
-		                "dist3score": 312,
-		                "dist4": "50",
-		                "dist4score": 304,
-		                "total": 1227,
-		                "created_at": "2018-10-13 00:24:21",
-		                "updated_at": "2018-10-13 00:24:21",
-		                "week": 0,
-		                "inners": 28,
-		                "max": 4,
-		                "totalhits": 0
-	                }
-                ],
-  
+            "Mens Cadet Compound": {
+                "0": {
+                    "archer": "<a href=\"/profile/public/test\">test</a>",
+                    "club": "",
+                    "round": "WA720 50m",
+                    "dist1": 334,
+                    "dist2": 340,
+                    "dist3": "",
+                    "dist4": "",
+                    "total": 674
+                },
+                "1": {
+                    "archer": "<a href=\"/profile/public/test\">test</a>",
+                    "club": "",
+                    "round": "WA720 50m",
+                    "dist1": 335,
+                    "dist2": 333,
+                    "dist3": "",
+                    "dist4": "",
+                    "total": 668
+                },
+                "rounds": {
+                    "dist1": "50",
+                    "dist2": "50",
+                    "dist3": "",
+                    "dist4": "",
+                    "total": "Total",
+                    "unit": "m"
+                }
             },
-            "recurve": {
-                "Women's Intermediate Recurve": [
-                	{
-	                	"firstname": "test",
-	                	"lastname": "person",
-	                	"gender": "f",
-	                	"entrycompetitionid": 17,
-	                	"eventcompetitionid": 12,
-	                	"roundid": 4,
-	                	"divisionname": "Masters 50-64 Recurve",
-	                	"bowtype": "recurve",
-	                	"unit": "m",
-	                	"flatscoreid": 14,
-	                	"entryid": 14,
-	                	"eventid": 2,
-	                	"divisionid": 71,
-	                	"dist1": "60",
-	                	"dist1score": 280,
-	                	"dist2": "60",
-	                	"dist2score": 270,
-	                	"dist3": "60",
-	                	"dist3score": 286,
-	                	"dist4": "60",
-	                	"dist4score": 276,
-	                	"total": 1112,
-	                	"created_at": "2018-10-13 00:28:00",
-	                	"updated_at": "2018-10-13 00:28:00",
-	                	"week": 0,
-	                	"inners": 15,
-	                	"max": 3,
-	                	"totalhits": 0
-                	},
-                	{
-	                	"firstname": "test",
-	                	"lastname": "person",
-	                	"gender": "f",
-	                	"entrycompetitionid": 18,
-	                	"eventcompetitionid": 12,
-	                	"roundid": 4,
-	                	"divisionname": "Masters 50-64 Recurve",
-	                	"bowtype": "recurve",
-	                	"unit": "m",
-	                	"flatscoreid": 15,
-	                	"entryid": 15,
-	                	"eventid": 2,
-	                	"divisionid": 71,
-	                	"dist1": "60",
-	                	"dist1score": 258,
-	                	"dist2": "60",
-	                	"dist2score": 276,
-	                	"dist3": "60",
-	                	"dist3score": 284,
-	                	"dist4": "60",
-	                	"dist4score": 285,
-	                	"total": 1103,
-	                	"created_at": "2018-10-13 00:28:00",
-	                	"updated_at": "2018-10-13 00:28:00",
-	                	"week": 0,
-	                	"inners": 14,
-	                	"max": 6,
-	                	"totalhits": 0
-                	}
-                ],
-                "Women's Masters 50-64 Recurve": [
-                	{
-	                	"firstname": "test",
-	                	"lastname": "person",
-	                	"gender": "m",
-	                	"entrycompetitionid": 19,
-	                	"eventcompetitionid": 12,
-	                	"roundid": 3,
-	                	"divisionname": "Senior Recurve",
-	                	"bowtype": "recurve",
-	                	"unit": "m",
-	                	"flatscoreid": 16,
-	                	"entryid": 16,
-	                	"eventid": 2,
-	                	"divisionid": 75,
-	                	"dist1": "70",
-	                	"dist1score": 282,
-	                	"dist2": "70",
-	                	"dist2score": 294,
-	                	"dist3": "70",
-	                	"dist3score": 272,
-	                	"dist4": "70",
-	                	"dist4score": 272,
-	                	"total": 1120,
-	                	"created_at": "2018-10-13 00:28:52",
-	                	"updated_at": "2018-10-13 00:28:52",
-	                	"week": 0,
-	                	"inners": 22,
-	                	"max": 3,
-	                	"totalhits": 0
-                	}
-                ],
-            }
+            "Mens Junior Compound": {
+            
+                "0": {
+                    "archer": "<a href=\"/profile/public/test\">test</a>",
+                    "club": "",
+                    "round": "WA720 50m",
+                    "dist1": 300,
+                    "dist2": 307,
+                    "dist3": "",
+                    "dist4": "",
+                    "total": 607
+                },
+                "rounds": {
+                    "dist1": "50",
+                    "dist2": "50",
+                    "dist3": "",
+                    "dist4": "",
+                    "total": "Total",
+                    "unit": "m"
+                }
+            },
         }
     }
 }
@@ -256,91 +145,97 @@ An array with the following keys and values:
 {
     "success": true,
     "data": {
-	        "event": {
-	        "eventid": 2,
-	        "eventtypeid": 1,
-	        "organisationid": 1,
-	        "clubid": 21,
-	        "entryclose": null,
-	        "start": "2018-05-26",
-	        "end": "2018-05-26",
-	        "daycount": 1,
-	        "contactname": "steve",
-	        "phone": "0211498154",
-	        "email": "info@archeryosa.com",
-	        "location": "Auckland Archery Club",
-	        "cost": "$30",
-	        "bankaccount": "01-1111-1111111-000",
-	        "bankreference": "Surname as reference",
-	        "schedule": "Start time: 9am",
-	        "info": "Prize giving at 5pm",
-	        "eventurl": "2018-test-event-2",
-	        "entrylimit": null,
-	        "eventname": "2018 Test Event"
+        "event": {
+            "eventid": 2,
+            "eventtypeid": 1,
+            "organisationid": 1,
+            "clubid": 21,
+            "entryclose": null,
+            "start": "2018-05-26",
+            "end": "2018-05-26",
+            "daycount": 1,
+            "contactname": "steve",
+            "phone": "0211498154",
+            "email": "info@archeryosa.com",
+            "location": "Auckland Archery Club",
+            "cost": "$30",
+            "bankaccount": "01-1111-1111111-000",
+            "bankreference": "Surname as reference",
+            "schedule": "Start time: 9am",
+            "info": "Prize giving at 5pm",
+            "eventurl": "2018-test-event-2",
+            "entrylimit": null,
+            "eventname": "2018 Test Event"
         },
 		"eventtype": "Competition",
         "results": {
-            "compound": {
-                "Women's Cadet Compound": [
-                    {
-                        "name": "test person",
-                        "dist1": "2x WA720 50m",
-                        "dist1score": 590,
-                        "total": 590
-                    }
-                ],
-                "Men's Masters 50-64 Compound": [
-                    {
-                        "name": "testperson",
-                        "dist1": "2x WA720 50m",
-                        "dist1score": 1298,
-                        "total": 1298
-                    },
-                    {
-                        "name": "testperson",
-                        "dist1": "2x WA720 50m",
-                        "dist1score": 1285,
-                        "total": 1285
-                    },
-                    {
-                        "name": "testperson",
-                        "dist1": "2x WA720 50m",
-                        "dist1score": 1284,
-                        "total": 1284
-                    }
-                ],
-                "Men's Senior Compound": [
-                    {
-                        "name": "test person",
-                        "dist1": "2x WA720 50m",
-                        "dist1score": 1316,
-                        "total": 1316
-                    }
-                ]
+            "Mens Senior Compound": {
+            
+                "0": {
+                    "217": 678,
+                    "218": 684,
+                    "219": 686,
+                    "archer": "<a href=\"/profile/public/test\">test</a>",
+                    "total": 2048
+                },
+                "rounds": {
+                    "217": "WA720 50m",
+                    "218": "WA720 50m",
+                    "219": "WA720 50m"
+                }
+            
             },
-            "recurve": {
-                "Women's Intermediate Recurve": [
-                    {
-                        "name": "test person",
-                        "dist1": "2x WA720 45m",
-                        "dist1score": 1012,
-                        "total": 1012
-                    }
-                ],
-                "Women's Masters 50-64 Recurve": [
-                    {
-                        "name": "test person",
-                        "dist1": "2x WA720 60m",
-                        "dist1score": 1112,
-                        "total": 1112
-                    },
-                    {
-                        "name": "test person",
-                        "dist1": "2x WA720 60m",
-                        "dist1score": 1103,
-                        "total": 1103
-                    }
-                ]
+            "Womens Cadet Compound": {
+            
+                "0": {
+                    "217": 595,
+                    "218": 581,
+                    "219": 573,
+                    "archer": "<a href=\"/profile/public/test\">test</a>",
+                    "total": 1749
+                },
+                "rounds": {
+                    "217": "WA720 50m",
+                    "218": "WA720 50m",
+                    "219": "WA720 50m"
+                }
+            
+            },
+            "Mens Cadet Recurve": {
+            
+                "0": {
+                    "217": 558,
+                    "218": 596,
+                    "219": 581,
+                    "archer": "<a href=\"/profile/public/test\">test</a>",
+                    "total": 1735
+                },
+                "1": {
+                    "217": 613,
+                    "218": 596,
+                    "219": "",
+                    "archer": "<a href=\"/profile/public/test\">test</a>",
+                    "total": 1209
+                },
+                "2": {
+                    "217": 527,
+                    "218": 555,
+                    "219": 553,
+                    "archer": "<a href=\"/profile/public/test\">test</a>",
+                    "total": 1635
+                },
+                "3": {
+                    "217": 542,
+                    "218": 545,
+                    "219": 559,
+                    "archer": "<a href=\"/profile/public/test\">test</a>",
+                    "total": 1646
+                },
+                "rounds": {
+                    "217": "WA720 60m",
+                    "218": "WA720 60m",
+                    "219": "WA720 60m"
+                }
             }
         }
     }
