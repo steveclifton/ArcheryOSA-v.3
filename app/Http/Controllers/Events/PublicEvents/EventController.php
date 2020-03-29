@@ -141,7 +141,7 @@ class EventController extends Controller
 
     public function getPreviousEventsList()
     {
-        $events = $this->helper->getPreviousEvents(true, 99);
+        $events = $this->helper->getPreviousEvents(true, 200);
 
         return view('events.results.events-list', compact('events'));
     }
