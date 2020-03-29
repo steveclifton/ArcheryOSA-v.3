@@ -18,6 +18,8 @@ class EventResultsController extends Controller
      */
     public function getOverallResults(Event $event, $apicall = false)
     {
+        $returnData = [];
+
         // get and format the Event Competitions
         $ectmp = EventCompetition::where('eventid', $event->eventid)->orderby('sequence')->get();
         $eventcompetitions = $competitionlabels = [];
@@ -27,6 +29,7 @@ class EventResultsController extends Controller
         }
         unset($ectmp);
 
+        $returnData['competitionlabels'] = $competitionlabels;
 
         // get all the scores once, sort them
         $flatscores = DB::select("
@@ -41,7 +44,11 @@ class EventResultsController extends Controller
             WHERE sf.`eventid` = :eventid
         ", ['eventid' => $event->eventid]);
 
-        if (empty($flatscores)) {
+
+        if ($apicall && empty($flatscores)) {
+            return $returnData;
+        }
+        else if (empty($flatscores)) {
             return back()->with('failure', 'Unable to process request');
         }
 
@@ -123,26 +130,31 @@ class EventResultsController extends Controller
         $results = $this->sorttotalresults($final);
         unset($final);
 
-        $data = compact('event', 'results', 'competitionlabels');
+        $returnData['results'] = $results;
+        $returnData['event'] = $event;
+
         if ($apicall) {
-            return $data;
+            return $returnData;
         }
 
-        return view('events.results.event.results-overall', $data);
+        return view('events.results.event.results-overall', $returnData);
     }
-
 
 
     /**
      * Returns an events individual competitions results
-     *
      * @param Event $event
      * @param $eventcompetitionid
      * @param bool $apicall
-     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     * @return array|\Illuminate\Contracts\View\Factory|\Illuminate\Http\RedirectResponse|\Illuminate\View\View
      */
     public function getEventCompetitionResults(Event $event, $eventcompetitionid, $apicall = false)
     {
+        $returnData = [];
+
+        $eventcompetition = EventCompetition::where('eventcompetitionid', $eventcompetitionid)->first();
+
+        $returnData['eventcompetition'] = $eventcompetition;
 
         $scores = DB::select("
             SELECT sf.*, ee.firstname, ee.lastname, ee.gender, ec.entrycompetitionid, r.label as roundname, d.label as division,
@@ -160,7 +172,10 @@ class EventResultsController extends Controller
             ORDER BY `d`.label
         ", ['eventcompetitionid' => $eventcompetitionid, 'eventid' => $event->eventid]);
 
-        if (empty($scores)) {
+        if ($apicall && empty($scores)) {
+            return $returnData;
+        }
+        else if (empty($scores)) {
             return back()->with('failure', 'Unable to process request');
         }
 
@@ -193,15 +208,14 @@ class EventResultsController extends Controller
 
         $results = $this->sorttotalresults($results);
 
-        $eventcompetition = EventCompetition::where('eventcompetitionid', $eventcompetitionid)->first();
-
-        $data = compact('event', 'results', 'eventcompetition');
+        $returnData['results'] = $results;
+        $returnData['event'] = $event;
 
         if (!empty($apicall)) {
-            return $data;
+            return $returnData;
         }
 
-        return view('events.results.event.results', $data);
+        return view('events.results.event.results', $returnData);
 
     }
 
