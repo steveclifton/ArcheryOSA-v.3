@@ -2,7 +2,9 @@
 
 namespace App\Http\Controllers\Auth;
 
-use App\Http\Controllers\Events\PublicEvents\EventResultsController;
+use App\Http\Controllers\Events\PublicEvents\Event\EventResultsController;
+use App\Http\Controllers\Events\PublicEvents\League\LeagueResultsController;
+use App\Http\Controllers\Events\PublicEvents\ResultsController;
 use App\Http\Requests\User\CreateChild;
 use App\Http\Requests\User\UpdateChild;
 use App\Http\Requests\User\UserUpdateProfile;
@@ -60,10 +62,12 @@ class ProfileController extends Controller
             WHERE ee.`userid` = :userid
             GROUP BY `e`.`eventid`
             ORDER BY `e`.end DESC
+           ", ['userid' => $user->userid]);
 
-        ", ['userid' => $user->userid]);
+            $resultscontroller = new ResultsController();
+            $eventresultscontroller = new EventResultsController();
+            $leagueresultscontroller = new LeagueResultsController();
 
-            $erc = new EventResultsController();
             $finalresults = [];
             foreach ($events as $event) {
 
@@ -80,10 +84,10 @@ class ProfileController extends Controller
                 $scores += count($flatscores);
 
                 if ($event->eventtypeid === 1 || $event->eventtypeid === 3) {
-                    $evententry = $erc->getEventEntrySorted($event->eventid, $user->userid);
+                    $evententry = $resultscontroller->getEventEntrySorted($event->eventid, $user->userid);
 
                     if (!empty($evententry)) {
-                        $results = $erc->formatOverallResults($evententry, $flatscores);
+                        $results = $eventresultscontroller->formatOverallResults($evententry, $flatscores);
                         $result = reset($results);
 
                         if (empty($result)) {
@@ -101,7 +105,7 @@ class ProfileController extends Controller
                     $eventObj = Event::where('eventid', $event->eventid)->first();
                     $results = [];
                     foreach (range(1,15) as $week) {
-                        $result = $erc->getLeagueCompetitionResults($eventObj, $week, true, $user->userid);
+                        $result = $leagueresultscontroller->getLeagueCompetitionResults($eventObj, $week, true, $user->userid);
 
                         // reformat the data
                         if (!empty($result['evententrys'])) {
