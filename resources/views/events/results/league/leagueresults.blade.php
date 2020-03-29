@@ -25,22 +25,32 @@
         @include('events.results.templates.event-banners')
     @endif
 
+    <style>
+        body {
+            line-height: 1;
+            font-size: 12px;
+        }
+
+        table.dataTable {
+            margin-top: 1px !important;
+            margin-bottom: 20px !important;
+        }
+    </style>
+
 	<div class="row">
         <div class="col-lg-12">
             <ul class="nav nav-tabs tabs"></ul>
 
-            <div class="tab-content">
+            <div class="tab-content"  style="padding: 0%">
                 @foreach ($evententrys as $bowtype => $ee)
                     <div class="tab-pane active" id="{{$bowtype}}">
                         @foreach($ee as $division => $archers)
-                            <h5 class="tableTitle d-block d-sm-block d-md-block d-lg-none">{{$division}}</h5>
                             @php $data = reset($archers); @endphp
                                 <div class="table-responsive">
                                     <table class="table table-striped table-bordered datatable-buttons" cellspacing="0" width="100%">
                                         <thead>
                                             <tr id="tabltr">
-                                                <th class="d-lg-none">Archer</th>
-                                                <th class="d-none d-sm-none d-md-none d-lg-block d-xl-block">{{$division}}</th>
+                                                <th>{{$division}}</th>
                                                 <th>{{$data->dist1. $data->unit}}</th>
                                                 <th>10/X</th>
                                                 <th>X</th>
@@ -102,20 +112,15 @@
 
     <script type="text/javascript">
         $(document).ready(function () {
-            //Buttons examples
             var index = $('#tabltr').find('th:last').index();
-            console.log(index);
+
             var table = $('.datatable-buttons').DataTable({
                 lengthChange: false,
                 bPaginate: false,
                 bInfo : false,
                 searching : false,
                 "order": [[ index, "desc"], [index - 3, "desc"], [index - 2, "desc" ]]
-                // buttons: ['excel', 'pdf']
             });
-            //
-            // table.buttons().container()
-            //     .appendTo('.datatable-buttons_wrapper .col-md-6:eq(0)');
         });
     </script>
 
