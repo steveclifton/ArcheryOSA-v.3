@@ -213,7 +213,8 @@ class APIEventsController extends Controller
 
                     if (!empty($id)) {
                         $data = (new EventResultsController())->getEventCompetitionResults($event, $id, true);
-                        $return['data']['results'] = !empty($data['evententrys']) ? $data['evententrys'] : [];
+                        $return['data']['results'] = !empty($data['results']) ? $data['results'] : [];
+                        $return['data']['competitions'] = !empty($data['eventcompetition']) ? $data['eventcompetition'] : [];
                     }
 
                 }
