@@ -27,7 +27,6 @@ class EventCompetitionController extends EventController
      */
     public function getEventCompetitionsView(Request $request)
     {
-
         // Get Event
         $event = $this->userOk($request->eventurl);
 
@@ -71,19 +70,19 @@ class EventCompetitionController extends EventController
 
             // Add the first competition day to the event
             $competition = EventCompetition::where('eventid', $event->eventid)
-                ->where('date', $firstdate)
-                ->first();
+                                            ->where('date', $firstdate)
+                                            ->first();
+            $entries = null;
 
             if (!empty($competition)) {
                 $competition = $competition->toArray();
+
+                $entries = EntryCompetition::where('eventid', $event->eventid)
+                                            ->where('eventcompetitionid', $competition['eventcompetitionid'])
+                                            ->first();
             }
 
-
             $formaction = empty($competition) ? 'create' : 'update';
-
-            $entries = EntryCompetition::where('eventid', $event->eventid)
-                ->where('eventcompetitionid',  $competition['eventcompetitionid'])
-                ->first();
 
             $eventcompetitions = EventCompetition::where('eventid', $event->eventid)->get();
 

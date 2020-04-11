@@ -4,7 +4,7 @@
         <select name="date" class="form-control">
             @foreach($event->daterange as $date)
                 <option value="{{$date}}"
-                        {!! (old('date') ?? $competition['date'] ) == $date ? 'selected' : ''!!}>
+                        {!! (old('date') ?? $competition['date'] ?? 'ignore' ) == $date ? 'selected' : ''!!}>
                     {{ date('F', strtotime($date))}}
                 </option>
             @endforeach

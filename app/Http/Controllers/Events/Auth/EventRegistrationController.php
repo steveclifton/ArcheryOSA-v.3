@@ -645,10 +645,10 @@ class EventRegistrationController extends EventController
         $evententry->eventid       = $event->eventid;
         $evententry->entrystatusid = 1; // 1 is pending
         $evententry->paid          = 0; // 0 is not paid yet
-        $evententry->firstname     = !empty($validated['firstname'])      ? ($validated['firsgbbtname'])  : '';
+        $evententry->firstname     = !empty($validated['firstname'])      ? ($validated['firstname'])  : '';
         $evententry->lastname      = !empty($validated['lastname'])       ? ($validated['lastname'])   : '';
-        $evententry->email         = !empty($validated['email'])          ? $validated['email']                  : '';
-        $evententry->bib           = !empty($validated['bib'])            ? $validated['bib']                  : '';
+        $evententry->email         = !empty($validated['email'])          ? $validated['email']        : '';
+        $evententry->bib           = !empty($validated['bib'])            ? $validated['bib']          : '';
         $evententry->address       = !empty($validated['address'])        ? ($validated['address'])    : '';
         $evententry->phone         = !empty($validated['phone'])          ? ($validated['phone'])      : '';
         $evententry->membership    = !empty($validated['membership'])     ? ($validated['membership']) : '';

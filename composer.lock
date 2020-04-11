@@ -1177,105 +1177,17 @@
             "time": "2019-11-02T09:15:47+00:00"
         },
         {
-            "name": "jakub-onderka/php-console-color",
-            "version": "v0.2",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/JakubOnderka/PHP-Console-Color.git",
-                "reference": "d5deaecff52a0d61ccb613bb3804088da0307191"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/JakubOnderka/PHP-Console-Color/zipball/d5deaecff52a0d61ccb613bb3804088da0307191",
-                "reference": "d5deaecff52a0d61ccb613bb3804088da0307191",
-                "shasum": ""
-            },
-            "require": {
-                "php": ">=5.4.0"
-            },
-            "require-dev": {
-                "jakub-onderka/php-code-style": "1.0",
-                "jakub-onderka/php-parallel-lint": "1.0",
-                "jakub-onderka/php-var-dump-check": "0.*",
-                "phpunit/phpunit": "~4.3",
-                "squizlabs/php_codesniffer": "1.*"
-            },
-            "type": "library",
-            "autoload": {
-                "psr-4": {
-                    "JakubOnderka\\PhpConsoleColor\\": "src/"
-                }
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "BSD-2-Clause"
-            ],
-            "authors": [
-                {
-                    "name": "Jakub Onderka",
-                    "email": "jakub.onderka@gmail.com"
-                }
-            ],
-            "time": "2018-09-29T17:23:10+00:00"
-        },
-        {
-            "name": "jakub-onderka/php-console-highlighter",
-            "version": "v0.4",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/JakubOnderka/PHP-Console-Highlighter.git",
-                "reference": "9f7a229a69d52506914b4bc61bfdb199d90c5547"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/JakubOnderka/PHP-Console-Highlighter/zipball/9f7a229a69d52506914b4bc61bfdb199d90c5547",
-                "reference": "9f7a229a69d52506914b4bc61bfdb199d90c5547",
-                "shasum": ""
-            },
-            "require": {
-                "ext-tokenizer": "*",
-                "jakub-onderka/php-console-color": "~0.2",
-                "php": ">=5.4.0"
-            },
-            "require-dev": {
-                "jakub-onderka/php-code-style": "~1.0",
-                "jakub-onderka/php-parallel-lint": "~1.0",
-                "jakub-onderka/php-var-dump-check": "~0.1",
-                "phpunit/phpunit": "~4.0",
-                "squizlabs/php_codesniffer": "~1.5"
-            },
-            "type": "library",
-            "autoload": {
-                "psr-4": {
-                    "JakubOnderka\\PhpConsoleHighlighter\\": "src/"
-                }
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "MIT"
-            ],
-            "authors": [
-                {
-                    "name": "Jakub Onderka",
-                    "email": "acci@acci.cz",
-                    "homepage": "http://www.acci.cz/"
-                }
-            ],
-            "description": "Highlight PHP code in terminal",
-            "time": "2018-09-29T18:48:56+00:00"
-        },
-        {
             "name": "laravel/framework",
-            "version": "v7.3.0",
+            "version": "v7.5.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/laravel/framework.git",
-                "reference": "36d8958b5b8058ef0641806e490f91102fdea70d"
+                "reference": "3a3b3f7fea69813f5a03449c6314bfb42c3ccf78"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/laravel/framework/zipball/36d8958b5b8058ef0641806e490f91102fdea70d",
-                "reference": "36d8958b5b8058ef0641806e490f91102fdea70d",
+                "url": "https://api.github.com/repos/laravel/framework/zipball/3a3b3f7fea69813f5a03449c6314bfb42c3ccf78",
+                "reference": "3a3b3f7fea69813f5a03449c6314bfb42c3ccf78",
                 "shasum": ""
             },
             "require": {
@@ -1413,7 +1325,7 @@
                 "framework",
                 "laravel"
             ],
-            "time": "2020-03-24T15:17:51+00:00"
+            "time": "2020-04-08T15:54:18+00:00"
         },
         {
             "name": "laravel/helpers",
@@ -1470,16 +1382,16 @@
         },
         {
             "name": "laravel/tinker",
-            "version": "v2.3.0",
+            "version": "v2.4.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/laravel/tinker.git",
-                "reference": "5271893ec90ad9f8d3e34792ac6b72cad3b84cc2"
+                "reference": "cde90a7335a2130a4488beb68f4b2141869241db"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/laravel/tinker/zipball/5271893ec90ad9f8d3e34792ac6b72cad3b84cc2",
-                "reference": "5271893ec90ad9f8d3e34792ac6b72cad3b84cc2",
+                "url": "https://api.github.com/repos/laravel/tinker/zipball/cde90a7335a2130a4488beb68f4b2141869241db",
+                "reference": "cde90a7335a2130a4488beb68f4b2141869241db",
                 "shasum": ""
             },
             "require": {
@@ -1487,12 +1399,12 @@
                 "illuminate/contracts": "^6.0|^7.0|^8.0",
                 "illuminate/support": "^6.0|^7.0|^8.0",
                 "php": "^7.2",
-                "psy/psysh": "^0.9|^0.10",
-                "symfony/var-dumper": "^4.0|^5.0"
+                "psy/psysh": "^0.10.3",
+                "symfony/var-dumper": "^4.3|^5.0"
             },
             "require-dev": {
                 "mockery/mockery": "^1.3.1",
-                "phpunit/phpunit": "^8.0|^9.0"
+                "phpunit/phpunit": "^8.4|^9.0"
             },
             "suggest": {
                 "illuminate/database": "The Illuminate Database package (^6.0|^7.0|^8.0)."
@@ -1530,7 +1442,7 @@
                 "laravel",
                 "psysh"
             ],
-            "time": "2020-03-17T15:34:59+00:00"
+            "time": "2020-04-07T15:01:31+00:00"
         },
         {
             "name": "laravel/ui",
@@ -1589,16 +1501,16 @@
         },
         {
             "name": "league/commonmark",
-            "version": "1.3.2",
+            "version": "1.3.3",
             "source": {
                 "type": "git",
                 "url": "https://github.com/thephpleague/commonmark.git",
-                "reference": "75542a366ccbe1896ed79fcf3e8e68206d6c4257"
+                "reference": "5a67afc2572ec6d430526cdc9c637ef124812389"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/thephpleague/commonmark/zipball/75542a366ccbe1896ed79fcf3e8e68206d6c4257",
-                "reference": "75542a366ccbe1896ed79fcf3e8e68206d6c4257",
+                "url": "https://api.github.com/repos/thephpleague/commonmark/zipball/5a67afc2572ec6d430526cdc9c637ef124812389",
+                "reference": "5a67afc2572ec6d430526cdc9c637ef124812389",
                 "shasum": ""
             },
             "require": {
@@ -1659,7 +1571,7 @@
                 "md",
                 "parser"
             ],
-            "time": "2020-03-25T19:55:28+00:00"
+            "time": "2020-04-05T16:01:48+00:00"
         },
         {
             "name": "league/csv",
@@ -1964,12 +1876,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/mpdf/mpdf.git",
-                "reference": "7615414f5bc42a77d1986ea2c87912e4302fc4ad"
+                "reference": "4c0e1939f398773db96ef9e753420b3a8b4773d0"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/mpdf/mpdf/zipball/7615414f5bc42a77d1986ea2c87912e4302fc4ad",
-                "reference": "7615414f5bc42a77d1986ea2c87912e4302fc4ad",
+                "url": "https://api.github.com/repos/mpdf/mpdf/zipball/4c0e1939f398773db96ef9e753420b3a8b4773d0",
+                "reference": "4c0e1939f398773db96ef9e753420b3a8b4773d0",
                 "shasum": ""
             },
             "require": {
@@ -2025,7 +1937,7 @@
                 "php",
                 "utf-8"
             ],
-            "time": "2020-02-05T08:46:07+00:00"
+            "time": "2020-04-09T13:44:33+00:00"
         },
         {
             "name": "myclabs/deep-copy",
@@ -2077,16 +1989,16 @@
         },
         {
             "name": "nesbot/carbon",
-            "version": "2.32.1",
+            "version": "2.32.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/briannesbitt/Carbon.git",
-                "reference": "ecb525c766deb3bbbb6a0082ea0e41d3d9ae477c"
+                "reference": "f10e22cf546704fab1db4ad4b9dedbc5c797a0dc"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/briannesbitt/Carbon/zipball/ecb525c766deb3bbbb6a0082ea0e41d3d9ae477c",
-                "reference": "ecb525c766deb3bbbb6a0082ea0e41d3d9ae477c",
+                "url": "https://api.github.com/repos/briannesbitt/Carbon/zipball/f10e22cf546704fab1db4ad4b9dedbc5c797a0dc",
+                "reference": "f10e22cf546704fab1db4ad4b9dedbc5c797a0dc",
                 "shasum": ""
             },
             "require": {
@@ -2144,7 +2056,7 @@
                 "datetime",
                 "time"
             ],
-            "time": "2020-03-26T13:04:10+00:00"
+            "time": "2020-03-31T13:43:19+00:00"
         },
         {
             "name": "nicmart/tree",
@@ -2184,16 +2096,16 @@
         },
         {
             "name": "nikic/php-parser",
-            "version": "v4.3.0",
+            "version": "v4.4.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/nikic/PHP-Parser.git",
-                "reference": "9a9981c347c5c49d6dfe5cf826bb882b824080dc"
+                "reference": "bd43ec7152eaaab3bd8c6d0aa95ceeb1df8ee120"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/nikic/PHP-Parser/zipball/9a9981c347c5c49d6dfe5cf826bb882b824080dc",
-                "reference": "9a9981c347c5c49d6dfe5cf826bb882b824080dc",
+                "url": "https://api.github.com/repos/nikic/PHP-Parser/zipball/bd43ec7152eaaab3bd8c6d0aa95ceeb1df8ee120",
+                "reference": "bd43ec7152eaaab3bd8c6d0aa95ceeb1df8ee120",
                 "shasum": ""
             },
             "require": {
@@ -2232,7 +2144,7 @@
                 "parser",
                 "php"
             ],
-            "time": "2019-11-08T13:50:10+00:00"
+            "time": "2020-04-10T16:34:50+00:00"
         },
         {
             "name": "opis/closure",
@@ -2637,23 +2549,22 @@
         },
         {
             "name": "psy/psysh",
-            "version": "v0.10.2",
+            "version": "v0.10.3",
             "source": {
                 "type": "git",
                 "url": "https://github.com/bobthecow/psysh.git",
-                "reference": "573c2362c3cdebe846b4adae4b630eecb350afd8"
+                "reference": "2bde2fa03e05dff0aee834598b951d6fc7c6fe02"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/bobthecow/psysh/zipball/573c2362c3cdebe846b4adae4b630eecb350afd8",
-                "reference": "573c2362c3cdebe846b4adae4b630eecb350afd8",
+                "url": "https://api.github.com/repos/bobthecow/psysh/zipball/2bde2fa03e05dff0aee834598b951d6fc7c6fe02",
+                "reference": "2bde2fa03e05dff0aee834598b951d6fc7c6fe02",
                 "shasum": ""
             },
             "require": {
                 "dnoegel/php-xdg-base-dir": "0.1.*",
                 "ext-json": "*",
                 "ext-tokenizer": "*",
-                "jakub-onderka/php-console-highlighter": "0.4.*|0.3.*",
                 "nikic/php-parser": "~4.0|~3.0|~2.0|~1.3",
                 "php": "^8.0 || ^7.0 || ^5.5.9",
                 "symfony/console": "~5.0|~4.0|~3.0|^2.4.2|~2.3.10",
@@ -2661,7 +2572,7 @@
             },
             "require-dev": {
                 "bamarni/composer-bin-plugin": "^1.2",
-                "hoa/console": "~3.16|~2.15"
+                "hoa/console": "3.17.*"
             },
             "suggest": {
                 "ext-pcntl": "Enabling the PCNTL extension makes PsySH a lot happier :)",
@@ -2706,7 +2617,7 @@
                 "interactive",
                 "shell"
             ],
-            "time": "2020-03-21T06:55:27+00:00"
+            "time": "2020-04-07T06:44:48+00:00"
         },
         {
             "name": "ralouphie/getallheaders",
@@ -3137,16 +3048,16 @@
         },
         {
             "name": "spatie/crawler",
-            "version": "4.6.8",
+            "version": "4.6.9",
             "source": {
                 "type": "git",
                 "url": "https://github.com/spatie/crawler.git",
-                "reference": "3c1eb2d38b4a18560d3f48087597f9786f95b694"
+                "reference": "2b3c84927e28288b4b53d9402aed0325f009283f"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/spatie/crawler/zipball/3c1eb2d38b4a18560d3f48087597f9786f95b694",
-                "reference": "3c1eb2d38b4a18560d3f48087597f9786f95b694",
+                "url": "https://api.github.com/repos/spatie/crawler/zipball/2b3c84927e28288b4b53d9402aed0325f009283f",
+                "reference": "2b3c84927e28288b4b53d9402aed0325f009283f",
                 "shasum": ""
             },
             "require": {
@@ -3192,7 +3103,7 @@
                 "spatie",
                 "website"
             ],
-            "time": "2020-03-13T10:56:11+00:00"
+            "time": "2020-04-11T18:48:59+00:00"
         },
         {
             "name": "spatie/image",
@@ -3453,16 +3364,16 @@
         },
         {
             "name": "stripe/stripe-php",
-            "version": "v7.27.3",
+            "version": "v7.28.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/stripe/stripe-php.git",
-                "reference": "a6bbc392248f892123aed515b18a6360447cd658"
+                "reference": "0f4af8bd7dc2e143a4a6983a8451b96429e747e1"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/stripe/stripe-php/zipball/a6bbc392248f892123aed515b18a6360447cd658",
-                "reference": "a6bbc392248f892123aed515b18a6360447cd658",
+                "url": "https://api.github.com/repos/stripe/stripe-php/zipball/0f4af8bd7dc2e143a4a6983a8451b96429e747e1",
+                "reference": "0f4af8bd7dc2e143a4a6983a8451b96429e747e1",
                 "shasum": ""
             },
             "require": {
@@ -3506,7 +3417,7 @@
                 "payment processing",
                 "stripe"
             ],
-            "time": "2020-03-18T20:32:13+00:00"
+            "time": "2020-04-10T17:05:40+00:00"
         },
         {
             "name": "swiftmailer/swiftmailer",
@@ -5001,16 +4912,16 @@
         },
         {
             "name": "tightenco/collect",
-            "version": "v7.3.0",
+            "version": "v7.5.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/tightenco/collect.git",
-                "reference": "306a4def08c9781ff74fcf1e012f22cbf8686348"
+                "reference": "1f5f7a36657a126fa035c7cfaafd738391690967"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/tightenco/collect/zipball/306a4def08c9781ff74fcf1e012f22cbf8686348",
-                "reference": "306a4def08c9781ff74fcf1e012f22cbf8686348",
+                "url": "https://api.github.com/repos/tightenco/collect/zipball/1f5f7a36657a126fa035c7cfaafd738391690967",
+                "reference": "1f5f7a36657a126fa035c7cfaafd738391690967",
                 "shasum": ""
             },
             "require": {
@@ -5047,7 +4958,7 @@
                 "collection",
                 "laravel"
             ],
-            "time": "2020-03-09T16:52:33+00:00"
+            "time": "2020-04-08T17:29:27+00:00"
         },
         {
             "name": "tijsverkoyen/css-to-inline-styles",
@@ -5542,28 +5453,28 @@
         },
         {
             "name": "nunomaduro/collision",
-            "version": "v4.1.3",
+            "version": "v4.2.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/nunomaduro/collision.git",
-                "reference": "a430bce33d1ad07f756ea6cae9afce9ef8670b42"
+                "reference": "d50490417eded97be300a92cd7df7badc37a9018"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/nunomaduro/collision/zipball/a430bce33d1ad07f756ea6cae9afce9ef8670b42",
-                "reference": "a430bce33d1ad07f756ea6cae9afce9ef8670b42",
+                "url": "https://api.github.com/repos/nunomaduro/collision/zipball/d50490417eded97be300a92cd7df7badc37a9018",
+                "reference": "d50490417eded97be300a92cd7df7badc37a9018",
                 "shasum": ""
             },
             "require": {
                 "facade/ignition-contracts": "^1.0",
                 "filp/whoops": "^2.4",
-                "jakub-onderka/php-console-highlighter": "^0.4",
                 "php": "^7.2.5",
                 "symfony/console": "^5.0"
             },
             "require-dev": {
                 "facade/ignition": "^2.0",
                 "fideloper/proxy": "^4.2",
+                "friendsofphp/php-cs-fixer": "^2.16",
                 "fruitcake/laravel-cors": "^1.0",
                 "laravel/framework": "^7.0",
                 "laravel/tinker": "^2.0",
@@ -5608,7 +5519,7 @@
                 "php",
                 "symfony"
             ],
-            "time": "2020-03-07T12:46:00+00:00"
+            "time": "2020-04-04T19:56:08+00:00"
         },
         {
             "name": "phar-io/manifest",
