@@ -90,7 +90,7 @@
                                     ]; @endphp
                             @foreach($bowtypes as $bowtype)
                                 <option value="{{$bowtype}}"
-                                        {!! (old('bowtype') ?? $division->bowtype) == $bowtype ? 'selected' : '' !!}>
+                                        {!! (old('bowtype') ?? $division->bowtype) == strtolower($bowtype) ? 'selected' : '' !!}>
                                     {{ucwords($bowtype)}}
                                 </option>
                             @endforeach

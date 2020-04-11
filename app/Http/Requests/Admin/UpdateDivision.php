@@ -35,6 +35,7 @@ class UpdateDivision extends FormRequest
             'bowtype'        => 'nullable',
             'age'            => 'nullable',
             'visible'        => 'nullable',
+            'class' => 'nullable',
 
         ];
     }

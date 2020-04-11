@@ -105,6 +105,7 @@ class DivisionController extends Controller
         $division->visible        = !empty($validated['visible'])         ? 1 : 0;
         $division->bowtype        = !empty($validated['bowtype'])         ? strtolower($validated['bowtype']) : null;
         $division->age            = !empty($validated['age'])             ? ($validated['age']) : null;
+        $division->class            = !empty($validated['class'])             ? ($validated['class']) : null;
 
 
         $division->save();
