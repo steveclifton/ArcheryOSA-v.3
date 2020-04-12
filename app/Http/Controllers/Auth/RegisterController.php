@@ -3,9 +3,11 @@
 namespace App\Http\Controllers\Auth;
 
 use App\Jobs\SendWelcome;
+use App\Models\UserRelation;
 use App\Rules\ValidRecaptcha;
 use App\User;
 use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Foundation\Auth\RegistersUsers;
@@ -63,13 +65,23 @@ class RegisterController extends Controller
      */
     protected function validator(array $data)
     {
-        return Validator::make($data, [
+        $rules = [
             'firstname' => 'required|string|max:255',
             'lastname' => 'required|string|max:255',
             'email' => 'required|string|email|max:255|unique:users',
             'password' => 'required|string|min:6|confirmed',
-            'g-recaptcha-response' => ['required', new ValidRecaptcha()]
-        ]);
+            'g-recaptcha-response' => ['required', new ValidRecaptcha()],
+            'addchild' => 'nullable'
+        ];
+
+        if (!empty($data['addchild'])) {
+            $rules['childfirstname'] = 'required|string|max:55';
+            $rules['childlastname'] = 'required|string|max:55';
+            $rules['childemail'] = 'nullable|string|email|max:255|unique:users,email';
+        }
+
+        return Validator::make($data, $rules);
+
     }
 
     /**
@@ -80,7 +92,7 @@ class RegisterController extends Controller
      */
     protected function create(array $data)
     {
-        return User::create([
+        $user = User::create([
             'firstname' => $data['firstname'],
             'lastname' => $data['lastname'],
             'email' => $data['email'],
@@ -89,6 +101,32 @@ class RegisterController extends Controller
             'roleid' => 4,
             'username' => strtolower(preg_replace("/[^a-zA-Z0-9]/", "", $data['firstname'].$data['lastname'])) . rand(1,1440)
         ]);
+
+        if (!empty($data['addchild'])) {
+
+            $child = [
+                'firstname' => ($data['childfirstname'] ?? ''),
+                'lastname' => ($data['childlastname'] ?? ''),
+                'email' => ($data['childemail'] ?? ''),
+            ];
+
+            $userid = $this->createBasicUser($child, $user->userid);
+
+            if (empty($userid)) {
+                return back()->with('failure', 'Please try again later');
+            }
+
+            $userrelation = new UserRelation();
+            $userrelation->userid = $user->userid;
+            $userrelation->relationid = $userid;
+            $userrelation->authorised = 1;
+            $userrelation->hash = $this->createHash();
+
+            $userrelation->save();
+
+        }
+
+        return $user;
     }
 
 

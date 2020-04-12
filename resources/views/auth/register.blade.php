@@ -69,6 +69,63 @@
                         </div>
                     </div>
 
+                    <div class="form-group ">
+                        <div class="col-12">
+                            <div class="checkbox checkbox-primary">
+                                <input name="addchild" id="addchild-checkbox" type="checkbox" {{ old('addchild') ? 'checked' : '' }}>
+                                <label for="addchild-checkbox">
+                                    Parents - Add Child
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+
+                    <script>
+                        $(function() {
+                            $('#addchild-checkbox').on('change', function() {
+                                $('#childaccount').toggle();
+                            });
+                        });
+                    </script>
+
+                    <div id="childaccount" style="display: {{ old('addchild') ? '' : 'none' }}">
+                        <div class="form-group ">
+                            <div class="col-12">
+                                <input name="childfirstname" class="form-control{{ $errors->has('childfirstname') ? ' is-invalid' : '' }}" type="text" placeholder="Child's First Name" value="{{ old('childfirstname') }}">
+                                @if ($errors->has('childfirstname'))
+                                    <span class="invalid-feedback" role="alert">
+                                    <strong>Firstname is required</strong>
+                                </span>
+                                @endif
+                            </div>
+                        </div>
+
+
+                        <div class="form-group ">
+                            <div class="col-12">
+                                <input name="childlastname" class="form-control{{ $errors->has('childlastname') ? ' is-invalid' : '' }}" type="text" placeholder="Child's Last Name" value="{{ old('childlastname') }}">
+                                @if ($errors->has('childlastname'))
+                                    <span class="invalid-feedback" role="alert">
+                                    <strong>Lastname is required</strong>
+                                </span>
+                                @endif
+                            </div>
+                        </div>
+
+                        <div class="form-group row">
+                            <div class="col-12">
+                                <input name="childemail" class="form-control{{ $errors->has('childemail') ? ' is-invalid' : '' }}" type="email" placeholder="Child's Email" value="{{ old('childemail') }}">
+                                @if ($errors->has('childemail'))
+                                    <span class="invalid-feedback" role="alert">
+                                        <strong>This email has already been taken</strong>
+                                    </span>
+                                @endif
+                            </div>
+                        </div>
+
+                    </div>
+
+                    <br>
 
                     <div class="form-group">
                         <div class="col-12">
