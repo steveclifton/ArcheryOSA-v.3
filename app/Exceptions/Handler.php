@@ -44,8 +44,7 @@ class Handler extends ExceptionHandler
                 'QUERY_STRING' => ($_SERVER['QUERY_STRING'] ?? ''),
                 'REQUEST_METHOD' => ($_SERVER['REQUEST_METHOD'] ?? ''),
             ]);
-        }
-        else {
+
             DB::table('exceptions')->insert([
                 'message' => $exception->getMessage(),
                 'file' => $exception->getFile(),
