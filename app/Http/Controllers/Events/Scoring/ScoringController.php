@@ -92,17 +92,35 @@ class ScoringController extends Controller
 
         $currentWeek = $event->isLeague() ? $eventcompetition->currentweek : 0;
         $evententrys = [];
+
+        $temp = Score::where('eventcompetitionid', $eventcompetition->eventcompetitionid)->where('week', $currentWeek)->get();
+        $scores = [];
+        foreach ($temp as $score) {
+            $scores[$score->entryid][] = $score;
+        }
+
+        // No longer required
+        unset($temp);
+
         foreach ($entrys as $entry) {
 
-            $scores = Score::where('entryid', $entry->entryid)
-                            ->where('roundid', $entry->roundid)
-                            ->where('divisionid', $entry->divisionid)
-                            ->where('eventcompetitionid', $entry->eventcompetitionid)
-                            ->where('week', $currentWeek)
-                            ->get();
+            $entryscores = isset($scores[$entry->entryid]) ? $scores[$entry->entryid] : [];
+
+//            $entryscores = Score::where('entryid', $entry->entryid)
+//                            ->where('roundid', $entry->roundid)
+//                            ->where('divisionid', $entry->divisionid)
+//                            ->where('eventcompetitionid', $entry->eventcompetitionid)
+//                            ->where('week', $currentWeek)
+//                            ->get();
 
             $i = 1;
-            foreach ($scores as $score) {
+            foreach ($entryscores as $score) {
+
+                // Make sure the roundid and the divisionid match
+                if ($score->roundid != $entry->roundid || $score->divisionid != $entry->divisionid) {
+                    continue;
+                }
+
                 $label = 'score' . $i++;
                 $entry->{$label} = $score;
 
