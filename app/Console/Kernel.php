@@ -57,7 +57,7 @@ class Kernel extends ConsoleKernel
         $schedule->call(function(){
             $e = DB::table('exceptions')->get();
 
-            if (empty($e)) {
+            if ($e->isEmpty()) {
                 return null;
             }
 
@@ -65,10 +65,12 @@ class Kernel extends ConsoleKernel
             $count = 1;
             foreach ($e as $item) {
                 $exceptions .= $count++ . ': ' . $item->message . '<br>';
-                $exceptions .= 'File : ' .$item->file . '<br><br>';
+                $exceptions .= 'File : ' . $item->file . '<br><br>';
             }
 
-            SendExceptionEmail::dispatch($exceptions, 'ArcheryOSA Exceptions');
+            if (!empty($exceptions)) {
+                SendExceptionEmail::dispatch($exceptions, 'ArcheryOSA Exceptions');
+            }
 
             DB::table('exceptions')->delete();
         })->everyFiveMinutes();
