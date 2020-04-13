@@ -45,12 +45,13 @@ class Handler extends ExceptionHandler
                 'REQUEST_METHOD' => ($_SERVER['REQUEST_METHOD'] ?? ''),
             ]);
         }
-
-        DB::table('exceptions')->insert([
-            'message' => $exception->getMessage(),
-            'file' => $exception->getFile(),
-            'notified' => 0
-        ]);
+        else {
+            DB::table('exceptions')->insert([
+                'message' => $exception->getMessage(),
+                'file' => $exception->getFile(),
+                'notified' => 0
+            ]);
+        }
 
         parent::report($exception);
     }
