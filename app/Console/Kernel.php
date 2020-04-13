@@ -60,6 +60,7 @@ class Kernel extends ConsoleKernel
             if ($e->isEmpty()) {
                 return null;
             }
+            Log::info($e);
 
             $exceptions = '';
             $count = 1;
