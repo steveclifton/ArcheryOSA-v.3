@@ -2,6 +2,7 @@
 
 namespace App\Exceptions;
 
+use Illuminate\Support\Facades\DB;
 use Throwable;
 use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
 use Illuminate\Support\Facades\Log;
@@ -36,14 +37,20 @@ class Handler extends ExceptionHandler
     public function report(Throwable $exception)
     {
         if (!$this->shouldntReport($exception)) {
-            
-            Log::channel('daily')->warning(['REQUEST_URI' => ($_SERVER['REQUEST_URI'] ?? ''),
+            Log::channel('daily')->warning([
+                'REQUEST_URI' => ($_SERVER['REQUEST_URI'] ?? ''),
                 'REMOTE_ADDR' => ($_SERVER['REMOTE_ADDR'] ?? ''),
                 'HTTP_USER_AGENT' => ($_SERVER['HTTP_USER_AGENT'] ?? ''),
                 'QUERY_STRING' => ($_SERVER['QUERY_STRING'] ?? ''),
                 'REQUEST_METHOD' => ($_SERVER['REQUEST_METHOD'] ?? ''),
             ]);
         }
+
+        DB::table('exceptions')->insert([
+            'message' => $exception->getMessage(),
+            'file' => $exception->getFile(),
+            'notified' => 0
+        ]);
 
         parent::report($exception);
     }
@@ -64,7 +71,8 @@ class Handler extends ExceptionHandler
     {
         try {
             return app(\Whoops\Handler\HandlerInterface::class);
-        } catch (\Illuminate\Contracts\Container\BindingResolutionException $e) {
+        }
+        catch (\Illuminate\Contracts\Container\BindingResolutionException $e) {
             return (new \Illuminate\Foundation\Exceptions\WhoopsHandler)->forDebug();
         }
     }

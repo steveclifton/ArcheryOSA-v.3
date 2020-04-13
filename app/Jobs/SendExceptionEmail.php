@@ -11,7 +11,7 @@ use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Support\Facades\Mail;
 
-class SendExceptionEmail implements ShouldQueue
+class SendExceptionEmail extends ArcheryOSASender implements ShouldQueue
 {
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
 
@@ -36,8 +36,9 @@ class SendExceptionEmail implements ShouldQueue
     public function handle()
     {
         $user = User::where('userid', 1)->first();
-        return;
+
         Mail::to($this->getEmailAddress($user->email))
             ->send(new ExceptionAlertEmail($this->exception, $this->subject));
+
     }
 }

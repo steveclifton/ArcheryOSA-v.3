@@ -2,8 +2,12 @@
 
 namespace App\Console;
 
+use App\Jobs\SendExceptionEmail;
+use App\Models\Event;
 use Illuminate\Console\Scheduling\Schedule;
 use Illuminate\Foundation\Console\Kernel as ConsoleKernel;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 
 class Kernel extends ConsoleKernel
 {
@@ -24,8 +28,50 @@ class Kernel extends ConsoleKernel
      */
     protected function schedule(Schedule $schedule)
     {
-        // $schedule->command('inspire')
-        //          ->hourly();
+        $schedule->call(function () {
+
+            // Where open or in progress
+            $events = Event::whereIn('eventstatusid', [1, 2])
+                ->where('end', '<', date('Y-m-d'))
+                ->get();
+
+            if (empty($events)) {
+                return null;
+            }
+            $log = '';
+
+            foreach ($events as $event) {
+                // Set to completed
+                $event->eventstatusid = 4;
+                $event->save();
+
+                $log .= 'Completed Event : ' . $event->label . ' (Eventid: '. $event->eventid . ')' . PHP_EOL;
+            }
+
+            if (!empty($log)) {
+                Log::info($log);
+            }
+
+        })->daily();
+
+        $schedule->call(function(){
+            $e = DB::table('exceptions')->get();
+
+            if (empty($e)) {
+                return null;
+            }
+
+            $exceptions = '';
+            $count = 1;
+            foreach ($e as $item) {
+                $exceptions .= $count++ . ': ' . $item->message . '<br>';
+                $exceptions .= 'File : ' .$item->file . '<br><br>';
+            }
+
+            SendExceptionEmail::dispatch($exceptions, 'ArcheryOSA Exceptions');
+
+            DB::table('exceptions')->delete();
+        })->everyFiveMinutes();
     }
 
     /**
