@@ -157,6 +157,7 @@
                                                 </li>
                                                 <li><a href="#">Rankings</a></li>
                                                 <li><a href="#">Results</a></li>
+                                                <li><a href="/admin/reports">Reports</a></li>
 
                                             </ul>
                                         </li>

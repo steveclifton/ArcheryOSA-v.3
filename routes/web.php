@@ -220,16 +220,12 @@ Route::middleware(['web'])->group(function() {
 
     });
 
-
-    Route::middleware(['admin'])->group(function () {
-
-
-    });
-
-
     Route::middleware(['superadmin'])->group(function () {
         Route::get('logs', '\Rap2hpoutre\LaravelLogViewer\LogViewerController@index');
         Route::get('phpinfo', 'HomeController@debug');
+
+        Route::get('admin/reports', 'Admin\ReportController@getReportView');
+        Route::get('reports/julysummary/csv', 'Export\ReportController@exportJulySummary');
 
         // Clubs
         Route::get('admin/clubs', 'Admin\ClubController@get');
