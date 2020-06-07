@@ -451,7 +451,7 @@ class EventRegistrationController extends EventController
         $evententry->pickup        = !empty($validated['pickup']);
         $evententry->dateofbirth   = !empty($validated['dateofbirth'])    ? $validated['dateofbirth']        : '';
         $evententry->gender        = !empty(($validated['gender'] ?? '') == 'm')  ? 'm' : 'f';
-        $evententry->paymenttype   = !empty(($validated['paymenttype'] ?? 'bt') == 'bt')  ? 'bt' : 'cc';
+        $evententry->paymenttype   = in_array(($validated['paymenttype'] ?? null), ['bt', 'cc', 'none']) ? $validated['paymenttype'] : 'none';
         $evententry->details       = $this->getRequestDetails($validated, ['mqs']);
         $evententry->enteredby     = Auth::id();
         $evententry->hash          = $this->createHash();

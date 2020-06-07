@@ -293,7 +293,11 @@
                     <label class="col-sm-12 col-md-3 col-form-label">Payment Type</label>
                     <div class="col-md-9">
                         <select name="paymenttype" class="form-control" id="paymentType">
-                            <option value="bt">Bank Transfer</option>
+                            @if($event->isLeague())
+                                <option value="none">None</option>
+                            @else
+                                <option value="bt">Bank Transfer</option>
+                            @endif
                         </select>
                     </div>
                 </div>
