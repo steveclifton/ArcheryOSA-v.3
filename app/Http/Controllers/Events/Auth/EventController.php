@@ -20,6 +20,7 @@ use App\Models\Organisation;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use App\Http\Classes\Competitions\Template;
 
 class EventController extends Controller
 {
@@ -219,7 +220,7 @@ class EventController extends Controller
         $event->daycount        = $difference;
         $event->contactname     = !empty($validated['contactname'])     ? $validated['contactname']   : null;
         $event->phone           = !empty($validated['phone'])           ? $validated['phone']         : null;
-        $event->region           = !empty($validated['region'])           ? $validated['region']         : null;
+        $event->region          = !empty($validated['region'])           ? $validated['region']         : null;
         $event->level           = !empty($validated['level'])           ? $validated['level']         : null;
         $event->email           = !empty($validated['email'])           ? $validated['email']         : null;
         $event->location        = !empty($validated['location'])        ? $validated['location']      : null;
@@ -237,6 +238,7 @@ class EventController extends Controller
         $event->adminnotifications = 1;
         $event->imagedt         = 'event' . rand(1,2) . '.jpg';
         $event->eventtypeid     = intval($validated['eventtypeid']);
+
         $event->save();
 
         $event->eventurl    = makeurl($validated['label'], $event->eventid);
@@ -257,6 +259,14 @@ class EventController extends Controller
             'line' => __LINE__,
             'before' => json_encode(['event' => $event, 'eventadmin' => $eventadmin])
         ]);
+
+        // If they have requested a template, create the requrired data
+        if (!empty($request->template)) {
+
+            $template = new Template($event);
+            $template->create($request->template);
+
+        }
 
         return redirect('/events/manage/' . $event->eventurl);
 
