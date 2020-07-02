@@ -31,6 +31,7 @@ class UpdateChild extends FormRequest
             'username'   => 'required',
             'dateofbirth'=> 'nullable',
             'membership' => 'nullable',
+            'anzdivisionid' => 'nullable',
         ];
     }
 
