@@ -49,6 +49,7 @@ class CreateEvent extends FormRequest
             'bankreference'  => 'nullable',
             'schedule'       => 'nullable',
             'info'           => 'nullable',
+            'template'       => 'nullable',
             'organisationid' => 'nullable|integer',
             'clubid'         => 'nullable|integer',
             'eventtypeid'    => 'required',
