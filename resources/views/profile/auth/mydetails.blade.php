@@ -160,6 +160,25 @@
                             @endif
                         </div>
 
+                        <div class="form-group col-md-4">
+                            <label class="col-form-label">Primary ArcheryNZ Division</label>
+                            <select name="anzdivisionid"
+                                    class="form-control {{ $errors->has('anzdivisionid') ? 'is-invalid' : '' }}" >
+
+                                <option value="0">None</option>
+                                @foreach($divisions as $division)
+                                    <option value="{{$division->divisionid}}"
+                                            {!! (old('anzdivisionid') ?? Auth::user()->anzdivisionid ?? '') == $division->divisionid ? 'selected' : '' !!}>
+                                        {{$division->label}}
+                                    </option>
+                                @endforeach
+                            </select>
+                            @if ($errors->has('anzdivisionid'))
+                                <span class="invalid-feedback" role="alert">
+                                    <strong>{{ $errors->first('anzdivisionid') }}</strong>
+                                </span>
+                            @endif
+                        </div>
 
                     </div>
 
