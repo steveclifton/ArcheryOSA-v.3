@@ -90,8 +90,6 @@ class Event extends Model
         return (!empty($this->attributes['visible']) && $this->eventstatusid === 1);
     }
 
-
-
     public function canEnterNonShooting()
     {
 
@@ -131,6 +129,18 @@ class Event extends Model
         }
 
         return false;
+    }
+
+
+    public function getEventsDateRange()
+    {
+        $start = new \DateTime( $this->start );
+        $end = new \DateTime( $this->end );
+        $end = $end->modify( '+1 day' );
+        $interval = new \DateInterval('P1D');
+        $daterange = new \DatePeriod($start, $interval ,$end);
+
+        return $daterange;
     }
 
 }
