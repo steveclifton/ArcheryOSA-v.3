@@ -163,6 +163,17 @@
                         </div>
                     </div>
                 </div>
+
+                <div class="form-group row justify-content-end">
+                    <div class=" col-md-9">
+                        <div class="checkbox checkbox-primary">
+                            <input name="retired" id="checkbox3" type="checkbox" {{ !empty($round->retired) ? 'checked' : '' }}>
+                            <label for="checkbox3">
+                                Retired
+                            </label>
+                        </div>
+                    </div>
+                </div>
                 
                 <div class="form-group mb-0 justify-content-start row">
                 	<div class="col-sm-12 col-md-3 col-form-label"></div>
