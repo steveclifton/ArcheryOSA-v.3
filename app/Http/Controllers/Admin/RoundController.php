@@ -120,6 +120,7 @@ class RoundController extends Controller
         $round->dist4max       = !empty($validated['dist4max'])   ? intval($validated['dist4max']) : null;
         $round->totalmax       = !empty($validated['totalmax'])   ? intval($validated['totalmax']) : null;
         $round->visible        = !empty($validated['visible'])    ? 1 : 0;
+        $round->retired        = !empty($validated['retired'])    ? 1 : 0;
         $round->type           = !empty($validated['type'])       ? strtolower($validated['type'])  : 'o';
 
         $round->save();
