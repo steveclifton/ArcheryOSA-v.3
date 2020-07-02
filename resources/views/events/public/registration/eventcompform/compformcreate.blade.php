@@ -26,6 +26,8 @@
         @php
             $olddivisionid = old('divisionid');
             $olddivisionid = !empty($olddivisionid[$eventcomp->eventcompetitionid]) ? $olddivisionid[$eventcomp->eventcompetitionid] : null;
+            $olddivisionid = empty($olddivisionid) ? ($user->anzdivisionid ?? null) : null ;
+
 
             $oldroundid = old('roundids');
             $oldroundid = !empty($oldroundid[$eventcomp->eventcompetitionid]) ? $oldroundid[$eventcomp->eventcompetitionid] : null;
