@@ -25,7 +25,6 @@
             <form class="form-horizontal myForms" action="/events/manage/create" method="POST" role="form">
                 @csrf
 
-
                 <div class="form-group row">
                     <label for="label" class="col-sm-12 col-md-3 col-form-label">Event Name*</label>
                     <div class="col-md-9">
@@ -236,6 +235,22 @@
                     <label class="col-sm-12 col-md-3 col-form-label">Schedule</label>
                     <div class="col-md-9">
                         <textarea name="schedule" class="form-control" rows="5">{{old('schedule')}}</textarea>
+                    </div>
+                </div>
+
+
+                <div class="form-group row">
+                    <label class="col-sm-12 col-md-3 col-form-label">ArcheryNZ Competition Template</label>
+                    <div class="col-md-9">
+                        <select name="template" class="form-control">
+                            <option value="none" {{ old('template') == 'none' ? 'selected' : ''}}>None</option>
+                            @foreach(\App\Http\Classes\Competitions\Template::TEMPLATES as $key => $value)
+                                <option value="{{$key}}" {{ old('template') == $key ? 'selected' : ''}} title="">
+                                    {{$value}}
+                                </option>
+                            @endforeach
+                        </select>
+                        <small>Preconfigure your ArcheryNZ event competitions (competition names may wish to be updated)</small>
                     </div>
                 </div>
 
