@@ -11,6 +11,7 @@ use App\Http\Requests\User\UserUpdateProfile;
 use App\Http\Controllers\Controller;
 use App\Jobs\SendArcherRelationRequest;
 use App\Models\Club;
+use App\Models\Division;
 use App\Models\Event;
 use App\Models\Membership;
 use App\Models\Organisation;
@@ -145,8 +146,9 @@ class ProfileController extends Controller
     public function getMyDetails()
     {
         $clubs = Club::get();
+        $divisions = Division::where('organisationid', 1)->orderby('code')->get();
 
-        return view('profile.auth.mydetails', compact('clubs'));
+        return view('profile.auth.mydetails', compact('clubs', 'divisions'));
     }
 
     public function getMyEvents()
@@ -322,8 +324,8 @@ class ProfileController extends Controller
         if (empty($child)) {
             return back()->with('failure', 'Invalid Request');
         }
-
-        return view('profile.auth.childupdate', compact('child'));
+        $divisions = Division::where('organisationid', 1)->orderby('code')->get();
+        return view('profile.auth.childupdate', compact('child', 'divisions'));
     }
 
 
@@ -380,6 +382,7 @@ class ProfileController extends Controller
         $user->firstname = strtolower($validated['firstname']);
         $user->lastname  = strtolower($validated['lastname']);
         $user->email     = !empty($validated['email']) ? $validated['email'] : $user->email;
+        $user->anzdivisionid     = !empty($validated['anzdivisionid']) ? $validated['anzdivisionid'] : NULL;
         $user->membership  = strtolower($validated['membership']);
         $user->dateofbirth  = $validated['dateofbirth'];
 
@@ -533,9 +536,9 @@ class ProfileController extends Controller
         $user->address     = $validated['address'];
         $user->city        = $validated['city'];
         $user->postcode    = $validated['postcode'];
-        $user->postcode    = $validated['postcode'];
         $user->dateofbirth = $validated['dateofbirth'];
         $user->membership  = $validated['membership'];
+        $user->anzdivisionid  = $validated['anzdivisionid'];
         $user->clubid      = $validated['club'];
         $user->gender      = in_array($validated['gender'], ['m', 'f']) ? $validated['gender'] : null ;
 
