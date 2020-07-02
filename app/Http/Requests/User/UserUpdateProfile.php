@@ -33,6 +33,7 @@ class UserUpdateProfile extends FormRequest
             'city'       => 'nullable|string|max:55',
             'postcode'   => 'nullable|numeric',
             'membership' => 'nullable',
+            'anzdivisionid' => 'nullable',
             'club' => 'nullable',
             'gender' => 'nullable',
 
