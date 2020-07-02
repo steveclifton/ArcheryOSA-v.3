@@ -50,7 +50,13 @@ class HomeController extends Controller
 
         }
 
-        return view('home', compact('upcomingevents', 'myevents'));
+        $message = '
+            To save time during event registration, you can now set a default ArcheryNZ division against your profile! <br><br>
+            Go to your profile to select your primary division to be used for ArcheryNZ events! 
+        ';
+
+
+        return view('home', compact('upcomingevents', 'myevents', 'message'));
     }
 
     public function debug()
