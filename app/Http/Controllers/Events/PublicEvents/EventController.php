@@ -37,7 +37,7 @@ class EventController extends Controller
      */
     public function getAllEvents()
     {
-        $events = DB::select("
+        $upcomingevents = DB::select("
             SELECT e.*, es.label as eventstatus
             FROM `events` e
             JOIN `eventstatus` es USING (`eventstatusid`)
@@ -47,7 +47,7 @@ class EventController extends Controller
         ");
 
 
-        return view('events.public.open', compact('events'));
+        return view('events.public.open', compact('upcomingevents'));
     }
 
 
