@@ -1,0 +1,42 @@
+<div class="row" style="padding-top: 20px">
+    <div class="col-lg-12">
+        <ul class="nav nav-tabs tabs">
+            <li class="nav-item tab">
+                <a href="javascript:;" data-toggle="tab" aria-expanded="true" class="nav-link show">
+                    Upcoming Events
+                </a>
+            </li>
+        </ul>
+
+        <div class="tab-content">
+            @if (!empty($upcomingevents))
+                <div class="table-responsive text-nowrap">
+                    <table class="table table-hover">
+                        <thead class="thead-light">
+                        <tr>
+                            <th>Name</th>
+                            <th>Start</th>
+                            <th>Region</th>
+                            <th>Type</th>
+
+                        </tr>
+                        </thead>
+                        <tbody>
+                        @foreach($upcomingevents as $event)
+                            <tr>
+                                <th scope="row">
+                                    <a href="/event/details/{{$event->eventurl}}">{{$event->label}}</a>
+                                </th>
+                                <td>{{date('d M', strtotime($event->start))}}</td>
+                                <td>{{$event->region}}</td>
+                                <td>{!! $event->level !!}</td>
+                            </tr>
+
+                        @endforeach
+                        </tbody>
+                    </table>
+                </div>
+            @endif
+        </div>
+    </div>
+</div>
