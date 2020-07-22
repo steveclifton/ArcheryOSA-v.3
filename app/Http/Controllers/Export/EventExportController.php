@@ -303,6 +303,7 @@ class EventExportController extends Controller
             $ta[$key][] = $user;
         }
 
+
         $htmlarray = [];
         foreach($ta as $eventcompname => $users) {
             $html = '<div><h3>' . $eventcompname . '</h3>';
@@ -350,10 +351,11 @@ class EventExportController extends Controller
 
         $mpdf = new Mpdf(['tempDir' => __DIR__ . '/tmp']);
         $mpdf->WriteHTML($style);
-        foreach ($htmlarray as $html) {
+
+        foreach ($htmlarray as $key => $html) {
             $mpdf->WriteHTML($html);
 
-            if (current($htmlarray) != end($htmlarray)) {
+            if ($key != array_key_last($htmlarray)) {
                 $mpdf->AddPage();
             }
         }
