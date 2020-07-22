@@ -220,12 +220,7 @@ Route::middleware(['web'])->group(function() {
 
     });
 
-    Route::middleware(['superadmin'])->group(function () {
-        Route::get('logs', '\Rap2hpoutre\LaravelLogViewer\LogViewerController@index');
-        Route::get('phpinfo', 'HomeController@debug');
-
-        Route::get('admin/reports', 'Admin\ReportController@getReportView');
-        Route::get('reports/julysummary/csv', 'Export\ReportController@exportJulySummary');
+    Route::middleware(['admin'])->group(function () {
 
         // Clubs
         Route::get('admin/clubs', 'Admin\ClubController@get');
@@ -262,6 +257,16 @@ Route::middleware(['web'])->group(function() {
         Route::get('admin/organisations/update/{organisationid}', 'Admin\OrganisationController@getUpdateView');
         Route::post('admin/organisation/update/{organisationid}', 'Admin\OrganisationController@updateOrganisation');
 
+        Route::get('admin/reports', 'Admin\ReportController@getReportView');
+
+    });
+
+    Route::middleware(['superadmin'])->group(function () {
+        Route::get('logs', '\Rap2hpoutre\LaravelLogViewer\LogViewerController@index');
+        Route::get('phpinfo', 'HomeController@debug');
+
+        Route::get('reports/julysummary/csv', 'Export\ReportController@exportJulySummary');
+
         // Rounds
         Route::get('admin/rounds', 'Admin\RoundController@get');
         Route::get('admin/rounds/create', 'Admin\RoundController@getCreateView');
@@ -273,7 +278,6 @@ Route::middleware(['web'])->group(function() {
         Route::get('admin/competitions', 'Admin\CompetitionController@get');
         Route::get('admin/competitions/create', 'Admin\CompetitionController@getCreateView');
         Route::post('admin/competitions/create', 'Admin\CompetitionController@createCompetition');
-
         Route::get('admin/competitions/update/{competitionid}', 'Admin\CompetitionController@getUpdateView');
         Route::post('admin/competitions/update/{competitionid}', 'Admin\CompetitionController@updateCompetition');
 

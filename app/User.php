@@ -105,6 +105,16 @@ class User extends Authenticatable
         return $this->roleid === 1;
     }
 
+    public function isAdmin()
+    {
+        return $this->roleid <= 2;
+    }
+
+    public function isEventAdmin()
+    {
+        return $this->roleid <= 3;
+    }
+
     public function getUserType()
     {
         switch ($this->roleid) {

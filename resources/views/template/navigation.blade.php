@@ -119,12 +119,12 @@
                         </ul>
                     </li>
 
-                    @if(Auth::check() && Auth::user()->roleid <= 3)
+                    @if(Auth::check() && Auth::user()->isEventAdmin())
                         <li class="has-submenu">
                             <a href="#"><i class="md md-settings"></i>Admin</a>
                             <ul class="submenu megamenu">
 
-                                @if(Auth::user()->roleid == 1)
+                                @if(Auth::user()->isSuperAdmin())
                                     <li>
                                         <ul>
                                             <li>
@@ -135,7 +135,7 @@
                                     </li>
                                 @endif
 
-                                @if(Auth::user()->roleid <=2)
+                                @if(Auth::user()->isAdmin())
                                     <li>
                                         <ul>
                                             <li>
@@ -145,22 +145,23 @@
                                             <li><a href="/admin/divisions">Divisions</a></li>
                                             <li><a href="/admin/divisionages">Division Age Groups</a></li>
                                             <li><a href="/admin/organisations">Organisations</a></li>
-                                            <li><a href="/admin/rounds">Rounds</a></li>
+                                            @if(Auth::user()->isSuperAdmin())
+                                                <li><a href="/admin/rounds">Rounds</a></li>
+                                            @endif
                                             <li><a href="/admin/schools">Schools</a></li>
                                         </ul>
                                     </li>
 
-                                        <li>
-                                            <ul>
-                                                <li>
-                                                    <span>Results</span>
-                                                </li>
-                                                <li><a href="#">Rankings</a></li>
-                                                <li><a href="#">Results</a></li>
-                                                <li><a href="/admin/reports">Reports</a></li>
-
-                                            </ul>
-                                        </li>
+                                    <li>
+                                        <ul>
+                                            <li>
+                                                <span>Results</span>
+                                            </li>
+                                            <li><a href="#">Rankings</a></li>
+                                            <li><a href="#">Results</a></li>
+                                            <li><a href="/admin/reports">Reports</a></li>
+                                        </ul>
+                                    </li>
                                 @endif
 
                                 <li>

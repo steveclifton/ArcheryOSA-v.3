@@ -16,7 +16,7 @@ class Authorise
      */
     public function handle($request, Closure $next)
     {
-        if (Auth::user() && Auth::user()->roleid <= 3) {
+        if (Auth::user() && Auth::user()->isAdmin()) {
             return $next($request);
         }
         return redirect('/');
