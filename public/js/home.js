@@ -33,6 +33,6 @@ $(function() {
 
         var hash = $(this).attr('data-hash');
 
-        setCookie(hash, 1, 120);
+        setCookie(hash, 1, 365);
     });
 })
