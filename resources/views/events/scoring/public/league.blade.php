@@ -34,33 +34,33 @@
                         @if(isset($entry->{$dist}))
                             <div class="form-group col-md-6">
                                 <label class="" for="{{$dist}}">Distance: {{ $entry->{$dist} . $entry->unit }}</label>
-                                <input type="text" class="form-control"
+                                <input type="text" class="form-control" pattern="\d*" title="Only numbers are allowed"
                                        id="{{$dist}}"
                                        data-max="{{ $entry->{$max} }}"
-                                       placeholder="Score"
+                                       placeholder="Enter Score"
                                        value="{{isset($entry->score->{$dist}) ? intval($entry->score->{$dist.'score'}): ''}}">
-                                <small id="emailHelp" class="form-text text-muted">Score</small>
+{{--                                <small id="emailHelp" class="form-text text-muted">Score</small>--}}
                             </div>
                         @endif
                     @endforeach
 
                     <div class="form-group col-md-6">
                         <input type="text" class="form-control"
-                               id="totalhit" placeholder=""
+                               id="totalhit" placeholder="Total Hits"
                                value="{{isset($entry->score->totalhits) ? intval($entry->score->totalhits) : ''}}">
-                        <small id="emailHelp" class="form-text text-muted">Total Hits</small>
+{{--                        <small id="emailHelp" class="form-text text-muted">Total Hits</small>--}}
                     </div>
                     <div class="form-group col-md-6">
                         <input type="text" class="form-control"
-                               id="total10" placeholder=""
+                               id="total10" placeholder="Total 10s & Xs"
                                value="{{isset($entry->score->inners) ? intval($entry->score->inners) : ''}}">
-                        <small id="emailHelp" class="form-text text-muted">Total 10s & Xs</small>
+{{--                        <small id="emailHelp" class="form-text text-muted">Total 10s & Xs</small>--}}
                     </div>
                     <div class="form-group col-md-6">
                         <input type="text" class="form-control"
-                               id="totalx" placeholder=""
+                               id="totalx" placeholder="Total Xs"
                                value="{{isset($entry->score->max) ? intval($entry->score->max) : ''}}">
-                        <small id="emailHelp" class="form-text text-muted">Total Xs</small>
+{{--                        <small id="emailHelp" class="form-text text-muted">Total Xs</small>--}}
                     </div>
 
                     <button type="submit" class="myButton btn btn-inverse btn-info waves-effect waves-light">Submit</button>
@@ -123,6 +123,10 @@
                         }
                     }
 
+
+                    if (score1 <= 0) {
+                        errors.push('Score cannot be 0 or below');
+                    }
 
                     if (errors.length > 0) {
                         errorDiv.html(errors.join('<br>')).show();

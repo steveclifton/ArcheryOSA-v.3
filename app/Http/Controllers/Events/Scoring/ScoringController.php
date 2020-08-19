@@ -406,15 +406,19 @@ class ScoringController extends Controller
             AND (ee.`userid` IN (
                   SELECT `relationid`
                   FROM `userrelations`
-                  WHERE `userid` = '".Auth::id()."'
+                  WHERE `userid` = :userrelationid 
                 )
                 OR 
-                ee.`userid` = '".Auth::id()."'
+                ee.`userid` = :userid
             )
             ORDER BY `d`.label, ee.firstname
-        ", ['eventid'=> $event->eventid,
+        ", [
+            'eventid'=> $event->eventid,
             'eventcompetitionid' => $eventcompetition->eventcompetitionid,
-            'scoringuserid'=> $request->userid ]
+            'scoringuserid'=> $request->userid,
+            'userrelationid' => Auth::id(),
+            'userid' => Auth::id()
+            ]
         );
 
         $entry = null;
