@@ -18,3 +18,5 @@ yarn-error.log
 public/content/files/
 public/files/
 
+public/vue/js/app.js
+public/vue/css/app.css
