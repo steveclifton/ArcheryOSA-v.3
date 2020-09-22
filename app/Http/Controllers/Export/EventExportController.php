@@ -162,7 +162,7 @@ class EventExportController extends Controller
 
             $entrys = DB::select("
                 SELECT ee.firstname, ee.lastname, c.label as clubname, ee.email, ee.address, ee.phone, 
-                        ecom.label as `eventcompname`, d.label as divisionname, r.label as roundname, ee.membership, ee.paid, ee.gender, ee.notes, ee.created_at, ee.updated_at
+                        ecom.label as `eventcompname`, d.label as divisionname, r.label as roundname, ee.membership, ee.paid, ee.gender, ee.notes, ee.bib, ee.created_at, ee.updated_at
                 FROM `evententrys` ee
                 JOIN `entrycompetitions` ec USING (`entryid`)
                 JOIN `divisions` d ON (`ec`.`divisionid` = `d`.`divisionid`)
@@ -194,7 +194,7 @@ class EventExportController extends Controller
                 $csv = Writer::createFromFileObject(new \SplTempFileObject());
 
                 $csv->insertOne(['Firstname', 'Lastname', 'Club', 'Email', 'Address', 'Phone', 'Competition', 'Division',
-                    'Round Name', 'Membership', 'Paid Status', 'Gender', 'Notes', 'Created Date', 'Updated Date' ]);
+                    'Round Name', 'Membership', 'Paid Status', 'Gender', 'Notes', 'Bib', 'Created Date', 'Updated Date' ]);
 
                 foreach ($entrys as $entry) {
                     $csv->insertOne((array) $entry);
