@@ -59,6 +59,12 @@ Route::middleware(['web'])->group(function() {
 
     Route::middleware(['auth'])->group(function () {
 
+        // VueJS
+        Route::get('admin/{admin?}', 'Vue\Admin\HomeController@home')->where('admin', '.*');
+
+        Route::post('admin/events/list', 'Vue\Admin\Events\EventController@getAllEvents');
+
+
 
         
         /*****************
