@@ -58,7 +58,7 @@ class Event extends Model
             // if we have an entry close set, do checks
             if (!empty($this->entryclose)) {
 
-                if (time() > (strtotime($this->entryclose)) // if entry close is after closing date
+                if (time() > strtotime($this->entryclose . ' + 1 day') // if entry close is after closing date
                     ||
                     (strtotime($this->entryclose) > strtotime($this->start) + 86400) // if the entry close is after the start date + 1 day
                 ) {

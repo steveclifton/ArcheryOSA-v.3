@@ -143,7 +143,7 @@ class User extends Authenticatable
 
     protected function loadcart()
     {
-        $this->cart = Cart::where('userid', $this->userid)->first();
+        $this->cart = null;//Cart::where('userid', $this->userid)->first();
     }
 
     public function getcart()
