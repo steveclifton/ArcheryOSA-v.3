@@ -45,11 +45,11 @@
 </template>
 
 <script>
-    require('datatables.net-bs4');
+    import 'datatables.net-bs4';
 
     export default {
         name: "EventsList",
-        data: () => {
+        data() {
             return {
                 events: []
             }

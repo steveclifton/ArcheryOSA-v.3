@@ -90,8 +90,9 @@ body {
   color: #6e768e;
   font-weight: 400; }
 
-#sidebar-menu .menuitem-active > a {
-  color: #4a81d4; }
+#sidebar-menu .router-link-active {
+  color: #4a81d4;
+}
 
 #sidebar-menu .menuitem-active .active {
   color: #4a81d4; }

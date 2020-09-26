@@ -197,6 +197,14 @@
 
 /*! /home/travis/build/feathericons/feather/src/index.js */
 
+/*! DataTables 1.10.22
+ * ©2008-2020 SpryMedia Ltd - datatables.net/license
+ */
+
+/*! DataTables Bootstrap 4 integration
+ * ©2011-2017 SpryMedia Ltd - datatables.net/license
+ */
+
 /*! classnames/dedupe */
 
 /*! core-js/es/array/from */

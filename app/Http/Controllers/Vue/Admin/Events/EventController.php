@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Vue\Admin\Events;
 
 use App\Http\Controllers\Controller;
+use App\Models\Event;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
@@ -37,5 +38,27 @@ class EventController extends Controller
                 ORDER BY `e`.`start` DESC
         ", ['userid' => Auth::id()]);
 
+    }
+
+    public function getEventDetails(Request $request)
+    {
+        if (empty($request->eventUrl)) {
+            return abort(400);
+        }
+
+        $event = Event::where('eventurl', $request->eventUrl)->first();
+
+        if (empty($event)) {
+            return abort(404);
+        }
+
+        $return = new \stdClass;
+
+        $return->event = [
+
+        ];
+
+
+        dd();
     }
 }

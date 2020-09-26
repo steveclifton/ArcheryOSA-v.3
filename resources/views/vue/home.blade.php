@@ -161,7 +161,7 @@
                         <li class="menu-title">Navigation</li>
 
                         <li>
-                            <router-link :to="{name: 'Admin-Home'}">
+                            <router-link :to="{name: 'Admin-Home'}" exact>
                                 <i data-feather="airplay"></i>
                                 <span> Dashboard </span>
                             </router-link>
