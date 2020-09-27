@@ -1,7 +1,8 @@
 <head>
     <title>@yield('title', 'Admin ')| Archery OSA</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+
     <meta name="description" content="@yield('description','Archery OSA is a free online archery event management system which allows you to run your archery events completely online')"/>
     <meta property="og:description" content="@yield('description','Archery OSA is a free online archery event management system which allows you to run your archery events completely online')" />
     <link rel="canonical" href="https://archeryosa.com/@yield('url', '')" itemprop="url">
