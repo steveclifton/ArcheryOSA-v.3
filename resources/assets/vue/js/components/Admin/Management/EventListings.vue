@@ -9,7 +9,7 @@
                             <code></code>
                         </p>
 
-                        <table id="basic-datatable" class="table dt-responsive nowrap w-100">
+                        <table id="basic-datatable" class="table table-responsive dt-responsive nowrap w-100">
                             <thead>
                             <tr>
                                 <th>Name</th>
