@@ -1,6 +1,7 @@
 <head>
     <title>@yield('title', 'Admin ')| Archery OSA</title>
-
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
     <meta name="description" content="@yield('description','Archery OSA is a free online archery event management system which allows you to run your archery events completely online')"/>
     <meta property="og:description" content="@yield('description','Archery OSA is a free online archery event management system which allows you to run your archery events completely online')" />
     <link rel="canonical" href="https://archeryosa.com/@yield('url', '')" itemprop="url">
@@ -14,12 +15,6 @@
     <link rel="icon" href="{{URL::asset('/images/favion.ico')}}" type="image/x-icon" />
     <link rel="shortcut icon" href="{{URL::asset('/images/favion.ico')}}" type="image/x-icon" />
 
-
-    <link href="/vue/css/app.css" rel="stylesheet" type="text/css" />
-    <link href="/vue/css/all.css" rel="stylesheet" type="text/css" />
-    <link href="/vue/css/icons.min.css" rel="stylesheet" type="text/css" />
-
-    <meta name="csrf-token" content="{{ csrf_token() }}">
 
     @if (getenv('APP_LIVE') && !empty(getenv('GOOGLE_UA')))
         <script src='https://www.google.com/recaptcha/api.js'></script>
@@ -42,4 +37,11 @@
             })(window,document,'script','dataLayer','{{getenv('GOOGLE_GTM')}}');
         </script>
     @endif
+
+
+    <link href="/vue/css/app.css" rel="stylesheet" type="text/css" />
+    <link href="/vue/css/all.css" rel="stylesheet" type="text/css" />
+    <link href="/vue/css/icons.min.css" rel="stylesheet" type="text/css" />
+
+    <meta name="csrf-token" content="{{ csrf_token() }}">
 </head>
