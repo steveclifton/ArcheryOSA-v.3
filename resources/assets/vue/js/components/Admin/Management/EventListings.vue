@@ -23,7 +23,7 @@
                             <tbody>
                             <tr v-for="event in events">
                                 <td>
-                                    <router-link :to="{name: 'Admin-EventDetails', params: {eventid: event.eventurl}}" style="color: inherit">
+                                    <router-link :to="{name: 'Admin-EventDetails', params: {eventUrl: event.eventurl}}" style="color: inherit">
                                         {{event.label}}
                                     </router-link>
                                 </td>
