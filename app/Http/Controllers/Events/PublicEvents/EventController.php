@@ -64,6 +64,11 @@ class EventController extends Controller
                         ->where('eventid', $event->eventid)
                         ->count();
 
+        $confirmed = DB::table('evententrys')
+                        ->where('eventid', $event->eventid)
+                        ->where('entrystatusid', 2)
+                        ->count();
+
         $scorecount = DB::table('scores')
                         ->where('eventid', $event->eventid)
                         ->count();
@@ -127,7 +132,7 @@ class EventController extends Controller
         }
 
         return view('events.public.details',
-            compact('event', 'entries', 'entrycount', 'scorecount', 'evententryopen',
+            compact('event', 'entries', 'confirmed', 'entrycount', 'scorecount', 'evententryopen',
                     'roundlabels', 'competitiontype', 'clublabel', 'targetallocations'));
 
 

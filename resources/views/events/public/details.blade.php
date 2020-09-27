@@ -48,14 +48,16 @@
                     <div class="d-flex justify-content-around row" id="myWidgetRow">
                         <div class="widget-bg-color-icon card-box col-lg-5 " id="myUserWidget">
                             <div class="widget-inline-box text-center">
-                                <h3><i class="text-inverse md md-account-child"></i> <b
-                                            data-plugin="counterup">{!! $entrycount !!}</b>
+                                <h3>
+                                    <i class="text-inverse md md-account-child"></i><br>
+                                    <b data-plugin="counterup">{!! $confirmed !!}</b>
                                 </h3>
-                                <h4 class="text-muted font-17">Total Entries</h4>
+                                <h4 class="text-muted font-17">Confirmed Entries</h4>
                                 @if(!empty($event->entrylimit) && $evententryopen)
                                     <p class="text-muted font-14">{!! $event->entrylimit - $entrycount !!} Spots
                                         Left</p>
                                 @endif
+                                <p class="text-muted font-14">{{ $entrycount }} Total Registrations</p>
                                 @if($evententryopen)
                                     <a href="/event/register/{{$event->eventurl}}"
                                        class="btn btn-inverse waves-effect waves-light">Enter Now</a>

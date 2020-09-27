@@ -1,9 +1,9 @@
 import NotFound from './components/NotFound';
 
-let Home = ()=> import(/* webpackChunkName: "Admin-Home"*/'./components/Admin/Home');
-let CreateEvent = ()=> import(/* webpackChunkName: "Admin-CreateEvent"*/'./components/Admin/Management/CreateEvent');
-let EventDetails = ()=> import(/* webpackChunkName: "Admin-EventsList"*/'./components/Admin/Management/EventDetails');
-let EventsList = ()=> import(/* webpackChunkName: "Admin-EventsList"*/'./components/Admin/Management/EventsList');
+let Home = ()=> import(/* webpackChunkName: "Admin-Home"*/ './components/Admin/Home');
+let CreateEvent = ()=> import(/* webpackChunkName: "Admin-CreateEvent"*/ './components/Admin/Management/CreateEvent');
+let EventDetails = ()=> import(/* webpackChunkName: "Admin-EventDetails"*/ './components/Admin/Management/EventDetails');
+let Eventlistings = ()=> import(/* webpackChunkName: "Admin-Eventlistings" */ './components/Admin/Management/EventListings');
 
 export default {
     mode : 'history',
@@ -18,9 +18,9 @@ export default {
             component : Home
         },
         {
-            name : 'Admin-EventsList',
+            name : 'Admin-Eventlistings',
             path : '/admin/events/manage',
-            component: EventsList
+            component: Eventlistings
         },
         {
             name : 'Admin-CreateEvent',
@@ -31,6 +31,11 @@ export default {
             name : 'Admin-EventDetails',
             path : '/admin/event/details/:eventUrl',
             component: EventDetails
-        }
+        },
+        {
+            name : 'Admin-Clubs',
+            path : '/admin/clubs',
+            template: '<template><div>Clubs!</div></template>'
+        },
     ]
 }

@@ -69,6 +69,11 @@ class User extends Authenticatable
         return ucwords($this->firstname ?? '') . " " . ucwords($this->lastname ?? '');
     }
 
+    public function getFullNameAttribute($value)
+    {
+        return ucwords($this->firstname ?? '') . " " . ucwords($this->lastname ?? '');
+    }
+
     public function getEventEntry($eventid)
     {
         return EventEntry::where('userid', $this->userid)
@@ -126,7 +131,7 @@ class User extends Authenticatable
                 return 'Event Admin';
 
             default:
-                return 'User';
+                return 'Archer';
         }
     }
 
@@ -143,7 +148,7 @@ class User extends Authenticatable
 
     protected function loadcart()
     {
-        $this->cart = Cart::where('userid', $this->userid)->first();
+        $this->cart = null;//Cart::where('userid', $this->userid)->first();
     }
 
     public function getcart()

@@ -6,7 +6,6 @@
                     <div class="card-body">
                         <h4 class="header-title">Events</h4>
                         <p class="text-muted font-13 mb-4">
-
                             <code></code>
                         </p>
 
@@ -22,18 +21,18 @@
                             </tr>
                             </thead>
                             <tbody>
-                                <tr v-for="event in events">
-                                    <td>
-                                        <router-link :to="{name: 'Admin-EventDetails', params: {eventid: event.eventurl}}" style="color: inherit">
-                                            {{event.label}}
-                                        </router-link>
-                                    </td>
-                                    <td>{{event.start}}</td>
-                                    <td>{{event.end}}</td>
-                                    <td>{{event.status}}</td>
-                                    <td>{{event.entries}}</td>
-                                    <td>{{event.visible ? "yes" : "no"}}</td>
-                                </tr>
+                            <tr v-for="event in events">
+                                <td>
+                                    <router-link :to="{name: 'Admin-EventDetails', params: {eventid: event.eventurl}}" style="color: inherit">
+                                        {{event.label}}
+                                    </router-link>
+                                </td>
+                                <td>{{event.start}}</td>
+                                <td>{{event.end}}</td>
+                                <td>{{event.status}}</td>
+                                <td>{{event.entries}}</td>
+                                <td>{{event.visible ? "yes" : "no"}}</td>
+                            </tr>
                             </tbody>
                         </table>
 
@@ -48,7 +47,7 @@
     import 'datatables.net-bs4';
 
     export default {
-        name: "EventsList",
+        name: "EventListings",
         data() {
             return {
                 events: []
@@ -58,10 +57,11 @@
 
             axios.post('/admin/events/list')
             .then((response) => {
+
                 this.events = response.data;
 
-
                 setTimeout(() => {
+
                     $("#basic-datatable").DataTable({
                         language: {
                             paginate: {
@@ -73,24 +73,18 @@
                             [1, "desc" ]
                         ],
                         "pageLength": 10,
-                        drawCallback: function() {
-                            $(".dataTables_paginate > .pagination").addClass("pagination-rounded")
-                        }
+                            drawCallback: function() {
+                                $(".dataTables_paginate > .pagination").addClass("pagination-rounded")
+                            }
                     });
 
-                }, 100)
+                }, 100);
 
             })
             .catch((response) => {
-                // error
+            // error
             });
-
-
 
         }
     }
 </script>
-
-<style scoped>
-    @import '~datatables.net-bs4/css/dataTables.bootstrap4.min.css';
-</style>
