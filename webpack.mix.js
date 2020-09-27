@@ -1,16 +1,19 @@
 let mix = require('laravel-mix');
 
-/*
- |--------------------------------------------------------------------------
- | Mix Asset Management
- |--------------------------------------------------------------------------
- |
- | Mix provides a clean, fluent API for defining some Webpack build steps
- | for your Laravel application. By default, we are compiling the Sass
- | file for the application as well as bundling up all the JS files.
- |
- */
-
-mix.sass('resources/assets/sass/scssdark/style.scss', 'public/css/scssdark')
-    .sass('resources/assets/sass/scsslight/style.scss', 'public/css/scsslight')
-    .sass('resources/assets/sass/archeryosa.scss', 'public/css');
+mix.js([
+        'resources/assets/vue/js/app.js',
+        'resources/assets/vue/js/base/bars.js'
+    ], 'public/vue/js')
+    .sass(
+        'resources/assets/vue/sass/app.scss',
+        'public/vue/css'
+    )
+    .styles([
+        'resources/assets/css/bootstrap-modern.css',
+        'resources/assets/css/app-modern.css'
+    ], 'public/vue/css/all.css')
+    .webpackConfig({
+        output: {
+            chunkFilename: 'js/chunks/[name].js?id=[chunkhash]',
+        }
+    });

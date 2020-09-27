@@ -20,3 +20,6 @@ public/files/
 
 public/vue/js/app.js
 public/vue/css/app.css
+public/vue/css/
+public/js/chunks/
+
