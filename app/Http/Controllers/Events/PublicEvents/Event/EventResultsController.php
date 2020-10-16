@@ -42,6 +42,7 @@ class EventResultsController extends Controller
             JOIN `eventcompetitions` ec ON (sf.`eventcompetitionid` = ec.`eventcompetitionid`)
             JOIN `divisions` d on (sf.divisionid = d.divisionid)
             WHERE sf.`eventid` = :eventid
+            ORDER BY `sf`.`total` DESC
         ", ['eventid' => $event->eventid]);
 
 
@@ -234,7 +235,7 @@ class EventResultsController extends Controller
                 uasort($res, function ($a, $b) {
 
                     if (empty($a['total']) || empty($b['total'])) {
-                        return 0;
+                        return 1;
                     }
 
                     if ((int)$b['total'] > (int)$a['total']) {
