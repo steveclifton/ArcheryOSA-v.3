@@ -397,7 +397,7 @@ class EventRegistrationController extends EventController
         }
 
         if (empty($event) || empty($user)) {
-            return back()->with('failure', 'Please try again later');
+            return back()->with('failure', 'Please try again later')->withInput();
         }
 
         // check to see if an entry exists for this user
@@ -407,15 +407,15 @@ class EventRegistrationController extends EventController
 
 
         if (!empty($existingevententry) ) {
-            return back()->with('failure', 'An entry already exists, please check back in a few minutes');
+            return back()->with('failure', 'An entry already exists, please check back in a few minutes')->withInput();
         }
 
         if (!empty($event->waver) && empty($validated['waver'])) {
-            return back()->with('failure', 'You must accept the waver to enter this competition');
+            return back()->with('failure', 'You must accept the waver to enter this competition')->withInput();
         }
 
         if (($event->isEvent() || $event->isPostal()) && empty($validated['roundids'])) {
-            return back()->with('failure', 'Please check the competitions and try again');
+            return back()->with('failure', 'Please check the competitions and try again')->withInput();
         }
 
         // This handles the case where the first event competition is not an entry
