@@ -41,7 +41,8 @@ class EventsHelper
             'Other',
             'RMT',
             'Major',
-            'Major - National'
+            'Major - National',
+            'Major - WA Registered'
         ];
     }
 
