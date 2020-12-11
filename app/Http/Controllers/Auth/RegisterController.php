@@ -65,19 +65,20 @@ class RegisterController extends Controller
      */
     protected function validator(array $data)
     {
+
         $rules = [
-            'firstname' => 'required|string|max:255',
-            'lastname' => 'required|string|max:255',
-            'email' => 'required|string|email|max:255|unique:users',
-            'password' => 'required|string|min:6|confirmed',
+            'firstname' => 'required|string|max:32',
+            'lastname' => 'required|string|max:32',
+            'email' => 'required|string|email|max:85|unique:users',
+            'password' => 'required|string|min:8|confirmed',
             'g-recaptcha-response' => ['required', new ValidRecaptcha()],
             'addchild' => 'nullable'
         ];
 
         if (!empty($data['addchild'])) {
-            $rules['childfirstname'] = 'required|string|max:55';
-            $rules['childlastname'] = 'required|string|max:55';
-            $rules['childemail'] = 'nullable|string|email|max:255|unique:users,email';
+            $rules['childfirstname'] = 'required|string|max:32';
+            $rules['childlastname'] = 'required|string|max:32';
+            $rules['childemail'] = 'nullable|string|email|max:85|unique:users,email';
         }
 
         return Validator::make($data, $rules);
@@ -92,6 +93,24 @@ class RegisterController extends Controller
      */
     protected function create(array $data)
     {
+
+        $banned = [
+            'http',
+            'weight',
+            'www'
+        ];
+
+        foreach ($banned as $word) {
+            if (stripos($data['firstname'], $word) !== false) {
+                abort(404);
+            }
+            else if (stripos($data['lastname'], $word) !== false) {
+                abort(404);
+            }
+        }
+
+
+
         $user = User::create([
             'firstname' => $data['firstname'],
             'lastname' => $data['lastname'],
