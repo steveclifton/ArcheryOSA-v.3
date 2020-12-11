@@ -11,7 +11,7 @@ use App\Models\EventCompetition;
 use App\Models\Score;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
-use App\Http\Controllers\Traits\UserResults;
+use App\Http\Traits\UserResults;
 
 
 class ResultsController extends EventController

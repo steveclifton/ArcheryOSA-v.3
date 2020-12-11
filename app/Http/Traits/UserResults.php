@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers\Traits;
+namespace App\Http\Traits;
 
 use App\LeaguePoint;
 use Illuminate\Support\Facades\DB;

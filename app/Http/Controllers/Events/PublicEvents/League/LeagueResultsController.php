@@ -3,7 +3,7 @@
 namespace App\Http\Controllers\Events\PublicEvents\League;
 
 use App\Http\Controllers\Controller;
-use App\Http\Controllers\Traits\UserResults;
+use App\Http\Traits\UserResults;
 use App\Models\Division;
 use App\Models\Event;
 use App\Models\EventCompetition;
