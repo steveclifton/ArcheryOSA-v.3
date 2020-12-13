@@ -24,7 +24,7 @@ class TidyHQ
     public function __construct()
     {
 
-        if ((bool) getenv('APP_DEBUG') == true) {
+        if (getenv('APP_DEBUG') === "true") {
             $this->clientId = getenv('TIDYHQ_CLIENTID_BUILD');
             $this->clientSecret = getenv('TIDYHQ_CLIENTSECRET_BUILD');
             $this->redirect = getenv('TIDYHQ_REDIRECT_BUILD');
