@@ -54,7 +54,14 @@ class Kernel extends ConsoleKernel
 
         })->daily();
 
-        $schedule->call(function(){
+        $schedule->call(function () {
+            $tidyHq = new \App\Http\Classes\TidyHQ();
+            $tidyHq->updateAllContacts();
+            $tidyHq->updateMemberships();
+
+        })->everySixHours();
+
+        $schedule->call(function() {
             $e = DB::table('exceptions')->get();
 
             if ($e->isEmpty()) {
@@ -75,6 +82,8 @@ class Kernel extends ConsoleKernel
 
             DB::table('exceptions')->delete();
         })->everyFiveMinutes();
+
+
     }
 
     /**

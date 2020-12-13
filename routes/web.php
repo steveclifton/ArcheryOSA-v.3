@@ -2,6 +2,8 @@
 
 
 // Downloads
+use Illuminate\Http\Request;
+
 require_once 'downloads.php';
 
 
@@ -59,11 +61,7 @@ Route::middleware(['web'])->group(function() {
 
     Route::middleware(['auth'])->group(function () {
 
-        // VueJS
-        Route::get('admin/{admin?}', 'Vue\Admin\HomeController@home')->where('admin', '.*');
 
-        Route::post('admin/events/list', 'Vue\Admin\Events\EventController@getAllEvents');
-        Route::post('admin/event/details', 'Vue\Admin\Events\EventController@getEventDetails');
 
 
 
@@ -225,6 +223,13 @@ Route::middleware(['web'])->group(function() {
         Route::get('event/export/results/{eventurl}/{eventcompetitionid}', 'Export\EventExportController@exportEventScores');
 
 
+
+        // VueJS
+        Route::get('new-admin/{admin?}', 'Vue\Admin\HomeController@home')->where('admin', '.*');
+
+        Route::post('new-admin/events/list', 'Vue\Admin\Events\EventController@getAllEvents');
+        Route::post('new-admin/event/details', 'Vue\Admin\Events\EventController@getEventDetails');
+
     });
 
     Route::middleware(['admin'])->group(function () {
@@ -290,7 +295,20 @@ Route::middleware(['web'])->group(function() {
 
         // Users
         Route::get('admin/users', 'Admin\UsersController@get');
-    });
+        Route::get('admin/tidyhq', 'TidyHq\Users@get');
 
+
+        Route::get('tidy-hq-start', function(Request $request) {
+            $tidyHq = new \App\Http\Classes\TidyHQ();
+            return $tidyHq->login();
+        });
+
+        Route::get('tidy-hq-auth', function(Request $request) {
+            if (\Illuminate\Support\Facades\Auth::id() === 1) {
+                dd($request);
+            }
+        });
+
+    });
 
 });

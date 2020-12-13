@@ -131,6 +131,7 @@
                                                 <span>Admin</span>
                                             </li>
                                             <li><a href="/admin/users">User Management</a></li>
+                                            <li><a href="/admin/tidyhq">TidyHQ Users</a></li>
                                         </ul>
                                     </li>
                                 @endif
