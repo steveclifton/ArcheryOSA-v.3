@@ -143,4 +143,8 @@ class Event extends Model
         return $daterange;
     }
 
+    public function isArcheryNZ() : bool
+    {
+        return $this->organisationid == 1;
+    }
 }

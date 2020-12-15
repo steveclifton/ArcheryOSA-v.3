@@ -14,6 +14,7 @@ use App\Models\FlatScore;
 use App\Models\Round;
 use App\Models\School;
 use App\Models\Score;
+use App\Models\TidyHqContact;
 use App\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -147,6 +148,16 @@ class EventEntryController extends EventController
                         ->where('userid', $user->userid)
                         ->first();
 
+        if (empty($evententry)) {
+            return back()->with('failure', 'Unable to get entry');
+        }
+
+
+        $anzMembership = null;
+        if ($event->isArcheryNZ()) {
+            $anzMembership = TidyHqContact::where('membershipnumber', $evententry->membership)->first();
+        }
+
         $countrys = Countries::all();
 
         if ($event->isNonShooting()) {
@@ -208,7 +219,7 @@ class EventEntryController extends EventController
         }
 
         return view('events.auth.management.entries.update',
-                compact('user', 'evententry', 'event', 'schools',
+                compact('user', 'evententry', 'event', 'schools', 'anzMembership',
                         'clubs', 'divisionsfinal', 'countrys', 'eventcomps','userentrydivisions', 'userentryrounds')
                     );
     }

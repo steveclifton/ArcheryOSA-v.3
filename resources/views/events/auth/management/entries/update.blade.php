@@ -114,6 +114,15 @@
                     </div>
                 </div>
 
+                @if (!empty($event->isArcheryNZ()))
+                    <div class="form-group row">
+                        <label for="label" class="col-sm-12 col-md-3 col-form-label">ANZ Membership Status</label>
+                        <div class="col-md-9">
+                            <input type="text" class="form-control" value="{{ ucwords($anzMembership->membershipstatus ?? 'Not Found')  }}" readonly disabled>
+                        </div>
+                    </div>
+                @endif
+
                 <div class="form-group row">
                     <label for="label" class="col-sm-12 col-md-3 col-form-label">Phone</label>
                     <div class="col-md-9">
