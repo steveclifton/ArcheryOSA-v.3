@@ -21,6 +21,7 @@
                         <tr>
                             <th>ArcheryOSA ID</th>
                             <th>TidyHQ ID</th>
+                            <th>Membership</th>
                             <th>First Name</th>
                             <th>Last Name</th>
                             <th>Email</th>
@@ -32,6 +33,7 @@
                                 <tr>
                                     <td>{{$user->userid}}</td>
                                     <td>{{$user->id}}</td>
+                                    <td>{{$user->membershipnumber}}</td>
                                     <td>{{$user->firstname}}</td>
                                     <td>{{$user->lastname}}</td>
                                     <td>{{$user->email}}</td>
