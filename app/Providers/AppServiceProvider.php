@@ -16,11 +16,13 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot()
     {
+        if (getenv('LOG_QUERIES')) {
+            \Event::listen('Illuminate\Database\Events\QueryExecuted', function ($query) {
+                Session::push('queries', ['query' => $query->sql, 'Time' => $query->time]);
+                Session::put('time', Session::get('time') + $query->time);
+            });
+        }
 
-        \Event::listen('Illuminate\Database\Events\QueryExecuted', function ($query) {
-            Session::push('queries', ['query' => $query->sql, 'Time' => $query->time]);
-            Session::put('time', Session::get('time') + $query->time);
-        });
 
         Schema::defaultStringLength(191);
     }

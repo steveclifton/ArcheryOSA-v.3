@@ -9,6 +9,10 @@
 
 define('LARAVEL_START', microtime(true));
 
+if (file_exists(__DIR__.'/../storage/framework/maintenance.blade.php')) {
+    require __DIR__.'/../storage/framework/maintenance.blade.php';
+}
+
 /*
 |--------------------------------------------------------------------------
 | Register The Auto Loader

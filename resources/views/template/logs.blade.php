@@ -1,5 +1,5 @@
 
-@if(Auth::check() && Auth::id() == 1)
+@if(getenv('LOG_QUERIES') && Auth::check() && Auth::id() == 1)
     <div class="container">
         <div class="row">
             {{Session::get('time')}}ms
