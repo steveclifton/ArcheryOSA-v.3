@@ -140,6 +140,9 @@ class EventSettingsController extends EventController
         $event->wavermessage       = $request->input('wavermessage');
         $event->membershiprequired = !empty($request->input('membershiprequired')) ? 1 : 0;
         $event->filename           = (!empty($event->filename) && !empty($request->input('removefile'))) ? NULL : $event->filename;
+
+        $event->status = EventStatus::where('eventstatusid', $event->eventstatusid)->pluck('label')->first();
+
         $event->save();
 
 

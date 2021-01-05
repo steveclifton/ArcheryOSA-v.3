@@ -230,6 +230,7 @@ class EventController extends Controller
         $event->schedule        = !empty($validated['schedule'])        ? $validated['schedule']      : null;
         $event->info            = !empty($validated['info'])            ? $validated['info']          : null;
         $event->eventstatusid   = 1;
+        $event->status          = 'Open';
         $event->createdby       = Auth::id();
         $event->clubid          = !empty($validated['clubid']) ? $validated['clubid'] : null;
         $event->organisationid  = !empty($validated['organisationid']) ? $validated['organisationid'] : null;
@@ -285,7 +286,6 @@ class EventController extends Controller
         }
 
         $eventBefore = clone $event;
-
 
         $entryclose = !empty($validated['entryclose']) ? new \DateTime($validated['entryclose']) : null;
         $startdate  = new \DateTime($validated['start']);
