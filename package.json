@@ -18,7 +18,7 @@
         "vue-template-compiler": "^2.6.12"
     },
     "dependencies": {
-        "axios": "^0.20.0",
+        "axios": "^0.21.1",
         "bootstrap": "^4.5.2",
         "datatables.net-bs4": "^1.10.22",
         "feather-icons": "^4.28.0",
@@ -27,5 +27,6 @@
         "simplebar": "^5.2.1",
         "vue": "^2.6.12",
         "vue-router": "^3.4.3"
-    }
+    },
+    "name": "archeryosa3"
 }
