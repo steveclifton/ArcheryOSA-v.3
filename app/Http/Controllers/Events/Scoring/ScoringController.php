@@ -177,7 +177,7 @@ class ScoringController extends Controller
         foreach ($request->data as $result) {
 
             // get the entry
-            $evententry = EventEntry::where('hash', $result['entryhash']??-1)
+            $evententry = EventEntry::where('hash', $result['entryhash'] ?? -1)
                                     ->where('eventid', $event->eventid)
                                     ->first();
 
@@ -212,6 +212,11 @@ class ScoringController extends Controller
                 $i = 1;
 
                 foreach ($result['score'] ?? [] as $data) {
+
+                    if (empty($data['key'])) {
+                        continue;
+                    }
+
                     $score = new Score();
                     $score->entryid = $evententry->entryid;
                     $score->entrycompetitionid = $entrycompetition->entrycompetitionid;
