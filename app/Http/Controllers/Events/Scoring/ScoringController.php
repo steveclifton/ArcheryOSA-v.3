@@ -157,7 +157,6 @@ class ScoringController extends Controller
 
     public function postScores(Request $request) {
 
-
         $event = $this->event;
 
         $week = 0;
@@ -167,22 +166,25 @@ class ScoringController extends Controller
             $week = EventCompetition::where('eventid', $event->eventid)->pluck('currentweek')->first();
         }
 
-        if (empty($event) || empty($request->data) || !is_array($request->data)) {
+        $requestScores = json_decode($request->data);
+
+        if (empty($event) || !is_array($requestScores)) {
             return response()->json([
                 'success' => false,
                 'message' => 'Invalid Request, please try again later'
             ]);
         }
 
-        foreach ($request->data as $result) {
+
+        foreach ($requestScores as $result) {
 
             // get the entry
-            $evententry = EventEntry::where('hash', $result['entryhash'] ?? -1)
+            $evententry = EventEntry::where('hash', ($result->entryhash ?? -1) )
                                     ->where('eventid', $event->eventid)
                                     ->first();
 
             // get users entry competition
-            $entrycompetition = EntryCompetition::where('entrycompetitionid', $result['entrycompetitionid'] ?? -1)
+            $entrycompetition = EntryCompetition::where('entrycompetitionid', ($result->entrycompetitionid ?? -1))
                                                 ->where('eventid', $event->eventid)
                                                 ->where('userid', $evententry->userid ?? -1)
                                                 ->first();
@@ -211,11 +213,9 @@ class ScoringController extends Controller
 
                 $i = 1;
 
-                foreach ($result['score'] ?? [] as $data) {
+                foreach ( ($result->score ?? []) as $data) {
 
-                    if (empty($data['key'])) {
-                        continue;
-                    }
+                    $data = (array) $data;
 
                     $score = new Score();
                     $score->entryid = $evententry->entryid;
@@ -301,7 +301,9 @@ class ScoringController extends Controller
                         ->first();
                 }
 
-                foreach ($result['score'] ?? [] as $data) {
+                foreach ( ($result->score ?? []) as $data) {
+
+                    $data = (array) $data;
 
                     $score = Score::where('scoreid', $data['scoreid'])
                                     ->where('entryid', $evententry->entryid)

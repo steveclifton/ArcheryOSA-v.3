@@ -321,7 +321,9 @@
                             'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
                         },
                         url: eventurl,
-                        data: {data:sendJson}
+                        data: {
+                            data : JSON.stringify(sendJson)
+                        }
                     }).done(function( json ) {
 
                         if (json.success) {
