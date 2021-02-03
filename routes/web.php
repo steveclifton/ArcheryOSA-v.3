@@ -61,11 +61,6 @@ Route::middleware(['web'])->group(function() {
 
     Route::middleware(['auth'])->group(function () {
 
-
-
-
-
-        
         /*****************
          *  Event management
          *   - defined in this route as not all users will have admin access
@@ -226,7 +221,6 @@ Route::middleware(['web'])->group(function() {
 
         // VueJS
         Route::get('new-admin/{admin?}', 'Vue\Admin\HomeController@home')->where('admin', '.*');
-
         Route::post('new-admin/events/list', 'Vue\Admin\Events\EventController@getAllEvents');
         Route::post('new-admin/event/details', 'Vue\Admin\Events\EventController@getEventDetails');
 

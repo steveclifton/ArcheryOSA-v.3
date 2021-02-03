@@ -3,13 +3,21 @@
 namespace App\Http\Controllers\Vue\Admin\Events;
 
 use App\Http\Controllers\Controller;
+use App\Models\Division;
+use App\Models\EntryStatus;
 use App\Models\Event;
+use App\Models\EventEntry;
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 
 class EventController extends Controller
 {
+
+    protected Collection $divisions;
+    protected Collection $entrystatus;
+
     public function getAllEvents()
     {
 
@@ -52,13 +60,35 @@ class EventController extends Controller
             return abort(404);
         }
 
-        $return = new \stdClass;
+        $this->divisions = Division::all()->keyBy('divisionid');
+        $this->entrystatus = EntryStatus::all()->keyBy('entrystatusid');
 
-        $return->event = [
+        $entries = EventEntry::where('eventid', $event->eventid)->get();
 
+        return [
+            'event' => [
+                'name' => $event->label,
+                'entries' => array_map([$this, 'formatListEntry'], $entries->toArray())
+            ]
         ];
 
+    }
 
-        dd();
+    private function formatListEntry($entry)
+    {
+        return [
+            'entryid' => $entry['entryid'],
+            'bib' => $entry['bib'],
+            'name' => ucwords(strtolower($entry['firstname'] . ' ' . $entry['lastname'])),
+            'paid' => $entry['paid'],
+            'notes' => $entry['notes'],
+            'email' => $entry['email'],
+            'gender' => $entry['gender'] == 'f' ? 'Womens' : 'Mens',
+            'status' => isset($this->entrystatus[$entry['entrystatusid']]) ? $this->entrystatus[$entry['entrystatusid']]->label : null,
+            'created' => date('Y-m-d', strtotime($entry['created_at'])),
+            'division' => isset($this->divisions[$entry['divisionid']]) ? $this->divisions[$entry['divisionid']]->label : null,
+            'entrystatusid' => $entry['entrystatusid'],
+            'confirmationemail' => $entry['confirmationemail'],
+        ];
     }
 }

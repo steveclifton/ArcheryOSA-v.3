@@ -14,27 +14,27 @@ export default {
         },
         {
             name : 'Admin-Home',
-            path : '/admin',
+            path : '/new-admin',
             component : Home
         },
         {
             name : 'Admin-Eventlistings',
-            path : '/admin/events/manage',
+            path : '/new-admin/events/manage',
             component: Eventlistings
         },
         {
             name : 'Admin-CreateEvent',
-            path : '/admin/events/new',
+            path : '/new-admin/events/new',
             component: CreateEvent
         },
         {
             name : 'Admin-EventDetails',
-            path : '/admin/event/details/:eventUrl',
+            path : '/new-admin/event/details/:eventUrl',
             component: EventDetails
         },
         {
             name : 'Admin-Clubs',
-            path : '/admin/clubs',
+            path : '/new-admin/clubs',
             template: '<template><div>Clubs!</div></template>'
         },
     ]

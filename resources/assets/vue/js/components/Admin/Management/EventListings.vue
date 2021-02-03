@@ -8,31 +8,30 @@
                         <p class="text-muted font-13 mb-4">
                             <code></code>
                         </p>
-
-                        <table id="basic-datatable" class="table table-responsive dt-responsive nowrap w-100">
+                        <table id="basic-datatable" class="table table-hover m-0 table-centered dt-responsive nowrap w-100 dataTable no-footer dtr-inline collapsed">
                             <thead>
-                            <tr>
-                                <th>Name</th>
-                                <th>Start</th>
-                                <th>Finish</th>
-                                <th>Status</th>
-                                <th>Entries</th>
-                                <th>Visible</th>
-                            </tr>
+                                <tr>
+                                    <th>Name</th>
+                                    <th>Start</th>
+                                    <th>Finish</th>
+                                    <th>Status</th>
+                                    <th>Entries</th>
+                                    <th>Visible</th>
+                                </tr>
                             </thead>
                             <tbody>
-                            <tr v-for="event in events">
-                                <td>
-                                    <router-link :to="{name: 'Admin-EventDetails', params: {eventUrl: event.eventurl}}" style="color: inherit">
-                                        {{event.label}}
-                                    </router-link>
-                                </td>
-                                <td>{{event.start}}</td>
-                                <td>{{event.end}}</td>
-                                <td>{{event.status}}</td>
-                                <td>{{event.entries}}</td>
-                                <td>{{event.visible ? "yes" : "no"}}</td>
-                            </tr>
+                                <tr v-for="event in events">
+                                    <td>
+                                        <router-link :to="{name: 'Admin-EventDetails', params: {eventUrl: event.eventurl}}" style="color: inherit">
+                                            {{event.label}}
+                                        </router-link>
+                                    </td>
+                                    <td>{{event.start}}</td>
+                                    <td>{{event.end}}</td>
+                                    <td>{{event.status}}</td>
+                                    <td>{{event.entries}}</td>
+                                    <td>{{event.visible ? "yes" : "no"}}</td>
+                                </tr>
                             </tbody>
                         </table>
 
@@ -55,7 +54,7 @@
         },
         created() {
 
-            axios.post('/admin/events/list')
+            axios.post('/new-admin/events/list')
             .then((response) => {
 
                 this.events = response.data;

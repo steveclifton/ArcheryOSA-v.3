@@ -1,6 +1,6 @@
 <template>
     <!-- Start Content-->
-    <div class="container-fluid">
+    <div class="container-fluid" v-if="event">
 
         <!-- start page title -->
         <div class="row">
@@ -8,11 +8,11 @@
                 <div class="page-title-box">
                     <div class="page-title-right">
                         <ol class="breadcrumb m-0">
-                            <li class="breadcrumb-item"><a href="javascript: void(0);">UBold</a></li>
-                            <li class="breadcrumb-item active">Event Name</li>
+                            <li class="breadcrumb-item"><a @click="$router.go(-1)" href="javascript:;">Event List</a></li>
+                            <li class="breadcrumb-item active">{{ event.name }}</li>
                         </ol>
                     </div>
-                    <h4 class="page-title">Event Name Here</h4>
+                    <h4 class="page-title">{{ event.name }}</h4>
                 </div>
             </div>
         </div>
@@ -22,41 +22,68 @@
         <div class="row">
             <div class="col-md-6 col-xl-3">
                 <div class="card-box">
-                    <i class="fa fa-info-circle text-muted float-right" data-toggle="tooltip" data-placement="bottom" title="" data-original-title="More Info"></i>
-                    <h4 class="mt-0 font-16">Total Entries</h4>
-                    <h2 class="text-primary my-3 text-center"><span data-plugin="counterup">45</span></h2>
+                    <h4 class="mt-0 font-16">Entries Total</h4>
+                    <h2 class="text-primary my-3 text-center">
+                        <span data-plugin="counterup">{{ getEntryCount }}</span>
+                    </h2>
                     <p class="text-muted mb-0"></p>
                 </div>
             </div>
 
             <div class="col-md-6 col-xl-3">
                 <div class="card-box">
-                    <i class="fa fa-info-circle text-muted float-right" data-toggle="tooltip" data-placement="bottom" title="" data-original-title="More Info"></i>
-                    <h4 class="mt-0 font-16">Sales Status</h4>
-                    <h2 class="text-primary my-3 text-center"><span data-plugin="counterup">683</span></h2>
-                    <p class="text-muted mb-0">Total sales: 2398 <span class="float-right"><i class="fa fa-caret-down text-danger mr-1"></i>7.85%</span></p>
+                    <h4 class="mt-0 font-16">Entries Confirmed</h4>
+                    <h2 class="text-primary my-3 text-center">
+                        <span data-plugin="counterup">{{ getConfirmedEntryCount }}</span>
+                    </h2>
                 </div>
             </div>
 
             <div class="col-md-6 col-xl-3">
                 <div class="card-box">
-                    <i class="fa fa-info-circle text-muted float-right" data-toggle="tooltip" data-placement="bottom" title="" data-original-title="More Info"></i>
-                    <h4 class="mt-0 font-16">Recent Users</h4>
-                    <h2 class="text-primary my-3 text-center"><span data-plugin="counterup">3.2</span>M</h2>
-                    <p class="text-muted mb-0">Total users: 121 M <span class="float-right"><i class="fa fa-caret-up text-success mr-1"></i>3.64%</span></p>
+                    <h4 class="mt-0 font-16">Entries Pending</h4>
+                    <h2 class="text-primary my-3 text-center">
+                        <span data-plugin="counterup">{{ getPendingEntryCount }}</span>
+                    </h2>
                 </div>
             </div>
 
-            <div class="col-md-6 col-xl-3">
-                <div class="card-box">
-                    <i class="fa fa-info-circle text-muted float-right" data-toggle="tooltip" data-placement="bottom" title="" data-original-title="More Info"></i>
-                    <h4 class="mt-0 font-16">Total Revenue</h4>
-                    <h2 class="text-primary my-3 text-center">$<span data-plugin="counterup">68,541</span></h2>
-                    <p class="text-muted mb-0">Total revenue: $1.2 M <span class="float-right"><i class="fa fa-caret-up text-success mr-1"></i>17.48%</span></p>
-                </div>
-            </div>
         </div>
-        <!-- end row -->
+
+        <div class="row">
+
+            <div class="col-12">
+                <div class="card">
+                    <div class="card-body">
+                        <h4 class="header-title mb-3">Entries</h4>
+
+                        <div class="table-responsive">
+                                <table id="basic-datatable" class="table table-hover">
+
+                                    <thead>
+                                        <tr role="row">
+                                            <th >Bib</th>
+                                            <th >Name</th>
+                                            <th >Status</th>
+                                            <th >Date</th>
+                                            <th >Note</th>
+                                            <th >Send Mail</th>
+                                            <th >Approve</th>
+                                            <th >Paid</th>
+                                            <th >Confirmation </th>
+                                            <th >Remove</th>
+                                        </tr>
+                                    </thead>
+
+                                    <event-entry-detail-list :entries="entries"></event-entry-detail-list>
+
+                                </table>
+                            </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
 
         <div class="row">
             <div class="col-xl-6">
@@ -91,6 +118,7 @@
                 </div> <!-- end card-->
             </div> <!-- end col -->
 
+
             <div class="col-xl-6">
                 <div class="card">
                     <div class="card-body">
@@ -123,75 +151,78 @@
                 </div> <!-- end card-->
             </div> <!-- end col -->
         </div>
-        <!-- end row -->
-
-        <div class="row">
-
-            <div class="col-12">
-                <div class="card">
-                    <div class="card-body">
-                        <div class="dropdown float-right">
-                            <a href="#" class="dropdown-toggle arrow-none card-drop" data-toggle="dropdown" aria-expanded="false">
-                                <i class="mdi mdi-dots-vertical"></i>
-                            </a>
-                            <div class="dropdown-menu dropdown-menu-right">
-                                <a href="javascript:void(0);" class="dropdown-item">Settings</a>
-                                <a href="javascript:void(0);" class="dropdown-item">Action</a>
-                            </div>
-                        </div>
-                        <h4 class="header-title mb-3">Entries (<a href="javascript:;">See All</a>)</h4>
-
-                        <div class="inbox-widget" data-simplebar style="max-height: 600px;">
-                            <div class="inbox-item">
-                                <table>
-                                    <thead>
-                                    <tr role="row">
-                                        <th class="sorting_asc" tabindex="0" aria-controls="datatable-buttons" rowspan="1" colspan="1" style="width: 79px;" aria-sort="ascending" aria-label="Bib: activate to sort column descending">Bib</th>
-                                        <th class="sorting" tabindex="0" aria-controls="datatable-buttons" rowspan="1" colspan="1" style="width: 170px;" aria-label="Name: activate to sort column ascending">Name</th>
-                                        <th class="sorting" tabindex="0" aria-controls="datatable-buttons" rowspan="1" colspan="1" style="width: 118px;" aria-label="Status: activate to sort column ascending">Status</th>
-                                        <th class="sorting" tabindex="0" aria-controls="datatable-buttons" rowspan="1" colspan="1" style="width: 100px;" aria-label="Note: activate to sort column ascending">Note</th>
-                                        <th class="sorting" tabindex="0" aria-controls="datatable-buttons" rowspan="1" colspan="1" style="width: 159px;" aria-label="Send Mail: activate to sort column ascending">Send Mail</th>
-                                        <th class="sorting" tabindex="0" aria-controls="datatable-buttons" rowspan="1" colspan="1" style="width: 228px;" aria-label="Date: activate to sort column ascending">Date</th>
-                                        <th class="sorting" tabindex="0" aria-controls="datatable-buttons" rowspan="1" colspan="1" style="width: 142px;" aria-label="Approve: activate to sort column ascending">Approve</th>
-                                        <th class="sorting" tabindex="0" aria-controls="datatable-buttons" rowspan="1" colspan="1" style="width: 93px;" aria-label="Paid: activate to sort column ascending">Paid</th>
-                                        <th class="sorting" tabindex="0" aria-controls="datatable-buttons" rowspan="1" colspan="1" style="width: 279px;" aria-label="Confirmation Email: activate to sort column ascending">Confirmation Email</th>
-                                        <th class="sorting" tabindex="0" aria-controls="datatable-buttons" rowspan="1" colspan="1" style="width: 137px;" aria-label="Remove: activate to sort column ascending">Remove</th></tr>
-                                    </thead>
-                                    <tr v-for="entry in ['one','two','three', 'four','five','six', 'seven', 'eight', 'nine', 'ten','one','two','three', 'four','five','six', 'seven', 'eight', 'nine', 'ten']">
-                                        <event-entry-detail-list-item :entry="entry"></event-entry-detail-list-item>
-                                    </tr>
-                                </table>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-        </div>
 
     </div>
 </template>
 
 <script>
-    import EventEntryDetailListItem from "./EventEntryDetailListItem";
-
+    import 'datatables.net-bs4';
+    import EventEntryDetailList from "./EventEntryDetailList";
     require('simplebar');
 
     export default {
         name: "EventDetails",
-        components: {EventEntryDetailListItem},
+        components: {
+            EventEntryDetailList
+        },
         data() {
             return {
-                event: null
+                event: null,
+                entries: []
+            }
+        },
+        computed: {
+            confirmedEntries: function() {
+                return this.event.entries.filter(entry => entry.entrystatusid == 2)
+            },
+            pendingEntries: function() {
+                return this.event.entries.filter(entry => entry.entrystatusid == 1)
+            },
+            getEntryCount: function() {
+                return this.event.entries.length;
+            },
+            getConfirmedEntryCount: function() {
+                return this.confirmedEntries.length;
+            },
+            getPendingEntryCount: function() {
+                return this.pendingEntries.length;
             }
         },
         created() {
 
-            axios.post('/admin/event/details', {
+            axios.post('/new-admin/event/details', {
                 eventUrl : this.$route.params.eventUrl
             })
             .then((response) => {
-                console.log(response);
+                this.event = response.data.event;
+                this.entries = this.event.entries;
+
+                setTimeout(() => {
+
+                    $("#basic-datatable").DataTable({
+                        'language': {
+                            paginate: {
+                                previous: "<i class='mdi mdi-chevron-left'>",
+                                next: "<i class='mdi mdi-chevron-right'>"
+                            }
+                        },
+                        'columnDefs': [
+                            {
+                                'type': 'date',
+                                'targets': [3]
+                            }
+                        ],
+                        "order": [
+                            [2, 'DESC'],
+                            [3, 'ASC']
+                        ],
+                        "pageLength": 10,
+                        drawCallback: function() {
+                            $(".dataTables_paginate > .pagination").addClass("pagination-rounded")
+                        }
+                    });
+
+                }, 200);
             })
             .catch((response) => {
 
@@ -199,7 +230,3 @@
         }
     }
 </script>
-
-<style scoped>
-
-</style>
