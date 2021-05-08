@@ -278,18 +278,18 @@
                         <div class="checkbox checkbox-primary">
                             <input name="waver" id="waver" type="checkbox" {{$event->waver ? 'checked' : ''}}>
                             <label for="waver">
-                                Waver Required
+                                Waiver Required
                             </label>
 
                         </div>
-                        <span class="help-block"><small>This allows event organisers to allow entries to require entries to accept the waver</small></span>
+                        <span class="help-block"><small>This allows event organisers to allow entries to require entries to accept the waiver</small></span>
 
                     </div>
                 </div>
                 <br>
 
                 <div class="form-group row">
-                    <label class="col-sm-12 col-md-3 col-form-label">Waver Message</label>
+                    <label class="col-sm-12 col-md-3 col-form-label">Waiver Message</label>
                     <div class="col-md-9">
                         <textarea name="wavermessage"
                                   class="form-control" rows="4">{{$event->wavermessage ?? old('wavermessage')}}</textarea>

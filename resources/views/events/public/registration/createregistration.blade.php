@@ -268,7 +268,7 @@
                 @if (!empty($event->waver))
 
                     <div class="form-group row">
-                        <label class="col-sm-12 col-md-3 col-form-label">Event Waver*</label>
+                        <label class="col-sm-12 col-md-3 col-form-label">Event Waiver*</label>
                         <div class="col-md-9">
                             <div id="checkb" class="checkbox checkbox-primary">
                                 <input required class="form-control {{ $errors->has('waver') ? 'is-invalid' : '' }}" name="waver" type="checkbox" id="waverc" {!! old('waver')  ? 'selected' : '' !!}>
