@@ -87,6 +87,10 @@ class TidyHQ
             return $response->json();
         }
 
+        $errorMsg = sprintf('Response : % Message : %s ', $response->body(), $response->status());
+
+        Log::error($errorMsg);
+
         throw new \Exception('Invalid response');
 
     }
