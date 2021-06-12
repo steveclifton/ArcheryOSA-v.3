@@ -91,7 +91,7 @@ class TidyHQ
 
         Log::error($errorMsg);
 
-        throw new \Exception('Invalid response');
+        return;
 
     }
 
