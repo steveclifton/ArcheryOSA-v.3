@@ -303,6 +303,13 @@ Route::middleware(['web'])->group(function() {
             }
         });
 
+        Route::get('test-email', function () {
+            foreach (range(0,1) as $i) {
+                Mail::to(getenv('EMAIL_TEST_ACCOUNT'))->send(new \App\Mail\TestEmail('Hello World'));
+                usleep(400);
+            }
+        });
+
     });
 
 });
