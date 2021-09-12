@@ -6,7 +6,6 @@ use App\LeaguePoint;
 use App\Models\Event;
 use App\Models\EventCompetition;
 use App\Models\FlatScore;
-use App\Models\Score;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;

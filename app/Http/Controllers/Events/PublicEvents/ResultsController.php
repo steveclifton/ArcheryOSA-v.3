@@ -8,7 +8,7 @@ use App\Http\Controllers\Events\PublicEvents\Postal\PostalResultsController;
 use App\Models\Division;
 use App\Models\Event;
 use App\Models\EventCompetition;
-use App\Models\Score;
+use App\Models\FlatScore;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use App\Http\Traits\UserResults;
@@ -82,7 +82,7 @@ class ResultsController extends EventController
 
             $rangeArr = [];
             foreach (range(1, $eventcompetition->currentweek) as $week) {
-                $score = Score::where('eventid', $eventcompetition->eventid)
+                $score = FlatScore::where('eventid', $eventcompetition->eventid)
                     ->where('eventcompetitionid', $eventcompetition->eventcompetitionid)
                     ->where('week', $week)
                     ->first();
@@ -101,7 +101,7 @@ class ResultsController extends EventController
         $haveScores = false;
         foreach ($eventcompetitions as $eventcompetition) {
 
-            $eventcompetition->score = Score::where('eventid', $eventcompetition->eventid)
+            $eventcompetition->score = FlatScore::where('eventid', $eventcompetition->eventid)
                                             ->where('eventcompetitionid', $eventcompetition->eventcompetitionid)
                                             ->first();
             if (empty($haveScores) && !empty($eventcompetition->score)) {

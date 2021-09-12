@@ -13,7 +13,6 @@ use App\Models\EventEntry;
 use App\Models\FlatScore;
 use App\Models\Round;
 use App\Models\School;
-use App\Models\Score;
 use App\Models\TidyHqContact;
 use App\User;
 use Illuminate\Http\Request;
@@ -455,7 +454,6 @@ class EventEntryController extends EventController
         }
 
         EntryCompetition::where('entryid', $entry->entryid)->delete();
-        Score::where('entryid', $entry->entryid)->delete();
         FlatScore::where('entryid', $entry->entryid)->delete();
 
         $entry->delete();

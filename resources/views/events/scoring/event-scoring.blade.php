@@ -25,6 +25,10 @@
                 </div>
                 <a role="button" href="javascript:;" class="myButton btn btn-danger">Save Results</a>
 
+                @if (Auth::check() && Auth::id() == 1)
+                    <a role="button" href="javascript:;" class="triggerTest btn btn-warning">TEST RESULTS</a>
+                @endif
+
                 <div class="tab-pane active" id=""><br>
                     @foreach($evententrys as $bowtype => $entrys)
                         @foreach($entrys as $division => $rounds)
@@ -52,72 +56,74 @@
 
                                         <tr class="results"
                                             data-entryhash="{{$a->hash}}"
-                                            data-entrycompetitionid="{{$a->entrycompetitionid}}">
+                                            data-entrycompetitionid="{{$a->entrycompetitionid}}"
+                                            data-fsid="{{ ($a->fsid ?? null) }}">
 
 
                                             <th scope="row" width="15%">{{ucwords($a->firstname . ' ' . $a->lastname)}}</th>
-                                            <td width="10%" data-type="distance" data-max="{{$data->dist1max}}" data-value="{{$data->dist1}}" data-sid="{{!empty($a->score1) ? $a->score1->scoreid : '0' }}">
-                                                <input type="text" class="form-control distInp"  value="{{!empty($a->score1) ? $a->score1->score : '0' }}" placeholder="">
+
+                                            <td width="10%" data-type="distance" data-max="{{$data->dist1max}}" data-value="{{$data->dist1}}">
+                                                <input type="text" class="form-control distInp" data-key="dist1score"  value="{{ ($a->dist1score ?? 0) }}" placeholder="">
 
                                                 @if(!$event->isLeague())
                                                     <i class="md-add-box showMore"></i>
                                                     <div class="hidden">
-                                                        Hits<input type="text" class="form-control" value="{{!empty($a->score1) ? $a->score1->hits : '' }}" data-type="hits" placeholder="Hits">
-                                                        10+X<input type="text" class="form-control" value="{{!empty($a->score1) ? $a->score1->inners : '' }}" data-type="inners" placeholder="10">
-                                                        X<input type="text" class="form-control" value="{{!empty($a->score1) ? $a->score1->max : '' }}" data-type="max" placeholder="X">
+                                                        Hits<input type="text" class="form-control" data-key="dist1hits" value="{{ ($a->dist1hitsscore ?? '') }}" data-type="hits" placeholder="Hits">
+                                                        10+X<input type="text" class="form-control" data-key="dist1inners" value="{{ ($a->dist1innersscore ?? '') }}" data-type="inners" placeholder="10">
+                                                        X<input type="text" class="form-control" data-key="dist1max" value="{{ ($a->dist1maxscore ?? '') }}" data-type="max" placeholder="X">
                                                     </div>
                                                 @endif
                                             </td>
                                             @if(!empty($data->dist2))
-                                                <td width="10%" data-type="distance" data-max="{{$data->dist2max}}" data-value="{{$data->dist2}}" data-sid="{{!empty($a->score2) ? $a->score2->scoreid : '0' }}">
-                                                    <input type="text" class="form-control distInp" value="{{!empty($a->score2) ? $a->score2->score : '0' }}" placeholder="">
+                                                <td width="10%" data-type="distance" data-max="{{$data->dist2max}}" data-value="{{$data->dist2}}">
+                                                    <input type="text" class="form-control distInp" data-key="dist2score" value="{{ ($a->dist2score ?? 0) }}" placeholder="">
 
                                                     @if(!$event->isLeague())
                                                         <i class="md-add-box showMore"></i>
                                                         <div class="hidden">
-                                                            Hits<input type="text" class="form-control" value="{{!empty($a->score2) ? $a->score2->hits : '' }}" data-type="hits" placeholder="Hits">
-                                                            10+X<input type="text" class="form-control" value="{{!empty($a->score2) ? $a->score2->inners : '' }}" data-type="inners" placeholder="10">
-                                                            X<input type="text" class="form-control" value="{{!empty($a->score2) ? $a->score2->max : '' }}" data-type="max" placeholder="X">
+                                                            Hits<input type="text" class="form-control" data-key="dist2hits" value="{{ ($a->dist2hitsscore ?? '') }}" data-type="hits" placeholder="Hits">
+                                                            10+X<input type="text" class="form-control" data-key="dist2inners" value="{{ ($a->dist2innersscore ?? '') }}" data-type="inners" placeholder="10">
+                                                            X<input type="text" class="form-control" data-key="dist2max" value="{{ ($a->dist2maxscore ?? '') }}" data-type="max" placeholder="X">
                                                         </div>
                                                     @endif
                                                 </td>
                                             @endif
                                             @if(!empty($data->dist3))
-                                                <td width="10%" data-type="distance" data-max="{{$data->dist3max}}" data-value="{{$data->dist3}}" data-sid="{{!empty($a->score3) ? $a->score3->scoreid : '0' }}">
-                                                    <input type="text" class="form-control distInp" value="{{!empty($a->score3) ? $a->score3->score : '0' }}" placeholder="">
+                                                <td width="10%" data-type="distance" data-max="{{$data->dist3max}}" data-value="{{$data->dist3}}">
+                                                    <input type="text" class="form-control distInp" data-key="dist3score" value="{{ ($a->dist3score ?? 0) }}" placeholder="">
                                                     @if (!$event->isLeague())
                                                         <i class="md-add-box showMore"></i>
                                                         <div class="hidden">
-                                                            Hits<input type="text" class="form-control" value="{{!empty($a->score3) ? $a->score3->hits : '' }}" data-type="hits" placeholder="Hits">
-                                                            10+X<input type="text" class="form-control" value="{{!empty($a->score3) ? $a->score3->inners : '' }}" data-type="inners" placeholder="10">
-                                                            X<input type="text" class="form-control" value="{{!empty($a->score3) ? $a->score3->max : '' }}" data-type="max" placeholder="X">
+                                                            Hits<input type="text" class="form-control" data-key="dist3hits" value="{{ ($a->dist3hitsscore ?? '') }}" data-type="hits" placeholder="Hits">
+                                                            10+X<input type="text" class="form-control" data-key="dist3inners" value="{{ ($a->dist3innersscore ?? '') }}" data-type="inners" placeholder="10">
+                                                            X<input type="text" class="form-control" data-key="dist3max" value="{{ ($a->dist3maxscore ?? '') }}" data-type="max" placeholder="X">
                                                         </div>
                                                     @endif
                                                 </td>
                                             @endif
                                             @if(!empty($data->dist4))
-                                                <td width="10%" data-type="distance" data-max="{{$data->dist4max}}" data-value="{{$data->dist4}}" data-sid="{{!empty($a->score4) ? $a->score4->scoreid : '0' }}">
-                                                    <input type="text" class="form-control distInp" value="{{!empty($a->score4) ? $a->score4->score : '0' }}" placeholder="">
+                                                <td width="10%" data-type="distance" data-max="{{$data->dist4max}}" data-value="{{$data->dist4}}">
+                                                    <input type="text" class="form-control distInp" data-key="dist4score" value="{{ ($a->dist4score ?? 0) }}" placeholder="">
                                                     @if(!$event->isLeague())
                                                         <i class="md-add-box showMore"></i>
                                                         <div class="hidden">
-                                                            Hits<input type="text" class="form-control" value="{{!empty($a->score4) ? $a->score4->hits : '' }}" data-type="hits" placeholder="Hits">
-                                                            10+X<input type="text" class="form-control" value="{{!empty($a->score4) ? $a->score4->inners : '' }}" data-type="inners" placeholder="10">
-                                                            X<input type="text" class="form-control" value="{{!empty($a->score4) ? $a->score4->max : '' }}" data-type="max" placeholder="X">
+                                                            Hits<input type="text" class="form-control" data-key="dist4hits" value="{{ ($a->dist4hitsscore ?? '') }}" data-type="hits" placeholder="Hits">
+                                                            10+X<input type="text" class="form-control" data-key="dist4inners" value="{{ ($a->dist4innersscore ?? '') }}" data-type="inners" placeholder="10">
+                                                            X<input type="text" class="form-control" data-key="dist4max" value="{{ ($a->dist4maxscore ?? '') }}" data-type="max" placeholder="X">
                                                         </div>
                                                     @endif
                                                 </td>
                                             @endif
 
-                                            <td width="10%" data-type="sum" data-value="total" data-sid="{{!empty($a->total) ? $a->total->scoreid : '0' }}">
-                                                <input type="text" class="form-control totalInp" value="{{ !empty($a->total) ? $a->total->score : '0' }}">
+                                            <td width="10%" data-type="sum" data-value="total">
+                                                <input type="text" class="form-control totalInp" data-key="total" value="{{ ($a->total ?? '') }}">
                                             </td>
 
-                                            <td width="10%" data-type="sum" data-value="inners" data-sid="{{!empty($a->inners) ? $a->inners->scoreid : '0' }}">
-                                                <input type="text" class="form-control" value="{{ !empty($a->inners) ? $a->inners->score : '0' }}">
+                                            <td width="10%" data-type="sum" data-value="inners">
+                                                <input type="text" class="form-control" data-key="inners" value="{{ ($a->inners ?? '') }}">
                                             </td>
-                                            <td width="10%" data-type="sum" data-value="max" data-sid="{{!empty($a->max) ? $a->max->scoreid : '0' }}">
-                                                <input type="text" class="form-control" value="{{ !empty($a->max) ? $a->max->score : '0' }}">
+                                            <td width="10%" data-type="sum" data-value="max">
+                                                <input type="text" class="form-control" data-key="max" value="{{ ($a->max ?? '') }}">
                                             </td>
                                         </tr>
                                     @endforeach
@@ -198,24 +204,23 @@
 
                        var entryhash          = $(this).attr('data-entryhash');
                        var entrycompetitionid = $(this).attr('data-entrycompetitionid');
+                       var fsid               = $(this).attr('data-fsid');
+
                        if (typeof entryhash == 'undefined') {
                            return;
                        }
 
                        // create new object with required data
                        var jsonData = {
-                           entryhash:entryhash,
-                           entrycompetitionid:entrycompetitionid
+                           entryhash: entryhash,
+                           entrycompetitionid: entrycompetitionid,
+                           fsid: fsid
                        };
 
                        // get the rows td
                        var children = $(this).children('td');
 
-                       // array of scores
-                       jsonData.score = [];
-
                        var totalScore = 0;
-                       var total      = 0;
                        children.each(function() {
                             // Remove errors
                            $(this).find('input').removeClass('error');
@@ -224,9 +229,8 @@
                            if ($(this).attr('data-type') == 'distance') {
 
                                var distMax = parseInt($(this).attr('data-max'));
-                               var dist    = $(this).attr('data-value');
+                               var key    = $(this).find('input').attr('data-key');
                                var score   = parseInt($(this).find('input').val());
-                               var scoreid = parseInt($(this).attr('data-sid'));
 
                                if (score > distMax) {
                                    errors = true;
@@ -235,66 +239,45 @@
                                    return;
                                }
 
+                               // Add the score
+                               jsonData[key] = score;
+
                                // add the score to the total
                                totalScore += score;
 
-
                                var extras  = $(this).find('div').children('input');
-                               var hits    = 0;
-                               var inners  = 0;
-                               var max     = 0;
-
 
                                extras.each(function () {
-                                  switch ($(this).attr('data-type')) {
+                                   var key = $(this).attr('data-key');
+
+                                   switch ($(this).attr('data-type')) {
                                       case 'hits':
-                                          hits = parseInt($(this).val());
+                                          jsonData[key] = parseInt($(this).val());
                                           break;
 
                                       case 'inners':
-                                          inners = parseInt($(this).val());
+                                          jsonData[key] = parseInt($(this).val());
                                           break;
 
                                       case 'max':
-                                          max = parseInt($(this).val());
+                                          jsonData[key] = parseInt($(this).val());
                                           break;
                                   }
                                });
 
-                               // build the cols score data
-                               var data = {
-                                   scoreid : scoreid,
-                                   key     : dist,
-                                   score   : score,
-                                   hits    : hits,
-                                   inners  : inners,
-                                   max     : max
-                               };
-
-                               jsonData.score.push(data);
+                               return;
                            }
                            else {
-                               var dist    = $(this).attr('data-value');
-                               var score   = parseInt($(this).find('input').val());
-                               var scoreid = parseInt($(this).attr('data-sid'));
+                               // Not a distance result - will be a total or distance max/inner
+                               var key = $(this).attr('data-value');
+                               var score = parseInt($(this).find('input').val());
 
-                               // set the total to be the input total, to be checked later
-                               if (dist == 'total') {
-                                   total = score;
-                               }
-
-                               var data = {
-                                   scoreid : scoreid,
-                                   key     : dist,
-                                   score   : score
-                               }
-                               jsonData.score.push(data);
+                               jsonData[key] = score;
 
                            }
                        });
 
-                       if (total != totalScore) {
-                           console.log(total, totalScore);
+                       if (typeof jsonData.total == 'undefined' || jsonData.total != totalScore) {
                            errors = true;
                            errormessage.push('- Scores and total do not match<br>');
                            $(this).find('th').addClass('error');
@@ -345,6 +328,48 @@
                     });
                 });
             });
+
+            $('.triggerTest').on('click', fakeScores);
+
+            function fakeScores() {
+                for (var i = 1; i < 5; i++) {
+                    $('input[data-key="dist' + i + 'score"]').each(function(e) {
+
+                        $(this).val(
+                            Math.floor(
+                                Math.floor(Math.random() * 359)
+                            )
+                        );
+
+                        $(this).keyup();
+
+                        $(this).parent().find('.hidden').children('input').each(function () {
+                            $(this).val(
+                                Math.floor(
+                                    Math.floor(Math.random() * 35)
+                                )
+                            )
+                        });
+
+                        $(this).parent().parent().find('td[data-value="inners"]').find('input').each(function () {
+                            $(this).val(
+                                Math.floor(
+                                    Math.floor(Math.random() * 35)
+                                )
+                            )
+                        });
+
+                        $(this).parent().parent().find('td[data-value="max"]').find('input').each(function () {
+                            $(this).val(
+                                Math.floor(
+                                    Math.floor(Math.random() * 35)
+                                )
+                            )
+                        });
+                    });
+                }
+            }
+
 
         </script>
 

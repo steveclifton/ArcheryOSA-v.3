@@ -89,50 +89,43 @@ class ScoringController extends Controller
             'eventid' => $event->eventid
         ]);
 
-
         $currentWeek = $event->isLeague() ? $eventcompetition->currentweek : 0;
+
+        $flatScores = FlatScore::where('eventcompetitionid', $eventcompetition->eventcompetitionid)->where('week', $currentWeek)->get()->toArray();
+
+        $sortedFlatScores = [];
+        array_walk($flatScores, function ($flatScore) use (&$sortedFlatScores) {
+           $sortedFlatScores[$flatScore['entryid']][] = (object) $flatScore;
+        });
+
         $evententrys = [];
-
-        $temp = Score::where('eventcompetitionid', $eventcompetition->eventcompetitionid)->where('week', $currentWeek)->get();
-        $scores = [];
-        foreach ($temp as $score) {
-            $scores[$score->entryid][] = $score;
-        }
-
-        // No longer required
-        unset($temp);
-
         foreach ($entrys as $entry) {
 
-            $entryscores = isset($scores[$entry->entryid]) ? $scores[$entry->entryid] : [];
+            $entryFlatScores = ($sortedFlatScores[$entry->entryid] ?? []);
 
-//            $entryscores = Score::where('entryid', $entry->entryid)
-//                            ->where('roundid', $entry->roundid)
-//                            ->where('divisionid', $entry->divisionid)
-//                            ->where('eventcompetitionid', $entry->eventcompetitionid)
-//                            ->where('week', $currentWeek)
-//                            ->get();
-
-            $i = 1;
-            foreach ($entryscores as $score) {
+            foreach ($entryFlatScores as $flatScore) {
 
                 // Make sure the roundid and the divisionid match
-                if ($score->roundid != $entry->roundid || $score->divisionid != $entry->divisionid) {
+                if ($flatScore->roundid != $entry->roundid || $flatScore->divisionid != $entry->divisionid) {
                     continue;
                 }
 
-                $label = 'score' . $i++;
-                $entry->{$label} = $score;
+                $entry->fsid = $flatScore->flatscoreid;
 
-                if ($score->key == 'total') {
-                    $entry->total = $score;
+                // Loop over 4 possible distances for score
+                foreach ([1,2,3,4] as $i) {
+                    $label = 'dist' . $i;
+                    $entry->{$label . 'score'} = $flatScore->{($label . 'score')};
+                    $entry->{$label . 'hitsscore'} = $flatScore->{($label . 'hits')};
+                    $entry->{$label . 'maxscore'} = $flatScore->{($label . 'max')};
+                    $entry->{$label . 'innersscore'} = $flatScore->{($label . 'inners')};
+
+                    $i++;
                 }
-                else if ($score->key == 'max') {
-                    $entry->max = $score;
-                }
-                else if ($score->key == 'inners') {
-                    $entry->inners = $score;
-                }
+
+                $entry->total = $flatScore->total;
+                $entry->max = $flatScore->max;
+                $entry->inners = $flatScore->inners;
             }
 
             $gender = '';
@@ -175,7 +168,6 @@ class ScoringController extends Controller
             ]);
         }
 
-
         foreach ($requestScores as $result) {
 
             // get the entry
@@ -194,7 +186,7 @@ class ScoringController extends Controller
             }
 
             // check if any scores exist, if none, create, else update
-            $scores = Score::where('entryid', $evententry->entryid)
+            $flatScore = FlatScore::where('entryid', $evententry->entryid)
                             ->where('entrycompetitionid', $entrycompetition->entrycompetitionid)
                             ->where('week', $week)
                             ->where('roundid', $entrycompetition->roundid)
@@ -206,168 +198,91 @@ class ScoringController extends Controller
             $saveScore      = false;
             $scoresArray    = [];
 
-            if (empty($scores)) {
-                // create
+            if (empty($flatScore)) {
+                $flatScore = new FlatScore();
 
-                $flatscore = new FlatScore();
-
-                $i = 1;
-
-                foreach ( ($result->score ?? []) as $data) {
-
-                    $data = (array) $data;
-
-                    $score = new Score();
-                    $score->entryid = $evententry->entryid;
-                    $score->entrycompetitionid = $entrycompetition->entrycompetitionid;
-                    $score->userid = $evententry->userid;
-                    $score->roundid = $entrycompetition->roundid;
-                    $score->eventid = $event->eventid;
-                    $score->eventcompetitionid = $entrycompetition->eventcompetitionid;
-                    $score->divisionid = $entrycompetition->divisionid;
-                    $score->key    = $data['key'] ?? '';
-                    $score->score  = intval($data['score'] ?? 0);
-                    $score->hits   = intval($data['hits'] ?? 0);
-                    $score->max    = intval($data['max'] ?? 0);
-                    $score->inners = intval($data['inners'] ?? 0);
-                    $score->week   = $week;
-
-                    if ($data['key'] == 'total' && !empty($data['score'])) {
-                        $saveScore = true;
-                    }
-
-                    $scoresArray[] = $score;
-
-                    if (is_numeric($data['key'])) {
-
-                        // do the flat scores
-                        $flatscore->entryid = $evententry->entryid;
-                        $flatscore->entrycompetitionid = $entrycompetition->entrycompetitionid;
-                        $flatscore->userid = $evententry->userid;
-                        $flatscore->roundid = $entrycompetition->roundid;
-                        $flatscore->eventid = $event->eventid;
-                        $flatscore->eventcompetitionid = $entrycompetition->eventcompetitionid;
-                        $flatscore->divisionid = $entrycompetition->divisionid;
-                        // add score
-                        $distscore = "dist" . $i . 'score';
-                        $flatscore->{$distscore} = intval($data['score'] ?? 0);
-                        // add distance
-                        $distkey = "dist" . $i++;
-                        $flatscore->{$distkey} = $data['key'] ?? '';
-                    }
-
-
-                    if ($data['key'] == 'total') {
-                        $flatscore->total = intval($data['score'] ?? 0);
-                    }
-                    if ($data['key'] == 'max') {
-                        if (is_null($flatscore->max)) {
-                            $flatscore->max = 0;
-                        }
-
-                        $flatscore->max += intval($data['score'] ?? 0);
-                    }
-                    if ($data['key'] == 'inners') {
-                        if (is_null($flatscore->inners)) {
-                            $flatscore->inners = 0;
-                        }
-
-                        $flatscore->inners += intval($data['score'] ?? 0);
-                    }
-
-
-                }
-
-                if ($saveScore) {
-                    $flatscore->week = $week;
-                    // Save the flat score
-                    $flatscore->save();
-                }
-
-            }
-            else {
-                // Update Score
-                $i = 1;
-                $flatscore = null;
-                $inners = 0;
-                $max    = 0;
-
-                if (empty($flatscore)) {
-                    $flatscore = FlatScore::where('entryid', $evententry->entryid)
-                        ->where('entrycompetitionid', $entrycompetition->entrycompetitionid)
-                        ->where('userid', $evententry->userid)
-                        ->where('divisionid', $entrycompetition->divisionid)
-                        ->where('week', $week)
-                        ->first();
-                }
-
-                foreach ( ($result->score ?? []) as $data) {
-
-                    $data = (array) $data;
-
-                    $score = Score::where('scoreid', $data['scoreid'])
-                                    ->where('entryid', $evententry->entryid)
-                                    ->where('entrycompetitionid', $entrycompetition->entrycompetitionid)
-                                    ->where('userid', $evententry->userid)
-                                    ->where('divisionid', $entrycompetition->divisionid)
-                                    ->where('week', $week)
-                                    ->first();
-
-                    // shouldnt ever be null
-                    if (empty($score)) {
-                        continue;
-                    }
-
-                    $score->key    = $data['key'] ?? '';
-                    $score->score  = intval($data['score'] ?? 0);
-                    $score->hits   = intval($data['hits'] ?? 0);
-                    $score->max    = intval($data['max'] ?? 0);
-                    $score->inners = intval($data['inners'] ?? 0);
-                    $score->save();
-
-                    if (!empty($flatscore)) {
-                        // flatscore update
-                        if (is_numeric($data['key'])) {
-
-                            // add score
-                            $distscore = "dist" . $i . 'score';
-                            $flatscore->{$distscore} = intval($data['score'] ?? 0);
-                            // add distance
-                            $distkey = "dist" . $i++;
-                            $flatscore->{$distkey} = $data['key'] ?? '';
-                        }
-
-                        if ($data['key'] == 'total') {
-                            $flatscore->total = intval($data['score'] ?? 0);
-                        }
-                    }
-
-
-                    if ($data['key'] == 'max') {
-                        $max += intval($data['score'] ?? 0);
-                    }
-                    if ($data['key'] == 'inners') {
-                        $inners += intval($data['score'] ?? 0);
-                    }
-
-                }
-
-                if (!empty($flatscore)) {
-                    $flatscore->max    = $max;
-                    $flatscore->inners = $inners;
-                    $flatscore->save();
-                }
-
+                $flatScore->entryid = $evententry->entryid;
+                $flatScore->entrycompetitionid = $entrycompetition->entrycompetitionid;
+                $flatScore->userid = $evententry->userid;
+                $flatScore->roundid = $entrycompetition->roundid;
+                $flatScore->eventid = $event->eventid;
+                $flatScore->eventcompetitionid = $entrycompetition->eventcompetitionid;
+                $flatScore->divisionid = $entrycompetition->divisionid;
+                $flatScore->week = $week;
             }
 
-            // triggered only on created
-            if ($saveScore) {
-                foreach ($scoresArray as $score) {
-                    $score->save();
-                }
+            // Scores
+            if (isset($result->dist1score)) {
+                $flatScore->dist1score = $result->dist1score;
+            }
+            if (isset($result->dist2score)) {
+                $flatScore->dist2score = $result->dist2score;
+            }
+            if (isset($result->dist3score)) {
+                $flatScore->dist3score = $result->dist3score;
+            }
+            if (isset($result->dist4score)) {
+                $flatScore->dist4score = $result->dist4score;
             }
 
+            // Hits
+            if (isset($result->dist1hits)) {
+                $flatScore->dist1hits = $result->dist1hits;
+            }
+            if (isset($result->dist2hits)) {
+                $flatScore->dist2hits = $result->dist2hits;
+            }
+            if (isset($result->dist3hits)) {
+                $flatScore->dist3hits = $result->dist3hits;
+            }
+            if (isset($result->dist4hits)) {
+                $flatScore->dist4hits = $result->dist4hits;
+            }
 
+            // Max
+            if (isset($result->dist1max)) {
+                $flatScore->dist1max = $result->dist1max;
+            }
+            if (isset($result->dist2max)) {
+                $flatScore->dist2max = $result->dist2max;
+            }
+            if (isset($result->dist3max)) {
+                $flatScore->dist3max = $result->dist3max;
+            }
+            if (isset($result->dist4max)) {
+                $flatScore->dist4max = $result->dist4max;
+            }
+
+            // Inners
+            if (isset($result->dist1inners)) {
+                $flatScore->dist1inners = $result->dist1inners;
+            }
+            if (isset($result->dist2inners)) {
+                $flatScore->dist2inners = $result->dist2inners;
+            }
+            if (isset($result->dist3inners)) {
+                $flatScore->dist3inners = $result->dist3inners;
+            }
+            if (isset($result->dist4inners)) {
+                $flatScore->dist4inners = $result->dist4inners;
+            }
+
+            // Result Total
+            if (isset($result->total)) {
+                $flatScore->total = $result->total;
+            }
+
+            // Result Inners
+            if (isset($result->inners)) {
+                $flatScore->inners = $result->inners;
+            }
+
+            // Results Max
+            if (isset($result->max)) {
+                $flatScore->max = $result->max;
+            }
+
+            $flatScore->save();
 
         } // end of looping over each user
 
