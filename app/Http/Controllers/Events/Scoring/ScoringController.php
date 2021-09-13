@@ -12,7 +12,6 @@ use App\Models\EventCompetition;
 use App\Models\EventEntry;
 use App\Models\FlatScore;
 use App\Models\Round;
-use App\Models\Score;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
@@ -22,7 +21,6 @@ class ScoringController extends Controller
 {
     public function __construct(Request $request)
     {
-
         // check to see if they are an event admin and can score
         $this->helper = new EventsHelper();
         $this->event  = Event::where('eventurl', $request->eventurl)->first();
@@ -40,9 +38,6 @@ class ScoringController extends Controller
         }
 
     }
-
-
-
 
     public function getEventScoringList()
     {
@@ -185,20 +180,13 @@ class ScoringController extends Controller
                 continue;
             }
 
-            // check if any scores exist, if none, create, else update
-            $flatScore = FlatScore::where('entryid', $evententry->entryid)
-                            ->where('entrycompetitionid', $entrycompetition->entrycompetitionid)
-                            ->where('week', $week)
-                            ->where('roundid', $entrycompetition->roundid)
-                            ->where('divisionid', $entrycompetition->divisionid)
-                            ->first();
+            $flatScore = null;
+            if (!empty($result->fsid)) {
+                $flatScore = FlatScore::where('flatscoreid', $result->fsid)
+                    ->first();
+            }
 
-
-            // push scores into an array, save only if total is not empty
-            $saveScore      = false;
-            $scoresArray    = [];
-
-            if (empty($flatScore)) {
+            if (!$flatScore) {
                 $flatScore = new FlatScore();
 
                 $flatScore->entryid = $evententry->entryid;
@@ -395,61 +383,8 @@ class ScoringController extends Controller
                 $flatscore->{$distscore} = intval($request->{$dist});
                 $flatscore->total += intval($request->{$dist});
 
-                if (empty($request->{$dist})) {
-                    continue;
-                }
-
-                // Scores
-                $score = new Score();
-                $score->entryid = $entry->entryid;
-                $score->entrycompetitionid = $entry->entrycompetitionid;
-                $score->userid = $entry->userid;
-                $score->roundid = $entry->roundid;
-                $score->eventid = $entry->eventid;
-                $score->eventcompetitionid = $entry->eventcompetitionid;
-                $score->divisionid = $entry->divisionid;
-                $score->key    = intval($entry->{$dist});
-                $score->score  = intval($request->{$dist});
-                $score->hits   = intval($request->totalhits);
-                $score->max    = intval($request->totalx);
-                $score->inners = intval($request->total10);
-                $score->week   = $entry->currentweek;
-
-                $score->save();
-
             }
             $flatscore->save();
-
-            // create scores for the totals
-            foreach(['total', 'max', 'inners'] as $key) {
-                // Scores
-                $score = new Score();
-                $score->entryid = $entry->entryid;
-                $score->entrycompetitionid = $entry->entrycompetitionid;
-                $score->userid = $entry->userid;
-                $score->roundid = $entry->roundid;
-                $score->eventid = $entry->eventid;
-                $score->eventcompetitionid = $entry->eventcompetitionid;
-                $score->divisionid = $entry->divisionid;
-                $score->key    = $key;
-                $score->week   = $entry->currentweek;
-
-                switch ($key) {
-                    case 'total' :
-                        $score->score  = intval($flatscore->total);
-                    break;
-
-                    case 'max' :
-                        $score->score  = intval($request->totalx);
-                    break;
-
-                    case 'inners' :
-                        $score->score  = intval($request->total10);
-                    break;
-                }
-                $score->save();
-            }
-
         }
         else {
             // update
@@ -463,65 +398,12 @@ class ScoringController extends Controller
                 $flatscore->{$dist} = $entry->{$dist}; // distance from the entry
                 $flatscore->{$distscore} = intval($request->{$dist});
                 $flatscore->total += intval($request->{$dist});
-
-                if (empty($request->{$dist})) {
-                    continue;
-                }
-
-                $score = Score::where('entryid', $entry->entryid)
-                                ->where('entrycompetitionid',$entry->entrycompetitionid)
-                                ->where('eventcompetitionid',$eventcompetition->eventcompetitionid)
-                                ->where('userid', $entry->userid)
-                                ->where('roundid', $entry->roundid)
-                                ->where('divisionid', $entry->divisionid)
-                                ->where('week', $entry->currentweek)
-                                ->first();
-
-                if (empty($score)) {
-                    // raise error
-                    continue;
-                }
-
-
-                $score->score  = intval($request->{$dist});
-                $score->hits   = intval($request->totalhits);
-                $score->max    = intval($request->totalx);
-                $score->inners = intval($request->total10);
-                $score->save();
-
             }
 
             $flatscore->totalhits = intval($request->totalhit);
             $flatscore->inners    = intval($request->total10);
             $flatscore->max       = intval($request->totalx);
             $flatscore->save();
-
-            foreach(['total', 'max', 'inners'] as $key) {
-                // Scores
-                $score = Score::where('entryid', $entry->entryid)
-                                ->where('entrycompetitionid',$entry->entrycompetitionid)
-                                ->where('userid', $entry->userid)
-                                ->where('roundid', $entry->roundid)
-                                ->where('divisionid', $entry->divisionid)
-                                ->where('week', $entry->currentweek)
-                                ->where('key', $key)
-                                ->first();
-                switch ($key) {
-                    case 'total' :
-                        $score->score  = intval($flatscore->total);
-                        break;
-
-                    case 'max' :
-                        $score->score  = intval($request->totalx);
-                        break;
-
-                    case 'inners' :
-                        $score->score  = intval($request->total10);
-                        break;
-                }
-                $score->save();
-            }
-
         }
 
         return response()->json([

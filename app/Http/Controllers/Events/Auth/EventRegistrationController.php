@@ -10,7 +10,6 @@ use App\Jobs\SendArcherRelationConfirm;
 use App\Jobs\SendEntryReceived;
 use App\Jobs\SendEventAdminEntryReceived;
 use App\Model\Audit;
-use App\Models\Cart;
 use App\Models\Club;
 use App\Models\Division;
 use App\Models\EntryCompetition;
@@ -20,7 +19,6 @@ use App\Models\EventEntry;
 use App\Models\FlatScore;
 use App\Models\Round;
 use App\Models\School;
-use App\Models\Score;
 use App\Models\UserRelation;
 use App\User;
 use Illuminate\Http\Request;
@@ -872,21 +870,6 @@ class EventRegistrationController extends EventController
 
                             $score_flat->save();
 
-                            // Now update the score's keys to be the correct value for the new round
-                            $scores = Score::where('entrycompetitionid', $ec->entrycompetitionid)->orderby('scoreid')->get();
-                            $i = 1;
-                            foreach ($scores as $score) {
-
-                                if (is_numeric($score->key)) {
-                                    // make the key the rounds 1-4th values
-                                    $distance = 'dist' . $i++;
-                                    $score->key = $round->{$distance};
-                                }
-
-                                $score->divisionid = $newentry->divisionid;
-                                $score->roundid = $newentry->roundid;
-                                $score->save();
-                            }
                         }
 
                         $ec->roundid = $newentry->roundid;
