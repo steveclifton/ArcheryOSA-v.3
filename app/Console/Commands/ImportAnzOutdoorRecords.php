@@ -22,7 +22,7 @@ class ImportAnzOutdoorRecords extends Command
      *
      * @var string
      */
-    protected $description = 'Import ANZ Records - Outdoor';
+    protected $description = 'Import ANZ Records';
 
     /**
      * Create a new command instance.
@@ -113,7 +113,7 @@ class ImportAnzOutdoorRecords extends Command
             }
         }
 
-        // Finsihed
+        // Finished
         return 0;
     }
 }
