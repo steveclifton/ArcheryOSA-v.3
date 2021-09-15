@@ -43,6 +43,11 @@ class UpdateRound extends FormRequest
             'totalmax'       => 'required|numeric',
             'visible'        => 'nullable',
             'retired'        => 'nullable',
+            'anz_record_id' => 'nullable',
+            'anz_record_dist1_id' => 'nullable',
+            'anz_record_dist2_id' => 'nullable',
+            'anz_record_dist3_id' => 'nullable',
+            'anz_record_dist4_id' => 'nullable',
         ];
     }
 
