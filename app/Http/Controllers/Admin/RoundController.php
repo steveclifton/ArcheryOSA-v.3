@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Requests\Admin\CreateRound;
 use App\Http\Requests\Admin\UpdateRound;
+use App\Models\AnzRecordRounds;
 use App\Models\Organisation;
 use App\Models\Round;
 use Illuminate\Http\Request;
@@ -43,7 +44,9 @@ class RoundController extends Controller
     {
         $organisations = Organisation::get();
 
-        return view('admin.rounds.create', compact('organisations'));
+        $anzRecordRounds = AnzRecordRounds::all();
+
+        return view('admin.rounds.create', compact('organisations', 'anzRecordRounds'));
 
     }
 
@@ -57,11 +60,10 @@ class RoundController extends Controller
         $round = Round::where('roundid', $roundid)->get()->first();
         $organisations = Organisation::get();
 
-        return view('admin.rounds.update', compact('round', 'organisations'));
+        $anzRecordRounds = AnzRecordRounds::all();
 
+        return view('admin.rounds.update', compact('round', 'organisations', 'anzRecordRounds'));
     }
-
-
 
 
     /******************************************************************************
@@ -88,13 +90,61 @@ class RoundController extends Controller
         $round->visible        = !empty($validated['visible'])    ? 1 : 0;
         $round->type           = !empty($validated['type'])       ? strtolower($validated['type'])  : 'o';
 
+        $errors = [];
+        if (!empty($validated['anz_record_id'])) {
+            if ( ! $this->hasExistingRecordMapping(0, $validated['anz_record_id'])) {
+                $round->anz_record_id = $validated['anz_record_id'];
+            }
+            else {
+                $errors[] = 'Anz Record has existing mapping';
+            }
+        }
+
+        if (!empty($validated['anz_record_dist1_id'])) {
+            if ( ! $this->hasExistingRecordMapping(0, $validated['anz_record_dist1_id'])) {
+                $round->anz_record_dist1_id = $validated['anz_record_dist1_id'];
+            }
+            else {
+                $errors[] = 'Distance 1 Anz Record has existing mapping';
+            }
+        }
+
+        if (!empty($validated['anz_record_dist2_id'])) {
+            if ( ! $this->hasExistingRecordMapping(0, $validated['anz_record_dist2_id'])) {
+                $round->anz_record_dist2_id = $validated['anz_record_dist2_id'];
+            }
+            else {
+                $errors[] = 'Distance 2 Anz Record has existing mapping';
+            }
+        }
+
+        if (!empty($validated['anz_record_dist3_id'])) {
+            if ( ! $this->hasExistingRecordMapping(0, $validated['anz_record_dist3_id'])) {
+                $round->anz_record_dist3_id = $validated['anz_record_dist3_id'];
+            }
+            else {
+                $errors[] = 'Distance 3 Anz Record has existing mapping';
+            }
+        }
+
+        if (!empty($validated['anz_record_dist4_id'])) {
+            if ( ! $this->hasExistingRecordMapping($round->roundid, $validated['anz_record_dist4_id'])) {
+                $round->anz_record_dist4_id = $validated['anz_record_dist4_id'];
+            }
+            else {
+                $errors[] = 'Distance 4 Anz Record has existing mapping';
+            }
+        }
+
+        if ($errors) {
+            return back()->with('failure', $errors);
+        }
+
         $round->createdby      = Auth::id();
         $round->save();
 
 
         return redirect('/admin/rounds')->with('success', 'Round Created!');
-
-
     }
 
     public function updateRound(UpdateRound $request)
@@ -123,6 +173,56 @@ class RoundController extends Controller
         $round->retired        = !empty($validated['retired'])    ? 1 : 0;
         $round->type           = !empty($validated['type'])       ? strtolower($validated['type'])  : 'o';
 
+        $errors = [];
+        if (!empty($validated['anz_record_id'])) {
+            if ( ! $this->hasExistingRecordMapping($round->roundid, $validated['anz_record_id'])) {
+                $round->anz_record_id = $validated['anz_record_id'];
+            }
+            else {
+                $errors[] = 'Anz Record has existing mapping';
+            }
+        }
+
+        if (!empty($validated['anz_record_dist1_id'])) {
+            if ( ! $this->hasExistingRecordMapping($round->roundid, $validated['anz_record_dist1_id'])) {
+                $round->anz_record_dist1_id = $validated['anz_record_dist1_id'];
+            }
+            else {
+                $errors[] = 'Distance 1 Anz Record has existing mapping';
+            }
+        }
+
+        if (!empty($validated['anz_record_dist2_id'])) {
+            if ( ! $this->hasExistingRecordMapping($round->roundid, $validated['anz_record_dist2_id'])) {
+                $round->anz_record_dist2_id = $validated['anz_record_dist2_id'];
+            }
+            else {
+                $errors[] = 'Distance 2 Anz Record has existing mapping';
+            }
+        }
+
+        if (!empty($validated['anz_record_dist3_id'])) {
+            if ( ! $this->hasExistingRecordMapping($round->roundid, $validated['anz_record_dist3_id'])) {
+                $round->anz_record_dist3_id = $validated['anz_record_dist3_id'];
+            }
+            else {
+                $errors[] = 'Distance 3 Anz Record has existing mapping';
+            }
+        }
+
+        if (!empty($validated['anz_record_dist4_id'])) {
+            if ( ! $this->hasExistingRecordMapping($round->roundid, $validated['anz_record_dist4_id'])) {
+                $round->anz_record_dist4_id = $validated['anz_record_dist4_id'];
+            }
+            else {
+                $errors[] = 'Distance 4 Anz Record has existing mapping';
+            }
+        }
+
+        if ($errors) {
+            return back()->with('failure', $errors);
+        }
+
         $round->save();
 
 
@@ -130,6 +230,21 @@ class RoundController extends Controller
 
     }
 
+    protected function hasExistingRecordMapping(int $roundId, int $recordId)
+    {
+        $round = Round::where('anz_record_id', $recordId)
+            ->orWhere('anz_record_dist1_id', $recordId)
+            ->orWhere('anz_record_dist2_id', $recordId)
+            ->orWhere('anz_record_dist3_id', $recordId)
+            ->orWhere('anz_record_dist4_id', $recordId)
+            ->first();
+
+        if (!$round) {
+            return false;
+        }
+
+        return $roundId && $round->roundid != $roundId;
+    }
 
 
 }

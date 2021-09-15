@@ -17,6 +17,7 @@
 
     <div class="col-md-8 offset-md-2">
         <div class="card-box">
+            @include('template.alerts')
             <h4 class="m-t-0 m-b-30 text-center addFormHeader header-title">Update Round</h4>
 
             <form class="form-horizontal myForms" method="POST" action="/admin/rounds/update/{{$round->roundid}}" role="form">
@@ -84,6 +85,21 @@
 	                </div>
 	            </div>
 
+                <div class="form-group row">
+                    <label class="col-sm-12 col-md-3 col-form-label">ANZ Record Map</label>
+                    <div class="col-md-9">
+                        <select name="anz_record_id" class="form-control">
+                            <option value="0">None</option>
+
+                            @foreach($anzRecordRounds as $recordType)
+                                <option value="{{$recordType->id}}" {{$round->anz_record_id == $recordType->id ? 'selected' : ''}}>
+                                    {{$recordType->name}}</option>
+                            @endforeach
+                        </select>
+                    </div>
+                </div>
+                <hr>
+
 	            <div class="form-group row">
                     <label class="col-sm-12 col-md-3 col-form-label">Distance 1*</label>
                     <div class="col-md-9">
@@ -100,7 +116,7 @@
 	            <div class="form-group row">
                     <label class="col-sm-12 col-md-3 col-form-label">Distance 1 Max*</label>
                     <div class="col-md-9">
-                        <input name="dist1max" type="text" class="form-control{{ $errors->has('email') ? ' is-invalid' : '' }}"
+                        <input name="dist1max" type="text" class="form-control{{ $errors->has('dist1max') ? ' is-invalid' : '' }}"
                                value="{{$round->dist1max ?? old('dist1max')}}">
                         @if ($errors->has('dist1max'))
                             <span class="invalid-feedback" role="alert">
@@ -109,6 +125,21 @@
                         @endif
                     </div>
                 </div>
+
+                <div class="form-group row">
+                    <label class="col-sm-12 col-md-3 col-form-label">Distance 1 ANZ Record Map</label>
+                    <div class="col-md-9">
+                        <select name="anz_record_dist1_id" class="form-control">
+                        <option value="0">None</option>
+
+                        @foreach($anzRecordRounds as $recordType)
+                                <option value="{{$recordType->id}}" {{$round->anz_record_dist1_id == $recordType->id ? 'selected' : ''}}>
+                                    {{$recordType->name}}</option>
+                            @endforeach
+                        </select>
+                    </div>
+                </div>
+                <hr>
 
                 <div class="form-group row">
                     <label class="col-sm-12 col-md-3 col-form-label">Distance 2</label>
@@ -122,6 +153,22 @@
                         <input name="dist2max" type="text" class="form-control" value="{{$round->dist2max ?? old('dist2max')}}">
                     </div>
                 </div>
+
+                <div class="form-group row">
+                    <label class="col-sm-12 col-md-3 col-form-label">Distance 2 ANZ Record Map</label>
+                    <div class="col-md-9">
+                        <select name="anz_record_dist2_id" class="form-control">
+                            <option value="0">None</option>
+
+                            @foreach($anzRecordRounds as $recordType)
+                                <option value="{{$recordType->id}}" {{$round->anz_record_dist2_id == $recordType->id ? 'selected' : ''}}>
+                                    {{$recordType->name}}</option>
+                            @endforeach
+                        </select>
+                    </div>
+                </div>
+                <hr>
+
                 <div class="form-group row">
                     <label class="col-sm-12 col-md-3 col-form-label">Distance 3</label>
                     <div class="col-md-9">
@@ -134,6 +181,22 @@
                         <input name="dist3max" type="text" class="form-control" value="{{$round->dist3max ?? old('dist3max')}}">
                     </div>
                 </div>
+
+                <div class="form-group row">
+                    <label class="col-sm-12 col-md-3 col-form-label">Distance 3 ANZ Record Map</label>
+                    <div class="col-md-9">
+                        <select name="anz_record_dist3_id" class="form-control">
+                            <option value="0">None</option>
+
+                            @foreach($anzRecordRounds as $recordType)
+                                <option value="{{$recordType->id}}" {{$round->anz_record_dist3_id == $recordType->id ? 'selected' : ''}}>
+                                    {{$recordType->name}}</option>
+                            @endforeach
+                        </select>
+                    </div>
+                </div>
+                <hr>
+
                 <div class="form-group row">
                     <label class="col-sm-12 col-md-3 col-form-label">Distance 4</label>
                     <div class="col-md-9">
@@ -146,6 +209,22 @@
                         <input name="dist4max" type="text" class="form-control" value="{{$round->dist4max ?? old('dist4max')}}">
                     </div>
                 </div>
+
+                <div class="form-group row">
+                    <label class="col-sm-12 col-md-3 col-form-label">Distance 4 ANZ Record Map</label>
+                    <div class="col-md-9">
+                        <select name="anz_record_dist4_id" class="form-control">
+                            <option value="0">None</option>
+
+                            @foreach($anzRecordRounds as $recordType)
+                                <option value="{{$recordType->id}}" {{$round->anz_record_dist4_id == $recordType->id ? 'selected' : ''}}>
+                                    {{$recordType->name}}</option>
+                            @endforeach
+                        </select>
+                    </div>
+                </div>
+                <hr>
+
                 <div class="form-group row">
                     <label class="col-sm-12 col-md-3 col-form-label">Max Total*</label>
                     <div class="col-md-9">
