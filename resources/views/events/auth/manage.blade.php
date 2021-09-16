@@ -47,16 +47,7 @@
             <a href="/events/manage/competitions/{{$event->eventurl}}">
                 <div class="db-social-box topLine">
                     <span class="fa fa-bullseye"></span>
-                    <h5>{!! $eventcompetitions->isEmpty() ? 'Add' : 'Edit' !!} Competitions</h5>
-                </div>
-            </a>
-        </div>
-
-        <div class="col-lg-4 col-md-4 col-sm-4">
-            <a href="javascript:;" onclick="alert('Coming Soon')" data-href="/events/manage/eventcosts/{{$event->eventurl}}">
-                <div class="db-social-box bottomLine" style="background-color: lightgrey; opacity: 0.3">
-                    <span class="md-local-grocery-store"></span>
-                    <h5>Costs</h5>
+                    <h5>Competitions</h5>
                 </div>
             </a>
         </div>
@@ -69,6 +60,16 @@
                 </div>
             </a>
         </div>
+
+        <div class="col-lg-4 col-md-4 col-sm-4">
+            <a href="javascript:;" onclick="alert('Coming Soon')" data-href="#">
+                <div class="db-social-box bottomLine">
+                    <span class="md-format-list-numbered"></span>
+                    <h5>Matchplay</h5>
+                </div>
+            </a>
+        </div>
+
 
         <div class="col-lg-4 col-md-4 col-sm-4">
             <a href="/event/scoring/{{$event->eventurl}}">
@@ -118,13 +119,13 @@
             </a>
         </div>
 
-        <div class="col-lg-4 col-md-4 col-sm-4" >
-            <a href="javascript:;" onclick="alert('Coming Soon')" data-href="/events/manage/eventpayments/{{$event->eventurl}}">
-                <div class="db-social-box bottomLine" style="background-color: lightgrey; opacity: 0.3">
-                    <span class="md-attach-money"></span>
-                    <h5>Entry Payments</h5>
-                </div>
-            </a>
-        </div>
+{{--        <div class="col-lg-4 col-md-4 col-sm-4" >--}}
+{{--            <a href="javascript:;" onclick="alert('Coming Soon')" data-href="/events/manage/eventpayments/{{$event->eventurl}}">--}}
+{{--                <div class="db-social-box bottomLine" style="background-color: lightgrey; opacity: 0.3">--}}
+{{--                    <span class="md-attach-money"></span>--}}
+{{--                    <h5>Entry Payments</h5>--}}
+{{--                </div>--}}
+{{--            </a>--}}
+{{--        </div>--}}
     </div>
 @endsection

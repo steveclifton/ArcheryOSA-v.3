@@ -135,7 +135,20 @@ class ScoringController extends Controller
     }
 
 
+    public function getMatchplayScoringView(Request $request)
+    {
+        $event = $this->event;
 
+        $eventcompetition = EventCompetition::where('eventid', $event->eventid)
+            ->where('eventcompetitionid', $request->eventcompetitionid ?? -1)
+            ->first();
+
+        if (empty($eventcompetition)) {
+            return back()->with('failure', 'Invalid, please try again');
+        }
+
+        return view('events.scoring.event-scoring-matchplay', compact('event', 'eventcompetition'));
+    }
 
 
     /********************
