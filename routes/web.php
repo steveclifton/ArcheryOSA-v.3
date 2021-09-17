@@ -143,10 +143,15 @@ Route::middleware(['web'])->group(function() {
         Route::get('/event/scoring/{eventurl}', 'Events\Scoring\ScoringController@getEventScoringList');
 
         Route::get('/event/manage/scoring/{eventurl}/{eventcompetitionid}', 'Events\Scoring\ScoringController@getEventScoringView');
-        Route::get('/event/manage/scoring/matchplay/{eventurl}/{eventcompetitionid}', 'Events\Scoring\ScoringController@getMatchplayScoringView');
 
         Route::post('/events/scoring/{eventurl}', 'Events\Scoring\ScoringController@postScores');
 
+        // Matchplay
+        Route::get('/event/matchplay/{eventurl}/create', 'Events\Matchplay\MatchplayController@getCreateMatchplayEventView');
+
+        Route::get('/event/matchplay/{eventurl}', 'Events\Matchplay\MatchplayController@getMatchplayView');
+        Route::get('/event/matchplay/{eventurl}/{matchplayid}', 'Events\Matchplay\MatchplayController@getMatchplayEventView');
+        Route::post('/event/matchplay/{eventurl}/create', 'Events\Matchplay\MatchplayController@createMatchplayEvent');
 
 
 

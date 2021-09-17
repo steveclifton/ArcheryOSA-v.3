@@ -61,9 +61,10 @@
             </a>
         </div>
 
-        <div class="col-lg-4 col-md-4 col-sm-4">
-            <a href="javascript:;" onclick="alert('Coming Soon')" data-href="#">
-                <div class="db-social-box bottomLine">
+        <div class="col-lg-4 col-md-4 col-sm-4" style="">
+{{--            <a href="/event/matchplay/{{$event->eventurl}}">--}}
+                <a href="javascript:;" onclick="alert('Coming Soon')" data-href="#">
+                <div class="db-social-box bottomLine" style="background-color: lightgrey; opacity: 0.3">
                     <span class="md-format-list-numbered"></span>
                     <h5>Matchplay</h5>
                 </div>
@@ -75,7 +76,7 @@
             <a href="/event/scoring/{{$event->eventurl}}">
                 <div class="db-social-box bottomLine">
                     <span class="fa fa-clipboard"></span>
-                    <h5> Scoring</h5>
+                    <h5>Scoring</h5>
                 </div>
             </a>
         </div>

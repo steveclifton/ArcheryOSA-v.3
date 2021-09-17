@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\DB;
 
@@ -9,6 +10,23 @@ class Event extends Model
 {
     protected $table = 'events';
     protected $primaryKey = 'eventid';
+
+
+    public function getMatchplayEvents() : Collection
+    {
+        return $this->hasMany(MatchplayEvent::class, 'eventid', 'eventid')->get();
+    }
+
+    public function getEventCompetitions() : Collection
+    {
+        return $this->hasMany(EventCompetition::class, 'eventid', 'eventid')->get();
+    }
+
+    public function getMatchplayEventCompetitions() : Collection
+    {
+        return $this->hasMany(EventCompetition::class, 'eventid', 'eventid')->where('matchplay', 1)->get();
+    }
+
 
     public function isEvent()
     {

@@ -23,6 +23,7 @@ class AddMatchplayScoringTable extends Migration
             $table->integer('eventcompetitionid');
             $table->integer('roundid')->index();
             $table->integer('divisionid')->index();
+            $table->string('gender')->nullable();
             $table->integer('count'); // count of archer's participating
 
             $table->timestamps();
