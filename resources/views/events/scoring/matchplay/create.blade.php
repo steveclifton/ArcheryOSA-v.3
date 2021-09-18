@@ -25,35 +25,23 @@
                 @csrf
 
                 <div class="form-group row">
-                    <label for="inputOrgName3" class="col-sm-12 col-md-3 col-form-label">Name*</label>
+                    <label class="col-sm-12 col-md-3 col-form-label">Round*</label>
                     <div class="col-md-9">
-                        <input name="label" type="text"
-                               class="form-control {{ $errors->has('label') ? ' is-invalid' : '' }}" id="inputOrgName3"
-                               value="{{old('label')}}">
-                        @if ($errors->has('label'))
-                            <span class="invalid-feedback" role="alert">
-                                <strong>{{ $errors->first('label') }}</strong>
-                            </span>
-                        @endif
-                    </div>
-                </div>
-
-                <div class="form-group row">
-                    <label class="col-sm-12 col-md-3 col-form-label">Gender*</label>
-                    <div class="col-md-9">
-                        <select name="type" class="form-control">
-                            <option value="o" selected>Open</option>
-                            <option value="m">Indoor</option>
-                            <option value="f">Clout</option>
+                        <select name="roundid" class="form-control" required>
+                            <option disabled selected>Choose..</option>
+                            @foreach($matchplayRounds as $mpr)
+                                <option value="{{$mpr->roundid}}">{{$mpr->label}}</option>
+                            @endforeach
                         </select>
                     </div>
                 </div>
 
+
                 @php $mec = $event->getMatchplayEventCompetitions() @endphp
                 <div class="form-group row">
-                    <label class="col-sm-12 col-md-3 col-form-label">Event Competition</label>
+                    <label class="col-sm-12 col-md-3 col-form-label">Event Competition*</label>
                     <div class="col-md-9">
-                        <select name="eventcompetitionid" class="form-control" id="eventCompSelect">
+                        <select name="eventcompetitionid" class="form-control" id="eventCompSelect" required>
                             @if(count($mec) > 1)
                                 <option disabled selected>Choose..</option>
                             @endif
@@ -64,8 +52,9 @@
                             @endforeach
                         </select>
                         <br>
-                        <select name="divisionid" class="form-control" id="divisionIdSelect" style="display: {{count($mec) > 1 ? 'none' : 'block'}}">
-                            @foreach($event->getMatchplayEventCompetitions() as $ec)
+                        <select name="divisionid" class="form-control" id="divisionIdSelect" style="display: {{count($mec) > 1 ? 'none' : 'block'}}" required>
+                            <option disabled selected>Choose..</option>
+                        @foreach($event->getMatchplayEventCompetitions() as $ec)
                                 @foreach($ec->getEventCompetitionDivisions() as $division)
                                     <option value="{{$division->divisionid}}"
                                             data-ecid="{{$ec->eventcompetitionid}}"
@@ -76,6 +65,8 @@
                             @endforeach
                         </select>
 
+                        <span id="divisionIdSelectSpan" style="display: {{count($mec) > 1 ? 'none' : 'block'}}">Choose the Division for this Matchplay Event</span>
+
                         <script>
                             $(function() {
 
@@ -85,6 +76,7 @@
                                     var ecid = select.find(":selected").val()
 
                                     $('#divisionIdSelect').show();
+                                    $('#divisionIdSelectSpan').show();
 
                                     $('#divisionIdSelect').children('option').hide();
                                     $('#divisionIdSelect').children('option[data-ecid="' + ecid + '"]').show();
@@ -96,50 +88,25 @@
 
 
                 <div class="form-group row">
-                    <label class="col-sm-12 col-md-3 col-form-label">Round</label>
-                   <div class="col-md-9">
-                        <select name="organisationid" class="form-control">
-                            <option value="0">None</option>
-                            @foreach([1] as $i)
-                                <option value=""
-                                        {{old('organisationid') == $i ? 'selected' : ''}}>
-                                    {{$i}}</option>
-                            @endforeach
+                    <label class="col-sm-12 col-md-3 col-form-label">Gender*</label>
+                    <div class="col-md-9">
+                        <select name="type" class="form-control" required>
+                            <option value="o" selected>Open</option>
+                            <option value="m">Mens</option>
+                            <option value="f">Womens</option>
                         </select>
                     </div>
                 </div>
 
                 <div class="form-group row">
-                    <label class="col-sm-12 col-md-3 col-form-label">Round Code*</label>
+                    <label class="col-sm-12 col-md-3 col-form-label">Archer Count*</label>
                     <div class="col-md-9">
-                        <input name="code" type="text" class="form-control {{ $errors->has('code') ? ' is-invalid' : '' }}" value="{{old('code')}}">
-                        @if ($errors->has('code'))
+                        <input name="count" type="text" class="form-control {{ $errors->has('count') ? ' is-invalid' : '' }}" value="{{old('count')}}" required>
+                        @if ($errors->has('count'))
                             <span class="invalid-feedback" role="alert">
-                                <strong>{{ $errors->first('code') }}</strong>
+                                <strong>{{ $errors->first('count') }}</strong>
                             </span>
                         @endif
-                    </div>
-                </div>
-
-                <div class="form-group row">
-                    <label class="col-sm-12 col-md-3 col-form-label">Round Units</label>
-                    <div class="col-md-9">
-                        <select name="unit" class="form-control">
-                            <option value="m" {{old('unit') == 'm' ? 'selected' : ''}}>Meters</option>
-                            <option value="y" {{old('unit') == 'y' ? 'selected' : ''}}>Yards</option>
-                        </select>
-                    </div>
-                </div>
-
-
-                <div class="form-group row justify-content-end">
-                    <div class=" col-md-9">
-                        <div class="checkbox checkbox-primary">
-                            <input name="visible" id="checkbox2" type="checkbox" checked>
-                            <label for="checkbox2">
-                                Visible
-                            </label>
-                        </div>
                     </div>
                 </div>
 
@@ -148,7 +115,6 @@
                     <div class="col-3">
                         <button type="submit" class="myButton btn btn-inverse btn-info waves-effect waves-light">Create</button>
                     </div>
-
                 </div>
 
             </form>

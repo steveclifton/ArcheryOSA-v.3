@@ -17,6 +17,11 @@ class Event extends Model
         return $this->hasMany(MatchplayEvent::class, 'eventid', 'eventid')->get();
     }
 
+    public function getEventCompetition(int $eventCompId)
+    {
+        return EventCompetition::where('eventid', $this->eventid)->where('eventcompetitionid', $eventCompId)->first();
+    }
+
     public function getEventCompetitions() : Collection
     {
         return $this->hasMany(EventCompetition::class, 'eventid', 'eventid')->get();

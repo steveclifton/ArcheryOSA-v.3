@@ -42,6 +42,7 @@ class UpdateRound extends FormRequest
             'dist4max'       => 'nullable|numeric',
             'totalmax'       => 'required|numeric',
             'visible'        => 'nullable',
+            'matchplay'      => 'nullable',
             'retired'        => 'nullable',
             'anz_record_id' => 'nullable',
             'anz_record_dist1_id' => 'nullable',

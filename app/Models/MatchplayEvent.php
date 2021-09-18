@@ -11,6 +11,17 @@ class MatchplayEvent extends Model
 
     protected $table = 'matchplay_event';
 
+    protected $fillable = [
+        'type',
+        'eventcompetitionid',
+        'roundid',
+        'divisionid',
+        'count',
+        'gender',
+        'eventid'
+    ];
+
+
     public function getEvent()
     {
         return $this->belongsTo(Event::class, 'eventid', 'eventid')->first();
