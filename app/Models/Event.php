@@ -30,6 +30,11 @@ class Event extends Model
         return $this->eventtypeid == 4;
     }
 
+    public function canBeEntered() : bool
+    {
+        return in_array($this->eventstatusid, [1], true);
+    }
+
     public function canEnterEvent()
     {
 

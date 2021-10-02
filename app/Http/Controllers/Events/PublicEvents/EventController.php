@@ -53,7 +53,7 @@ class EventController extends Controller
 
     public function getEventDetails(Request $request)
     {
-
+        /** @var Event $event */
         $event = Event::where('eventurl', $request->eventurl)->first();
 
         if (empty($event)) {
@@ -82,13 +82,13 @@ class EventController extends Controller
             $scorecount = !empty($resultsfile);
         }
 
+        // Make sure it is Open first
+        $evententryopen = $event->canBeEntered();
 
-        $evententryopen = true;
-
-        if ($event->isEvent()) {
+        if ($evententryopen && $event->isEvent()) {
             $evententryopen = $event->canEnterEvent();
         }
-        else if ($event->isNonShooting()) {
+        else if ($evententryopen && $event->isNonShooting()) {
             $evententryopen = $event->canEnterNonShooting();
         }
 
