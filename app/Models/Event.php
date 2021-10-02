@@ -37,6 +37,10 @@ class Event extends Model
 
     public function canEnterEvent()
     {
+        // Stop here if its not Open
+        if (!$this->canBeEntered()) {
+            return false;
+        }
 
         // check only for events, LEAGUE is different
         if (!empty($this->attributes['visible']) && $this->isEvent() && $this->eventstatusid === 1) {

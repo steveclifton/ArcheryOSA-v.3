@@ -356,6 +356,7 @@ class EventRegistrationController extends EventController
      */
     public function createRegistration(CreateRegistration $request)
     {
+        /** @var Event $event */
         $event = Event::where('eventurl', $request->eventurl)->first();
 
         if ($event->isEvent() && !$event->canEnterEvent()) {
