@@ -13,6 +13,8 @@ use Illuminate\Support\Str;
 class EventCommunicationController extends EventController
 {
 
+    return redirect()->back()->with('failure', 'Event emails unavailable at this time.');
+
     public function getEventCommView(Request $request)
     {
         // Get Event
