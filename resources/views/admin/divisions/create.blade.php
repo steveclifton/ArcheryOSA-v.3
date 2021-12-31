@@ -86,7 +86,8 @@
                                     'R' => 'Recurve',
                                     'L' => 'Longbow',
                                     'BB' => 'Barebow',
-                                    'XB' => 'Crossbow'
+                                    'XB' => 'Crossbow',
+                                    'T' => 'Traditional'
                                     ]; @endphp
                             @foreach($bowtypes as $key => $bowtype)
                                 <option value="{{$key}}"
@@ -107,7 +108,8 @@
                                     'R' => 'Recurve',
                                     'L' => 'Longbow',
                                     'BB' => 'Barebow',
-                                    'XB' => 'Crossbow'
+                                    'XB' => 'Crossbow',
+                                    'T' => 'Traditional'
                                     ]; @endphp
                             @foreach($bowtypes as $key => $bowtype)
                                 <option value="{{$key}}"

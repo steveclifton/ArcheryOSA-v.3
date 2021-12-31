@@ -135,6 +135,9 @@ class DivisionController extends Controller
             case (stripos($type, 'crossbow') > 0) :
                 return 'crossbow';
                 break;
+            case (stripos($type, 'traditional') > 0) :
+                return 'traditional';
+                break;
         }
 
         return 'other';
