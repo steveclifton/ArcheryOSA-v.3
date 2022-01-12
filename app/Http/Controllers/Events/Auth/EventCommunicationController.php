@@ -16,7 +16,7 @@ class EventCommunicationController extends EventController
     public function getEventCommView(Request $request)
     {
 
-        return redirect()->back()->with('failure', 'Event emails unavailable at this time.');
+        // return redirect()->back()->with('failure', 'Event emails unavailable at this time.');
 
         // Get Event
         if (Auth::user()->isSuperAdmin()) {
@@ -168,7 +168,7 @@ class EventCommunicationController extends EventController
                 foreach ($evententrys as $evententry) {
                     SendEventUpdate::dispatch($evententry->email, $event->label, $request->input('message'), $event->contactname, $event->email, $filesArr)
                                         ->delay(now()->addMinutes($i));
-                    
+
                     if (++$count == 2) {
                         $count = 0;
                         $i++;
