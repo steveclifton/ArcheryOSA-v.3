@@ -25,7 +25,7 @@ $(function() {
 
     var showModal = getCookie($('[data-dismiss="modal"]').attr('data-hash'));
 
-    if (showModal == '') {
+    if (false && showModal == '') {
         $('[data-target="#newsmodal"]').trigger('click');
     }
 
