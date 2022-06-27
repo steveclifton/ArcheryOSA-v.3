@@ -235,7 +235,7 @@ class EventResultsController extends Controller
                 uasort($res, function ($a, $b) {
 
                     if (empty($a['total']) || empty($b['total'])) {
-                        return 1;
+                        return 0;
                     }
 
                     if ((int)$b['total'] > (int)$a['total']) {

@@ -180,6 +180,8 @@ class ScoringController extends Controller
                 continue;
             }
 
+            $round = Round::where('roundid', $entrycompetition->roundid)->first();
+
             $flatScore = null;
             if (!empty($result->fsid)) {
                 $flatScore = FlatScore::where('flatscoreid', $result->fsid)
@@ -197,6 +199,11 @@ class ScoringController extends Controller
                 $flatScore->eventcompetitionid = $entrycompetition->eventcompetitionid;
                 $flatScore->divisionid = $entrycompetition->divisionid;
                 $flatScore->week = $week;
+            }
+
+            foreach ([1,2,3,4] as $i) {
+                $label = 'dist' . $i++;
+                $flatScore->{$label} = $round->{$label};
             }
 
             // Scores

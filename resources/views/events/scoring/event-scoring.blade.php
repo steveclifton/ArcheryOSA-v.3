@@ -181,9 +181,17 @@
 
                 });
 
+                var isSaving = false;
 
                 // on score submit
-                $(document).on('click', '.myButton', function () {
+                $(document).on('click', '.myButton', function (e) {
+
+                    if (isSaving) {
+                        console.log('saving....');
+                        return;
+                    }
+
+                    isSaving = true;
 
                     $('.alert').addClass('hidden').removeClass('alert-danger').removeClass('alert-success');
                     $('th').each(function() {
@@ -323,6 +331,8 @@
                             setTimeout(function (e) {
                                 location.reload();
                             }, 100);
+
+                            isSaving = false;
 
                         }
                     });
