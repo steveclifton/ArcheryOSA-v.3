@@ -24,6 +24,7 @@
                             <th>First Name</th>
                             <th>Last Name</th>
                             <th>Email</th>
+                            <th>Club</th>
                         </tr>
                         </thead>
                         <tbody>
@@ -34,6 +35,7 @@
                                     <td>{{ucwords($user->firstname)}}</td>
                                     <td>{{ucwords($user->lastname)}}</td>
                                     <td>{{$user->email}}</td>
+                                    <td>{{$user->getClubName()}}</td>
                                 </tr>
                             @endforeach
                         </tbody>

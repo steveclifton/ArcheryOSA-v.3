@@ -3,6 +3,7 @@
 namespace App;
 
 use App\Models\Cart;
+use App\Models\Club;
 use App\Models\EntryStatus;
 use App\Models\Event;
 use App\Models\EventAdmin;
@@ -177,5 +178,15 @@ class User extends Authenticatable
     public function getParent()
     {
         return User::where('userid', $this->parentuserid)->first();
+    }
+
+    public function getClubName()
+    {
+        if (!$this->clubid) {
+            return '';
+        }
+        $club = Club::where('clubid', $this->clubid)->first();
+
+        return $club->label ?? '';
     }
 }
