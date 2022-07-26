@@ -192,7 +192,7 @@
                     <label class="col-sm-12 col-md-3 col-form-label">Club</label>
                     <div class="col-md-9">
                         <select name="clubid" class=" clubSelect form-control">
-                            <option value="0">None</option>
+                            <option value="0" {!! (!old('clubid')) ? 'selected' : '' !!}>None</option>
                             @foreach($clubs as $club)
                                 <option value="{{$club->clubid}}"
                                         {!! old('clubid') == $club->clubid ? 'selected' : '' !!}>
