@@ -69,7 +69,7 @@ class ScoringController extends Controller
         }
 
         // Event Entries
-        $entrys = DB::select("
+        $entries = DB::select("
             SELECT ee.*, ec.divisionid as divisionid, ec.entrycompetitionid, ec.eventcompetitionid, ec.roundid, d.label as divisionname, d.bowtype,
                   r.dist1,r.dist2,r.dist3,r.dist4,r.dist1max,r.dist2max,r.dist3max,r.dist4max,r.unit
             FROM `evententrys` ee
@@ -94,7 +94,7 @@ class ScoringController extends Controller
         });
 
         $evententrys = [];
-        foreach ($entrys as $entry) {
+        foreach ($entries as $entry) {
 
             $entryFlatScores = ($sortedFlatScores[$entry->entryid] ?? []);
 
@@ -308,7 +308,7 @@ class ScoringController extends Controller
 
 
         // Event Entries
-        $entrys = DB::select("
+        $entries = DB::select("
             SELECT ee.*, ec.divisionid as divisionid, ec.entrycompetitionid, ec.eventcompetitionid, ec.roundid, d.label as divisionname, d.bowtype,
                   r.dist1,r.dist2,r.dist3,r.dist4,r.dist1max,r.dist2max,r.dist3max,r.dist4max,r.unit, IFNULL(ecomp.currentweek, 1) as currentweek
             FROM `evententrys` ee
@@ -339,7 +339,7 @@ class ScoringController extends Controller
         );
 
         $entry = null;
-        foreach ($entrys as $e) {
+        foreach ($entries as $e) {
             if ($e->divisionid == $request->divisionid) {
                 $entry = $e;
                 break;

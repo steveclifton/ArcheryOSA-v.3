@@ -23,12 +23,12 @@ class LeagueResultsController extends Controller
      */
     public function getLeagueOverallResults(Event $event, $apicall = false)
     {
-        $entrys = $this->getEventEntrySorted($event->eventid);
+        $entries = $this->getEventEntrySorted($event->eventid);
 
         $eventcompetition = EventCompetition::where('eventid', $event->eventid)->first();
 
         $evententrys = [];
-        foreach ($entrys as $entry) {
+        foreach ($entries as $entry) {
             $entry->top10 = $this->getUserTop10Scores($entry->userid, $entry->divisionid, $event->eventid);
 
             if (empty($entry->top10->total)) {
@@ -79,7 +79,7 @@ class LeagueResultsController extends Controller
             $args['userid'] = $userid;
         }
 
-        $entrys = DB::select("
+        $entries = DB::select("
             SELECT ee.firstname, ee.lastname, ee.gender, ec.entrycompetitionid, 
                 ec.eventcompetitionid, ec.roundid, d.label as divisionname, d.bowtype, r.unit,
                 sf.*, lp.points, u.username
@@ -99,11 +99,11 @@ class LeagueResultsController extends Controller
         ", $args);
 
 
-        if ($apicall && empty($entrys)) {
+        if ($apicall && empty($entries)) {
             return [];
         }
 
-        else if (empty($entrys)) {
+        else if (empty($entries)) {
             return back()->with('failure', 'Unable to get results');
         }
 
@@ -111,7 +111,7 @@ class LeagueResultsController extends Controller
 
 
         $evententrys = [];
-        foreach ($entrys as $entry) {
+        foreach ($entries as $entry) {
             $gender = '';
             if (!$eventcompetition->ignoregenders) {
                 $entry->gender == 'm' ? 'Mens ' : 'Womens ';
@@ -135,7 +135,7 @@ class LeagueResultsController extends Controller
 
 
     /**
-     * Returns the event's entrys sorted
+     * Returns the event's entries sorted
      * @param $eventid
      * @return array|bool|mixed
      */
@@ -153,7 +153,7 @@ class LeagueResultsController extends Controller
             $groupby = " GROUP BY `ee`.`entryid` ";
         }
 
-        $entrys = DB::select("
+        $entries = DB::select("
             SELECT ee.userid, ee.firstname, ee.lastname, ee.gender, ec.roundid, ec.divisionid,  
                   d.label as divisionname, d.bowtype, r.unit, r.code, r.label as roundname, s.label as schoolname, u.username
             FROM `evententrys` ee
@@ -179,7 +179,7 @@ class LeagueResultsController extends Controller
 
         $sortedEntrys = [];
 
-        foreach ($entrys as $entry) {
+        foreach ($entries as $entry) {
             if (strpos($entry->divisionid, ',') !== false) {
                 $divisionids = explode(',', $entry->divisionid);
 

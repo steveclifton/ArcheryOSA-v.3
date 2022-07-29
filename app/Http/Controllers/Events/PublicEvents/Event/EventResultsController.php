@@ -289,7 +289,7 @@ class EventResultsController extends Controller
      * Old Method, needs to be updated
      *  - Only used now in the profilecontroller
      */
-    public function formatOverallResults($entrys, $flatscores)
+    public function formatOverallResults($entries, $flatscores)
     {
         $numberofec = count(array_column($flatscores, 'eventcompetitionid', 'eventcompetitionid'));
 
@@ -305,7 +305,7 @@ class EventResultsController extends Controller
         }
 
         // loop over the scores and find the one that matches the div and round
-        foreach ($entrys as $key => $entry) {
+        foreach ($entries as $key => $entry) {
 
             if (!empty($flatscoressorted[$entry->userid])) {
 
@@ -332,16 +332,16 @@ class EventResultsController extends Controller
             }
             else {
                 // remove the entry
-                unset($entrys[$key]);
+                unset($entries[$key]);
             }
         }
 
         $finalResults = [];
-        foreach ($entrys as $key => $entry) {
+        foreach ($entries as $key => $entry) {
 
             // Make sure they have a score
             if (empty($entry->score)) {
-                unset($entrys[$key]);
+                unset($entries[$key]);
                 continue;
             }
 
