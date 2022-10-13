@@ -119,7 +119,7 @@ class ResultsController extends EventController
 
 
     /**
-     * Returns the event's entrys sorted
+     * Returns the event's entries sorted
      * @param $eventid
      * @return array|bool|mixed
      */
@@ -137,7 +137,7 @@ class ResultsController extends EventController
             $groupby = " GROUP BY `ee`.`entryid` ";
         }
 
-        $entrys = DB::select("
+        $entries = DB::select("
             SELECT ee.userid, ee.firstname, ee.lastname, ee.gender, ec.roundid, ec.divisionid,  
                   d.label as divisionname, d.bowtype, r.unit, r.code, r.label as roundname, s.label as schoolname, u.username
             FROM `evententrys` ee
@@ -163,7 +163,7 @@ class ResultsController extends EventController
 
         $sortedEntrys = [];
 
-        foreach ($entrys as $entry) {
+        foreach ($entries as $entry) {
             if (strpos($entry->divisionid, ',') !== false) {
                 $divisionids = explode(',', $entry->divisionid);
 

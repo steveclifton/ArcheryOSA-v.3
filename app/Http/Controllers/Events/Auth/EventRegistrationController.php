@@ -70,7 +70,7 @@ class EventRegistrationController extends EventController
         }
 
         if ($event->isEvent() && !$event->canEnterEvent()) {
-            return redirect('/event/details/' . $event->eventurl)->with('failure', 'Event entrys are closed');
+            return redirect('/event/details/' . $event->eventurl)->with('failure', 'Event entries are closed');
         }
 
         // Try get an existing entry | redirect if exists
@@ -108,7 +108,7 @@ class EventRegistrationController extends EventController
         }
 
         if ($event->isEvent() && !$event->canEnterEvent()) {
-            return redirect('/event/details/' . $event->eventurl)->with('failure', 'Event entrys are closed');
+            return redirect('/event/details/' . $event->eventurl)->with('failure', 'Event entries are closed');
         }
 
         $countrys = Countries::all();
@@ -262,7 +262,7 @@ class EventRegistrationController extends EventController
         }
 
         if ($event->isEvent() && !$event->canEnterEvent()) {
-            return redirect('/event/details/' . $event->eventurl)->with('failure', 'Event entrys are closed');
+            return redirect('/event/details/' . $event->eventurl)->with('failure', 'Event entries are closed');
         }
 
         $eventcompetitions = DB::select("
@@ -296,7 +296,7 @@ class EventRegistrationController extends EventController
 
 
     /**
-     * Create an entrys event competitions
+     * Create an entry's event competitions
      * @param $event
      * @param $evententry
      * @param $eventcompetition
@@ -304,7 +304,7 @@ class EventRegistrationController extends EventController
      */
     protected function create($event, $evententry, $eventcompetition, $validated)
     {
-        $entrys = [];
+        $entries = [];
 
         if ($event->isleague()) {
             foreach ($validated['divisionid'] as $divisionid) {
@@ -320,7 +320,7 @@ class EventRegistrationController extends EventController
                 $entrycompetition->roundid            = $eventcompetition->roundids;
                 $entrycompetition->save();
 
-                $entrys[] = $entrycompetition;
+                $entries[] = $entrycompetition;
             }
         }
         else {
@@ -340,12 +340,12 @@ class EventRegistrationController extends EventController
                 $entrycompetition->roundid            = $roundid;
                 $entrycompetition->save();
 
-                $entrys[] = $entrycompetition;
+                $entries[] = $entrycompetition;
 
             }
         }
 
-        return $entrys;
+        return $entries;
     }
 
 
@@ -360,7 +360,7 @@ class EventRegistrationController extends EventController
         $event = Event::where('eventurl', $request->eventurl)->first();
 
         if ($event->isEvent() && !$event->canEnterEvent()) {
-            return redirect('/event/details/' . $event->eventurl)->with('failure', 'Event entrys are closed');
+            return redirect('/event/details/' . $event->eventurl)->with('failure', 'Event entries are closed');
         }
 
         if ($event->isNonShooting()) {
@@ -456,7 +456,7 @@ class EventRegistrationController extends EventController
         $evententry->hash          = $this->createHash();
         $evententry->save();
 
-        $entrys = $this->create($event, $evententry, $eventcompetition, $validated);
+        $entries = $this->create($event, $evententry, $eventcompetition, $validated);
 
         Audit::create([
             'eventid' => $event->eventid,
@@ -464,7 +464,7 @@ class EventRegistrationController extends EventController
             'class' => __CLASS__,
             'method' => __FUNCTION__,
             'line' => __LINE__,
-            'before' => json_encode(['evententry' => $evententry, 'eventcompetitions' => $entrys])
+            'before' => json_encode(['evententry' => $evententry, 'eventcompetitions' => $entries])
         ]);
 
         SendEntryReceived::dispatch($evententry->email, $event->label);
@@ -492,7 +492,7 @@ class EventRegistrationController extends EventController
         $event = Event::where('eventurl', $request->eventurl)->first();
 
         if ($event->isEvent() && !$event->canEnterEvent()) {
-            return redirect('/event/details/' . $event->eventurl)->with('failure', 'Event entrys are closed');
+            return redirect('/event/details/' . $event->eventurl)->with('failure', 'Event entries are closed');
         }
 
         $user = Auth::user();
@@ -670,9 +670,9 @@ class EventRegistrationController extends EventController
 
         $evententry->save();
 
-        $entrys = null;
+        $entries = null;
         if (!$event->isNonShooting()) {
-            $entrys = $this->create($event, $evententry, $eventcompetition, $validated);
+            $entries = $this->create($event, $evententry, $eventcompetition, $validated);
         }
 
         Audit::create([
@@ -681,7 +681,7 @@ class EventRegistrationController extends EventController
             'class' => __CLASS__,
             'method' => __FUNCTION__,
             'line' => __LINE__,
-            'before' => json_encode(['evententry' => $evententry, 'eventcompetitions' => $entrys]),
+            'before' => json_encode(['evententry' => $evententry, 'eventcompetitions' => $entries]),
         ]);
 
         return redirect('/events/manage/evententries/' . $event->eventurl)->with('success', 'Entry Added!');

@@ -17,7 +17,7 @@
     <div class="row">
         <div class="offset-md-2 col-md-8 col-sm-12">
 
-            @foreach($entrys as $entry)
+            @foreach($entries as $entry)
 
             <div class="card-box">
                 <h4 class="m-t-0 m-b-30 header-title">{{$entry->firstname . ' ' . $entry->lastname . ' - ' . $entry->divisionname}}</h4>

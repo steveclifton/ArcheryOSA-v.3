@@ -68,7 +68,7 @@
                         <div class="radio radio-primary">
                             <input name="email" id="approvedentries" value="approved" type="radio">
                             <label for="approvedentries">
-                                Approved entrys only
+                                Approved entries only
                             </label>
                         </div>
                         <div class="radio radio-primary">

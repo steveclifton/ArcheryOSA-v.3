@@ -45,7 +45,7 @@ class EventExportController extends Controller
 
         $eventcompetitionids = EventCompetition::where('eventid', $event->eventid)->pluck('eventcompetitionid')->toArray();
 
-        $entrys = DB::select("
+        $entries = DB::select("
             SELECT ee.bib, 
                    1 as `session`, 
                    d.class as division, 
@@ -77,7 +77,7 @@ class EventExportController extends Controller
             ORDER BY `d`.label, ee.firstname
         ", ['eventid' => $event->eventid]);
 
-        foreach ($entrys as $entry) {
+        foreach ($entries as $entry) {
 
             if ($entry->gender == 'f') {
                 $entry->gender = 'w';
@@ -96,7 +96,7 @@ class EventExportController extends Controller
                 $csv->insertOne(['Bib', 'Session', 'Division', 'Class', 'Target', 'IndividualQualRound', 'TeamQualRound',
                     'IndividualFinal', 'TeamFinal', 'MixedTeamFinal', 'Lastname', 'Firstname', 'Gender', 'Country Code', 'Country', 'DOB', 'Subclass', 'Clubcode', 'Clubname' ]);
 
-                foreach ($entrys as $entry) {
+                foreach ($entries as $entry) {
                     $csv->insertOne(array_map('ucwords', (array) $entry));
                 }
 
@@ -106,7 +106,7 @@ class EventExportController extends Controller
             case 'pdf':
 
                 $mpdf = new Mpdf(['orientation' => 'L', 'tempDir' => __DIR__ . '/tmp']);
-                $mpdf->WriteHTML($this->makeentrypdfmarkup($event->label, $entrys));
+                $mpdf->WriteHTML($this->makeentrypdfmarkup($event->label, $entries));
                 $mpdf->Output($filename . '.pdf', \Mpdf\Output\Destination::DOWNLOAD);
                 die;
         }
@@ -149,7 +149,7 @@ class EventExportController extends Controller
         }
 
         if ($event->isNonShooting()) {
-            $entrys = DB::select("
+            $entries = DB::select("
                 SELECT ee.firstname, ee.lastname, '' as clubname, ee.email, ee.address, ee.phone, 
                         '' as divisionname, '' as roundname, ee.membership, ee.paid, ee.gender, ee.notes, ee.created_at, ee.updated_at
                 FROM `evententrys` ee
@@ -160,7 +160,7 @@ class EventExportController extends Controller
         else {
             $eventcompetitionids = EventCompetition::where('eventid', $event->eventid)->pluck('eventcompetitionid')->toArray();
 
-            $entrys = DB::select("
+            $entries = DB::select("
                 SELECT ee.firstname, ee.lastname, c.label as clubname, ee.email, ee.address, ee.phone, 
                         ecom.label as `eventcompname`, d.label as divisionname, r.label as roundname, ee.membership, ee.paid, ee.gender, ee.notes, ee.bib, ee.created_at, ee.updated_at
                 FROM `evententrys` ee
@@ -175,7 +175,7 @@ class EventExportController extends Controller
             ", ['eventid' => $event->eventid]);
         }
 
-        foreach ($entrys as $entry) {
+        foreach ($entries as $entry) {
             if (empty($entry->paid)) {
                 $entry->paid = 'No';
             }
@@ -196,7 +196,7 @@ class EventExportController extends Controller
                 $csv->insertOne(['Firstname', 'Lastname', 'Club', 'Email', 'Address', 'Phone', 'Competition', 'Division',
                     'Round Name', 'Membership', 'Paid Status', 'Gender', 'Notes', 'Bib', 'Created Date', 'Updated Date' ]);
 
-                foreach ($entrys as $entry) {
+                foreach ($entries as $entry) {
                     $csv->insertOne((array) $entry);
                 }
 
@@ -206,7 +206,7 @@ class EventExportController extends Controller
             case 'pdf':
 
                 $mpdf = new Mpdf(['orientation' => 'L', 'tempDir' => __DIR__ . '/tmp']);
-                $mpdf->WriteHTML($this->makeentrypdfmarkup($event->label, $entrys));
+                $mpdf->WriteHTML($this->makeentrypdfmarkup($event->label, $entries));
                 $mpdf->Output($filename . '.pdf', \Mpdf\Output\Destination::DOWNLOAD);
                 die;
         }
@@ -366,11 +366,11 @@ class EventExportController extends Controller
 
     }
 
-    protected function makeentrypdfmarkup($eventname, $entrys)
+    protected function makeentrypdfmarkup($eventname, $entries)
     {
         $html = '<h3>' .$eventname. '</h3>';
 
-        if (empty($entrys)) {
+        if (empty($entries)) {
             return $html;
         }
 
@@ -396,7 +396,7 @@ class EventExportController extends Controller
 
 
 
-        foreach ($entrys as $entry) {
+        foreach ($entries as $entry) {
             $html .= '<tr>'.
                 '<td>'.$entry->firstname.'</td>'.
                 '<td>'.$entry->lastname.'</td>'.

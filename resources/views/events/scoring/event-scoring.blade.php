@@ -30,8 +30,8 @@
                 @endif
 
                 <div class="tab-pane active" id=""><br>
-                    @foreach($evententrys as $bowtype => $entrys)
-                        @foreach($entrys as $division => $rounds)
+                    @foreach($evententrys as $bowtype => $entries)
+                        @foreach($entries as $division => $rounds)
 
                             <h5 class="tableTitle">{{$division}}</h5>
 
