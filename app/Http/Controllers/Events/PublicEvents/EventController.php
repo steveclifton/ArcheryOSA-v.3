@@ -69,7 +69,7 @@ class EventController extends Controller
                         ->where('entrystatusid', 2)
                         ->count();
 
-        $scorecount = DB::table('scores')
+        $scorecount = DB::table('scores_flat')
                         ->where('eventid', $event->eventid)
                         ->count();
 

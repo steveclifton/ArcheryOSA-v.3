@@ -35,7 +35,8 @@ class LeagueResultsController extends Controller
                 continue;
             }
 
-            $entry->average     = $this->getUserAverage($entry->userid, $entry->divisionid, $event->eventid);
+
+            $entry->average     = $this->getUserAverageFromLeagueTable($entry->userid, $entry->divisionid, $event->eventid);
             $entry->top10points = $this->getUserTop10Points($entry->userid, $entry->divisionid, $event->eventid);
 
             $gender = '';

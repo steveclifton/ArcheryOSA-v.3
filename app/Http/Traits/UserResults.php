@@ -40,6 +40,19 @@ trait UserResults
         return !empty($result[0]) ? $result[0] : 0;
     }
 
+    private function getUserAverageFromLeagueTable($userid, $divisionid, $eventid)
+    {
+        $result = DB::select("
+            SELECT `avg_distance1_total` as average
+            FROM `leagueaverages`
+            WHERE `userid` = :userid
+            AND `divisionid` = :divisionid
+            AND `eventid` = :eventid
+            ", ['userid' => $userid, 'divisionid' => $divisionid, 'eventid' => $eventid]);
+
+        return !empty($result[0]) ? $result[0] : 0;
+    }
+
     public static function getUserTop10Points($userid, $divisionid, $eventid)
     {
         $result = DB::select("
