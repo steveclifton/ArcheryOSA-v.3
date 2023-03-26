@@ -49,6 +49,7 @@
                             <th>Name</th>
                             <th>Status</th>
                             <th>Note</th>
+                            <th>Membership Status</th>
                             <th>Send Mail</th>
                             <th>Date</th>
                             <th>Approve</th>
@@ -79,6 +80,9 @@
                                         <i class="fa fa-sticky-note-o"></i>
                                     </a>
                                 @endif
+                            </td>
+                            <td align="center">
+                                {{ucwords($entry->anzMembership)}}
                             </td>
                             <td align="center">
                                 <a href="/events/manage/evententries/{{$event->eventurl}}/email/{{$entry->username}}">
