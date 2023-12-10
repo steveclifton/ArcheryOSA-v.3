@@ -188,10 +188,10 @@ class EventResultsController extends Controller
             $archer['archer'] = '<a href="/profile/public/'.$score->username.'">' . htmlentities(ucwords($score->firstname . ' ' . $score->lastname)) . '</a>';
             $archer['club'] = ($score->club ?? '');
             $archer['round'] = ($score->roundname ?? '');
-            $archer['dist1'] = ($score->dist1score ?? '');
-            $archer['dist2'] = ($score->dist2score ?? '');
-            $archer['dist3'] = ($score->dist3score ?? '');
-            $archer['dist4'] = ($score->dist4score ?? '');
+            $archer['dist1'] = ($score->dist1score ?? NULL);
+            $archer['dist2'] = ($score->dist2score ?? NULL);
+            $archer['dist3'] = ($score->dist3score ?? NULL);
+            $archer['dist4'] = ($score->dist4score ?? NULL);
             $archer['total'] = ($score->total ?? '');
 
             $key = ($score->gender == 'm' ? "Mens" : "Womens") . ' ' . $score->division;

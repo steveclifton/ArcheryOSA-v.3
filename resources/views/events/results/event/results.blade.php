@@ -57,10 +57,10 @@
                                     <tr class="results">
 
                                         <th scope="row" width="30%">{!! $result['archer'] !!}</th>
-                                        @if (!empty($result['dist1'])) <th scope="row" width="10%">{{ intval($result['dist1']) }}</th> @endif
-                                        @if (!empty($result['dist2'])) <th scope="row" width="10%">{{ intval($result['dist2']) }}</th> @endif
-                                        @if (!empty($result['dist3'])) <th scope="row" width="10%">{{ intval($result['dist3']) }}</th> @endif
-                                        @if (!empty($result['dist4'])) <th scope="row" width="10%">{{ intval($result['dist4']) }}</th> @endif
+                                        @if ($result['dist1'] !== NULL) <th scope="row" width="10%">{{ intval($result['dist1']) }}</th> @endif
+                                        @if ($result['dist2'] !== NULL) <th scope="row" width="10%">{{ intval($result['dist2']) }}</th> @endif
+                                        @if ($result['dist3'] !== NULL) <th scope="row" width="10%">{{ intval($result['dist3']) }}</th> @endif
+                                        @if ($result['dist4'] !== NULL) <th scope="row" width="10%">{{ intval($result['dist4']) }}</th> @endif
                                         <th scope="row" width="10%">{!! $result['total'] !!}</th>
 
                                     </tr>
