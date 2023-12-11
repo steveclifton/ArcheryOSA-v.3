@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Events\PublicEvents\Event;
 use App\Http\Controllers\Controller;
 use App\Models\Event;
 use App\Models\EventCompetition;
+use App\Services\ScoringService;
 use Illuminate\Support\Facades\DB;
 
 class EventResultsController extends Controller
@@ -207,7 +208,7 @@ class EventResultsController extends Controller
             $results[$bowtype][$key][] = $archer;
         }
 
-        $results = $this->sorttotalresults($results);
+        $results = (new ScoringService($results))->getSortedResults();
 
         $returnData['results'] = $results;
         $returnData['event'] = $event;
@@ -220,7 +221,7 @@ class EventResultsController extends Controller
 
     }
 
-    private function sorttotalresults($results)
+    public function sorttotalresults($results)
     {
         $return = [];
 
@@ -230,23 +231,25 @@ class EventResultsController extends Controller
             ksort($r);
 
             foreach ($r as &$res) {
+                $rounds = $res['rounds'];
+                unset($res['rounds']);
 
                 // Sort each divisions results by highest first
                 uasort($res, function ($a, $b) {
-
-                    if (empty($a['total']) || empty($b['total'])) {
+                    if (empty($a['total']) && empty($b['total'])) {
                         return 0;
                     }
 
                     if ((int)$b['total'] > (int)$a['total']) {
                         return 1;
                     }
-                    else if ((int)$b['total'] < (int)$a['total']) {
+                    if ((int)$b['total'] < (int)$a['total']) {
                         return -1;
                     }
 
                     return 0;
                 });
+                $res['rounds'] = $rounds;
             }
 
             $return = array_merge($return, $r);
