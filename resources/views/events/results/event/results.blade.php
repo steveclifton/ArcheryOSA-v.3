@@ -43,24 +43,27 @@
                                         $rounds = !empty($divisionresults['rounds']) ? $divisionresults['rounds'] : [];
                                         $unit = !empty($rounds['unit']) ? $rounds['unit'] : '';
                                         unset($divisionresults['rounds'], $rounds['unit']);
+                                        $ignoreKeys = [];
+
+                                        foreach ($rounds as $key => $round) {
+                                            if (empty($round)) {
+                                                $ignoreKeys[] = $key;
+                                                continue;
+                                            }
+                                            @endphp
+                                                <td style="background-color: #add8e680">{{$round . ($round != 'Total' ? $unit : '')}}</td>
+                                            @php
+                                        }
                                     @endphp
-                                    @foreach ($rounds as $round)
-
-                                        @if (empty($round))
-                                            @continue
-                                        @endif
-
-                                        <td style="background-color: #add8e680">{{$round . ($round != 'Total' ? $unit : '')}}</td>
-                                    @endforeach
-                                </tr>
+                                    </tr>
                                 @foreach ($divisionresults as $result)
                                     <tr class="results">
 
                                         <th scope="row" width="30%">{!! $result['archer'] !!}</th>
-                                        @if ($result['dist1'] !== NULL) <th scope="row" width="10%">{{ intval($result['dist1']) }}</th> @endif
-                                        @if ($result['dist2'] !== NULL) <th scope="row" width="10%">{{ intval($result['dist2']) }}</th> @endif
-                                        @if ($result['dist3'] !== NULL) <th scope="row" width="10%">{{ intval($result['dist3']) }}</th> @endif
-                                        @if ($result['dist4'] !== NULL) <th scope="row" width="10%">{{ intval($result['dist4']) }}</th> @endif
+                                        @if (!in_array('dist1', $ignoreKeys) && $result['dist1'] !== NULL) <th scope="row" width="10%">{{ intval($result['dist1']) }}</th> @endif
+                                        @if (!in_array('dist2', $ignoreKeys) && $result['dist2'] !== NULL) <th scope="row" width="10%">{{ intval($result['dist2']) }}</th> @endif
+                                        @if (!in_array('dist3', $ignoreKeys) && $result['dist3'] !== NULL) <th scope="row" width="10%">{{ intval($result['dist3']) }}</th> @endif
+                                        @if (!in_array('dist4', $ignoreKeys) && $result['dist4'] !== NULL) <th scope="row" width="10%">{{ intval($result['dist4']) }}</th> @endif
                                         <th scope="row" width="10%">{!! $result['total'] !!}</th>
 
                                     </tr>
