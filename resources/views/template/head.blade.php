@@ -4,7 +4,6 @@
 <meta name="description" content="@yield('description','Archery OSA is a free online archery event management system which allows you to run your archery events completely online')"/>
 <meta property="og:description" content="@yield('description','Archery OSA is a free online archery event management system which allows you to run your archery events completely online')" />
 <link rel="canonical" href="https://archeryosa.com/@yield('url', '')" itemprop="url">
-<link rel="canonical" href="https://archeryosa.com/@yield('url', '')">
 <meta property="og:url" content="https://archeryosa.com/@yield('url', '')" />
 
 <meta name="referrer" content="always">
