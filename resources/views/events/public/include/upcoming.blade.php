@@ -22,7 +22,7 @@
                             <tr>
                                 <th scope="row">
                                     <a href="/event/details/{{$event->eventurl}}">
-                                        {{strlen($event->label) < 42 ? $event->label : (substr($event->label, 0, 42) . "...") }}
+                                        {{strlen($event->label) < 44 ? $event->label : (substr($event->label, 0, 44) . "...") }}
                                     </a>
                                 </th>
                                 <td>{{date('d M', strtotime($event->start))}}</td>
