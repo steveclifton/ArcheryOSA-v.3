@@ -1,14 +1,10 @@
-<div class="row" style="padding-top: 20px">
+<div class="row" style="padding-top: 20px; padding-bottom: 10px">
     <div class="col-lg-12">
-        <ul class="nav nav-tabs tabs">
-            <li class="nav-item tab">
-                <a href="javascript:;" data-toggle="tab" aria-expanded="true" class="nav-link show">
-                    Upcoming Events
-                </a>
-            </li>
-        </ul>
+        <h3 style="text-align: center">
+            Upcoming Events
+        </h3>
 
-        <div class="tab-content">
+        <div class="tab-content" style="background: white; border: 2px solid lightgrey;">
             @if (!empty($upcomingevents))
                 <div class="table-responsive text-nowrap">
                     <table class="table table-hover">
@@ -25,7 +21,9 @@
                         @foreach($upcomingevents as $event)
                             <tr>
                                 <th scope="row">
-                                    <a href="/event/details/{{$event->eventurl}}">{{$event->label}}</a>
+                                    <a href="/event/details/{{$event->eventurl}}">
+                                        {{strlen($event->label) < 42 ? $event->label : (substr($event->label, 0, 42) . "...") }}
+                                    </a>
                                 </th>
                                 <td>{{date('d M', strtotime($event->start))}}</td>
                                 <td>{{$event->region}}</td>

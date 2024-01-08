@@ -32,11 +32,11 @@
                     <div class="table-responsive">
                         <table class="table table-hover">
                             <thead class="thead-light">
-                            <tr>
-                                <th width="50%">Event Competition</th>
-                                <th width="40%">Date</th>
-                                <th width="">Status</th>
-                            </tr>
+                                <tr>
+                                    <th width="50%">Event Competition</th>
+                                    <th width="40%">Date</th>
+                                    <th width="">Status</th>
+                                </tr>
                             </thead>
                             <tbody>
                                 @foreach($eventcompetitions as $eventcompetition)

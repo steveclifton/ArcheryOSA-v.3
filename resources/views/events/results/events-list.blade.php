@@ -5,17 +5,13 @@
 @section('content')
     @if(!empty($events))
 
-        <div class="row" style="padding-top: 20px">
+        <div class="row" style="padding-top: 20px; padding-bottom: 10px">
             <div class="col-lg-12">
-                <ul class="nav nav-tabs tabs">
-                    <li class="nav-item tab">
-                        <a href="javascript:;" data-toggle="tab" aria-expanded="true" class="nav-link show">
-                            Completed Events
-                        </a>
-                    </li>
-                </ul>
+                <h3 style="text-align: center">
+                    Completed Events
+                </h3>
 
-                <div class="tab-content">
+                <div class="tab-content" style="background: white; border: 2px solid lightgrey;">
 
                     @if (!empty($events))
                         <div class="table-responsive text-nowrap">
