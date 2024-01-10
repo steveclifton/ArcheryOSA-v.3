@@ -140,7 +140,7 @@
         <script src="{{URL::asset('/js/home.js')}}"></script>
     @endauth
 
-    <div class="row justify-content-center align-items-center" style="padding-bottom: 10px">
+    <div class="row align-items-center" style="padding-bottom: 10px">
         <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-4820276379493226"
                 crossorigin="anonymous"></script>
         <!-- Nav-Ad -->
