@@ -20,3 +20,4 @@ Route::get('event/{eventurl}/{competitionid?}', 'API\APIEventsController@getEven
 
 Route::get('eventtypes', 'API\APIEventsController@getEventTypes');
 
+Route::get('event/{eventid}/entrants/export', 'API\APIEventsController@getEventEntrantsExport');
