@@ -23,9 +23,7 @@
         "webpatser/laravel-countries": "^1.5"
     },
     "require-dev": {
-        "beyondcode/laravel-view-xray": "^1.1",
         "filp/whoops": "^2.4",
-        "fzaninotto/faker": "^1.4",
         "mockery/mockery": "^1.0",
         "nunomaduro/collision": "^5.0",
         "phpunit/phpunit": "^9.0"
