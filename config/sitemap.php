@@ -1,7 +1,6 @@
 <?php
 
 use GuzzleHttp\RequestOptions;
-use Spatie\Sitemap\Crawler\Profile;
 
 return [
 
