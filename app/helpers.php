@@ -40,3 +40,14 @@ function getEntryStatusText($entrystatusid)
             return 'danger';
     }
 }
+
+if (!function_exists('mb_strcut')) {
+    function mb_strcut($string, $start, $length = null, $encoding = null)
+    {
+        $encoding = $encoding ?: 'UTF-8';
+        $strlen = mb_strlen($string, $encoding);
+        if ($start < 0) $start = max(0, $strlen + $start);
+        if ($length === null) $length = $strlen - $start;
+        return mb_substr($string, $start, $length, $encoding);
+    }
+}
