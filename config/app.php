@@ -65,7 +65,7 @@ return [
     |
     */
 
-    'timezone' => 'NZ',
+    'timezone' => env('APP_TIMEZONE', 'Pacific/Auckland'),
 
     /*
     |--------------------------------------------------------------------------

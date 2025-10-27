@@ -62,7 +62,7 @@ class Event extends Model
             }
 
             // set the date default to be nz
-            date_default_timezone_set('NZ');
+            date_default_timezone_set('Pacific/Auckland');
 
             // if we have an entry close set, do checks
             if (!empty($this->entryclose)) {
@@ -113,7 +113,7 @@ class Event extends Model
             }
 
             // set the date default to be nz
-            date_default_timezone_set('NZ');
+            date_default_timezone_set('Pacific/Auckland');
 
             // if we have an entry close set, do checks
             if (!empty($this->entryclose)) {
