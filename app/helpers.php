@@ -12,23 +12,6 @@ function makeurl($eventname, $eventid)
     return prepurl($eventname) . '-' . $eventid;
 }
 
-function debug(...$data)
-{
-    if (Auth::id() != 1) {
-        return;
-    }
-    dump($data);
-}
-
-function debugx(...$data)
-{
-    if (Auth::id() != 1) {
-        return;
-    }
-    dd($data);
-}
-
-
 function getEntryStatusText($entrystatusid)
 {
     switch ($entrystatusid) {
