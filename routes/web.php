@@ -129,7 +129,7 @@ Route::middleware(['web'])->group(function() {
 
 
         // Logout
-        Route::post('logout', 'Auth\LoginController@logout')->name('logout');
+        Route::post('logout', 'Auth\LoginController@logout')->name('logout-post');
         Route::get('logout', 'Auth\LoginController@logout')->name('logout');
 
 
