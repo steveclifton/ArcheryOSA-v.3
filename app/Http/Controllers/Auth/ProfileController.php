@@ -129,7 +129,7 @@ class ProfileController extends Controller
 
             $data = compact('user', 'eventcount','scorecount', 'finalresults');
 
-            Cache::put('userprofile' . $request->username, $data, 60);
+            Cache::put('userprofile' . $request->username, $data, 3600);
         }
 
         if (empty($data)) {
