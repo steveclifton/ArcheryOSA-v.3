@@ -6,6 +6,7 @@ use App\Jobs\SendExceptionEmail;
 use App\Models\Event;
 use Illuminate\Console\Scheduling\Schedule;
 use Illuminate\Foundation\Console\Kernel as ConsoleKernel;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 
@@ -50,6 +51,7 @@ class Kernel extends ConsoleKernel
 
             if (!empty($log)) {
                 Log::info($log);
+                Cache::forget('upcomingevents');
             }
 
         })->daily();

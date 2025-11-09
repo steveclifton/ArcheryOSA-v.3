@@ -10,6 +10,7 @@ use App\Models\EventCompetition;
 use App\Models\EventStatus;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Cache;
 use Image;
 
 class EventSettingsController extends EventController
@@ -163,6 +164,8 @@ class EventSettingsController extends EventController
             $eventcompetition->currentweek   = !empty($request->input('currentweek')) ? intval($request->input('currentweek')) : 1;
             $eventcompetition->save();
         }
+
+        Cache::forget('upcomingevents');
 
         return back()->with('success', 'Event updated');
     }

@@ -19,6 +19,7 @@ use App\Models\EventType;
 use App\Models\Organisation;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\DB;
 use App\Http\Classes\Competitions\Template;
 
@@ -269,6 +270,8 @@ class EventController extends Controller
 
         }
 
+        Cache::forget('upcomingevents');
+
         return redirect('/events/manage/' . $event->eventurl);
 
     }
@@ -356,6 +359,7 @@ class EventController extends Controller
             'after' => json_encode(['event' => $event])
         ]);
 
+        Cache::forget('upcomingevents');
         return redirect('events/manage/update/' . $event->eventurl)->with('success', 'Event updated!');
 
     }

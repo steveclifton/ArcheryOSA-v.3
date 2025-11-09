@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Classes\EventsHelper;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\DB;
 
 class HomeController extends Controller
@@ -25,15 +26,21 @@ class HomeController extends Controller
      */
     public function index()
     {
-        $upcomingevents = DB::select("
-            SELECT e.*, es.label as eventstatus
-            FROM `events` e
-            JOIN `eventstatus` es USING (`eventstatusid`)
-            WHERE `e`.`end` + interval 1 day > now() 
-            AND `e`.`visible` = 1
-            AND `e`.`eventstatusid` NOT IN (3,4)
-            ORDER BY `e`.`start`
-        ");
+        $upcomingevents = Cache::get('upcomingevents');
+
+        if (!$upcomingevents) {
+            $upcomingevents = DB::select("
+                SELECT e.*, es.label as eventstatus
+                FROM `events` e
+                JOIN `eventstatus` es USING (`eventstatusid`)
+                WHERE `e`.`end` + interval 1 day > now() 
+                AND `e`.`visible` = 1
+                AND `e`.`eventstatusid` NOT IN (3,4)
+                ORDER BY `e`.`start`
+            ");
+
+            Cache::put('upcomingevents', $upcomingevents, now()->addDay());
+        }
 
         $myevents = [];
         if (Auth::check()) {
