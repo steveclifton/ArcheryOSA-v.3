@@ -82,7 +82,7 @@ class Kernel extends ConsoleKernel
                 SendExceptionEmail::dispatch($exceptions, 'ArcheryOSA Exceptions');
             }
 
-            // DB::table('exceptions')->delete();
+             DB::table('exceptions')->delete();
         })->everyFiveMinutes();
 
 
