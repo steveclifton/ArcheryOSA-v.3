@@ -7,10 +7,9 @@
 
     "require": {
         "php": "^7.3|^8.0",
-        "doctrine/dbal": "^3.0",
         "guzzlehttp/guzzle": "^7.0.1",
         "intervention/image": "^2.4",
-        "laravel/framework": "^10.0",
+        "laravel/framework": "^12.0",
         "laravel/helpers": "^1.1",
         "laravel/tinker": "^2.0",
         "laravel/ui": "^4.0",
@@ -24,8 +23,8 @@
     "require-dev": {
         "barryvdh/laravel-debugbar": "^3.16",
         "mockery/mockery": "^1.0",
-        "nunomaduro/collision": "^6.1",
-        "phpunit/phpunit": "^9.0"
+        "nunomaduro/collision": "^8.1",
+        "phpunit/phpunit": "^11.0"
     },
     "autoload": {
         "files": [
