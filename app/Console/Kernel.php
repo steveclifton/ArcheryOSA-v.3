@@ -6,6 +6,7 @@ use App\Jobs\SendExceptionEmail;
 use App\Models\Event;
 use Illuminate\Console\Scheduling\Schedule;
 use Illuminate\Foundation\Console\Kernel as ConsoleKernel;
+use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
@@ -55,6 +56,10 @@ class Kernel extends ConsoleKernel
             }
 
         })->daily();
+
+        $schedule->call(function () {
+            Artisan::call('queue:retry', ['id' => 'all']);
+        })->everyFiveMinutes();
 
         $schedule->call(function () {
             $tidyHq = new \App\Http\Classes\TidyHQ();
