@@ -76,6 +76,7 @@ class Kernel extends ConsoleKernel
             foreach ($e as $item) {
                 $exceptions .= $count++ . ': ' . $item->message . '<br>';
                 $exceptions .= 'File : ' . $item->file . '<br><br>';
+                $exceptions .= 'Time : ' . $item->created_at . '<br><br>';
             }
 
             if (!empty($exceptions)) {

@@ -48,6 +48,8 @@ class Handler extends ExceptionHandler
             DB::table('exceptions')->insert([
                 'message' => $exception->getMessage(),
                 'file' => $exception->getFile(),
+                'created_at' => now(),
+                'updated_at' => now(),
                 'notified' => 0
             ]);
         }
