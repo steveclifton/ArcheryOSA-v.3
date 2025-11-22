@@ -3,6 +3,7 @@
 namespace App\Exceptions;
 
 use Illuminate\Support\Facades\DB;
+use Sentry\Laravel\Integration;
 use Throwable;
 use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
 use Illuminate\Support\Facades\Log;
@@ -27,6 +28,13 @@ class Handler extends ExceptionHandler
         'password',
         'password_confirmation',
     ];
+
+    public function register(): void
+    {
+        $this->reportable(function (Throwable $e) {
+            Integration::captureUnhandledException($e);
+        });
+    }
 
     /**
      * Report or log an exception.
