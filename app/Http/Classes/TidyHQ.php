@@ -18,7 +18,7 @@ class TidyHQ
     protected string $redirect = '';
     protected string $accessToken = '';
 
-    const BASEURL = 'https://api.tidyhq.com/v1/';
+    const BASEURL = 'https://api.tidyhq.com/v2/';
 
 
     public function __construct()
