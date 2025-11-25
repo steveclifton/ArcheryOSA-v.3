@@ -156,4 +156,9 @@ class Event extends Model
     {
         return $this->organisationid == 1;
     }
+
+    public function isVisible()
+    {
+        return !empty($this->visible);
+    }
 }
