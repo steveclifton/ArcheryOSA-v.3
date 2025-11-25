@@ -159,6 +159,6 @@ class Event extends Model
 
     public function isVisible()
     {
-        return !empty($this->visible);
+        return $this->visible == 1;
     }
 }
