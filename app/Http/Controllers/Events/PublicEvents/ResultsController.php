@@ -70,7 +70,7 @@ class ResultsController extends EventController
     {
         $event = Event::where('eventurl', $request->eventurl)->first();
 
-        if (empty($event) || !$event->isVisible()) {
+        if (empty($event)) {
             return redirect('/');
         }
 
