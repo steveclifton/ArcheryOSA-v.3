@@ -80,6 +80,10 @@ class ResultsController extends EventController
         if ($event->isLeague()) {
             $eventcompetition = EventCompetition::where('eventid', $event->eventid)->first();
 
+            if (empty($eventcompetition)) {
+                return redirect('/');
+            }
+
             $rangeArr = [];
             foreach (range(1, $eventcompetition->currentweek) as $week) {
                 $score = FlatScore::where('eventid', $eventcompetition->eventid)
