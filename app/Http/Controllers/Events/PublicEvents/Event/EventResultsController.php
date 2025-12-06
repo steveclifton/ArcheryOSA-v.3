@@ -100,6 +100,8 @@ class EventResultsController extends Controller
                 }
 
                 $result[$eventcompid] = $score->total;
+                $result['inners'] = $score->inners;
+                $result['xcount'] = $score->max;
 
                 if (empty($key)) {
                     $key = ($score->gender == 'm' ? "Mens" : "Womens") . ' ' . $score->division;
@@ -194,6 +196,8 @@ class EventResultsController extends Controller
             $archer['dist3'] = ($score->dist3score ?? NULL);
             $archer['dist4'] = ($score->dist4score ?? NULL);
             $archer['total'] = ($score->total ?? '');
+            $archer['inners'] = ($score->inners ?? '');
+            $archer['xcount'] = ($score->max ?? '');
 
             $key = ($score->gender == 'm' ? "Mens" : "Womens") . ' ' . $score->division;
             $bowtype = $score->bowtype;
@@ -244,6 +248,17 @@ class EventResultsController extends Controller
                         return 1;
                     }
                     if ((int)$b['total'] < (int)$a['total']) {
+                        return -1;
+                    }
+
+                    if ((int)$b['total'] != (int)$a['total']) {
+                        return 0;
+                    }
+
+                    if ((int)$b['inners'] > (int)$a['inners']) {
+                        return 1;
+                    }
+                    if ((int)$b['inners'] < (int)$a['inners']) {
                         return -1;
                     }
 

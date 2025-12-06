@@ -41,6 +41,17 @@ class ScoringService
                         return -1;
                     }
 
+                    if ((int)$b['total'] != (int)$a['total']) {
+                        return 0;
+                    }
+
+                    if ((int)$b['inners'] > (int)$a['inners']) {
+                        return 1;
+                    }
+                    if ((int)$b['inners'] < (int)$a['inners']) {
+                        return -1;
+                    }
+
                     return 0;
                 });
                 $res['rounds'] = $rounds;

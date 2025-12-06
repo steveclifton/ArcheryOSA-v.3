@@ -65,7 +65,7 @@
                                         @php unset($result['archer']) @endphp
 
                                         @foreach ($result as $key => $r)
-                                            @if ($key == 'total') @continue; @endif
+                                            @if (in_array($key, ['total', 'inners', 'xcount'])) @continue; @endif
 
                                             <th scope="row" width="15%">{{$r}}</th>
                                         @endforeach
