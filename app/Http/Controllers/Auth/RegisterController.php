@@ -126,7 +126,7 @@ class RegisterController extends Controller
             $child = [
                 'firstname' => ($data['childfirstname'] ?? ''),
                 'lastname' => ($data['childlastname'] ?? ''),
-                'email' => ($data['childemail'] ?? ''),
+                'email' => (($data['childemail'] ?? '') != $data['email'] ? $data['childemail'] : ''),
             ];
 
             $userid = $this->createBasicUser($child, $user->userid);
