@@ -22,7 +22,7 @@ use Illuminate\Support\Facades\Log;
  */
 class EventController extends Controller
 {
-
+    protected EventsHelper $helper;
 
     public function __construct()
     {
@@ -60,14 +60,13 @@ class EventController extends Controller
             return redirect('/');
         }
 
-        $entrycount = DB::table('evententrys')
+        $entrys = DB::table('evententrys')
+                        ->select('entrystatusid')
                         ->where('eventid', $event->eventid)
-                        ->count();
+                        ->get();
 
-        $confirmed = DB::table('evententrys')
-                        ->where('eventid', $event->eventid)
-                        ->where('entrystatusid', 2)
-                        ->count();
+        $confirmed = $entrys->where('entrystatusid', 2)->count();
+        $entrycount = $entrys->count();
 
         $scorecount = DB::table('scores_flat')
                         ->where('eventid', $event->eventid)
@@ -111,9 +110,6 @@ class EventController extends Controller
             AND e.`entrystatusid` = 2
             ORDER BY `d`.`label`, `e`.`firstname`
         ", ['eventid' => $event->eventid]);
-
-
-
 
         $eventtargetallocations = DB::select("
             SELECT ta.target, ec.`label` as `eventcompname`, CONCAT(ee.firstname, ' ', ee.lastname) as `fullname`

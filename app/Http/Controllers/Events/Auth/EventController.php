@@ -25,6 +25,7 @@ use App\Http\Classes\Competitions\Template;
 
 class EventController extends Controller
 {
+    protected EventsHelper $helper;
 
     public function __construct()
     {

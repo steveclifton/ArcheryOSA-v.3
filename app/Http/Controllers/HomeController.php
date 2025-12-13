@@ -9,11 +9,8 @@ use Illuminate\Support\Facades\DB;
 
 class HomeController extends Controller
 {
-    /**
-     * Create a new controller instance.
-     *
-     * @return void
-     */
+    protected EventsHelper $eventhelper;
+
     public function __construct()
     {
         $this->eventhelper = new EventsHelper();
