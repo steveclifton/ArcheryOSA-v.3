@@ -80,7 +80,7 @@ class EventSettingsController extends EventController
 
             @list($fileName, $fileExt) = explode('.', $file->getClientOriginalName());
 
-            $filename = $fileName .'-' . date('d-h-m') . '.' . $file->getClientOriginalExtension();
+            $filename = str_replace(' ', '-', $fileName) .'-' . date('d-h-m') . '.' . $file->getClientOriginalExtension();
 
             // save the file
             $file->move('files/events', $filename);
