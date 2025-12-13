@@ -1,8 +1,7 @@
 <?php
 
 return [
-  'barebow' => [
-    'Mens 50+ Barebow' => [
+    '50+ Barebow Mens' => [
       'rounds' => [
         'dist1' => 50,
         'dist2' => 40,
@@ -13,6 +12,8 @@ return [
       ],
       0 => [
         'archer' => 'testArcher',
+        'inners' => 10,
+        'xcount' => 3,
         'club' => NULL,
         'round' => 'WAO Barebow Round',
         'dist1' => 248,
@@ -23,6 +24,8 @@ return [
       ],
       1 => [
         'archer' => 'testArcher',
+        'inners' => 10,
+        'xcount' => 3,
         'club' => NULL,
         'round' => 'WAO Barebow Round',
         'dist1' => 231,
@@ -33,6 +36,8 @@ return [
       ],
       2 => [
         'archer' => 'testArcher',
+        'inners' => 10,
+        'xcount' => 3,
         'club' => NULL,
         'round' => 'WAO Short Round',
         'dist1' => 214,
@@ -42,7 +47,7 @@ return [
         'total' => 746,
       ],
     ],
-    'Mens Open Barebow' => [
+    'Open Barebow Mens' => [
       'rounds' => [
         'dist1' => 50,
         'dist2' => 40,
@@ -53,6 +58,8 @@ return [
       ],
       0 => [
         'archer' => 'testArcher',
+        'inners' => 10,
+        'xcount' => 3,
         'club' => NULL,
         'round' => 'WAO Barebow Round',
         'dist1' => 243,
@@ -63,6 +70,8 @@ return [
       ],
       1 => [
         'archer' => 'testArcher',
+        'inners' => 10,
+        'xcount' => 3,
         'club' => NULL,
         'round' => 'WAO Short Round',
         'dist1' => 207,
@@ -73,6 +82,8 @@ return [
       ],
       2 => [
         'archer' => 'testArcher',
+        'inners' => 10,
+        'xcount' => 3,
         'club' => NULL,
         'round' => 'WAO Barebow Round',
         'dist1' => 203,
@@ -83,6 +94,8 @@ return [
       ],
       3 => [
         'archer' => 'testArcher',
+        'inners' => 10,
+        'xcount' => 3,
         'club' => NULL,
         'round' => 'WAO Barebow Round',
         'dist1' => 53,
@@ -92,7 +105,7 @@ return [
         'total' => 269,
       ],
     ],
-    'Womens Open Barebow' => [
+    'Open Barebow Womens' => [
       'rounds' => [
         'dist1' => 40,
         'dist2' => 30,
@@ -103,6 +116,8 @@ return [
       ],
       0 => [
         'archer' => 'testArcher',
+        'inners' => 10,
+        'xcount' => 3,
         'club' => NULL,
         'round' => 'WAO Short Round',
         'dist1' => 141,
@@ -113,6 +128,8 @@ return [
       ],
       1 => [
         'archer' => 'testArcher',
+        'inners' => 10,
+        'xcount' => 3,
         'club' => NULL,
         'round' => 'WAO Short Round',
         'dist1' => 95,
@@ -123,6 +140,8 @@ return [
       ],
       2 => [
         'archer' => 'testArcher',
+        'inners' => 10,
+        'xcount' => 3,
         'club' => NULL,
         'round' => 'WAO Barebow Round',
         'dist1' => 251,
@@ -133,6 +152,8 @@ return [
       ],
       3 => [
         'archer' => 'testArcher',
+        'inners' => 10,
+        'xcount' => 3,
         'club' => NULL,
         'round' => 'WAO Barebow Round',
         'dist1' => 0,
@@ -142,7 +163,7 @@ return [
         'total' => 0,
       ],
     ],
-    'Mens U18 Barebow' => [
+    'U18 Barebow Mens' => [
       'rounds' => [
         'dist1' => 50,
         'dist2' => 40,
@@ -153,6 +174,8 @@ return [
       ],
       0 => [
         'archer' => 'testArcher',
+        'inners' => 10,
+        'xcount' => 3,
         'club' => NULL,
         'round' => 'WAO Barebow Round',
         'dist1' => 186,
@@ -162,7 +185,7 @@ return [
         'total' => 670,
       ],
     ],
-    'Womens U18 Barebow' => [
+    'U18 Barebow Womens' => [
       'rounds' => [
         'dist1' => 50,
         'dist2' => 40,
@@ -173,6 +196,8 @@ return [
       ],
       0 => [
         'archer' => 'testArcher',
+        'inners' => 10,
+        'xcount' => 3,
         'club' => NULL,
         'round' => 'WAO Barebow Round',
         'dist1' => 176,
@@ -182,9 +207,7 @@ return [
         'total' => 567,
       ],
     ],
-  ],
-  'compound' => [
-    'Mens 50+ Compound' => [
+    '50+ Compound Mens' => [
       'rounds' => [
         'dist1' => 60,
         'dist2' => 50,
@@ -195,6 +218,8 @@ return [
       ],
       0 => [
         'archer' => 'testArcher',
+        'inners' => 10,
+        'xcount' => 3,
         'club' => NULL,
         'round' => 'WAO Long Round',
         'dist1' => 264,
@@ -205,6 +230,8 @@ return [
       ],
       1 => [
         'archer' => 'testArcher',
+        'inners' => 10,
+        'xcount' => 3,
         'club' => NULL,
         'round' => 'WAO Long Round',
         'dist1' => 277,
@@ -215,6 +242,8 @@ return [
       ],
       2 => [
         'archer' => 'testArcher',
+        'inners' => 10,
+        'xcount' => 3,
         'club' => NULL,
         'round' => 'WAO Long Round',
         'dist1' => 244,
@@ -225,6 +254,8 @@ return [
       ],
       3 => [
         'archer' => 'testArcher',
+        'inners' => 10,
+        'xcount' => 3,
         'club' => NULL,
         'round' => 'WAO Long Round',
         'dist1' => 258,
@@ -235,6 +266,8 @@ return [
       ],
       4 => [
         'archer' => 'testArcher',
+        'inners' => 10,
+        'xcount' => 3,
         'club' => NULL,
         'round' => 'WAO Long Round',
         'dist1' => 253,
@@ -245,6 +278,8 @@ return [
       ],
       5 => [
         'archer' => 'testArcher',
+        'inners' => 10,
+        'xcount' => 3,
         'club' => NULL,
         'round' => 'WAO Long Round',
         'dist1' => 0,
@@ -255,6 +290,8 @@ return [
       ],
       6 => [
         'archer' => 'testArcher',
+        'inners' => 10,
+        'xcount' => 3,
         'club' => NULL,
         'round' => 'WAO Long Round',
         'dist1' => 279,
@@ -265,6 +302,8 @@ return [
       ],
       7 => [
         'archer' => 'testArcher',
+        'inners' => 10,
+        'xcount' => 3,
         'club' => NULL,
         'round' => 'WAO Short Round',
         'dist1' => 281,
@@ -275,6 +314,8 @@ return [
       ],
       8 => [
         'archer' => 'testArcher',
+        'inners' => 10,
+        'xcount' => 3,
         'club' => NULL,
         'round' => 'WAO Long Round',
         'dist1' => 264,
@@ -285,6 +326,8 @@ return [
       ],
       9 => [
         'archer' => 'testArcher',
+        'inners' => 10,
+        'xcount' => 3,
         'club' => NULL,
         'round' => 'WAO Long Round',
         'dist1' => 239,
@@ -295,6 +338,8 @@ return [
       ],
       10 => [
         'archer' => 'testArcher',
+        'inners' => 10,
+        'xcount' => 3,
         'club' => NULL,
         'round' => 'WAO Short Round',
         'dist1' => 282,
@@ -304,7 +349,7 @@ return [
         'total' => 867,
       ],
     ],
-    'Womens 50+ Compound' => [
+    '50+ Compound Womens' => [
       'rounds' => [
         'dist1' => 60,
         'dist2' => 50,
@@ -315,6 +360,8 @@ return [
       ],
       0 => [
         'archer' => 'testArcher',
+        'inners' => 10,
+        'xcount' => 3,
         'club' => NULL,
         'round' => 'WAO Long Round',
         'dist1' => 218,
@@ -325,6 +372,8 @@ return [
       ],
       1 => [
         'archer' => 'testArcher',
+        'inners' => 10,
+        'xcount' => 3,
         'club' => NULL,
         'round' => 'WAO Long Round',
         'dist1' => 286,
@@ -334,7 +383,7 @@ return [
         'total' => 875,
       ],
     ],
-    'Womens Open Compound' => [
+    'Open Compound Womens' => [
       'rounds' => [
         'dist1' => 60,
         'dist2' => 50,
@@ -345,6 +394,8 @@ return [
       ],
       0 => [
         'archer' => 'testArcher',
+        'inners' => 10,
+        'xcount' => 3,
         'club' => NULL,
         'round' => 'WAO Long Round',
         'dist1' => 285,
@@ -355,6 +406,8 @@ return [
       ],
       1 => [
         'archer' => 'testArcher',
+        'inners' => 10,
+        'xcount' => 3,
         'club' => NULL,
         'round' => 'WAO Long Round',
         'dist1' => 273,
@@ -364,7 +417,7 @@ return [
         'total' => 835,
       ],
     ],
-    'Mens Open Compound' => [
+    'Open Compound Mens' => [
       'rounds' => [
         'dist1' => 60,
         'dist2' => 50,
@@ -375,6 +428,8 @@ return [
       ],
       0 => [
         'archer' => 'testArcher',
+        'inners' => 10,
+        'xcount' => 3,
         'club' => NULL,
         'round' => 'WAO Long Round',
         'dist1' => 224,
@@ -385,6 +440,8 @@ return [
       ],
       1 => [
         'archer' => 'testArcher',
+        'inners' => 10,
+        'xcount' => 3,
         'club' => NULL,
         'round' => 'WAO Long Round',
         'dist1' => 294,
@@ -395,6 +452,8 @@ return [
       ],
       2 => [
         'archer' => 'testArcher',
+        'inners' => 10,
+        'xcount' => 3,
         'club' => NULL,
         'round' => 'WAO Long Round',
         'dist1' => 0,
@@ -405,6 +464,8 @@ return [
       ],
       3 => [
         'archer' => 'testArcher',
+        'inners' => 10,
+        'xcount' => 3,
         'club' => NULL,
         'round' => 'WAO Long Round',
         'dist1' => 271,
@@ -415,6 +476,8 @@ return [
       ],
       4 => [
         'archer' => 'testArcher',
+        'inners' => 10,
+        'xcount' => 3,
         'club' => NULL,
         'round' => 'WAO Long Round',
         'dist1' => 276,
@@ -425,6 +488,8 @@ return [
       ],
       5 => [
         'archer' => 'testArcher',
+        'inners' => 10,
+        'xcount' => 3,
         'club' => NULL,
         'round' => 'WAO Short Round',
         'dist1' => 280,
@@ -434,7 +499,7 @@ return [
         'total' => 864,
       ],
     ],
-    'Mens U18 Compound' => [
+    'U18 Compound Mens' => [
       'rounds' => [
         'dist1' => 40,
         'dist2' => 30,
@@ -445,6 +510,8 @@ return [
       ],
       0 => [
         'archer' => 'testArcher',
+        'inners' => 10,
+        'xcount' => 3,
         'club' => NULL,
         'round' => 'WAO Short Round',
         'dist1' => 243,
@@ -455,6 +522,8 @@ return [
       ],
       1 => [
         'archer' => 'testArcher',
+        'inners' => 10,
+        'xcount' => 3,
         'club' => NULL,
         'round' => 'WAO Long Round',
         'dist1' => 243,
@@ -464,9 +533,7 @@ return [
         'total' => 717,
       ],
     ],
-  ],
-  'recurve' => [
-    'Mens 50+ Recurve' => [
+    '50+ Recurve Mens' => [
       'rounds' => [
         'dist1' => 60,
         'dist2' => 50,
@@ -477,6 +544,8 @@ return [
       ],
       0 => [
         'archer' => 'testArcher',
+        'inners' => 10,
+        'xcount' => 3,
         'club' => NULL,
         'round' => 'WAO Long Round',
         'dist1' => 254,
@@ -487,6 +556,8 @@ return [
       ],
       1 => [
         'archer' => 'testArcher',
+        'inners' => 10,
+        'xcount' => 3,
         'club' => NULL,
         'round' => 'WAO Long Round',
         'dist1' => 230,
@@ -497,6 +568,8 @@ return [
       ],
       2 => [
         'archer' => 'testArcher',
+        'inners' => 10,
+        'xcount' => 3,
         'club' => NULL,
         'round' => 'WAO Long Round',
         'dist1' => 177,
@@ -507,6 +580,8 @@ return [
       ],
       3 => [
         'archer' => 'testArcher',
+        'inners' => 10,
+        'xcount' => 3,
         'club' => NULL,
         'round' => 'WAO Long Round',
         'dist1' => 0,
@@ -517,6 +592,8 @@ return [
       ],
       4 => [
         'archer' => 'testArcher',
+        'inners' => 10,
+        'xcount' => 3,
         'club' => NULL,
         'round' => 'WAO Long Round',
         'dist1' => 226,
@@ -527,6 +604,8 @@ return [
       ],
       5 => [
         'archer' => 'testArcher',
+        'inners' => 10,
+        'xcount' => 3,
         'club' => NULL,
         'round' => 'WAO Long Round',
         'dist1' => 214,
@@ -537,6 +616,8 @@ return [
       ],
       6 => [
         'archer' => 'testArcher',
+        'inners' => 10,
+        'xcount' => 3,
         'club' => NULL,
         'round' => 'WAO Long Round',
         'dist1' => 253,
@@ -547,6 +628,8 @@ return [
       ],
       7 => [
         'archer' => 'testArcher',
+        'inners' => 10,
+        'xcount' => 3,
         'club' => NULL,
         'round' => 'WAO Long Round',
         'dist1' => 225,
@@ -557,6 +640,8 @@ return [
       ],
       8 => [
         'archer' => 'testArcher',
+        'inners' => 10,
+        'xcount' => 3,
         'club' => NULL,
         'round' => 'WAO Long Round',
         'dist1' => 263,
@@ -567,6 +652,8 @@ return [
       ],
       9 => [
         'archer' => 'testArcher',
+        'inners' => 10,
+        'xcount' => 3,
         'club' => NULL,
         'round' => 'WAO Long Round',
         'dist1' => 260,
@@ -576,7 +663,7 @@ return [
         'total' => 771,
       ],
     ],
-    'Mens Open Recurve' => [
+    'Open Recurve Mens' => [
       'rounds' => [
         'dist1' => 60,
         'dist2' => 50,
@@ -587,6 +674,8 @@ return [
       ],
       0 => [
         'archer' => 'testArcher',
+        'inners' => 10,
+        'xcount' => 3,
         'club' => NULL,
         'round' => 'WAO Long Round',
         'dist1' => 253,
@@ -597,6 +686,8 @@ return [
       ],
       1 => [
         'archer' => 'testArcher',
+        'inners' => 10,
+        'xcount' => 3,
         'club' => NULL,
         'round' => 'WAO Short Round',
         'dist1' => 243,
@@ -607,6 +698,8 @@ return [
       ],
       2 => [
         'archer' => 'testArcher',
+        'inners' => 10,
+        'xcount' => 3,
         'club' => NULL,
         'round' => 'WAO Long Round',
         'dist1' => 0,
@@ -617,6 +710,8 @@ return [
       ],
       3 => [
         'archer' => 'testArcher',
+        'inners' => 10,
+        'xcount' => 3,
         'club' => NULL,
         'round' => 'WAO Long Round',
         'dist1' => 116,
@@ -627,6 +722,8 @@ return [
       ],
       4 => [
         'archer' => 'testArcher',
+        'inners' => 10,
+        'xcount' => 3,
         'club' => NULL,
         'round' => 'WAO Short Round',
         'dist1' => 237,
@@ -637,6 +734,8 @@ return [
       ],
       5 => [
         'archer' => 'testArcher',
+        'inners' => 10,
+        'xcount' => 3,
         'club' => NULL,
         'round' => 'WAO Long Round',
         'dist1' => 260,
@@ -647,6 +746,8 @@ return [
       ],
       6 => [
         'archer' => 'testArcher',
+        'inners' => 10,
+        'xcount' => 3,
         'club' => NULL,
         'round' => 'WAO Long Round',
         'dist1' => 0,
@@ -657,6 +758,8 @@ return [
       ],
       7 => [
         'archer' => 'testArcher',
+        'inners' => 10,
+        'xcount' => 3,
         'club' => NULL,
         'round' => 'WAO Long Round',
         'dist1' => 251,
@@ -667,6 +770,8 @@ return [
       ],
       8 => [
         'archer' => 'testArcher',
+        'inners' => 10,
+        'xcount' => 3,
         'club' => NULL,
         'round' => 'WAO Long Round',
         'dist1' => 167,
@@ -677,6 +782,8 @@ return [
       ],
       9 => [
         'archer' => 'testArcher',
+        'inners' => 10,
+        'xcount' => 3,
         'club' => NULL,
         'round' => 'WAO Long Round',
         'dist1' => 207,
@@ -687,6 +794,8 @@ return [
       ],
       10 => [
         'archer' => 'testArcher',
+        'inners' => 10,
+        'xcount' => 3,
         'club' => NULL,
         'round' => 'WAO Long Round',
         'dist1' => 259,
@@ -697,6 +806,8 @@ return [
       ],
       11 => [
         'archer' => 'testArcher',
+        'inners' => 10,
+        'xcount' => 3,
         'club' => NULL,
         'round' => 'WAO Short Round',
         'dist1' => 216,
@@ -707,6 +818,8 @@ return [
       ],
       12 => [
         'archer' => 'testArcher',
+        'inners' => 10,
+        'xcount' => 3,
         'club' => NULL,
         'round' => 'WAO Long Round',
         'dist1' => 0,
@@ -716,7 +829,7 @@ return [
         'total' => 0,
       ],
     ],
-    'Womens Open Recurve' => [
+    'Open Recurve Womens' => [
       'rounds' => [
         'dist1' => 40,
         'dist2' => 30,
@@ -727,6 +840,8 @@ return [
       ],
       0 => [
         'archer' => 'testArcher',
+        'inners' => 10,
+        'xcount' => 3,
         'club' => NULL,
         'round' => 'WAO Short Round',
         'dist1' => 160,
@@ -737,6 +852,8 @@ return [
       ],
       1 => [
         'archer' => 'testArcher',
+        'inners' => 10,
+        'xcount' => 3,
         'club' => NULL,
         'round' => 'WAO Long Round',
         'dist1' => 254,
@@ -747,6 +864,8 @@ return [
       ],
       2 => [
         'archer' => 'testArcher',
+        'inners' => 10,
+        'xcount' => 3,
         'club' => NULL,
         'round' => 'WAO Short Round',
         'dist1' => 218,
@@ -757,6 +876,8 @@ return [
       ],
       3 => [
         'archer' => 'testArcher',
+        'inners' => 10,
+        'xcount' => 3,
         'club' => NULL,
         'round' => 'WAO Long Round',
         'dist1' => 234,
@@ -767,6 +888,8 @@ return [
       ],
       4 => [
         'archer' => 'testArcher',
+        'inners' => 10,
+        'xcount' => 3,
         'club' => NULL,
         'round' => 'WAO Long Round',
         'dist1' => 240,
@@ -777,6 +900,8 @@ return [
       ],
       5 => [
         'archer' => 'testArcher',
+        'inners' => 10,
+        'xcount' => 3,
         'club' => NULL,
         'round' => 'WAO Long Round',
         'dist1' => 214,
@@ -787,6 +912,8 @@ return [
       ],
       6 => [
         'archer' => 'testArcher',
+        'inners' => 10,
+        'xcount' => 3,
         'club' => NULL,
         'round' => 'WAO Long Round',
         'dist1' => 206,
@@ -797,6 +924,8 @@ return [
       ],
       7 => [
         'archer' => 'testArcher',
+        'inners' => 10,
+        'xcount' => 3,
         'club' => NULL,
         'round' => 'WAO Long Round',
         'dist1' => 231,
@@ -807,6 +936,8 @@ return [
       ],
       8 => [
         'archer' => 'testArcher',
+        'inners' => 10,
+        'xcount' => 3,
         'club' => NULL,
         'round' => 'WAO Long Round',
         'dist1' => 267,
@@ -816,7 +947,7 @@ return [
         'total' => 828,
       ],
     ],
-    'Mens U18 Recurve' => [
+    'U18 Recurve Mens' => [
       'rounds' => [
         'dist1' => 60,
         'dist2' => 50,
@@ -827,6 +958,8 @@ return [
       ],
       0 => [
         'archer' => 'testArcher',
+        'inners' => 10,
+        'xcount' => 3,
         'club' => NULL,
         'round' => 'WAO Long Round',
         'dist1' => 0,
@@ -837,6 +970,8 @@ return [
       ],
       1 => [
         'archer' => 'testArcher',
+        'inners' => 10,
+        'xcount' => 3,
         'club' => NULL,
         'round' => 'WAO Long Round',
         'dist1' => 241,
@@ -847,6 +982,8 @@ return [
       ],
       2 => [
         'archer' => 'testArcher',
+        'inners' => 10,
+        'xcount' => 3,
         'club' => NULL,
         'round' => 'WAO Long Round',
         'dist1' => 141,
@@ -856,7 +993,7 @@ return [
         'total' => 505,
       ],
     ],
-    'Womens U18 Recurve' => [
+    'U18 Recurve Womens' => [
       'rounds' => [
         'dist1' => 40,
         'dist2' => 30,
@@ -867,6 +1004,8 @@ return [
       ],
       0 => [
         'archer' => 'testArcher',
+        'inners' => 10,
+        'xcount' => 3,
         'club' => NULL,
         'round' => 'WAO Short Round',
         'dist1' => 188,
@@ -877,6 +1016,8 @@ return [
       ],
       1 => [
         'archer' => 'testArcher',
+        'inners' => 10,
+        'xcount' => 3,
         'club' => NULL,
         'round' => 'WAO Short Round',
         'dist1' => 172,
@@ -886,7 +1027,7 @@ return [
         'total' => 625,
       ],
     ],
-    'Mens U21 Recurve' => [
+    'U21 Recurve Mens' => [
       'rounds' => [
         'dist1' => 60,
         'dist2' => 50,
@@ -897,6 +1038,8 @@ return [
       ],
       0 => [
         'archer' => 'testArcher',
+        'inners' => 10,
+        'xcount' => 3,
         'club' => NULL,
         'round' => 'WAO Long Round',
         'dist1' => 248,
@@ -906,7 +1049,7 @@ return [
         'total' => 782,
       ],
     ],
-    'Womens U21 Recurve' => [
+    'U21 Recurve Womens' => [
       'rounds' => [
         'dist1' => 40,
         'dist2' => 30,
@@ -917,6 +1060,8 @@ return [
       ],
       0 => [
         'archer' => 'testArcher',
+        'inners' => 10,
+        'xcount' => 3,
         'club' => NULL,
         'round' => 'WAO Short Round',
         'dist1' => 0,
@@ -927,6 +1072,8 @@ return [
       ],
       1 => [
         'archer' => 'testArcher',
+        'inners' => 10,
+        'xcount' => 3,
         'club' => NULL,
         'round' => 'WAO Long Round',
         'dist1' => 201,
@@ -936,5 +1083,4 @@ return [
         'total' => 636,
       ],
     ],
-  ],
 ];

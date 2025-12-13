@@ -66,7 +66,6 @@ class ProfileController extends Controller
            ", ['userid' => $user->userid]);
 
             $resultscontroller = new ResultsController();
-            $eventresultscontroller = new EventResultsController();
             $leagueresultscontroller = new LeagueResultsController();
 
             $finalresults = [];
@@ -88,7 +87,7 @@ class ProfileController extends Controller
                     $evententry = $resultscontroller->getEventEntrySorted($event->eventid, $user->userid);
 
                     if (!empty($evententry)) {
-                        $results = $eventresultscontroller->formatOverallResults($evententry, $flatscores);
+                        $results = $this->formatOverallResults($evententry, $flatscores);
                         $result = reset($results);
 
                         if (empty($result)) {
@@ -551,6 +550,149 @@ class ProfileController extends Controller
         return redirect()->back()->with('success', 'Profile Updated');
     }
 
+
+
+    /**
+     * Old Method, needs to be updated
+     *  - Only used now in the profilecontroller
+     */
+    protected function formatOverallResults($entries, $flatscores)
+    {
+        $numberofec = count(array_column($flatscores, 'eventcompetitionid', 'eventcompetitionid'));
+
+        $eventcompseq = $flatscoressorted = [];
+        foreach ($flatscores as $flatscore) {
+            // Add scores to a UserID KEY'd array
+            $flatscoressorted[$flatscore->userid][] = $flatscore;
+
+            // reformat the round name
+            $flatscore->roundname = $flatscore->roundname . date(' - d M', strtotime($flatscore->compdate)) . '|' .$flatscore->eventcompetitionid;
+
+            $eventcompseq[$flatscore->roundname] = $flatscore->sequence;
+        }
+
+        // loop over the scores and find the one that matches the div and round
+        foreach ($entries as $key => $entry) {
+
+            if (!empty($flatscoressorted[$entry->userid])) {
+
+                // create the array for the entry's scores
+                $entry->score = [];
+
+                // they have scores, find the score that matches the details
+                foreach ($flatscoressorted[$entry->userid] as $flatscore) {
+
+                    // if its an event
+                    if ((!empty($flatscore->eventtypeid) && $flatscore->eventtypeid === 1) && ($entry->divisionid == $flatscore->divisionid)) {
+                        $entry->score[$flatscore->roundname] = $flatscore->total;
+                        continue;
+                    }
+
+                    // league stuff needs to be checked
+                    $divMatch = $entry->divisionid == $flatscore->divisionid;
+                    $roundMatch = $entry->roundid == $flatscore->roundid;
+
+                    if ($divMatch && $roundMatch) {
+                        $entry->score[$flatscore->roundname] = $flatscore->total;
+                    }
+                }
+            }
+            else {
+                // remove the entry
+                unset($entries[$key]);
+            }
+        }
+
+        $finalResults = [];
+        foreach ($entries as $key => $entry) {
+
+            // Make sure they have a score
+            if (empty($entry->score)) {
+                unset($entries[$key]);
+                continue;
+            }
+
+            $gender = $entry->gender == 'm' ? 'Men\'s ' : 'Women\'s ';
+
+            $key = $gender . $entry->divisionname . ' - ' . ($entry->roundname);
+
+            $finalResults[$entry->bowtype][$key][] = $entry;
+        }
+
+        // Sort by sequence
+        foreach ($finalResults as $bowtype => &$divisions) {
+            foreach ($divisions as $divisionname => &$rounds) {
+
+                // Build an array of all the round names
+                $ecomp = [];
+                foreach ($rounds as $round) {
+                    foreach (array_keys($round->score) as $key) {
+                        $ecomp[$key] = $key;
+                    }
+                }
+
+                // Sort them by the sequence
+                uksort($ecomp, function($a, $b) use ($eventcompseq) {
+                    if (!isset($eventcompseq[$a]) || !isset($eventcompseq[$b])) {
+                        return -1;
+                    }
+                    if ($eventcompseq[$a] > $eventcompseq[$b]) {
+                        return 1;
+                    }
+                    if ($eventcompseq[$a] < $eventcompseq[$b]) {
+                        return -1;
+                    }
+                    return 0;
+                });
+
+
+                // Add users results into the results array
+                foreach ($rounds as $archer) {
+
+                    $result = [];
+                    $result['Archer'] = '<a href="/profile/public/'.$archer->username.'">' . ucwords($archer->firstname . ' ' . $archer->lastname) . '</a>';
+
+                    if (!empty($archer->schoolname)) {
+                        $result['School'] = ucwords($archer->schoolname);
+                    }
+                    foreach($ecomp as $key) {
+                        $result[$key] = '';
+                    }
+
+                    if (count($ecomp) < $numberofec) {
+                        foreach (range(count($ecomp), $numberofec - 1) as $i) {
+                            $result[$i] = '';
+                        }
+                    }
+
+                    $totalscore = 0;
+                    foreach ($archer->score as $roundname => $score) {
+                        $result[$roundname] = $score;
+                        $totalscore += $score;
+                    }
+                    $result['Total'] = $totalscore;
+                    $divisions[$divisionname]['results'][] = $result;
+                }
+
+                // Sort the results by Total
+                usort($divisions[$divisionname]['results'], function($a, $b) {
+                    if ($a['Total'] == $b['Total']) {
+                        return 0;
+                    }
+                    if ($a['Total'] < $b['Total']) {
+                        return 1;
+                    }
+                    if ($a['Total'] > $b['Total']) {
+                        return -1;
+                    }
+                    return 0;
+                });
+
+            }
+        }
+
+        return $finalResults;
+    }
 
 
 }

@@ -14,96 +14,186 @@ class ScoringServiceTest extends TestCase
     protected function setUp(): void
     {
         $this->results = include 'results.php';
-        $this->scoringService = new ScoringService($this->results);
+        $this->scoringService = new ScoringService();
 
         parent::setUp();
     }
 
-    public function test_scoring_service_has_no_results()
+    /**
+     * @test
+     */
+    public function it_sorts_results_by_total_score_descending()
     {
-        $scoringService = new ScoringService([]);
+        $unsortedResults = [
+            'Test Division' => [
+                'rounds' => ['dist1' => 50, 'dist2' => 40],
+                0 => ['archer' => 'Archer A', 'total' => 500, 'inners' => 10, 'xcount' => 5],
+                1 => ['archer' => 'Archer B', 'total' => 700, 'inners' => 15, 'xcount' => 8],
+                2 => ['archer' => 'Archer C', 'total' => 600, 'inners' => 12, 'xcount' => 6],
+            ],
+        ];
 
-        $this->assertEmpty($scoringService->getResults());
+        $sorted = $this->scoringService->setResults($unsortedResults)->sort()->getSortedResults();
+
+        $scores = array_values(array_filter(array_keys($sorted['Test Division']), 'is_numeric'));
+        $this->assertEquals(700, $sorted['Test Division'][$scores[0]]['total']);
+        $this->assertEquals(600, $sorted['Test Division'][$scores[1]]['total']);
+        $this->assertEquals(500, $sorted['Test Division'][$scores[2]]['total']);
     }
 
-    public function test_scoring_service_has_results_when_passed()
+    /**
+     * @test
+     */
+    public function it_breaks_ties_using_inners_count()
     {
-        $this->assertNotEmpty($this->scoringService->getResults());
+        $tiedResults = [
+            'Test Division' => [
+                'rounds' => ['dist1' => 50],
+                0 => ['archer' => 'Archer A', 'total' => 700, 'inners' => 10, 'xcount' => 5],
+                1 => ['archer' => 'Archer B', 'total' => 700, 'inners' => 15, 'xcount' => 5],
+                2 => ['archer' => 'Archer C', 'total' => 700, 'inners' => 12, 'xcount' => 5],
+            ],
+        ];
 
-        $this->assertCount(3, $this->scoringService->getResults());
+        $sorted = $this->scoringService->setResults($tiedResults)->sort()->getSortedResults();
 
-        $this->assertArrayHasKey('barebow', $this->scoringService->getResults());
+        $scores = array_values(array_filter(array_keys($sorted['Test Division']), 'is_numeric'));
+        $this->assertEquals(15, $sorted['Test Division'][$scores[0]]['inners']);
+        $this->assertEquals(12, $sorted['Test Division'][$scores[1]]['inners']);
+        $this->assertEquals(10, $sorted['Test Division'][$scores[2]]['inners']);
     }
 
-    public function test_can_get_a_result_by_key()
+    /**
+     * @test
+     */
+    public function it_breaks_ties_using_xcount_when_inners_are_equal()
     {
-        $this->assertNotEmpty($this->scoringService->getResultsByKey('barebow'));
+        $tiedResults = [
+            'Test Division' => [
+                'rounds' => ['dist1' => 50],
+                0 => ['archer' => 'Archer A', 'total' => 700, 'inners' => 15, 'xcount' => 5],
+                1 => ['archer' => 'Archer B', 'total' => 700, 'inners' => 15, 'xcount' => 10],
+                2 => ['archer' => 'Archer C', 'total' => 700, 'inners' => 15, 'xcount' => 8],
+            ],
+        ];
+
+        $sorted = $this->scoringService->setResults($tiedResults)->sort()->getSortedResults();
+
+        $scores = array_values(array_filter(array_keys($sorted['Test Division']), 'is_numeric'));
+        $this->assertEquals(10, $sorted['Test Division'][$scores[0]]['xcount']);
+        $this->assertEquals(8, $sorted['Test Division'][$scores[1]]['xcount']);
+        $this->assertEquals(5, $sorted['Test Division'][$scores[2]]['xcount']);
     }
 
-    public function test_can_get_all_results_sorted()
+    /**
+     * @test
+     */
+    public function it_preserves_rounds_array_after_sorting()
     {
-        $allResultsSorted = $this->scoringService->getSortedResults();
+        $results = [
+            'Test Division' => [
+                'rounds' => ['dist1' => 50, 'dist2' => 40, 'dist3' => 30],
+                0 => ['archer' => 'Archer A', 'total' => 500, 'inners' => 10, 'xcount' => 5],
+            ],
+        ];
 
-        foreach ($allResultsSorted as $division => $results) {
-            unset($results['rounds']); // Not needed for testing totals
+        $sorted = $this->scoringService->setResults($results)->sort()->getSortedResults();
 
-            $previousKey = key($results);
-            foreach ($results as $key => $result) {
-                if ($key == $previousKey) {
-                    continue;
-                }
+        $this->assertArrayHasKey('rounds', $sorted['Test Division']);
+        $this->assertEquals(['dist1' => 50, 'dist2' => 40, 'dist3' => 30], $sorted['Test Division']['rounds']);
+    }
 
-                $total = $result['total'];
-                $previousResult = $results[$previousKey]['total'];
+    /**
+     * @test
+     */
+    public function it_handles_zero_scores()
+    {
+        $results = [
+            'Test Division' => [
+                'rounds' => ['dist1' => 50],
+                0 => ['archer' => 'Archer A', 'total' => 0, 'inners' => 0, 'xcount' => 0],
+                1 => ['archer' => 'Archer B', 'total' => 500, 'inners' => 10, 'xcount' => 5],
+            ],
+        ];
 
-                if (!empty($total)) {
-                    $this->assertGreaterThanOrEqual(
-                        $total,
-                        $previousResult,
-                        sprintf(
-                            "%s is not greater than %s for Division %s",
-                            $total,
-                            $previousResult,
-                            $division
-                        )
-                    );
-                }
-                $previousKey = $key;
+        $sorted = $this->scoringService->setResults($results)->sort()->getSortedResults();
+
+        $scores = array_values(array_filter(array_keys($sorted['Test Division']), 'is_numeric'));
+        $this->assertEquals(500, $sorted['Test Division'][$scores[0]]['total']);
+        $this->assertEquals(0, $sorted['Test Division'][$scores[1]]['total']);
+    }
+
+    /**
+     * @test
+     */
+    public function it_sorts_multiple_divisions()
+    {
+        $sorted = $this->scoringService->setResults($this->results)->sort()->getSortedResults();
+
+        foreach ($sorted as $division => $results) {
+            $this->assertArrayHasKey('rounds', $results);
+
+            $scores = array_filter($results, fn($key) => is_numeric($key), ARRAY_FILTER_USE_KEY);
+            $totals = array_column($scores, 'total');
+
+            $sortedTotals = $totals;
+            rsort($sortedTotals);
+
+            // Verify descending order (allowing for ties)
+            for ($i = 0; $i < count($totals) - 1; $i++) {
+                $this->assertGreaterThanOrEqual($totals[$i + 1], $totals[$i]);
             }
         }
     }
 
-    public function test_can_get_division_results_sorted()
+    /**
+     * @test
+     */
+    public function it_handles_empty_total_values()
     {
-        $recurveMensOpen = $this->scoringService->getSortedResultsByDivisionKey('Mens Open Recurve');
+        $results = [
+            'Test Division' => [
+                'rounds' => ['dist1' => 50],
+                0 => ['archer' => 'Archer A', 'total' => '', 'inners' => 0, 'xcount' => 0],
+                1 => ['archer' => 'Archer B', 'total' => '', 'inners' => 0, 'xcount' => 0],
+            ],
+        ];
 
-        $this->assertCount(14, $recurveMensOpen);
+        $sorted = $this->scoringService->setResults($results)->sort()->getSortedResults();
 
-        unset($recurveMensOpen['rounds']); // Not needed to test the totals
-
-        $this->assertCount(13, $recurveMensOpen);
-
-        $previousKey = key($recurveMensOpen);
-        foreach ($recurveMensOpen as $key => $result) {
-            if ($key == $previousKey) {
-                continue;
-            }
-
-            $total = $result['total'];
-            $previousResult = $recurveMensOpen[$previousKey]['total'];
-
-            if (!empty($total)) {
-                $this->assertGreaterThanOrEqual(
-                    $total,
-                    $previousResult,
-                    sprintf(
-                        "%s is not greater than %s",
-                        $total,
-                        $previousResult,
-                    )
-                );
-            }
-            $previousKey = $key;
-        }
+        $this->assertNotEmpty($sorted);
+        $this->assertArrayHasKey('Test Division', $sorted);
     }
+
+    /**
+     * @test
+     */
+    public function it_maintains_archer_data_integrity()
+    {
+        $results = [
+            'Test Division' => [
+                'rounds' => ['dist1' => 50],
+                0 => [
+                    'archer' => 'Test Archer',
+                    'club' => 'Test Club',
+                    'round' => 'Test Round',
+                    'dist1' => 100,
+                    'total' => 100,
+                    'inners' => 5,
+                    'xcount' => 3,
+                ],
+            ],
+        ];
+
+        $sorted = $this->scoringService->setResults($results)->sort()->getSortedResults();
+
+        $scores = array_filter($sorted['Test Division'], fn($key) => is_numeric($key), ARRAY_FILTER_USE_KEY);
+        $archer = reset($scores);
+
+        $this->assertEquals('Test Archer', $archer['archer']);
+        $this->assertEquals('Test Club', $archer['club']);
+        $this->assertEquals('Test Round', $archer['round']);
+        $this->assertEquals(100, $archer['dist1']);
+    }
+
 }

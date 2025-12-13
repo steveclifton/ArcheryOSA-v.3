@@ -4,85 +4,67 @@ namespace App\Services;
 
 class ScoringService
 {
-
     private array $results;
 
-    private array $sortedResults;
-
-    public function __construct(array $results)
+    public function setResults($results)
     {
         $this->results = $results;
-        $this->sortedResults = $this->sort();
+        return $this;
     }
 
-    protected function sort()
-    {
-        $return = [];
-
-        foreach ($this->results as $bowtype => $r) {
-
-            // HERE I NEED TO SORT THE DIVISIONS BY A SEQUENCE YET TO BE ADDED TO DIVISIONS
-            ksort($r);
-
-            foreach ($r as $d => &$res) {
-                $rounds = $res['rounds'];
-                unset($res['rounds']);
-
-                // Sort each divisions results by highest first
-                uasort($res, function ($a, $b) use ($d) {
-                    if (empty($a['total']) && empty($b['total'])) {
-                        return 0;
-                    }
-
-                    if ((int)$b['total'] > (int)$a['total']) {
-                        return 1;
-                    }
-                    if ((int)$b['total'] < (int)$a['total']) {
-                        return -1;
-                    }
-
-                    if ((int)$b['total'] != (int)$a['total']) {
-                        return 0;
-                    }
-
-                    if ((int)$b['inners'] > (int)$a['inners']) {
-                        return 1;
-                    }
-                    if ((int)$b['inners'] < (int)$a['inners']) {
-                        return -1;
-                    }
-
-                    return 0;
-                });
-                $res['rounds'] = $rounds;
-            }
-
-            $return = array_merge($return, $r);
-        }
-
-        return $return;
-    }
-
-    public function getResults(): array
+    public function getSortedResults()
     {
         return $this->results;
     }
 
-    public function getResultsByKey(string $key): ?array
+    public function sort()
     {
-        return $this->results[$key] ?? null;
+        foreach ($this->results as $key => &$r) {
+            // Remove rounds before sorting
+            $rounds = $r['rounds'] ?? [];
+            unset($r['rounds']);
+
+            // Sort each divisions results by highest first
+            uasort($r, function ($a, $b) {
+                if (empty($a['total']) && empty($b['total'])) {
+                    return 0;
+                }
+
+                if ((int)$b['total'] > (int)$a['total']) {
+                    return 1;
+                }
+                if ((int)$b['total'] < (int)$a['total']) {
+                    return -1;
+                }
+
+                // Stop here if totals are not equal - this means the scores are not tied
+                if ((int)$b['total'] != (int)$a['total']) {
+                    return 0;
+                }
+
+                // First attempt to break tie with inners
+                if ((int)$b['inners'] > (int)$a['inners']) {
+                    return 1;
+                } else if ((int)$b['inners'] < (int)$a['inners']) {
+                    return -1;
+                } else if ((int)$b['inners'] == (int)$a['inners']) {
+                    // If inners are also tied, continue to next tiebreaker
+                    // Second attempt to break tie with xcount
+                    if ((int)$b['xcount'] > (int)$a['xcount']) {
+                        return 1;
+                    } else if ((int)$b['xcount'] < (int)$a['xcount']) {
+                        return -1;
+                    }
+                }
+
+                return 0;
+            });
+
+            // Restore rounds after sorting
+            $this->results[$key]['rounds'] = $rounds;
+        }
+
+        return $this;
     }
-
-    public function getSortedResults(): array
-    {
-        return $this->sortedResults;
-    }
-
-    public function getSortedResultsByDivisionKey(string $key): ?array
-    {
-        return $this->sortedResults[$key] ?? null;
-
-    }
-
 
 }
