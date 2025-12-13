@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers\League;
 
-use App\LeaguePoint;
+use App\Models\LeaguePoint;
 use App\Models\Event;
 use App\Models\EventCompetition;
 use App\Models\FlatScore;

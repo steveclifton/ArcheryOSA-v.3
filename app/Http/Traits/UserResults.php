@@ -2,7 +2,7 @@
 
 namespace App\Http\Traits;
 
-use App\LeaguePoint;
+use App\Models\LeaguePoint;
 use Illuminate\Support\Facades\DB;
 
 trait UserResults
