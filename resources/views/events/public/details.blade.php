@@ -165,7 +165,7 @@
                             <tr>
                                 <th scope="row">Location</th>
                                 <td>
-                                    {!! nl2br($event->location)!!}
+                                    {!! nl2br($event->location ?? '')!!}
                                 </td>
                             </tr>
                             <tr>
@@ -198,20 +198,20 @@
                             <tr>
                                 <th scope="row">Event Info</th>
                                 <td style="word-wrap: break-word;">
-                                    {!! nl2br($event->info) !!}
+                                    {!! nl2br($event->info ?? '') !!}
                                 </td>
                             </tr>
                             <tr>
                                 <th scope="row">Schedule</th>
                                 <td>
-                                    {!! nl2br($event->schedule) !!}
+                                    {!! nl2br($event->schedule ?? '') !!}
                                 </td>
                             </tr>
                             @if(!empty($event->filename))
                                 <tr>
                                     <th scope="row">Downloads</th>
                                     <td>
-                                        <a href="/eventdownload/{{$event->filename}}">{{ $event->filename }}</a>
+                                        <a href="/files/events/{{$event->filename}}">{{ $event->filename }}</a>
                                     </td>
                                 </tr>
                             @endif
