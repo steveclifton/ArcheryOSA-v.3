@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers\Auth;
 
-use App\Http\Controllers\Events\PublicEvents\Event\EventResultsController;
 use App\Http\Controllers\Events\PublicEvents\League\LeagueResultsController;
 use App\Http\Controllers\Events\PublicEvents\ResultsController;
 use App\Http\Requests\User\CreateChild;

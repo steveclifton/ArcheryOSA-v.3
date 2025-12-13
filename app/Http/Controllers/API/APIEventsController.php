@@ -2,11 +2,11 @@
 
 namespace App\Http\Controllers\API;
 
-use App\Http\Controllers\Events\PublicEvents\Event\EventResultsController;
 use App\Http\Controllers\Events\PublicEvents\League\LeagueResultsController;
 use App\Http\Controllers\Events\PublicEvents\ResultsController;
 use App\Models\Event;
 use App\Models\EventType;
+use App\Services\EventResultService;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\DB;
@@ -201,7 +201,7 @@ class APIEventsController extends Controller
 
                 if (empty($request->competitionid) || $request->competitionid == 'overall') {
                     // overall
-                    $data = (new EventResultsController())->getOverallResults($event, true);
+                    $data = (new EventResultService())->getOverallResults($event, true);
 
                     $return['data']['results'] = !empty($data['results']) ? $data['results'] : [];
                     $return['data']['competitions'] = !empty($data['competitionlabels']) ? $data['competitionlabels'] : [];
@@ -212,7 +212,7 @@ class APIEventsController extends Controller
                     $id = intval($request->competitionid);
 
                     if (!empty($id)) {
-                        $data = (new EventResultsController())->getEventCompetitionResults($event, $id, true);
+                        $data = (new EventResultService())->getEventCompetitionResults($event, $id, true);
                         $return['data']['results'] = !empty($data['results']) ? $data['results'] : [];
                         $return['data']['competitions'] = !empty($data['eventcompetition']) ? $data['eventcompetition'] : [];
                     }

@@ -3,8 +3,8 @@
 namespace App\Http\Controllers\Events\PublicEvents\Postal;
 
 use App\Http\Controllers\Controller;
-use App\Http\Controllers\Events\PublicEvents\Event\EventResultsController;
 use App\Models\Event;
+use App\Services\EventResultService;
 
 class PostalResultsController extends Controller
 {
@@ -16,6 +16,6 @@ class PostalResultsController extends Controller
      */
     public function getOverallResults(Event $event)
     {
-        return (new EventResultsController())->getOverallResults($event);
+        return (new EventResultService())->getOverallResults($event);
     }
 }

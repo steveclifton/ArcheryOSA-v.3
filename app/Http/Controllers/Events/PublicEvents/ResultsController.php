@@ -2,13 +2,13 @@
 
 namespace App\Http\Controllers\Events\PublicEvents;
 
-use App\Http\Controllers\Events\PublicEvents\Event\EventResultsController;
 use App\Http\Controllers\Events\PublicEvents\League\LeagueResultsController;
 use App\Http\Controllers\Events\PublicEvents\Postal\PostalResultsController;
 use App\Models\Division;
 use App\Models\Event;
 use App\Models\EventCompetition;
 use App\Models\FlatScore;
+use App\Services\EventResultService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use App\Http\Traits\UserResults;
@@ -45,7 +45,7 @@ class ResultsController extends EventController
             }
 
             // Normal Event
-            return (new EventResultsController())->getOverallResults($event);
+            return (new EventResultService())->getOverallResults($event);
         }
 
         // league processing
@@ -54,7 +54,7 @@ class ResultsController extends EventController
         }
 
         // Get the results for the event and the eventcompetitionid
-        return (new EventResultsController())->getEventCompetitionResults($event, $request->eventcompetitionid);
+        return (new EventResultService())->getEventCompetitionResults($event, $request->eventcompetitionid);
 
     }
 
