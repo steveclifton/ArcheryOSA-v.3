@@ -180,13 +180,8 @@ class EventController extends Controller
             return redirect('/');
         }
 
-        if (1) {
-            $leagueController = new LeagueController();
-            return $leagueController->getUserLeagueScoringView($event);
-        }
-
-        return back()->with('failure', 'Not supported currently');
-        dd($request);
+        $leagueController = new LeagueController();
+        return $leagueController->getUserLeagueScoringView($event);
     }
 
 

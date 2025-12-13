@@ -14,8 +14,6 @@ use Illuminate\Support\Facades\DB;
 class LeagueController extends Controller
 {
 
-
-
     public function getUserLeagueScoringView(Event $event)
     {
 
@@ -41,15 +39,19 @@ class LeagueController extends Controller
             AND (ee.`userid` IN (
                   SELECT `relationid`
                   FROM `userrelations`
-                  WHERE `userid` = '".Auth::id()."'
+                  WHERE `userid` = :user_relation_id
                 )
                 OR 
-                ee.`userid` = '".Auth::id()."'
+                ee.`userid` = userid
             )
             GROUP BY `ec`.`entrycompetitionid`
             ORDER BY ee.firstname
-        ", ['eventid'=> $event->eventid,
-            'eventcompetitionid' => $eventcompetition->eventcompetitionid]
+        ", [
+            'eventid'=> $event->eventid,
+            'eventcompetitionid' => $eventcompetition->eventcompetitionid,
+            'user_relation_id' => Auth::id(),
+            'userid' => Auth::id()
+            ]
         );
 
         foreach ($entries as $entry) {
@@ -96,7 +98,6 @@ class LeagueController extends Controller
             WHERE `week` = :week
             AND `eventid` = :eventid
             AND `total` <> 0
-            
             ORDER BY `divisionid`, `total` DESC
         ", ['week' => $eventcompetition->currentweek, 'eventid' => $event->eventid]);
 

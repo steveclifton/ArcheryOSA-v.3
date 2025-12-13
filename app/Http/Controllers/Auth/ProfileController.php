@@ -156,9 +156,9 @@ class ProfileController extends Controller
             JOIN `evententrys` ee USING (`eventid`)
             JOIN `eventstatus` evs USING (`eventstatusid`)
             JOIN `entrystatus` es ON (ee.entrystatusid = es.entrystatusid)
-            WHERE `ee`.`userid` = '".Auth::id()."'
+            WHERE `ee`.`userid` = :userid
             ORDER BY `e`.`start` DESC
-        ");
+        ", ['userid' => Auth::id()]);
 
 
         return view('profile.auth.events.myevents', compact('myevents'));
