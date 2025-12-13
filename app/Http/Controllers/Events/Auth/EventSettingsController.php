@@ -11,7 +11,7 @@ use App\Models\EventStatus;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Cache;
-use Image;
+use Intervention\Image\Laravel\Facades\Image;
 
 class EventSettingsController extends EventController
 {
@@ -103,7 +103,7 @@ class EventSettingsController extends EventController
             // Create for cards
             $filename = time() . rand(0,999) . '.' . $image->getClientOriginalExtension();
             $location = public_path('images/events/' . $filename);
-            Image::make($image)->resize(1024, 641)->save($location);
+            Image::read($image)->resize(1024, 641)->save($location);
             $event->imagedt = $filename;
 
         }
@@ -122,7 +122,7 @@ class EventSettingsController extends EventController
             // Create for cards
             $filename = time() . rand(0,999) . '.' . $image->getClientOriginalExtension();
             $location = public_path('images/events/' . $filename);
-            Image::make($image)->resize(1471, 200)->save($location);
+            Image::read($image)->resize(1471, 200)->save($location);
             $event->imagebanner = $filename;
         }
 
