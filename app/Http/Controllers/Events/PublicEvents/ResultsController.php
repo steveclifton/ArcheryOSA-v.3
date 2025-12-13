@@ -3,7 +3,6 @@
 namespace App\Http\Controllers\Events\PublicEvents;
 
 use App\Http\Controllers\Events\PublicEvents\League\LeagueResultsController;
-use App\Http\Controllers\Events\PublicEvents\Postal\PostalResultsController;
 use App\Models\Division;
 use App\Models\Event;
 use App\Models\EventCompetition;
@@ -41,7 +40,7 @@ class ResultsController extends EventController
             }
 
             if ($event->ispostal()) {
-                return (new PostalResultsController())->getOverallResults($event);
+                return (new EventResultService())->getOverallResults($event);
             }
 
             // Normal Event
