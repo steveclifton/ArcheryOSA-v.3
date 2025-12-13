@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "94bac5a12676d37cf52c437ac0ca7833",
+    "content-hash": "80a0f3af8d526ac1b7ea2c292986b556",
     "packages": [
         {
             "name": "brick/math",
@@ -5452,20 +5452,20 @@
         },
         {
             "name": "symfony/http-client",
-            "version": "v6.4.28",
+            "version": "v7.4.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/http-client.git",
-                "reference": "c9e69c185c4a845f9d46958cdb0dc7aa847f3981"
+                "reference": "26cc224ea7103dda90e9694d9e139a389092d007"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/http-client/zipball/c9e69c185c4a845f9d46958cdb0dc7aa847f3981",
-                "reference": "c9e69c185c4a845f9d46958cdb0dc7aa847f3981",
+                "url": "https://api.github.com/repos/symfony/http-client/zipball/26cc224ea7103dda90e9694d9e139a389092d007",
+                "reference": "26cc224ea7103dda90e9694d9e139a389092d007",
                 "shasum": ""
             },
             "require": {
-                "php": ">=8.1",
+                "php": ">=8.2",
                 "psr/log": "^1|^2|^3",
                 "symfony/deprecation-contracts": "^2.5|^3",
                 "symfony/http-client-contracts": "~3.4.4|^3.5.2",
@@ -5473,8 +5473,10 @@
                 "symfony/service-contracts": "^2.5|^3"
             },
             "conflict": {
+                "amphp/amp": "<2.5",
+                "amphp/socket": "<1.1",
                 "php-http/discovery": "<1.15",
-                "symfony/http-foundation": "<6.3"
+                "symfony/http-foundation": "<6.4"
             },
             "provide": {
                 "php-http/async-client-implementation": "*",
@@ -5483,19 +5485,20 @@
                 "symfony/http-client-implementation": "3.0"
             },
             "require-dev": {
-                "amphp/amp": "^2.5",
-                "amphp/http-client": "^4.2.1",
-                "amphp/http-tunnel": "^1.0",
-                "amphp/socket": "^1.1",
+                "amphp/http-client": "^4.2.1|^5.0",
+                "amphp/http-tunnel": "^1.0|^2.0",
                 "guzzlehttp/promises": "^1.4|^2.0",
                 "nyholm/psr7": "^1.0",
                 "php-http/httplug": "^1.0|^2.0",
                 "psr/http-client": "^1.0",
-                "symfony/dependency-injection": "^5.4|^6.0|^7.0",
-                "symfony/http-kernel": "^5.4|^6.0|^7.0",
-                "symfony/messenger": "^5.4|^6.0|^7.0",
-                "symfony/process": "^5.4|^6.0|^7.0",
-                "symfony/stopwatch": "^5.4|^6.0|^7.0"
+                "symfony/amphp-http-client-meta": "^1.0|^2.0",
+                "symfony/cache": "^6.4|^7.0|^8.0",
+                "symfony/dependency-injection": "^6.4|^7.0|^8.0",
+                "symfony/http-kernel": "^6.4|^7.0|^8.0",
+                "symfony/messenger": "^6.4|^7.0|^8.0",
+                "symfony/process": "^6.4|^7.0|^8.0",
+                "symfony/rate-limiter": "^6.4|^7.0|^8.0",
+                "symfony/stopwatch": "^6.4|^7.0|^8.0"
             },
             "type": "library",
             "autoload": {
@@ -5526,7 +5529,7 @@
                 "http"
             ],
             "support": {
-                "source": "https://github.com/symfony/http-client/tree/v6.4.28"
+                "source": "https://github.com/symfony/http-client/tree/v7.4.1"
             },
             "funding": [
                 {
@@ -5546,7 +5549,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2025-11-05T17:39:22+00:00"
+            "time": "2025-12-04T21:12:57+00:00"
         },
         {
             "name": "symfony/http-client-contracts",
@@ -7867,29 +7870,41 @@
         },
         {
             "name": "webpatser/laravel-countries",
-            "version": "1.5.4",
+            "version": "v2.0.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/webpatser/laravel-countries.git",
-                "reference": "000d7aaa67a1eb488275feafe6ab74a6b7544e84"
+                "reference": "f91e2d20827db8b4a554e2feab3c95c4a9a385ff"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/webpatser/laravel-countries/zipball/000d7aaa67a1eb488275feafe6ab74a6b7544e84",
-                "reference": "000d7aaa67a1eb488275feafe6ab74a6b7544e84",
+                "url": "https://api.github.com/repos/webpatser/laravel-countries/zipball/f91e2d20827db8b4a554e2feab3c95c4a9a385ff",
+                "reference": "f91e2d20827db8b4a554e2feab3c95c4a9a385ff",
                 "shasum": ""
             },
             "require": {
-                "php": ">=5.3.0"
+                "illuminate/database": "^11.0|^12.0",
+                "illuminate/support": "^11.0|^12.0",
+                "php": "^8.2"
+            },
+            "require-dev": {
+                "phpunit/phpunit": "^11.0"
             },
             "type": "library",
+            "extra": {
+                "laravel": {
+                    "aliases": {
+                        "Countries": "Webpatser\\Countries\\CountriesFacade"
+                    },
+                    "providers": [
+                        "Webpatser\\Countries\\CountriesServiceProvider"
+                    ]
+                }
+            },
             "autoload": {
-                "psr-0": {
-                    "Webpatser\\Countries": "src/"
-                },
-                "classmap": [
-                    "src/commands"
-                ]
+                "psr-4": {
+                    "Webpatser\\Countries\\": "src/"
+                }
             },
             "notification-url": "https://packagist.org/downloads/",
             "license": [
@@ -7899,7 +7914,7 @@
                 {
                     "name": "Christoph Kempen",
                     "email": "christoph@downsized.nl",
-                    "homepage": "http://downsized.nl/",
+                    "homepage": "https://downsized.nl/",
                     "role": "developer"
                 },
                 {
@@ -7907,10 +7922,12 @@
                     "role": "developer"
                 }
             ],
-            "description": "Laravel Countries is a bundle for Laravel, providing Almost ISO 3166_2, 3166_3, currency, Capital and more for all countries.",
+            "description": "Modern Laravel Countries package providing ISO 3166-2, ISO 3166-3, currency, capital and more for all countries. Compatible with Laravel 11.x and 12.x.",
             "homepage": "https://github.com/webpatser/laravel-countries",
             "keywords": [
+                "capitals",
                 "countries",
+                "currency",
                 "iso_3166_2",
                 "iso_3166_3",
                 "laravel"
@@ -7919,7 +7936,7 @@
                 "issues": "https://github.com/webpatser/laravel-countries/issues",
                 "source": "https://github.com/webpatser/laravel-countries"
             },
-            "time": "2018-05-16T06:37:24+00:00"
+            "time": "2025-09-12T14:51:15+00:00"
         }
     ],
     "packages-dev": [
