@@ -67,17 +67,27 @@ class ProfileController extends Controller
             $leagueresultscontroller = new LeagueResultsController();
 
             $finalresults = [];
-            foreach ($events as $event) {
 
-                $flatscores = DB::select("
+            $eventIds = array_column($events, 'eventid');
+
+            $flatscores = DB::select("
                 SELECT sf.*, CONCAT_WS(' ', r.label, ec.label) as roundname, r.unit, ec.date as compdate, ec.sequence
                 FROM `scores_flat` sf
                 JOIN `rounds` r USING (`roundid`)
                 JOIN `eventcompetitions` ec ON (sf.`eventcompetitionid` = ec.`eventcompetitionid`)
-                WHERE sf.`eventid` = :eventid
+                WHERE sf.`eventid` IN (" . implode(',', $eventIds) . ")
                 AND `sf`.`userid` = :userid
                 AND `sf`.`total` <> 0
-                ", ['eventid' => $event->eventid, 'userid' => $user->userid]);
+                ", ['userid' => $user->userid]);
+
+            // Pre-group scores by eventid to reduce queries
+            $scoresByEvent = [];
+            foreach ($flatscores as $flatscore) {
+                $scoresByEvent[$flatscore->eventid][] = $flatscore;
+            }
+
+            foreach ($events as $event) {
+                $flatscores = $scoresByEvent[$event->eventid] ?? [];
 
                 $scores += count($flatscores);
 
@@ -99,7 +109,7 @@ class ProfileController extends Controller
                         }
                     }
                 }
-                else if ($event->eventtypeid === 2) {
+                else if (false && $event->eventtypeid === 2) {
                     $eventObj = Event::where('eventid', $event->eventid)->first();
                     $results = [];
                     foreach (range(1,15) as $week) {
