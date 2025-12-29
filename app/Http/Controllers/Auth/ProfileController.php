@@ -70,7 +70,10 @@ class ProfileController extends Controller
 
             $eventIds = array_column($events, 'eventid');
 
-            $flatscores = DB::select("
+            $flatscores = [];
+
+            if (!empty($eventIds)) {
+                $flatscores = DB::select("
                 SELECT sf.*, CONCAT_WS(' ', r.label, ec.label) as roundname, r.unit, ec.date as compdate, ec.sequence
                 FROM `scores_flat` sf
                 JOIN `rounds` r USING (`roundid`)
@@ -79,6 +82,7 @@ class ProfileController extends Controller
                 AND `sf`.`userid` = :userid
                 AND `sf`.`total` <> 0
                 ", ['userid' => $user->userid]);
+            }
 
             // Pre-group scores by eventid to reduce queries
             $scoresByEvent = [];
