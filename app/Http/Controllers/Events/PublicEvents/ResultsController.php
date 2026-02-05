@@ -52,10 +52,6 @@ class ResultsController extends EventController
             return (new LeagueResultsController())->getLeagueCompetitionResults($event, $request->eventcompetitionid);
         }
 
-        if (!is_int($request->eventcompetitionid)) {
-            return back()->with('failure', 'Invalid Request');
-        }
-
         // Get the results for the event and the eventcompetitionid
         return (new EventResultService())->getEventCompetitionResults($event, $request->eventcompetitionid);
 
