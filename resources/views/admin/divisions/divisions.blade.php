@@ -44,6 +44,7 @@
                             <th width="20%">Name</th>
                             <th>Organisation</th>
                             <th>Code</th>
+                            <th width="10%">Sort Order</th>
                             <th>Visible</th>
                         </tr>
                         </thead>
@@ -55,6 +56,7 @@
                                     </th>
                                     <td>{{ $division->organisationname }}</td>
                                     <td>{{ strtoupper($division->code) }}</td>
+                                    <td>{{ $division->sortorder }}</td>
                                     <td>
                                         @if($division->visible)
                                             <i class="fa fa-check"></i>

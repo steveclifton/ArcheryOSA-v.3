@@ -35,6 +35,7 @@ class CreateDivision extends FormRequest
             'bowtype'        => 'nullable',
             'age'            => 'nullable',
             'visible'        => 'nullable',
+            'sortorder'      => 'nullable|integer',
 
         ];
     }

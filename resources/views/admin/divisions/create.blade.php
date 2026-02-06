@@ -63,6 +63,21 @@
                 </div>
 
                 <div class="form-group row">
+                    <label class="col-sm-12 col-md-3 col-form-label">Sort Order</label>
+                    <div class="col-md-9">
+                        <input name="sortorder" type="number" min="0" step="1"
+                               class="form-control{{ $errors->has('sortorder') ? ' is-invalid' : '' }}"
+                               value="{{ old('sortorder', 0) }}">
+                        @if ($errors->has('sortorder'))
+                            <span class="invalid-feedback" role="alert">
+                                <strong>{{ $errors->first('sortorder') }}</strong>
+                            </span>
+                        @endif
+                        <span class="help-block"><small>Lower numbers appear first in admin lists.</small></span>
+                    </div>
+                </div>
+
+                <div class="form-group row">
                     <label class="col-sm-12 col-md-3 col-form-label">Age Group</label>
                     <div class="col-md-9">
                         <select name="age" class="form-control">

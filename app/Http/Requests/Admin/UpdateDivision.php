@@ -36,6 +36,7 @@ class UpdateDivision extends FormRequest
             'age'            => 'nullable',
             'visible'        => 'nullable',
             'class' => 'nullable',
+            'sortorder'      => 'nullable|integer',
 
         ];
     }

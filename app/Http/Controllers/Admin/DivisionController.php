@@ -29,6 +29,7 @@ class DivisionController extends Controller
             SELECT d.*, o.label as organisationname
             FROM `divisions` d
             LEFT JOIN `organisations` o USING (`organisationid`)
+            ORDER BY d.sortorder ASC, d.label ASC
         ");
 
         return view('admin.divisions.divisions', compact('divisions'));
@@ -81,6 +82,7 @@ class DivisionController extends Controller
         $division->createdby      = Auth::id();
         $division->bowtype        = !empty($validated['bowtype'])         ? strtolower($validated['bowtype']) : null;
         $division->age            = !empty($validated['age'])             ? ($validated['age']) : null;
+        $division->sortorder      = isset($validated['sortorder'])        ? intval($validated['sortorder']) : 0;
         $division->save();
 
         return redirect('/admin/divisions')->with('success', 'Division Created!');
@@ -106,6 +108,7 @@ class DivisionController extends Controller
         $division->bowtype        = !empty($validated['bowtype'])         ? strtolower($validated['bowtype']) : null;
         $division->age            = !empty($validated['age'])             ? ($validated['age']) : null;
         $division->class            = !empty($validated['class'])             ? ($validated['class']) : null;
+        $division->sortorder      = isset($validated['sortorder'])        ? intval($validated['sortorder']) : 0;
 
 
         $division->save();
