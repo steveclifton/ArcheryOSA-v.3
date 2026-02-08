@@ -3,6 +3,7 @@
 namespace Tests\Unit;
 
 use App\Services\ScoringService;
+use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\TestCase;
 
 class ScoringServiceTest extends TestCase
@@ -19,9 +20,7 @@ class ScoringServiceTest extends TestCase
         parent::setUp();
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function it_sorts_results_by_total_score_descending()
     {
         $unsortedResults = [
@@ -41,9 +40,7 @@ class ScoringServiceTest extends TestCase
         $this->assertEquals(500, $sorted['Test Division'][$scores[2]]['total']);
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function it_breaks_ties_using_inners_count()
     {
         $tiedResults = [
@@ -63,9 +60,7 @@ class ScoringServiceTest extends TestCase
         $this->assertEquals(10, $sorted['Test Division'][$scores[2]]['inners']);
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function it_breaks_ties_using_xcount_when_inners_are_equal()
     {
         $tiedResults = [
@@ -85,9 +80,7 @@ class ScoringServiceTest extends TestCase
         $this->assertEquals(5, $sorted['Test Division'][$scores[2]]['xcount']);
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function it_preserves_rounds_array_after_sorting()
     {
         $results = [
@@ -103,9 +96,7 @@ class ScoringServiceTest extends TestCase
         $this->assertEquals(['dist1' => 50, 'dist2' => 40, 'dist3' => 30], $sorted['Test Division']['rounds']);
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function it_handles_zero_scores()
     {
         $results = [
@@ -123,9 +114,7 @@ class ScoringServiceTest extends TestCase
         $this->assertEquals(0, $sorted['Test Division'][$scores[1]]['total']);
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function it_sorts_multiple_divisions()
     {
         $sorted = $this->scoringService->setResults($this->results)->sort()->getSortedResults();
@@ -146,9 +135,7 @@ class ScoringServiceTest extends TestCase
         }
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function it_handles_empty_total_values()
     {
         $results = [
@@ -165,9 +152,7 @@ class ScoringServiceTest extends TestCase
         $this->assertArrayHasKey('Test Division', $sorted);
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function it_maintains_archer_data_integrity()
     {
         $results = [
