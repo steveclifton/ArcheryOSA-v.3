@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers\Auth;
 
-use App\Http\Controllers\Events\PublicEvents\ResultsController;
 use App\Http\Requests\User\CreateChild;
 use App\Http\Requests\User\UpdateChild;
 use App\Http\Requests\User\UserUpdateProfile;
@@ -17,7 +16,6 @@ use App\User;
 use Illuminate\Support\Facades\Auth;
 Use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Cache;
 
 
 class ProfileController extends Controller
@@ -47,84 +45,151 @@ class ProfileController extends Controller
             abort(404);
         }
 
-        $data = $this->getcacheditem('userprofile' . $request->username);
+        $events = DB::select("
+        SELECT `e`.`eventid`, `e`.`eventtypeid`, `e`.`label`,
+               CONCAT_WS(' - ', DATE_FORMAT(`e`.`start`, '%d-%M %Y'), DATE_FORMAT(`e`.`end`, '%d-%M %Y')) as date
+        FROM `evententrys` ee
+        JOIN `events` e USING (`eventid`)
+        JOIN `scores_flat` sf USING (`entryid`)
+        WHERE ee.`userid` = :userid
+        GROUP BY `e`.`eventid`
+        ORDER BY `e`.end DESC
+       ", ['userid' => $user->userid]);
 
-        if (empty($data)) {
-            $events = DB::select("
-            SELECT `e`.`eventid`, `e`.`eventtypeid`, `e`.`label`,
-                   CONCAT_WS(' - ', DATE_FORMAT(`e`.`start`, '%d-%M %Y'), DATE_FORMAT(`e`.`end`, '%d-%M %Y')) as date
-            FROM `evententrys` ee
-            JOIN `events` e USING (`eventid`)
-            JOIN `scores_flat` sf USING (`entryid`)
-            WHERE ee.`userid` = :userid
-            GROUP BY `e`.`eventid`
-            ORDER BY `e`.end DESC
-           ", ['userid' => $user->userid]);
+        $finalresults = [];
 
-            $resultscontroller = new ResultsController();
+        $eventIds = array_column($events, 'eventid');
 
-            $finalresults = [];
+        $flatscores = [];
+        $entriesByEvent = [];
 
-            $eventIds = array_column($events, 'eventid');
+        if (!empty($eventIds)) {
+            $flatscores = DB::select("
+            SELECT sf.*, CONCAT_WS(' ', r.label, ec.label) as roundname, r.unit, ec.date as compdate, ec.sequence
+            FROM `scores_flat` sf
+            JOIN `rounds` r USING (`roundid`)
+            JOIN `eventcompetitions` ec ON (sf.`eventcompetitionid` = ec.`eventcompetitionid`)
+            WHERE sf.`eventid` IN (" . implode(',', $eventIds) . ")
+            AND `sf`.`userid` = :userid
+            AND `sf`.`total` <> 0
+            ", ['userid' => $user->userid]);
 
-            $flatscores = [];
+            $entriesByEvent = $this->getEntriesForEvents($eventIds, $user->userid);
+        }
 
-            if (!empty($eventIds)) {
-                $flatscores = DB::select("
-                SELECT sf.*, CONCAT_WS(' ', r.label, ec.label) as roundname, r.unit, ec.date as compdate, ec.sequence
-                FROM `scores_flat` sf
-                JOIN `rounds` r USING (`roundid`)
-                JOIN `eventcompetitions` ec ON (sf.`eventcompetitionid` = ec.`eventcompetitionid`)
-                WHERE sf.`eventid` IN (" . implode(',', $eventIds) . ")
-                AND `sf`.`userid` = :userid
-                AND `sf`.`total` <> 0
-                ", ['userid' => $user->userid]);
-            }
+        // Pre-group scores by eventid to reduce queries
+        $scoresByEvent = [];
+        foreach ($flatscores as $flatscore) {
+            $scoresByEvent[$flatscore->eventid][] = $flatscore;
+        }
 
-            // Pre-group scores by eventid to reduce queries
-            $scoresByEvent = [];
-            foreach ($flatscores as $flatscore) {
-                $scoresByEvent[$flatscore->eventid][] = $flatscore;
-            }
+        foreach ($events as $event) {
+            $flatscores = $scoresByEvent[$event->eventid] ?? [];
 
-            foreach ($events as $event) {
-                $flatscores = $scoresByEvent[$event->eventid] ?? [];
+            $evententry = $entriesByEvent[$event->eventid] ?? [];
 
-                $scores += count($flatscores);
+            $scores += count($flatscores);
 
-                if ($event->eventtypeid === 1 || $event->eventtypeid === 3) {
-                    $evententry = $resultscontroller->getEventEntrySorted($event->eventid, $user->userid);
+            if ($event->eventtypeid === 1 || $event->eventtypeid === 3) {
+                if (!empty($evententry)) {
+                    $results = $this->formatOverallResults($evententry, $flatscores);
+                    $result = reset($results);
 
-                    if (!empty($evententry)) {
-                        $results = $this->formatOverallResults($evententry, $flatscores);
-                        $result = reset($results);
+                    if (empty($result)) {
+                        continue;
+                    }
 
-                        if (empty($result)) {
-                            continue;
-                        }
-
-                        foreach ($result as $key => $value) {
-                            $data = reset($value['results']);
-                            unset($data['Archer']);
-                            $finalresults['events'][$event->label . '|' . $event->date][$key] = $data;
-                        }
+                    foreach ($result as $key => $value) {
+                        $data = reset($value['results']);
+                        unset($data['Archer']);
+                        $finalresults['events'][$event->label . '|' . $event->date][$key] = $data;
                     }
                 }
             }
-
-            $scorecount = $scores;
-            $eventcount = count($events);
-
-            $data = compact('user', 'eventcount','scorecount', 'finalresults');
-
-            Cache::put('userprofile' . $request->username, $data, 3600);
         }
+
+        $scorecount = $scores;
+        $eventcount = count($events);
+
+        $data = compact('user', 'eventcount','scorecount', 'finalresults');
 
         if (empty($data)) {
             abort(503);
         }
 
         return view('profile.public.public-profile', $data);
+    }
+
+    /**
+     * Fetch entries for a set of events and a single user in one query,
+     * grouped by eventid to avoid per-event lookups.
+     */
+    protected function getEntriesForEvents(array $eventIds, int $userid): array
+    {
+        if (empty($eventIds)) {
+            return [];
+        }
+
+        $entries = DB::table('evententrys as ee')
+            ->join('users as u', 'ee.userid', '=', 'u.userid')
+            ->join('entrycompetitions as ec', 'ec.entryid', '=', 'ee.entryid')
+            ->join('divisions as d', 'ec.divisionid', '=', 'd.divisionid')
+            ->join('rounds as r', 'ec.roundid', '=', 'r.roundid')
+            ->join('scores_flat as sf', function ($join) {
+                $join->on('ee.entryid', '=', 'sf.entryid')
+                    ->on('sf.divisionid', '=', 'ec.divisionid');
+            })
+            ->leftJoin('schools as s', 'ee.schoolid', '=', 's.schoolid')
+            ->whereIn('ee.eventid', $eventIds)
+            ->where('ee.entrystatusid', 2)
+            ->where('ee.userid', $userid)
+            ->orderBy('d.label')
+            ->orderBy('ee.userid')
+            ->orderBy('ec.eventcompetitionid')
+            ->select(
+                'ee.eventid',
+                'ee.userid',
+                'ee.firstname',
+                'ee.lastname',
+                'ee.gender',
+                'ec.roundid',
+                'ec.divisionid',
+                'd.label as divisionname',
+                'd.bowtype',
+                'r.unit',
+                'r.code',
+                'r.label as roundname',
+                's.label as schoolname',
+                'u.username'
+            )
+            ->get();
+
+        static $alldivisions;
+        if (empty($alldivisions)) {
+            $alldivisions = Division::all()->keyBy('divisionid')->toArray();
+        }
+
+        $entriesByEvent = [];
+
+        foreach ($entries as $entry) {
+            if (strpos((string) $entry->divisionid, ',') !== false) {
+                $divisionids = explode(',', $entry->divisionid);
+
+                foreach ($divisionids as $divisionid) {
+                    $entryUpdated = clone $entry;
+                    $divison = (object) ($alldivisions[$divisionid] ?? []);
+
+                    $entryUpdated->bowtype = $divison->bowtype ?? null;
+                    $entryUpdated->divisionname = $divison->label ?? null;
+                    $entryUpdated->divisionid = $divisionid;
+                    $entriesByEvent[$entryUpdated->eventid][] = $entryUpdated;
+                }
+            } else {
+                $entriesByEvent[$entry->eventid][] = $entry;
+            }
+        }
+
+        return $entriesByEvent;
     }
 
     /**
