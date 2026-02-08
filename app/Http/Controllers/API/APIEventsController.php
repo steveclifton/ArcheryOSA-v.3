@@ -2,13 +2,13 @@
 
 namespace App\Http\Controllers\API;
 
-use App\Http\Controllers\Events\PublicEvents\League\LeagueResultsController;
+use App\Http\Controllers\Controller;
 use App\Http\Controllers\Events\PublicEvents\ResultsController;
 use App\Models\Event;
 use App\Models\EventType;
 use App\Services\EventResultService;
+use App\Services\LeagueResultsService;
 use Illuminate\Http\Request;
-use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\DB;
 
 class APIEventsController extends Controller
@@ -164,7 +164,7 @@ class APIEventsController extends Controller
 
 
 
-    public function getEventResults(Request $request)
+    public function getEventResults(Request $request, LeagueResultsService $leagueResultsService, EventResultService $eventResultService)
     {
         $event = Event::where('eventurl', $request->eventurl ?? -1)->get($this->eventFields)->first();
 
@@ -184,8 +184,6 @@ class APIEventsController extends Controller
             }
         }
 
-        $eventresultscontroller = new ResultsController();
-
         $return = [];
         $return['success'] = true;
         $return['data'] = [];
@@ -201,7 +199,7 @@ class APIEventsController extends Controller
 
                 if (empty($request->competitionid) || $request->competitionid == 'overall') {
                     // overall
-                    $data = (new EventResultService())->getOverallResults($event, true);
+                    $data = $eventResultService->getOverallResults($event, true);
 
                     $return['data']['results'] = !empty($data['results']) ? $data['results'] : [];
                     $return['data']['competitions'] = !empty($data['competitionlabels']) ? $data['competitionlabels'] : [];
@@ -212,7 +210,7 @@ class APIEventsController extends Controller
                     $id = intval($request->competitionid);
 
                     if (!empty($id)) {
-                        $data = (new EventResultService())->getEventCompetitionResults($event, $id, true);
+                        $data = $eventResultService->getEventCompetitionResults($event, $id, true);
                         $return['data']['results'] = !empty($data['results']) ? $data['results'] : [];
                         $return['data']['competitions'] = !empty($data['eventcompetition']) ? $data['eventcompetition'] : [];
                     }
@@ -227,7 +225,7 @@ class APIEventsController extends Controller
 
                 if (empty($request->competitionid)) {
                     // overall
-                    $data = (new LeagueResultsController())->getLeagueOverallResults($event, true);
+                    $data = $leagueResultsService->getLeagueOverallResults($event, true);
                     $return['data']['results'] = !empty($data['evententrys']) ? $data['evententrys'] : [];
                 }
                 else {
@@ -235,17 +233,12 @@ class APIEventsController extends Controller
                     $week = intval($request->competitionid);
 
                     if (!empty($week)) {
-                        $data = (new LeagueResultsController())->getLeagueCompetitionResults($event, $week, true);
+                        $data = $leagueResultsService->getLeagueCompetitionResults($event, $week, true);
                         $return['data']['results'] = !empty($data['evententrys']) ? $data['evententrys'] : [];
                     }
                 }
 
                 break;
-
-            // Shouldnt get here, yet..
-            default:
-
-                return null;
 
         }
 

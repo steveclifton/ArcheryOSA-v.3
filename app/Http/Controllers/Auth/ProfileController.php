@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers\Auth;
 
-use App\Http\Controllers\Events\PublicEvents\League\LeagueResultsController;
 use App\Http\Controllers\Events\PublicEvents\ResultsController;
 use App\Http\Requests\User\CreateChild;
 use App\Http\Requests\User\UpdateChild;
@@ -11,7 +10,6 @@ use App\Http\Controllers\Controller;
 use App\Jobs\SendArcherRelationRequest;
 use App\Models\Club;
 use App\Models\Division;
-use App\Models\Event;
 use App\Models\Membership;
 use App\Models\Organisation;
 use App\Models\UserRelation;
@@ -64,7 +62,6 @@ class ProfileController extends Controller
            ", ['userid' => $user->userid]);
 
             $resultscontroller = new ResultsController();
-            $leagueresultscontroller = new LeagueResultsController();
 
             $finalresults = [];
 
@@ -112,26 +109,6 @@ class ProfileController extends Controller
                             $finalresults['events'][$event->label . '|' . $event->date][$key] = $data;
                         }
                     }
-                }
-                else if (false && $event->eventtypeid === 2) {
-                    $eventObj = Event::where('eventid', $event->eventid)->first();
-                    $results = [];
-                    foreach (range(1,15) as $week) {
-                        $result = $leagueresultscontroller->getLeagueCompetitionResults($eventObj, $week, true, $user->userid);
-
-                        // reformat the data
-                        if (!empty($result['evententrys'])) {
-                            foreach ($result['evententrys'] as $key => $value) {
-                                $value = reset($value);
-                                $results[] = reset($value);
-                            }
-                        }
-                    }
-
-                    if (!empty($results)) {
-                        $finalresults['leagues'][$event->label . '|' . $event->date] = $results;
-                    }
-
                 }
             }
 
