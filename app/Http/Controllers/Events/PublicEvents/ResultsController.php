@@ -2,21 +2,18 @@
 
 namespace App\Http\Controllers\Events\PublicEvents;
 
-use App\Http\Controllers\Events\PublicEvents\League\LeagueResultsController;
 use App\Models\Division;
 use App\Models\Event;
 use App\Models\EventCompetition;
 use App\Models\FlatScore;
 use App\Services\EventResultService;
+use App\Services\LeagueResultsService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
-use App\Http\Traits\UserResults;
 
 
 class ResultsController extends EventController
 {
-    use UserResults;
-
 
     /**
      * MAIN entry point into get results.
@@ -25,7 +22,7 @@ class ResultsController extends EventController
      * @param Request $request
      * @return \Illuminate\Contracts\View\Factory|\Illuminate\Http\RedirectResponse|\Illuminate\View\View
      */
-    public function getCompetitionResults(Request $request)
+    public function getCompetitionResults(Request $request, LeagueResultsService $leagueResultsService, EventResultService $eventResultService)
     {
         $event = Event::where('eventurl', $request->eventurl)->first();
 
@@ -36,24 +33,24 @@ class ResultsController extends EventController
         if (strcasecmp($request->eventcompetitionid, 'overall') === 0) {
             // league processing
             if ($event->isLeague()) {
-                return (new LeagueResultsController())->getLeagueOverallResults($event);
+                return $leagueResultsService->getLeagueOverallResults($event);
             }
 
             if ($event->ispostal()) {
-                return (new EventResultService())->getOverallResults($event);
+                return $eventResultService->getOverallResults($event);
             }
 
             // Normal Event
-            return (new EventResultService())->getOverallResults($event);
+            return $eventResultService->getOverallResults($event);
         }
 
         // league processing
         if ($event->isLeague()) {
-            return (new LeagueResultsController())->getLeagueCompetitionResults($event, $request->eventcompetitionid);
+            return $leagueResultsService->getLeagueCompetitionResults($event, $request->eventcompetitionid);
         }
 
         // Get the results for the event and the eventcompetitionid
-        return (new EventResultService())->getEventCompetitionResults($event, $request->eventcompetitionid);
+        return $eventResultService->getEventCompetitionResults($event, $request->eventcompetitionid);
 
     }
 

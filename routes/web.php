@@ -1,6 +1,4 @@
 <?php
-
-
 // Downloads
 use Illuminate\Http\Request;
 

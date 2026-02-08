@@ -1,19 +1,15 @@
 <?php
 
-namespace App\Http\Controllers\Events\PublicEvents\League;
+namespace App\Services;
 
 use App\Http\Controllers\Controller;
-use App\Http\Traits\UserResults;
 use App\Models\Division;
 use App\Models\Event;
 use App\Models\EventCompetition;
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
-class LeagueResultsController extends Controller
+class LeagueResultsService extends Controller
 {
-    use UserResults;
-
 
     /**
      * Returns a league events overall results
@@ -202,6 +198,57 @@ class LeagueResultsController extends Controller
 
         return $sortedEntrys;
 
+    }
+
+    private function getUserTop10Scores($userid, $divisionid, $eventid)
+    {
+
+        $result = DB::select("
+            SELECT sum(`total`) as total
+            FROM (SELECT `total`
+                    FROM `scores_flat`
+                    WHERE `userid` = :userid
+                    AND `divisionid` = :divisionid
+                    AND `eventid` = :eventid
+                    ORDER BY `total` DESC
+                    LIMIT 10
+                ) AS total
+            ", ['userid' => $userid, 'divisionid' => $divisionid, 'eventid' => $eventid]);
+
+        return !empty($result[0]) ? $result[0] : 0;
+
+    }
+
+    private function getUserAverageFromLeagueTable($userid, $divisionid, $eventid)
+    {
+        $result = DB::select("
+            SELECT `avg_distance1_total` as average
+            FROM `leagueaverages`
+            WHERE `userid` = :userid
+            AND `divisionid` = :divisionid
+            AND `eventid` = :eventid
+            ", ['userid' => $userid, 'divisionid' => $divisionid, 'eventid' => $eventid]);
+
+        return !empty($result[0]) ? $result[0] : 0;
+    }
+
+    public static function getUserTop10Points($userid, $divisionid, $eventid)
+    {
+        $result = DB::select("
+            SELECT sum(`points`) as points
+            FROM (
+              SELECT `points`
+                FROM `leaguepoints`
+                WHERE `userid` = :userid
+                AND `divisionid` = :divisionid
+                AND `eventid` = :eventid
+                ORDER BY `points` DESC
+                LIMIT 10
+            ) as points
+            ",['userid'=>$userid, 'divisionid'=>$divisionid, 'eventid' => $eventid]);
+
+
+        return !empty($result[0]) ? $result[0] : 0;
     }
 
 }
