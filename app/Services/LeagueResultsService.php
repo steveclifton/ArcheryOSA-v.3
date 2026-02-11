@@ -23,17 +23,25 @@ class LeagueResultsService extends Controller
 
         $eventcompetition = EventCompetition::where('eventid', $event->eventid)->first();
 
-        $evententrys = [];
+        $top10Map = $this->getUserTop10ScoresMap($entries, $event->eventid);
+        $qualifyingEntries = [];
         foreach ($entries as $entry) {
-            $entry->top10 = $this->getUserTop10Scores($entry->userid, $entry->divisionid, $event->eventid);
-
+            $key = $this->getEntryAggregateKey($entry->userid, $entry->divisionid);
+            $entry->top10 = $top10Map[$key] ?? (object) ['total' => 0];
             if (empty($entry->top10->total)) {
                 continue;
             }
+            $qualifyingEntries[] = $entry;
+        }
 
+        $averageMap = $this->getUserAverageMapFromLeagueTable($qualifyingEntries, $event->eventid);
+        $top10PointsMap = $this->getUserTop10PointsMap($qualifyingEntries, $event->eventid);
 
-            $entry->average     = $this->getUserAverageFromLeagueTable($entry->userid, $entry->divisionid, $event->eventid);
-            $entry->top10points = $this->getUserTop10Points($entry->userid, $entry->divisionid, $event->eventid);
+        $evententrys = [];
+        foreach ($qualifyingEntries as $entry) {
+            $key = $this->getEntryAggregateKey($entry->userid, $entry->divisionid);
+            $entry->average = $averageMap[$key] ?? 0;
+            $entry->top10points = $top10PointsMap[$key] ?? 0;
 
             $gender = '';
             if (!$eventcompetition->ignoregenders) {
@@ -200,55 +208,149 @@ class LeagueResultsService extends Controller
 
     }
 
-    private function getUserTop10Scores($userid, $divisionid, $eventid)
+    private function getUserTop10ScoresMap(array $entries, $eventid)
     {
+        if (empty($entries)) {
+            return [];
+        }
+
+        [$pairsTable, $pairBindings] = $this->buildEntryPairsDerivedTable($entries, 'scorepair');
+
+        $bindings = array_merge(
+            ['eventid' => $eventid],
+            $pairBindings
+        );
 
         $result = DB::select("
-            SELECT sum(`total`) as total
-            FROM (SELECT `total`
-                    FROM `scores_flat`
-                    WHERE `userid` = :userid
-                    AND `divisionid` = :divisionid
-                    AND `eventid` = :eventid
-                    ORDER BY `total` DESC
-                    LIMIT 10
-                ) AS total
-            ", ['userid' => $userid, 'divisionid' => $divisionid, 'eventid' => $eventid]);
-
-        return !empty($result[0]) ? $result[0] : 0;
-
-    }
-
-    private function getUserAverageFromLeagueTable($userid, $divisionid, $eventid)
-    {
-        $result = DB::select("
-            SELECT `avg_distance1_total` as average
-            FROM `leagueaverages`
-            WHERE `userid` = :userid
-            AND `divisionid` = :divisionid
-            AND `eventid` = :eventid
-            ", ['userid' => $userid, 'divisionid' => $divisionid, 'eventid' => $eventid]);
-
-        return !empty($result[0]) ? $result[0] : 0;
-    }
-
-    public static function getUserTop10Points($userid, $divisionid, $eventid)
-    {
-        $result = DB::select("
-            SELECT sum(`points`) as points
+            SELECT ranked.`userid`, ranked.`divisionid`, SUM(ranked.`total`) as `total`
             FROM (
-              SELECT `points`
-                FROM `leaguepoints`
-                WHERE `userid` = :userid
-                AND `divisionid` = :divisionid
-                AND `eventid` = :eventid
-                ORDER BY `points` DESC
-                LIMIT 10
-            ) as points
-            ",['userid'=>$userid, 'divisionid'=>$divisionid, 'eventid' => $eventid]);
+                SELECT sf.`userid`, sf.`divisionid`, sf.`total`,
+                    ROW_NUMBER() OVER (
+                        PARTITION BY sf.`userid`, sf.`divisionid`
+                        ORDER BY sf.`total` DESC
+                    ) as `rn`
+                FROM `scores_flat` sf
+                JOIN $pairsTable AS pairs
+                    ON pairs.`userid` = sf.`userid`
+                    AND pairs.`divisionid` = sf.`divisionid`
+                WHERE sf.`eventid` = :eventid
+            ) as ranked
+            WHERE ranked.`rn` <= 10
+            GROUP BY ranked.`userid`, ranked.`divisionid`
+        ", $bindings);
 
+        $totals = [];
+        foreach ($result as $row) {
+            $totals[$this->getEntryAggregateKey($row->userid, $row->divisionid)] = (object) ['total' => $row->total];
+        }
 
-        return !empty($result[0]) ? $result[0] : 0;
+        return $totals;
     }
 
+    private function getUserAverageMapFromLeagueTable(array $entries, $eventid)
+    {
+        if (empty($entries)) {
+            return [];
+        }
+
+        [$pairsTable, $pairBindings] = $this->buildEntryPairsDerivedTable($entries, 'avgpair');
+
+        $bindings = array_merge(
+            ['eventid' => $eventid],
+            $pairBindings
+        );
+
+        $result = DB::select("
+            SELECT la.`userid`, la.`divisionid`, la.`avg_distance1_total` as average
+            FROM `leagueaverages` la
+            JOIN $pairsTable AS pairs
+                ON pairs.`userid` = la.`userid`
+                AND pairs.`divisionid` = la.`divisionid`
+            WHERE la.`eventid` = :eventid
+        ", $bindings);
+
+        $averages = [];
+        foreach ($result as $row) {
+            $averages[$this->getEntryAggregateKey($row->userid, $row->divisionid)] = (object) ['average' => $row->average];
+        }
+
+        return $averages;
+    }
+
+    private function getUserTop10PointsMap(array $entries, $eventid)
+    {
+        if (empty($entries)) {
+            return [];
+        }
+
+        [$pairsTable, $pairBindings] = $this->buildEntryPairsDerivedTable($entries, 'pointpair');
+
+        $bindings = array_merge(
+            ['eventid' => $eventid],
+            $pairBindings
+        );
+
+        $pointsRows = DB::select("
+            SELECT ranked.`userid`, ranked.`divisionid`, SUM(ranked.`points`) as `points`
+            FROM (
+                SELECT lp.`userid`, lp.`divisionid`, lp.`points`,
+                    ROW_NUMBER() OVER (
+                        PARTITION BY lp.`userid`, lp.`divisionid`
+                        ORDER BY lp.`points` DESC
+                    ) as `rn`
+                FROM `leaguepoints` lp
+                JOIN $pairsTable AS pairs
+                    ON pairs.`userid` = lp.`userid`
+                    AND pairs.`divisionid` = lp.`divisionid`
+                WHERE lp.`eventid` = :eventid
+            ) as ranked
+            WHERE ranked.`rn` <= 10
+            GROUP BY ranked.`userid`, ranked.`divisionid`
+        ", $bindings);
+
+        $results = [];
+        foreach ($pointsRows as $row) {
+            $results[$this->getEntryAggregateKey($row->userid, $row->divisionid)] = (object) ['points' => $row->points];
+        }
+
+        return $results;
+    }
+
+    private function getEntryAggregateKey($userid, $divisionid)
+    {
+        return $userid . ':' . $divisionid;
+    }
+
+    private function buildEntryPairsDerivedTable(array $entries, $prefix)
+    {
+        $pairs = [];
+        foreach ($entries as $entry) {
+            $key = $this->getEntryAggregateKey($entry->userid, $entry->divisionid);
+            if (isset($pairs[$key])) {
+                continue;
+            }
+
+            $pairs[$key] = ['userid' => $entry->userid, 'divisionid' => $entry->divisionid];
+        }
+
+        $bindings = [];
+        $queries = [];
+
+        foreach (array_values($pairs) as $index => $pair) {
+            $useridKey = $prefix . 'userid' . $index;
+            $divisionidKey = $prefix . 'divisionid' . $index;
+
+            $bindings[$useridKey] = $pair['userid'];
+            $bindings[$divisionidKey] = $pair['divisionid'];
+
+            if ($index === 0) {
+                $queries[] = "SELECT :$useridKey AS `userid`, :$divisionidKey AS `divisionid`";
+            }
+            else {
+                $queries[] = "SELECT :$useridKey, :$divisionidKey";
+            }
+        }
+
+        return ['(' . implode(' UNION ALL ', $queries) . ')', $bindings];
+    }
 }

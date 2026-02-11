@@ -16,7 +16,7 @@ class LeagueResultsServiceTest extends TestCase
         parent::tearDown();
     }
 
-    public function test_get_league_overall_results_groups_entries_for_api_calls()
+    public function test_get_league_overall_results_batches_average_and_points_queries_for_api_calls()
     {
         $event = new Event();
         $event->eventid = 100;
@@ -56,31 +56,52 @@ class LeagueResultsServiceTest extends TestCase
 
         // Each entry triggers three selects (top10 scores, average, points)
         DB::shouldReceive('select')
-            ->with(Mockery::on(fn($query) => str_contains($query, 'scores_flat') && str_contains($query, 'LIMIT 10')),
-                ['userid' => 1, 'divisionid' => 10, 'eventid' => 100])
-            ->andReturn([(object) ['total' => 500]]);
-        DB::shouldReceive('select')
-            ->with(Mockery::on(fn($query) => str_contains($query, 'scores_flat') && str_contains($query, 'LIMIT 10')),
-                ['userid' => 2, 'divisionid' => 10, 'eventid' => 100])
-            ->andReturn([(object) ['total' => 450]]);
+            ->once()
+            ->with(
+                Mockery::on(fn($query) => str_contains($query, 'scores_flat') && str_contains($query, 'JOIN (SELECT') && str_contains($query, 'ROW_NUMBER() OVER')),
+                Mockery::on(function ($bindings) {
+                    return $bindings['eventid'] === 100
+                        && in_array(1, $bindings, true)
+                        && in_array(2, $bindings, true)
+                        && in_array(10, $bindings, true);
+                })
+            )
+            ->andReturn([
+                (object) ['userid' => 1, 'divisionid' => 10, 'total' => 500],
+                (object) ['userid' => 2, 'divisionid' => 10, 'total' => 450],
+            ]);
 
         DB::shouldReceive('select')
-            ->with(Mockery::on(fn($query) => str_contains($query, 'leagueaverages')),
-                ['userid' => 1, 'divisionid' => 10, 'eventid' => 100])
-            ->andReturn([(object) ['average' => 48]]);
-        DB::shouldReceive('select')
-            ->with(Mockery::on(fn($query) => str_contains($query, 'leagueaverages')),
-                ['userid' => 2, 'divisionid' => 10, 'eventid' => 100])
-            ->andReturn([(object) ['average' => 42]]);
+            ->once()
+            ->with(
+                Mockery::on(fn($query) => str_contains($query, 'leagueaverages') && str_contains($query, 'JOIN (SELECT')),
+                Mockery::on(function ($bindings) {
+                    return $bindings['eventid'] === 100
+                        && in_array(1, $bindings, true)
+                        && in_array(2, $bindings, true)
+                        && in_array(10, $bindings, true);
+                })
+            )
+            ->andReturn([
+                (object) ['userid' => 1, 'divisionid' => 10, 'average' => 48],
+                (object) ['userid' => 2, 'divisionid' => 10, 'average' => 42],
+            ]);
 
         DB::shouldReceive('select')
-            ->with(Mockery::on(fn($query) => str_contains($query, 'leaguepoints')),
-                ['userid' => 1, 'divisionid' => 10, 'eventid' => 100])
-            ->andReturn([(object) ['points' => 95]]);
-        DB::shouldReceive('select')
-            ->with(Mockery::on(fn($query) => str_contains($query, 'leaguepoints')),
-                ['userid' => 2, 'divisionid' => 10, 'eventid' => 100])
-            ->andReturn([(object) ['points' => 88]]);
+            ->once()
+            ->with(
+                Mockery::on(fn($query) => str_contains($query, 'leaguepoints') && str_contains($query, 'JOIN (SELECT') && str_contains($query, 'ROW_NUMBER() OVER')),
+                Mockery::on(function ($bindings) {
+                    return $bindings['eventid'] === 100
+                        && in_array(1, $bindings, true)
+                        && in_array(2, $bindings, true)
+                        && in_array(10, $bindings, true);
+                })
+            )
+            ->andReturn([
+                (object) ['userid' => 1, 'divisionid' => 10, 'points' => 95],
+                (object) ['userid' => 2, 'divisionid' => 10, 'points' => 88],
+            ]);
 
         $result = $service->getLeagueOverallResults($event, true);
 
@@ -93,6 +114,66 @@ class LeagueResultsServiceTest extends TestCase
         $this->assertEquals(500, $result['evententrys']['Recurve']['Open']['alice']->top10->total);
         $this->assertEquals(95, $result['evententrys']['Recurve']['Open']['alice']->top10points->points);
         $this->assertEquals(42, $result['evententrys']['Recurve']['Open']['bob']->average->average);
+    }
+
+    public function test_get_league_overall_results_points_sum_is_capped_to_top_10()
+    {
+        $event = new Event();
+        $event->eventid = 101;
+
+        $entries = [
+            (object) [
+                'userid' => 7,
+                'divisionid' => 20,
+                'bowtype' => 'Compound',
+                'divisionname' => 'Senior',
+                'username' => 'charlie',
+                'gender' => 'm',
+            ],
+        ];
+
+        $eventCompetition = (object) ['ignoregenders' => true];
+
+        $service = Mockery::mock(LeagueResultsService::class)->makePartial();
+        $service->shouldReceive('getEventEntrySorted')
+            ->once()
+            ->with($event->eventid)
+            ->andReturn($entries);
+
+        $competitionModel = Mockery::mock('alias:App\\Models\\EventCompetition');
+        $competitionModel->shouldReceive('where')->once()->with('eventid', $event->eventid)->andReturnSelf();
+        $competitionModel->shouldReceive('first')->once()->andReturn($eventCompetition);
+
+        DB::shouldReceive('select')
+            ->once()
+            ->with(
+                Mockery::on(fn($query) => str_contains($query, 'scores_flat') && str_contains($query, 'JOIN (SELECT') && str_contains($query, 'ROW_NUMBER() OVER')),
+                Mockery::type('array')
+            )
+            ->andReturn([(object) ['userid' => 7, 'divisionid' => 20, 'total' => 600]]);
+
+        DB::shouldReceive('select')
+            ->once()
+            ->with(
+                Mockery::on(fn($query) => str_contains($query, 'leagueaverages') && str_contains($query, 'JOIN (SELECT')),
+                Mockery::type('array')
+            )
+            ->andReturn([(object) ['userid' => 7, 'divisionid' => 20, 'average' => 55]]);
+
+        DB::shouldReceive('select')
+            ->once()
+            ->with(
+                Mockery::on(fn($query) => str_contains($query, 'leaguepoints') && str_contains($query, 'JOIN (SELECT') && str_contains($query, 'ROW_NUMBER() OVER')),
+                Mockery::type('array')
+            )
+            ->andReturn([(object) ['userid' => 7, 'divisionid' => 20, 'points' => 100]]);
+
+        $result = $service->getLeagueOverallResults($event, true);
+
+        $entry = $result['evententrys']['Compound']['Senior']['charlie'];
+        $this->assertEquals(600, $entry->top10->total);
+        $this->assertEquals(100, $entry->top10points->points);
+        $this->assertEquals(55, $entry->average->average);
     }
 
     public function test_get_league_competition_results_returns_empty_array_for_api_when_no_entries()

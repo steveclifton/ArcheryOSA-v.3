@@ -193,129 +193,141 @@ class EventResultService
      */
     public function getEventOverallResults(Event $event, bool $apiCall = false)
     {
-        $returnData = [];
+        $competitionlabels = $this->getEventCompetitionLabels($event->eventid);
+        $returnData = [
+            'competitionlabels' => $competitionlabels,
+            'event' => $event,
+        ];
 
-        // get and format the Event Competitions
-        $ectmp = EventCompetition::where('eventid', $event->eventid)->orderby('sequence')->get();
-        $eventcompetitions = $competitionlabels = [];
-        foreach ($ectmp as $e) {
-            $eventcompetitions[$e->eventcompetitionid] = $e;
-            $competitionlabels[$e->eventcompetitionid] = $e->label . ' - ' . date('d M', strtotime($e->date));
-        }
-        unset($ectmp);
+        $flatscores = $this->getEventOverallFlatScores($event->eventid);
 
-        $returnData['competitionlabels'] = $competitionlabels;
+        if (empty($flatscores)) {
+            if ($apiCall) {
+                return $returnData;
+            }
 
-        // get all the scores once, sort them
-        $flatscores = DB::select("
-            SELECT sf.*, r.label as roundname, r.unit, ec.date as compdate, ec.sequence, `e`.`eventtypeid`, ee.firstname, ee.lastname, ee.gender, u.username, d.label as division, d.bowtype
-            FROM `scores_flat` sf
-            JOIN `events` e ON (`e`.`eventid` = `sf`.`eventid`)
-            JOIN `evententrys` ee ON (sf.entryid = ee.entryid)
-            LEFT JOIN `users` u ON (ee.userid = u.userid)
-            JOIN `rounds` r USING (`roundid`)
-            JOIN `eventcompetitions` ec ON (sf.`eventcompetitionid` = ec.`eventcompetitionid`)
-            JOIN `divisions` d on (sf.divisionid = d.divisionid)
-            WHERE sf.`eventid` = :eventid
-            ORDER BY `sf`.`total` DESC
-        ", ['eventid' => $event->eventid]);
-
-
-        if ($apiCall && empty($flatscores)) {
-            return $returnData;
-        }
-        else if (empty($flatscores)) {
             return back()->with('failure', 'Unable to process request');
         }
 
-        $archers = [];
-        // Sort into array of archers and eventcompids
-        foreach ($flatscores as $entry) {
-
-            // sometimes people change divisions, keep the sorting user/division specific
-            $key = $entry->userid . $entry->divisionid;
-
-            $archers[$key][$entry->eventcompetitionid] = $entry;
-
-            if (empty($archers[$key]['total'])) {
-                $archers[$key]['total'] = 0;
-            }
-            $archers[$key]['total'] += $entry->total;
-        }
-
-        // Sort by keys
-        $final = [];
-        foreach ($archers as $archer) {
-            ksort($archer, SORT_STRING);
-
-            $result = [];
-            $rounds = [];
-
-            // Load in all the competition days
-            // Create the rounds here as they are sequenced correctly
-            foreach ($competitionlabels as $ecid => $label) {
-                $result[$ecid] = '';
-                $rounds[$ecid] = '';
-            }
-
-            // Loop over the Archer's scores
-            $key = '';
-            $bowtype = '';
-
-            foreach ($archer as $eventcompid => $score) {
-
-                if (empty($result['archer'])) {
-                    $result['archer'] = '<a href="/profile/public/'.$score->username.'">' . htmlentities(ucwords($score->firstname . ' ' . $score->lastname)) . '</a>';
-                }
-
-                if ($eventcompid == 'total') {
-                    $result['total'] = $score;
-                    continue;
-                }
-
-                $result[$eventcompid] = $score->total;
-                $result['inners'] = $score->inners;
-                $result['xcount'] = $score->max;
-
-                if (empty($key)) {
-                    $key = ($score->gender == 'm' ? "Mens" : "Womens") . ' ' . $score->division;
-                }
-                if (empty($bowtype)) {
-                    $bowtype = $score->bowtype;
-                }
-
-                // Update the round name
-                if (empty($rounds[$score->eventcompetitionid])) {
-                    $rounds[$score->eventcompetitionid] = $score->roundname;
-                }
-            }
-
-
-            // Loop over each round that was set and update if its not empty
-            foreach ($rounds as $ecid => $round) {
-                if (empty($final[$bowtype][$key]['rounds'][$ecid])) {
-                    $final[$bowtype][$key]['rounds'][$ecid] = $round;
-                }
-            }
-
-            $final[$bowtype][$key][] = $result;
-
-        }
-
-        // sort the bowtypes
-        ksort($final);
-
-        $results = $this->sortTotalOverallResults($final);
-        unset($final);
-
-        $returnData['results'] = $results;
-        $returnData['event'] = $event;
+        $returnData['results'] = $this->buildEventOverallResults($flatscores, $competitionlabels);
 
         if ($apiCall) {
             return $returnData;
         }
 
         return view('events.results.event.results-overall', $returnData);
+    }
+
+    protected function getEventCompetitionLabels(int $eventId): array
+    {
+        $competitionlabels = [];
+        $eventCompetitions = EventCompetition::where('eventid', $eventId)
+            ->orderBy('sequence')
+            ->get(['eventcompetitionid', 'label', 'date']);
+
+        foreach ($eventCompetitions as $competition) {
+            $competitionlabels[$competition->eventcompetitionid] =
+                $competition->label . ' - ' . date('d M', strtotime($competition->date));
+        }
+
+        return $competitionlabels;
+    }
+
+    protected function getEventOverallFlatScores(int $eventId): array
+    {
+        return DB::table('scores_flat as sf')
+            ->join('evententrys as ee', 'sf.entryid', '=', 'ee.entryid')
+            ->leftJoin('users as u', 'ee.userid', '=', 'u.userid')
+            ->join('rounds as r', 'sf.roundid', '=', 'r.roundid')
+            ->join('eventcompetitions as ec', 'sf.eventcompetitionid', '=', 'ec.eventcompetitionid')
+            ->join('divisions as d', 'sf.divisionid', '=', 'd.divisionid')
+            ->where('sf.eventid', $eventId)
+            ->orderByDesc('sf.total')
+            ->select([
+                'sf.eventcompetitionid',
+                'sf.total',
+                'sf.inners',
+                'sf.max',
+                'ec.sequence',
+                'ee.userid',
+                'd.divisionid',
+                'ee.firstname',
+                'ee.lastname',
+                'ee.gender',
+                'u.username',
+                'd.label as division',
+                'd.bowtype',
+                'r.label as roundname',
+            ])
+            ->get()
+            ->all();
+    }
+
+    protected function buildEventOverallResults(array $flatscores, array $competitionlabels): array
+    {
+        $archerGroups = [];
+        $competitionIds = array_keys($competitionlabels);
+
+        foreach ($flatscores as $score) {
+            $groupKey = $score->userid . ':' . $score->divisionid;
+
+            if (empty($archerGroups[$groupKey])) {
+                $row = ['archer' => $this->formatArcherLink($score), 'total' => 0, 'inners' => '', 'xcount' => ''];
+                foreach ($competitionIds as $competitionId) {
+                    $row[$competitionId] = '';
+                }
+
+                $archerGroups[$groupKey] = [
+                    'bowtype' => $score->bowtype,
+                    'divisionkey' => ($score->gender == 'm' ? 'Mens' : 'Womens') . ' ' . $score->division,
+                    'rounds' => array_fill_keys($competitionIds, ''),
+                    'row' => $row,
+                    'lastsequence' => PHP_INT_MIN,
+                ];
+            }
+
+            $archerGroups[$groupKey]['row'][$score->eventcompetitionid] = $score->total;
+            $archerGroups[$groupKey]['row']['total'] += (int) $score->total;
+
+            if ((int) $score->sequence >= $archerGroups[$groupKey]['lastsequence']) {
+                $archerGroups[$groupKey]['row']['inners'] = $score->inners;
+                $archerGroups[$groupKey]['row']['xcount'] = $score->max;
+                $archerGroups[$groupKey]['lastsequence'] = (int) $score->sequence;
+            }
+
+            if (empty($archerGroups[$groupKey]['rounds'][$score->eventcompetitionid])) {
+                $archerGroups[$groupKey]['rounds'][$score->eventcompetitionid] = $score->roundname;
+            }
+        }
+
+        $final = [];
+        foreach ($archerGroups as $group) {
+            $bowtype = $group['bowtype'];
+            $divisionkey = $group['divisionkey'];
+
+            if (empty($final[$bowtype][$divisionkey]['rounds'])) {
+                $final[$bowtype][$divisionkey]['rounds'] = $group['rounds'];
+            } else {
+                foreach ($group['rounds'] as $eventcompetitionid => $roundname) {
+                    if (empty($final[$bowtype][$divisionkey]['rounds'][$eventcompetitionid])) {
+                        $final[$bowtype][$divisionkey]['rounds'][$eventcompetitionid] = $roundname;
+                    }
+                }
+            }
+
+            $final[$bowtype][$divisionkey][] = $group['row'];
+        }
+
+        ksort($final);
+
+        return $this->sortTotalOverallResults($final);
+    }
+
+    protected function formatArcherLink(object $score): string
+    {
+        return '<a href="/profile/public/'.$score->username.'">' .
+            htmlentities(ucwords($score->firstname . ' ' . $score->lastname)) .
+            '</a>';
     }
 
 }
