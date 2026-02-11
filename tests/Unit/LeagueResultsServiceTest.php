@@ -58,7 +58,7 @@ class LeagueResultsServiceTest extends TestCase
         DB::shouldReceive('select')
             ->once()
             ->with(
-                Mockery::on(fn($query) => str_contains($query, 'scores_flat') && str_contains($query, 'JOIN (SELECT') && str_contains($query, 'ROW_NUMBER() OVER')),
+                Mockery::on(fn($query) => str_contains($query, 'scores_flat') && str_contains($query, 'ROW_NUMBER() OVER') && str_contains($query, 'IN (')),
                 Mockery::on(function ($bindings) {
                     return $bindings['eventid'] === 100
                         && in_array(1, $bindings, true)
@@ -74,7 +74,7 @@ class LeagueResultsServiceTest extends TestCase
         DB::shouldReceive('select')
             ->once()
             ->with(
-                Mockery::on(fn($query) => str_contains($query, 'leagueaverages') && str_contains($query, 'JOIN (SELECT')),
+                Mockery::on(fn($query) => str_contains($query, 'leagueaverages') && str_contains($query, 'IN (')),
                 Mockery::on(function ($bindings) {
                     return $bindings['eventid'] === 100
                         && in_array(1, $bindings, true)
@@ -90,7 +90,7 @@ class LeagueResultsServiceTest extends TestCase
         DB::shouldReceive('select')
             ->once()
             ->with(
-                Mockery::on(fn($query) => str_contains($query, 'leaguepoints') && str_contains($query, 'JOIN (SELECT') && str_contains($query, 'ROW_NUMBER() OVER')),
+                Mockery::on(fn($query) => str_contains($query, 'leaguepoints') && str_contains($query, 'ROW_NUMBER() OVER') && str_contains($query, 'IN (')),
                 Mockery::on(function ($bindings) {
                     return $bindings['eventid'] === 100
                         && in_array(1, $bindings, true)
@@ -147,7 +147,7 @@ class LeagueResultsServiceTest extends TestCase
         DB::shouldReceive('select')
             ->once()
             ->with(
-                Mockery::on(fn($query) => str_contains($query, 'scores_flat') && str_contains($query, 'JOIN (SELECT') && str_contains($query, 'ROW_NUMBER() OVER')),
+                Mockery::on(fn($query) => str_contains($query, 'scores_flat') && str_contains($query, 'ROW_NUMBER() OVER') && str_contains($query, 'IN (')),
                 Mockery::type('array')
             )
             ->andReturn([(object) ['userid' => 7, 'divisionid' => 20, 'total' => 600]]);
@@ -155,7 +155,7 @@ class LeagueResultsServiceTest extends TestCase
         DB::shouldReceive('select')
             ->once()
             ->with(
-                Mockery::on(fn($query) => str_contains($query, 'leagueaverages') && str_contains($query, 'JOIN (SELECT')),
+                Mockery::on(fn($query) => str_contains($query, 'leagueaverages') && str_contains($query, 'IN (')),
                 Mockery::type('array')
             )
             ->andReturn([(object) ['userid' => 7, 'divisionid' => 20, 'average' => 55]]);
@@ -163,7 +163,7 @@ class LeagueResultsServiceTest extends TestCase
         DB::shouldReceive('select')
             ->once()
             ->with(
-                Mockery::on(fn($query) => str_contains($query, 'leaguepoints') && str_contains($query, 'JOIN (SELECT') && str_contains($query, 'ROW_NUMBER() OVER')),
+                Mockery::on(fn($query) => str_contains($query, 'leaguepoints') && str_contains($query, 'ROW_NUMBER() OVER') && str_contains($query, 'IN (')),
                 Mockery::type('array')
             )
             ->andReturn([(object) ['userid' => 7, 'divisionid' => 20, 'points' => 100]]);

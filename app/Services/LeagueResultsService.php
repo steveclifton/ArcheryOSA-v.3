@@ -214,7 +214,7 @@ class LeagueResultsService extends Controller
             return [];
         }
 
-        [$pairsTable, $pairBindings] = $this->buildEntryPairsDerivedTable($entries, 'scorepair');
+        [$pairClause, $pairBindings] = $this->buildEntryPairTupleInClause($entries, 'scorepair');
 
         $bindings = array_merge(
             ['eventid' => $eventid],
@@ -230,10 +230,8 @@ class LeagueResultsService extends Controller
                         ORDER BY sf.`total` DESC
                     ) as `rn`
                 FROM `scores_flat` sf
-                JOIN $pairsTable AS pairs
-                    ON pairs.`userid` = sf.`userid`
-                    AND pairs.`divisionid` = sf.`divisionid`
                 WHERE sf.`eventid` = :eventid
+                AND (sf.`userid`, sf.`divisionid`) IN ($pairClause)
             ) as ranked
             WHERE ranked.`rn` <= 10
             GROUP BY ranked.`userid`, ranked.`divisionid`
@@ -253,7 +251,7 @@ class LeagueResultsService extends Controller
             return [];
         }
 
-        [$pairsTable, $pairBindings] = $this->buildEntryPairsDerivedTable($entries, 'avgpair');
+        [$pairClause, $pairBindings] = $this->buildEntryPairTupleInClause($entries, 'avgpair');
 
         $bindings = array_merge(
             ['eventid' => $eventid],
@@ -263,10 +261,8 @@ class LeagueResultsService extends Controller
         $result = DB::select("
             SELECT la.`userid`, la.`divisionid`, la.`avg_distance1_total` as average
             FROM `leagueaverages` la
-            JOIN $pairsTable AS pairs
-                ON pairs.`userid` = la.`userid`
-                AND pairs.`divisionid` = la.`divisionid`
             WHERE la.`eventid` = :eventid
+            AND (la.`userid`, la.`divisionid`) IN ($pairClause)
         ", $bindings);
 
         $averages = [];
@@ -283,7 +279,7 @@ class LeagueResultsService extends Controller
             return [];
         }
 
-        [$pairsTable, $pairBindings] = $this->buildEntryPairsDerivedTable($entries, 'pointpair');
+        [$pairClause, $pairBindings] = $this->buildEntryPairTupleInClause($entries, 'pointpair');
 
         $bindings = array_merge(
             ['eventid' => $eventid],
@@ -299,10 +295,8 @@ class LeagueResultsService extends Controller
                         ORDER BY lp.`points` DESC
                     ) as `rn`
                 FROM `leaguepoints` lp
-                JOIN $pairsTable AS pairs
-                    ON pairs.`userid` = lp.`userid`
-                    AND pairs.`divisionid` = lp.`divisionid`
                 WHERE lp.`eventid` = :eventid
+                AND (lp.`userid`, lp.`divisionid`) IN ($pairClause)
             ) as ranked
             WHERE ranked.`rn` <= 10
             GROUP BY ranked.`userid`, ranked.`divisionid`
@@ -321,7 +315,7 @@ class LeagueResultsService extends Controller
         return $userid . ':' . $divisionid;
     }
 
-    private function buildEntryPairsDerivedTable(array $entries, $prefix)
+    private function buildEntryPairTupleInClause(array $entries, $prefix)
     {
         $pairs = [];
         foreach ($entries as $entry) {
@@ -334,7 +328,7 @@ class LeagueResultsService extends Controller
         }
 
         $bindings = [];
-        $queries = [];
+        $tuples = [];
 
         foreach (array_values($pairs) as $index => $pair) {
             $useridKey = $prefix . 'userid' . $index;
@@ -342,15 +336,10 @@ class LeagueResultsService extends Controller
 
             $bindings[$useridKey] = $pair['userid'];
             $bindings[$divisionidKey] = $pair['divisionid'];
-
-            if ($index === 0) {
-                $queries[] = "SELECT :$useridKey AS `userid`, :$divisionidKey AS `divisionid`";
-            }
-            else {
-                $queries[] = "SELECT :$useridKey, :$divisionidKey";
-            }
+            $tuples[] = "(:$useridKey, :$divisionidKey)";
         }
 
-        return ['(' . implode(' UNION ALL ', $queries) . ')', $bindings];
+        return [implode(', ', $tuples), $bindings];
     }
+
 }
