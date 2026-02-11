@@ -151,4 +151,205 @@ class EventResultServiceTest extends TestCase
         $this->assertSame('<a href="/profile/public/alice">Alice Smith</a>', $rankedArchers[1]['archer']);
         $this->assertSame(720, $rankedArchers[1]['total']);
     }
+
+    public function test_get_event_overall_results_returns_competitions_for_api_when_no_scores()
+    {
+        $event = new Event();
+        $event->eventid = 500;
+
+        $service = new class extends EventResultService {
+            public array $fakeLabels = [];
+            public array $fakeScores = [];
+
+            protected function getEventCompetitionLabels(int $eventId): array
+            {
+                return $this->fakeLabels;
+            }
+
+            protected function getEventOverallFlatScores(int $eventId): array
+            {
+                return $this->fakeScores;
+            }
+        };
+
+        $service->fakeLabels = [10 => 'Saturday - 01 Jan', 11 => 'Sunday - 02 Jan'];
+        $service->fakeScores = [];
+
+        $response = $service->getEventOverallResults($event, true);
+
+        $this->assertArrayHasKey('competitionlabels', $response);
+        $this->assertArrayHasKey('event', $response);
+        $this->assertArrayNotHasKey('results', $response);
+        $this->assertSame($event, $response['event']);
+        $this->assertSame($service->fakeLabels, $response['competitionlabels']);
+    }
+
+    public function test_get_event_overall_results_aggregates_and_sorts_division_results_for_api()
+    {
+        $event = new Event();
+        $event->eventid = 501;
+
+        $service = new class extends EventResultService {
+            public array $fakeLabels = [];
+            public array $fakeScores = [];
+
+            protected function getEventCompetitionLabels(int $eventId): array
+            {
+                return $this->fakeLabels;
+            }
+
+            protected function getEventOverallFlatScores(int $eventId): array
+            {
+                return $this->fakeScores;
+            }
+        };
+
+        $service->fakeLabels = [10 => 'Day 1 - 01 Jan', 11 => 'Day 2 - 02 Jan'];
+        $service->fakeScores = [
+            (object) [
+                'eventcompetitionid' => 10,
+                'total' => 300,
+                'inners' => 5,
+                'max' => 1,
+                'sequence' => 1,
+                'userid' => 1,
+                'divisionid' => 20,
+                'firstname' => 'alice',
+                'lastname' => 'jones',
+                'gender' => 'f',
+                'username' => 'alice',
+                'division' => 'Open',
+                'bowtype' => 'Recurve',
+                'roundname' => 'WA 720',
+            ],
+            (object) [
+                'eventcompetitionid' => 11,
+                'total' => 350,
+                'inners' => 8,
+                'max' => 2,
+                'sequence' => 2,
+                'userid' => 1,
+                'divisionid' => 20,
+                'firstname' => 'alice',
+                'lastname' => 'jones',
+                'gender' => 'f',
+                'username' => 'alice',
+                'division' => 'Open',
+                'bowtype' => 'Recurve',
+                'roundname' => 'WA 720',
+            ],
+            (object) [
+                'eventcompetitionid' => 10,
+                'total' => 400,
+                'inners' => 10,
+                'max' => 3,
+                'sequence' => 1,
+                'userid' => 2,
+                'divisionid' => 20,
+                'firstname' => 'beth',
+                'lastname' => 'stone',
+                'gender' => 'f',
+                'username' => 'beth',
+                'division' => 'Open',
+                'bowtype' => 'Recurve',
+                'roundname' => 'WA 720',
+            ],
+            (object) [
+                'eventcompetitionid' => 11,
+                'total' => 200,
+                'inners' => 6,
+                'max' => 1,
+                'sequence' => 2,
+                'userid' => 2,
+                'divisionid' => 20,
+                'firstname' => 'beth',
+                'lastname' => 'stone',
+                'gender' => 'f',
+                'username' => 'beth',
+                'division' => 'Open',
+                'bowtype' => 'Recurve',
+                'roundname' => 'WA 720',
+            ],
+        ];
+
+        $response = $service->getEventOverallResults($event, true);
+
+        $this->assertArrayHasKey('results', $response);
+        $this->assertArrayHasKey('Womens Open', $response['results']);
+
+        $group = $response['results']['Womens Open'];
+        $this->assertSame('WA 720', $group['rounds'][10]);
+        $this->assertSame('WA 720', $group['rounds'][11]);
+
+        $rankedArchers = array_values(array_filter($group, fn($entry, $key) => $key !== 'rounds', ARRAY_FILTER_USE_BOTH));
+        $this->assertSame('<a href="/profile/public/alice">Alice Jones</a>', $rankedArchers[0]['archer']);
+        $this->assertSame(650, $rankedArchers[0]['total']);
+        $this->assertSame(350, $rankedArchers[0][11]);
+        $this->assertSame(8, $rankedArchers[0]['inners']);
+        $this->assertSame('<a href="/profile/public/beth">Beth Stone</a>', $rankedArchers[1]['archer']);
+        $this->assertSame(600, $rankedArchers[1]['total']);
+    }
+
+    public function test_get_event_overall_results_keeps_same_user_in_separate_divisions()
+    {
+        $event = new Event();
+        $event->eventid = 502;
+
+        $service = new class extends EventResultService {
+            public array $fakeLabels = [];
+            public array $fakeScores = [];
+
+            protected function getEventCompetitionLabels(int $eventId): array
+            {
+                return $this->fakeLabels;
+            }
+
+            protected function getEventOverallFlatScores(int $eventId): array
+            {
+                return $this->fakeScores;
+            }
+        };
+
+        $service->fakeLabels = [10 => 'Day 1 - 01 Jan'];
+        $service->fakeScores = [
+            (object) [
+                'eventcompetitionid' => 10,
+                'total' => 320,
+                'inners' => 5,
+                'max' => 2,
+                'sequence' => 1,
+                'userid' => 9,
+                'divisionid' => 100,
+                'firstname' => 'sam',
+                'lastname' => 'archer',
+                'gender' => 'm',
+                'username' => 'sam',
+                'division' => 'Open',
+                'bowtype' => 'Compound',
+                'roundname' => 'WA 720',
+            ],
+            (object) [
+                'eventcompetitionid' => 10,
+                'total' => 290,
+                'inners' => 4,
+                'max' => 1,
+                'sequence' => 1,
+                'userid' => 9,
+                'divisionid' => 101,
+                'firstname' => 'sam',
+                'lastname' => 'archer',
+                'gender' => 'm',
+                'username' => 'sam',
+                'division' => 'U21',
+                'bowtype' => 'Compound',
+                'roundname' => 'WA 720',
+            ],
+        ];
+
+        $response = $service->getEventOverallResults($event, true);
+
+        $this->assertArrayHasKey('Mens Open', $response['results']);
+        $this->assertArrayHasKey('Mens U21', $response['results']);
+        $this->assertCount(2, $response['results']);
+    }
 }
