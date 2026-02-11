@@ -80,17 +80,14 @@ class ResultsController extends EventController
                 return redirect('/');
             }
 
-            $rangeArr = [];
-            foreach (range(1, $eventcompetition->currentweek) as $week) {
-                $score = FlatScore::where('eventid', $eventcompetition->eventid)
-                    ->where('eventcompetitionid', $eventcompetition->eventcompetitionid)
-                    ->where('week', $week)
-                    ->first();
-
-                if (!empty($score)) {
-                    $rangeArr[] = $week;
-                }
-            }
+            $rangeArr = FlatScore::where('eventid', $eventcompetition->eventid)
+                ->where('eventcompetitionid', $eventcompetition->eventcompetitionid)
+                ->whereBetween('week', [1, $eventcompetition->currentweek])
+                ->pluck('week')
+                ->unique()
+                ->sort()
+                ->values()
+                ->toArray();
 
             return view('events.results.league.leaguecompetitions', compact('event', 'rangeArr', 'overall'));
         }
@@ -99,15 +96,18 @@ class ResultsController extends EventController
         // not a league
         $eventcompetitions = EventCompetition::where('eventid', $event->eventid)->orderBy('date', 'asc')->get();
         $haveScores = false;
-        foreach ($eventcompetitions as $eventcompetition) {
+        $scoresByCompetition = FlatScore::where('eventid', $event->eventid)
+            ->whereIn('eventcompetitionid', $eventcompetitions->pluck('eventcompetitionid'))
+            ->get()
+            ->groupBy('eventcompetitionid');
 
-            $eventcompetition->score = FlatScore::where('eventid', $eventcompetition->eventid)
-                                            ->where('eventcompetitionid', $eventcompetition->eventcompetitionid)
-                                            ->first();
-            if (empty($haveScores) && !empty($eventcompetition->score)) {
+        foreach ($eventcompetitions as $eventcompetition) {
+            $eventcompetitionScores = $scoresByCompetition->get($eventcompetition->eventcompetitionid);
+            $eventcompetition->score = $eventcompetitionScores ? $eventcompetitionScores->first() : null;
+
+            if (!$haveScores && !empty($eventcompetition->score)) {
                 $haveScores = true;
             }
-
         }
 
         // dont show overall if there are no results
