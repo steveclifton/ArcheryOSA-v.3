@@ -8,6 +8,12 @@ use Illuminate\Support\Facades\DB;
 
 class EventResultService
 {
+    protected ScoringService $scoringService;
+
+    public function __construct(?ScoringService $scoringService = null)
+    {
+        $this->scoringService = $scoringService ?? new ScoringService();
+    }
 
     protected function sortTotalOverallResults($results)
     {
@@ -73,9 +79,11 @@ class EventResultService
     {
         $returnData = [];
 
-        $eventCompetition = EventCompetition::where('eventcompetitionid', $eventCompetitionId)->first();
+        $eventCompetition = EventCompetition::where('eventcompetitionid', $eventCompetitionId)
+            ->where('eventid', $event->eventid)
+            ->first();
 
-        if (($eventCompetition->eventid ?? null) != $event->eventid) {
+        if (!$eventCompetition) {
             if ($apiCall) {
                 return $returnData;
             }
@@ -83,57 +91,23 @@ class EventResultService
         }
 
         $returnData['eventcompetition'] = $eventCompetition;
+        $returnData['event'] = $event;
 
-        $scores = DB::select("
-            SELECT sf.*, ee.firstname, ee.lastname, ee.gender, ec.entrycompetitionid, r.label as roundname, d.label as division,
-                ec.eventcompetitionid, ec.roundid, d.label as divisionname, d.bowtype, r.unit, u.username
-            FROM `evententrys` ee
-            JOIN `entrycompetitions` ec USING (`entryid`)
-            JOIN `users` u on (ee.userid = u.userid)
-            JOIN `divisions` d ON (`ec`.`divisionid` = `d`.`divisionid`)
-            JOIN `rounds` r ON (ec.roundid = r.roundid)
-            JOIN `scores_flat` sf ON (ee.entryid = sf.entryid AND ec.entrycompetitionid = sf.entrycompetitionid AND ec.roundid = sf.roundid)
-            WHERE `ee`.`eventid` = :eventid
-            AND `ec`.`eventcompetitionid` = :eventcompetitionid
-            AND `ee`.`entrystatusid` = 2
-            ORDER BY `d`.label
-        ", ['eventcompetitionid' => $eventCompetitionId, 'eventid' => $event->eventid]);
+        $scores = $this->getEventCompetitionScores($event->eventid, $eventCompetitionId);
 
-        if ($apiCall && empty($scores)) {
-            return $returnData;
-        }
-        else if (empty($scores)) {
+        if (empty($scores)) {
+            if ($apiCall) {
+                return $returnData;
+            }
+
             return back()->with('failure', 'Unable to process request');
         }
 
-
-        $results = [];
-        foreach ($scores as $score) {
-            $key = sprintf('%s %s', $score->division, ($score->gender == 'm' ? "Men" : "Women"));
-
-            if (empty($results[$key]['rounds'])) {
-                $results[$key]['rounds'] = $this->getRound($score);
-            }
-
-            $archer = [
-                'archer' => '<a href="/profile/public/'.$score->username.'">' . htmlentities(ucwords($score->firstname . ' ' . $score->lastname)) . '</a>',
-                'round' => ($score->roundname ?? ''),
-                'dist1' => ($score->dist1score ?? NULL),
-                'dist2' => ($score->dist2score ?? NULL),
-                'dist3' => ($score->dist3score ?? NULL),
-                'dist4' => ($score->dist4score ?? NULL),
-                'total' => ($score->total ?? ''),
-                'inners' => ($score->inners ?? ''),
-                'xcount' => ($score->max ?? '')
-            ];
-
-            $results[$key][] = $archer;
-        }
-
-        $results = (new ScoringService())->setResults($results)->sort()->getSortedResults();
-
-        $returnData['results'] = $results;
-        $returnData['event'] = $event;
+        $results = $this->buildEventCompetitionResults($scores);
+        $returnData['results'] = $this->scoringService
+            ->setResults($results)
+            ->sort()
+            ->getSortedResults();
 
         if ($apiCall) {
             return $returnData;
@@ -142,14 +116,82 @@ class EventResultService
         return view('events.results.event.results', $returnData);
     }
 
+    protected function getEventCompetitionScores(int $eventId, int $eventCompetitionId): array
+    {
+        return DB::table('evententrys as ee')
+            ->join('entrycompetitions as ec', 'ec.entryid', '=', 'ee.entryid')
+            ->join('users as u', 'u.userid', '=', 'ee.userid')
+            ->join('divisions as d', 'd.divisionid', '=', 'ec.divisionid')
+            ->join('rounds as r', 'r.roundid', '=', 'ec.roundid')
+            ->join('scores_flat as sf', function ($join) {
+                $join->on('sf.entryid', '=', 'ee.entryid')
+                    ->on('sf.entrycompetitionid', '=', 'ec.entrycompetitionid')
+                    ->on('sf.roundid', '=', 'ec.roundid');
+            })
+            ->where('ee.eventid', $eventId)
+            ->where('ec.eventcompetitionid', $eventCompetitionId)
+            ->where('ee.entrystatusid', 2)
+            ->orderBy('d.label')
+            ->select([
+                'ee.firstname',
+                'ee.lastname',
+                'ee.gender',
+                'u.username',
+                'd.label as division',
+                'r.label as roundname',
+                'r.unit',
+                'sf.dist1',
+                'sf.dist2',
+                'sf.dist3',
+                'sf.dist4',
+                'sf.dist1score',
+                'sf.dist2score',
+                'sf.dist3score',
+                'sf.dist4score',
+                'sf.total',
+                'sf.inners',
+                'sf.max',
+            ])
+            ->get()
+            ->all();
+    }
+
+    protected function buildEventCompetitionResults(array $scores): array
+    {
+        $results = [];
+
+        foreach ($scores as $score) {
+            $key = sprintf('%s %s', $score->division, $score->gender == 'm' ? 'Men' : 'Women');
+
+            if (empty($results[$key]['rounds'])) {
+                $results[$key]['rounds'] = $this->getRound($score);
+            }
+
+            $results[$key][] = [
+                'archer' => '<a href="/profile/public/'.$score->username.'">' . htmlentities(ucwords($score->firstname . ' ' . $score->lastname)) . '</a>',
+                'round' => $score->roundname ?? '',
+                'dist1' => $score->dist1score ?? null,
+                'dist2' => $score->dist2score ?? null,
+                'dist3' => $score->dist3score ?? null,
+                'dist4' => $score->dist4score ?? null,
+                'total' => $score->total ?? '',
+                'inners' => $score->inners ?? '',
+                'xcount' => $score->max ?? '',
+            ];
+        }
+
+        return $results;
+    }
+
 
     /**
-     * Returns the overall results for an event - consolidated
+     * Get the overall results for an event, sorted by total score and inners
+     *
      * @param Event $event
      * @param bool $apiCall
-     * @return array|\Illuminate\Contracts\View\Factory|\Illuminate\View\View|\stdClass
+     * @return array|\Illuminate\Contracts\View\Factory|\Illuminate\Http\RedirectResponse|\Illuminate\Routing\Redirector|\Illuminate\View\View
      */
-    public function getOverallResults(Event $event, bool $apiCall = false)
+    public function getEventOverallResults(Event $event, bool $apiCall = false)
     {
         $returnData = [];
 

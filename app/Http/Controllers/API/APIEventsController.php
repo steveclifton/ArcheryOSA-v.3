@@ -199,7 +199,7 @@ class APIEventsController extends Controller
 
                 if (empty($request->competitionid) || $request->competitionid == 'overall') {
                     // overall
-                    $data = $eventResultService->getOverallResults($event, true);
+                    $data = $eventResultService->getEventOverallResults($event, true);
 
                     $return['data']['results'] = !empty($data['results']) ? $data['results'] : [];
                     $return['data']['competitions'] = !empty($data['competitionlabels']) ? $data['competitionlabels'] : [];

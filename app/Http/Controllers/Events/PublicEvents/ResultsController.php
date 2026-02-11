@@ -36,12 +36,8 @@ class ResultsController extends EventController
                 return $leagueResultsService->getLeagueOverallResults($event);
             }
 
-            if ($event->ispostal()) {
-                return $eventResultService->getOverallResults($event);
-            }
-
             // Normal Event
-            return $eventResultService->getOverallResults($event);
+            return $eventResultService->getEventOverallResults($event);
         }
 
         // league processing
@@ -115,75 +111,5 @@ class ResultsController extends EventController
             $overall = false;
         }
         return view('events.results.eventcompetitions', compact('event', 'eventcompetitions', 'overall'));
-    }
-
-
-    /**
-     * Returns the event's entries sorted
-     * @param $eventid
-     * @return array|bool|mixed
-     */
-    public function getEventEntrySorted($eventid, $userid = null, $groupbyentry = false)
-    {
-        $and = '';
-        $args = ['eventid' => $eventid];
-        if (!empty($userid)) {
-            $and = ' AND `ee`.`userid` = :userid ';
-            $args['userid'] = $userid;
-        }
-
-        $groupby = '';
-        if (!empty($groupbyentry)) {
-            $groupby = " GROUP BY `ee`.`entryid` ";
-        }
-
-        $entries = DB::select("
-            SELECT ee.userid, ee.firstname, ee.lastname, ee.gender, ec.roundid, ec.divisionid,  
-                  d.label as divisionname, d.bowtype, r.unit, r.code, r.label as roundname, s.label as schoolname, u.username
-            FROM `evententrys` ee
-            JOIN `users` u ON (ee.userid = u.userid)
-            JOIN `entrycompetitions` ec ON (ec.`entryid` = ee.`entryid`)
-            JOIN `divisions` d ON (`ec`.`divisionid` = `d`.`divisionid`)
-            JOIN `rounds` r ON (ec.roundid = r.roundid)
-            JOIN `scores_flat` sf ON (ee.entryid = sf.entryid AND `sf`.`divisionid` = ec.divisionid)
-            LEFT JOIN `schools` s ON (ee.schoolid = s.schoolid)
-            WHERE `ee`.`eventid` = :eventid
-            AND `ee`.`entrystatusid` = 2
-            $and 
-            $groupby
-            ORDER BY d.label, ee.userid, ec.eventcompetitionid
-        ", $args);
-
-        // Get all the divisions
-        static $alldivisions;
-        if (empty($alldivisions)) {
-            $alldivisions = Division::all()->keyBy('divisionid')->toArray();
-        }
-
-
-        $sortedEntrys = [];
-
-        foreach ($entries as $entry) {
-            if (strpos($entry->divisionid, ',') !== false) {
-                $divisionids = explode(',', $entry->divisionid);
-
-                foreach ($divisionids as $divisionid) {
-                    // clone the entry
-                    $entryUpdated = clone $entry;
-                    $divison = (object) $alldivisions[$divisionid];
-
-                    $entryUpdated->bowtype = $divison->bowtype;
-                    $entryUpdated->divisionname = $divison->label;
-                    $entryUpdated->divisionid = $divisionid;
-                    $sortedEntrys[] = $entryUpdated;
-                }
-            }
-            else {
-                $sortedEntrys[] = $entry;
-            }
-        }
-
-        return $sortedEntrys;
-
     }
 }
