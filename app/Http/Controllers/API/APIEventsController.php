@@ -246,3 +246,36 @@ class APIEventsController extends Controller
 
     }
 }
+
+public function getEventEntrantsExport($eventId)
+{
+    $entrants = \App\Models\Entrant::with('club')
+        ->where('event_id', $eventId)
+        ->get();
+
+    $formatted = $entrants->map(function ($entrant) {
+        return [
+            'id' => $entrant->id,
+            'firstname' => $entrant->firstname,
+            'lastname' => $entrant->lastname,
+            'fullname' => trim("{$entrant->firstname} {$entrant->lastname}"),
+            'email' => $entrant->email,
+            'phone' => $entrant->phone,
+            'club' => optional($entrant->club)->name,
+            'division' => $entrant->division,
+            'class' => $entrant->class,
+            'bow_type' => $entrant->bow_type,
+            'category' => $entrant->category,
+            'age_class' => $entrant->age_class,
+            'notes' => $entrant->notes,
+            'created_at' => $entrant->created_at,
+            'updated_at' => $entrant->updated_at,
+        ];
+    });
+
+    return response()->json([
+        'event_id' => $eventId,
+        'entrant_count' => $formatted->count(),
+        'entrants' => $formatted,
+    ]);
+}
